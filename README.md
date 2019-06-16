@@ -4,7 +4,6 @@
 
 <!-- SUMMARY -->
 
-- Explore the interfaces: [TSDoc](https://stoplightio.github.io/http-spec)
 - View the changelog: [Releases](https://github.com/stoplightio/http-spec/releases)
 
 ### Features
@@ -24,7 +23,7 @@ yarn add @stoplight/http-spec
 ### Usage
 
 ```ts
-import { Library } from "@stoplight/http-spec";
+import { transformOas3Operation } from "@stoplight/http-spec";
 
 // ...example
 ```
