@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateToServers translate single ServerObject to IServer 1`] = `
+Array [
+  Object {
+    "description": "description",
+    "url": "http://stoplight.io/path",
+    "variables": Object {
+      "a": Object {
+        "default": "false",
+        "description": "false",
+        "enum": Array [
+          "false",
+          "true",
+          "false",
+        ],
+      },
+      "b": Object {
+        "default": "123",
+        "description": "123",
+        "enum": Array [
+          "1",
+          "2",
+          "3",
+        ],
+      },
+    },
+  },
+]
+`;
+
+exports[`translateToServers translate undefined to empty array 1`] = `Array []`;

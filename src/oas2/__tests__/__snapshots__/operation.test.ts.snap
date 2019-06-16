@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transformOas2Operation should translate operation 1`] = `
+Object {
+  "deprecated": true,
+  "description": "odesc",
+  "id": "?http-operation-id?",
+  "iid": "oid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {},
+  "responses": Object {},
+  "security": Object {},
+  "servers": Array [],
+  "summary": "osum",
+  "tags": Array [],
+}
+`;

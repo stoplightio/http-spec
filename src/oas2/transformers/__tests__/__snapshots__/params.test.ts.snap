@@ -1,0 +1,275 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`params.translator translateToBodyParameter given x-examples should translate to body parameter with multiple examples 1`] = `
+Object {
+  "contents": Array [
+    Object {
+      "examples": Array [
+        Object {
+          "key": "example-1",
+          "value": Object {
+            "hello": "world",
+          },
+        },
+        Object {
+          "key": "example-2",
+          "value": Object {
+            "foo": "bar",
+          },
+        },
+      ],
+      "mediaType": "*",
+      "schema": Object {
+        "format": "e-mail",
+      },
+    },
+  ],
+  "description": "descr",
+  "required": true,
+}
+`;
+
+exports[`params.translator translateToBodyParameter should translate to body parameter 1`] = `
+Object {
+  "contents": Array [
+    Object {
+      "examples": Array [],
+      "mediaType": "*",
+      "schema": Object {
+        "format": "e-mail",
+      },
+    },
+  ],
+  "description": "descr",
+  "required": true,
+}
+`;
+
+exports[`params.translator translateToFormDataParameter given a request body it should add a property to the schema 1`] = `
+Object {
+  "contents": Array [
+    Object {
+      "encodings": Array [
+        Object {
+          "property": "name",
+          "style": "form",
+        },
+      ],
+      "examples": Array [],
+      "mediaType": "application/json",
+      "schema": Object {
+        "properties": Object {
+          "count": Object {
+            "type": "number",
+          },
+          "id": Object {
+            "type": "number",
+          },
+        },
+        "required": Array [
+          "id",
+        ],
+        "type": "object",
+      },
+    },
+  ],
+}
+`;
+
+exports[`params.translator translateToFormDataParameter given no request body should create one 1`] = `
+Object {
+  "allowEmptyValue": undefined,
+  "contents": Array [
+    Object {
+      "encodings": Array [
+        Object {
+          "property": "name",
+          "style": "form",
+        },
+      ],
+      "mediaType": "*",
+      "schema": Object {
+        "description": "desc",
+        "type": "string",
+      },
+    },
+  ],
+}
+`;
+
+exports[`params.translator translateToFormDataParameter given request body with empty encodings should create encoding 1`] = `
+Object {
+  "contents": Array [
+    Object {
+      "encodings": Array [
+        Object {
+          "property": "name",
+          "style": "form",
+        },
+      ],
+      "mediaType": "application/json",
+      "schema": Object {
+        "description": "desc",
+        "type": "string",
+      },
+    },
+  ],
+}
+`;
+
+exports[`params.translator translateToFormDataParameter given request body with existing encoding should append 1`] = `
+Object {
+  "contents": Array [
+    Object {
+      "encodings": Array [
+        Object {
+          "headers": Array [],
+          "property": "prop",
+          "style": "spaceDelimited",
+        },
+        Object {
+          "property": "name",
+          "style": "form",
+        },
+      ],
+      "examples": Array [],
+      "mediaType": "application/json",
+      "schema": Object {
+        "description": "desc",
+        "type": "string",
+      },
+    },
+  ],
+}
+`;
+
+exports[`params.translator translateToHeaderParam should translate header param 1`] = `
+Object {
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "desc",
+    "minimum": 12,
+    "type": "integer",
+  },
+  "style": "simple",
+}
+`;
+
+exports[`params.translator translateToHeaderParams should translate empty dictionary to empty array 1`] = `Array []`;
+
+exports[`params.translator translateToHeaderParams should translate to multiple header params 1`] = `
+Array [
+  Object {
+    "name": "header-name",
+    "schema": Object {
+      "description": "a description",
+      "type": "string",
+    },
+    "style": "simple",
+  },
+  Object {
+    "name": "plain-tex",
+    "schema": Object {
+      "description": "another description",
+      "type": "string",
+    },
+    "style": "simple",
+  },
+]
+`;
+
+exports[`params.translator translateToHeaderParams should translate to simple header param 1`] = `
+Array [
+  Object {
+    "name": "header-name",
+    "schema": Object {
+      "description": "a description",
+      "type": "string",
+    },
+    "style": "simple",
+  },
+]
+`;
+
+exports[`params.translator translateToPathParameter should translate 1`] = `
+Object {
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "type": "string",
+  },
+  "style": "simple",
+}
+`;
+
+exports[`params.translator translateToQueryParameter translate style: csv 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "minLength": 1,
+    "type": "number",
+  },
+  "style": "form",
+}
+`;
+
+exports[`params.translator translateToQueryParameter translate style: multi 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "minLength": 1,
+    "type": "number",
+  },
+  "style": "form",
+}
+`;
+
+exports[`params.translator translateToQueryParameter translate style: pipes 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "minLength": 1,
+    "type": "number",
+  },
+  "style": "pipeDelimited",
+}
+`;
+
+exports[`params.translator translateToQueryParameter translate style: something-else 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "minLength": 1,
+    "type": "number",
+  },
+  "style": "form",
+}
+`;
+
+exports[`params.translator translateToQueryParameter translate style: ssv 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "name": "name",
+  "required": true,
+  "schema": Object {
+    "description": "descr",
+    "minLength": 1,
+    "type": "number",
+  },
+  "style": "spaceDelimited",
+}
+`;

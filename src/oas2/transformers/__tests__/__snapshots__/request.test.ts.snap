@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`request given single body param should translate to request with body 1`] = `
+Object {
+  "body": Object {
+    "in": "body",
+  },
+}
+`;
+
+exports[`request given single form param should translate to request with form 1`] = `
+Object {
+  "body": Object {
+    "in": "body",
+    "type": "form",
+  },
+}
+`;
+
+exports[`request given single header param should translate to request with header 1`] = `
+Object {
+  "headers": Array [
+    Object {
+      "in": "header",
+    },
+  ],
+}
+`;
+
+exports[`request given single path param should translate to request with path 1`] = `
+Object {
+  "path": Array [
+    Object {
+      "in": "path",
+    },
+  ],
+}
+`;
+
+exports[`request given single query param should translate to request with query 1`] = `
+Object {
+  "query": Array [
+    Object {
+      "in": "query",
+    },
+  ],
+}
+`;
+
+exports[`request given two header params should translate 1`] = `
+Object {
+  "headers": Array [
+    Object {
+      "in": "header",
+    },
+    Object {
+      "in": "header",
+    },
+  ],
+}
+`;
+
+exports[`request given two path params should translate 1`] = `
+Object {
+  "path": Array [
+    Object {
+      "in": "path",
+    },
+    Object {
+      "in": "path",
+    },
+  ],
+}
+`;
+
+exports[`request given two query params should translate 1`] = `
+Object {
+  "query": Array [
+    Object {
+      "in": "query",
+    },
+    Object {
+      "in": "query",
+    },
+  ],
+}
+`;
+
+exports[`request should translate mixed request 1`] = `
+Object {
+  "body": Object {
+    "in": "body",
+    "type": "form",
+  },
+  "headers": Array [
+    Object {
+      "in": "header",
+    },
+  ],
+  "path": Array [
+    Object {
+      "in": "path",
+    },
+  ],
+  "query": Array [
+    Object {
+      "in": "query",
+    },
+  ],
+}
+`;

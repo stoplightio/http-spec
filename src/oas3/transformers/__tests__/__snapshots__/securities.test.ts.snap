@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateOas3ToSecurities basic snapshot 1`] = `
+Array [
+  Object {
+    "bearerFormat": "Bearer",
+    "description": "Description",
+    "flows": Object {
+      "authorizationCode": Object {
+        "scopes": Object {
+          "read:write": Object {},
+        },
+        "tokenUrl": "https://google.it/token",
+      },
+    },
+    "in": "header",
+    "name": "oauth2",
+    "openIdConnectUrl": "https://oaid.com/login",
+    "scheme": "scheme",
+    "type": "oauth2",
+  },
+]
+`;

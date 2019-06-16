@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateToOas3Responses given a response in dictionary should translate 1`] = `
+Array [
+  Object {
+    "code": "200",
+    "contents": Array [
+      Object {
+        "encodings": Array [],
+        "examples": Array [],
+        "mediaType": "fake-content-type-200",
+        "schema": undefined,
+      },
+    ],
+    "description": "descr 200",
+    "headers": Array [
+      Object {
+        "encodings": Array [],
+        "examples": Array [],
+        "name": "fake-header-name-200",
+        "style": "simple",
+      },
+    ],
+  },
+  Object {
+    "code": "default",
+    "contents": Array [
+      Object {
+        "encodings": Array [],
+        "examples": Array [],
+        "mediaType": "fake-content-type",
+        "schema": undefined,
+      },
+    ],
+    "description": "descr",
+    "headers": Array [
+      Object {
+        "description": "calls per hour allowed by the user",
+        "encodings": Array [],
+        "examples": Array [
+          Object {
+            "key": "__default",
+            "value": 1000,
+          },
+        ],
+        "name": "fake-header-name-1",
+        "schema": Object {
+          "format": "int32",
+          "type": "integer",
+        },
+        "style": "simple",
+      },
+      Object {
+        "description": "calls per hour allowed by the user",
+        "encodings": Array [],
+        "examples": Array [
+          Object {
+            "key": "__default",
+            "value": 1000,
+          },
+        ],
+        "name": "fake-header-name-2",
+        "required": true,
+        "schema": Object {
+          "format": "int32",
+          "type": "integer",
+        },
+        "style": "simple",
+      },
+    ],
+  },
+]
+`;

@@ -1,0 +1,148 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transformOas3Operation given no tags should translate operation with empty tags array 1`] = `
+Object {
+  "deprecated": true,
+  "description": "descr",
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [],
+  "summary": "summary",
+  "tags": Array [],
+}
+`;
+
+exports[`transformOas3Operation given operation servers should translate operation with those servers 1`] = `
+Object {
+  "deprecated": true,
+  "description": "descr",
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [
+    Object {
+      "description": undefined,
+      "url": "operation/server",
+      "variables": Object {},
+    },
+  ],
+  "summary": "summary",
+  "tags": Array [],
+}
+`;
+
+exports[`transformOas3Operation given path servers should translate operation with those servers 1`] = `
+Object {
+  "deprecated": true,
+  "description": "descr",
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [
+    Object {
+      "description": undefined,
+      "url": "path/server",
+      "variables": Object {},
+    },
+  ],
+  "summary": "summary",
+  "tags": Array [],
+}
+`;
+
+exports[`transformOas3Operation given some tags should translate operation with those tags 1`] = `
+Object {
+  "deprecated": true,
+  "description": "descr",
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [],
+  "summary": "summary",
+  "tags": Array [
+    Object {
+      "name": "tag1",
+    },
+  ],
+}
+`;
+
+exports[`transformOas3Operation given spec servers should translate operation with those servers 1`] = `
+Object {
+  "deprecated": true,
+  "description": "descr",
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [
+    Object {
+      "description": undefined,
+      "url": "spec/server",
+      "variables": Object {},
+    },
+  ],
+  "summary": "summary",
+  "tags": Array [],
+}
+`;

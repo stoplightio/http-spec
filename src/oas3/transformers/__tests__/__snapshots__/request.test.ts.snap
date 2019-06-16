@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateOas3ToRequest give a request body should translate it 1`] = `
+Object {
+  "body": Object {
+    "contents": Array [
+      "translateMediaTypeObject({\\"schema\\":{}}, content-a, {\\"content-a\\":{\\"schema\\":{}}})",
+    ],
+    "description": "descr",
+    "required": true,
+  },
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [],
+}
+`;
+
+exports[`translateOas3ToRequest given no request body should translate parameters 1`] = `
+Object {
+  "body": Object {
+    "contents": Array [],
+  },
+  "cookie": Array [],
+  "headers": Array [
+    Object {
+      "content": Object {
+        "content-c": Object {
+          "schema": Object {},
+        },
+      },
+      "examples": Array [],
+      "name": "param-name-3",
+    },
+  ],
+  "path": Array [],
+  "query": Array [
+    Object {
+      "content": Object {
+        "content-a": Object {
+          "schema": Object {},
+        },
+      },
+      "examples": Array [],
+      "name": "param-name-1",
+    },
+    Object {
+      "content": Object {
+        "content-b": Object {
+          "schema": Object {},
+        },
+      },
+      "examples": Array [],
+      "name": "param-name-2",
+    },
+  ],
+}
+`;
