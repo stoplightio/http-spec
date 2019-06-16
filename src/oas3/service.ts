@@ -1,10 +1,11 @@
-import { DeepPartial, HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
+import { HttpSecurityScheme, IServer } from '@stoplight/types';
 import { compact, flatMap, get } from 'lodash';
-import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
+import { SecuritySchemeObject } from 'openapi3-ts';
 
+import { Oas3HttpServiceTransformer } from '../oas/types';
 import { transformToSingleSecurity } from './transformers/securities';
 
-export function transformOas3Service(document: DeepPartial<OpenAPIObject>): IHttpService {
+export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
   const servers = compact(
     (document.servers || []).map(server =>
       server
@@ -46,4 +47,4 @@ export function transformOas3Service(document: DeepPartial<OpenAPIObject>): IHtt
     security,
     securitySchemes,
   };
-}
+};

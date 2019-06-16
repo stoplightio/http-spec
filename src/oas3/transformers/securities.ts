@@ -1,8 +1,6 @@
-import { DeepPartial, IOauthFlowObjects } from '@stoplight/types';
+import { DeepPartial, HttpSecurityScheme, IOauthFlowObjects } from '@stoplight/types';
 import { pickBy } from 'lodash';
 import { OAuthFlowsObject, SecuritySchemeObject } from 'openapi3-ts';
-
-import { HttpSecurityScheme } from '../../oas/types';
 
 export function translateToSecurities(securities: SecuritySchemeObject[]): HttpSecurityScheme[] {
   return securities.map(transformToSingleSecurity);

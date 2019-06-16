@@ -1,10 +1,10 @@
 import { DeepPartial, IHttpOperation } from '@stoplight/types';
-import { get, isNull, omitBy } from 'lodash';
+import { get, isNil, omitBy } from 'lodash';
 import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
 
 import { getOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
-import { Oas2TranslateOperationOptions } from '../oas/types';
+import { Oas2HttpOperationTransformer } from '../oas/types';
 import { getConsumes, getProduces, getSecurities } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
@@ -16,9 +16,7 @@ export function computeOas2Operations(spec: DeepPartial<Spec>): IHttpOperation[]
   return [];
 }
 
-export function transformOas2Operation(opts: Oas2TranslateOperationOptions): IHttpOperation {
-  const { document, path, method } = opts;
-
+export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
   const pathObj = get(document, ['paths', path]) as Path;
   if (!pathObj) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
@@ -54,5 +52,5 @@ export function transformOas2Operation(opts: Oas2TranslateOperationOptions): IHt
     security: translateToSecurities(getSecurities(document, operationSecurity)),
   };
 
-  return omitBy(httpOperation, isNull) as IHttpOperation;
-}
+  return omitBy(httpOperation, isNil) as IHttpOperation;
+};

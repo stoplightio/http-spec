@@ -1,10 +1,10 @@
 import { DeepPartial, IHttpOperation } from '@stoplight/types';
-import { get, isNull, omitBy } from 'lodash';
+import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
 import { getOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
-import { Oas3TranslateOperationOptions } from '../oas/types';
+import { Oas3HttpOperationTransformer } from '../oas/types';
 import { getSecurities } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
@@ -16,9 +16,7 @@ export function computeOas3Operations(spec: DeepPartial<OpenAPIObject>): IHttpOp
   return [];
 }
 
-export function transformOas3Operation(opts: Oas3TranslateOperationOptions): IHttpOperation {
-  const { document, path, method } = opts;
-
+export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document, path, method }) => {
   const pathObj = get(document, ['paths', path]) as PathsObject;
   if (!pathObj) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
@@ -47,5 +45,5 @@ export function transformOas3Operation(opts: Oas3TranslateOperationOptions): IHt
     security: translateToSecurities(getSecurities(document, operation)),
   };
 
-  return omitBy(httpOperation, isNull) as IHttpOperation;
-}
+  return omitBy(httpOperation, isNil) as IHttpOperation;
+};

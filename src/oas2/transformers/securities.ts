@@ -1,5 +1,6 @@
 import {
   DeepPartial,
+  HttpSecurityScheme,
   IApiKeySecurityScheme,
   IBasicSecurityScheme,
   IOauth2SecurityScheme,
@@ -7,8 +8,6 @@ import {
 } from '@stoplight/types';
 import { compact } from 'lodash';
 import { ApiKeySecurity, BaseOAuthSecurity, Security } from 'swagger-schema-official';
-
-import { HttpSecurityScheme } from '../../oas/types';
 
 /**
  * @param security the union with 'any' is purposeful. Passing strict types does not help much here,

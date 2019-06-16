@@ -1,10 +1,10 @@
-import { DeepPartial, HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
+import { HttpSecurityScheme, IServer } from '@stoplight/types';
 import { compact, flatMap, get, values } from 'lodash';
-import { Spec } from 'swagger-schema-official';
 
+import { Oas2HttpServiceTransformer } from '../oas/types';
 import { translateToSingleSecurity } from './transformers/securities';
 
-export function transformOas2Service(document: DeepPartial<Spec>): IHttpService {
+export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
   const securitySchemes = values(document.securityDefinitions).map(sec =>
     sec ? translateToSingleSecurity(sec) : [],
   ) as HttpSecurityScheme[];
@@ -29,4 +29,4 @@ export function transformOas2Service(document: DeepPartial<Spec>): IHttpService 
     security,
     securitySchemes,
   };
-}
+};
