@@ -20,7 +20,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "sl-scripts build",
+    "build": "tsc -p ./tsconfig.build.json -d",
     "commit": "git-cz",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
