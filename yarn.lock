@@ -751,25 +751,20 @@
     lodash "^4.17.4"
     read-pkg-up "^6.0.0"
 
-"@stoplight/fast-safe-stringify@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/fast-safe-stringify/-/fast-safe-stringify-2.1.2.tgz#2811eff4989c3d4c5c9a3789f057e25358db0899"
-  integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
-
-"@stoplight/json@^2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.2.tgz#da757bdb1be7440feaa8c359c95c50ac5e7a5f4e"
-  integrity sha512-V8zdMTzLYDmWJBWe+zpF8Qm/0Mw4AMhXJcmB7U1ShXNtylcD7+TvFllg5PuhH/TSAD+yHstRMZQ5zMwPOEeI0Q==
+"@stoplight/json@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.0.1.tgz#e81345a2874486523c215282b252d70259c9c739"
+  integrity sha512-xsqbuXcvv6tepeifrtsRXXVLXzCJurESwUiZQx0SRmRGAk3EEANRrClZMOQf0LCSp2RoJkSd8Ch66tCO+079Xw==
   dependencies:
-    "@stoplight/fast-safe-stringify" "^2.1.2"
     "@stoplight/types" "^9.1.2"
-    jsonc-parser "~2.1.0"
-    lodash "^4.10"
+    jsonc-parser "~2.1"
+    lodash "^4.17"
+    safe-stable-stringify "^1.1"
 
-"@stoplight/scripts@7.x.x":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-7.0.2.tgz#7ff1a6c7a1de4961e6bba3894236c7708d73910e"
-  integrity sha512-A4QDtK9IsGAdhCnY0zgXPOCLcce0D7mgahCpBPFtP9kaSdsFLuTwd+rneexz9Lf+1yyxonzP67w6ZmNBz7FeHw==
+"@stoplight/scripts@7.0.3":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-7.0.3.tgz#024805f3a97c349836a50821b5ddf68d142be27d"
+  integrity sha512-7QybaFhfWTnI9O7MOFEHwWx0FfXMPgt7I16RvRv85CGFIzQxg3lBIhCsil7JuGvOVnpN19bHvjojhBbXAVrUfg==
   dependencies:
     "@commitlint/cli" "7.6.1"
     "@commitlint/config-conventional" "7.6.0"
@@ -4417,7 +4412,7 @@ json5@2.x, json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@~2.1.0:
+jsonc-parser@~2.1:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.1.0.tgz#eb0d0c7a3c33048524ce3574c57c7278fb2f1bf3"
   integrity sha512-n9GrT8rrr2fhvBbANa1g+xFmgGK5X91KFeDwlKQ3+SJfmH5+tKv/M/kahx/TXOMflfWHKGKqKyfHQaLKTNzJ6w==
@@ -4892,7 +4887,7 @@ lodash@4.17.11:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
-lodash@^4.10, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.2.1:
+lodash@^4.17, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.2.1:
   version "4.17.14"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
@@ -6919,6 +6914,11 @@ safe-regex@^1.1.0:
   integrity sha1-QKNmnzsHfR6UPURinhV91IAjvy4=
   dependencies:
     ret "~0.1.10"
+
+safe-stable-stringify@^1.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/safe-stable-stringify/-/safe-stable-stringify-1.1.0.tgz#f712b600f8f775444ccc66e8f31d250e43fdfe01"
+  integrity sha512-8h+96qSufNQrydRPzbHms38VftQQSRGbqUkaIMWUBWN4/N8sLNALIALa8KmFcQ8P/a9uzMkA+KY04Rj5WQiXPA==
 
 "safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"

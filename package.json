@@ -34,7 +34,7 @@
     "yalc.watch": "nodemon --watch 'src/**/*' --exec 'yarn yalc'"
   },
   "dependencies": {
-    "@stoplight/json": "^2.3.2",
+    "@stoplight/json": "^3.0.1",
     "@stoplight/types": "^9.1.2",
     "@types/swagger-schema-official": "~2.0.18",
     "@types/urijs": "~1.19.1",
@@ -43,7 +43,7 @@
     "urijs": "~1.19.1"
   },
   "devDependencies": {
-    "@stoplight/scripts": "7.x.x",
+    "@stoplight/scripts": "7.0.3",
     "@stoplight/test-utils": "^0.0.1",
     "@types/jest": "24.x.x",
     "@types/json-schema": "7.0.x",
