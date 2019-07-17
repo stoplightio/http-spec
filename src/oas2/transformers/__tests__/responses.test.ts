@@ -7,7 +7,7 @@ jest.mock('../params');
 
 describe('responses', () => {
   const fakeHeaderParams: IHttpHeaderParam[] = [{ name: 'fake-header', style: HttpParamStyles.Simple }];
-  const produces = ['*'];
+  const produces = ['application/json', 'application/xml'];
 
   beforeEach(() => {
     (translateToHeaderParams as jest.Mock).mockReturnValue(fakeHeaderParams);
@@ -18,7 +18,7 @@ describe('responses', () => {
         r1: {
           description: 'd1',
           examples: {
-            e1: {},
+            'application/json': {},
           },
           headers: {},
           schema: {},
@@ -26,7 +26,7 @@ describe('responses', () => {
         r2: {
           description: 'd2',
           examples: {
-            e2: {},
+            'application/xml': {},
           },
           headers: {},
           schema: {},
@@ -45,7 +45,7 @@ describe('responses', () => {
           r1: {
             description: 'd1',
             examples: {
-              e1: {},
+              'application/xml': {},
             },
             schema: {},
           },
