@@ -20,7 +20,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json -d",
+    "build": "sl-scripts build",
     "commit": "git-cz",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
@@ -43,7 +43,7 @@
     "urijs": "~1.19.1"
   },
   "devDependencies": {
-    "@stoplight/scripts": "7.0.3",
+    "@stoplight/scripts": "5.1.x",
     "@stoplight/test-utils": "^0.0.1",
     "@types/jest": "24.x.x",
     "@types/json-schema": "7.0.x",
