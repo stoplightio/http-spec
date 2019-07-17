@@ -16,7 +16,7 @@ function translateToResponse(produces: string[], response: Response, statusCode:
     contents: produces.map(mediaType => ({
       mediaType,
       schema: response.schema as JSONSchema4,
-      examples: map(response.examples, toObject),
+      examples: map(response.examples, toObject).filter(example => example.key === mediaType),
     })),
     // `links` not supported by oas2
   };
