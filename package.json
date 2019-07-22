@@ -55,7 +55,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}$": [
-      "yarn lint.fix",
+      "tslint -p tsconfig.build.json",
       "git add"
     ]
   },
