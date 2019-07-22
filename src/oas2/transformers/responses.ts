@@ -11,7 +11,7 @@ function translateToResponse(produces: string[], response: Response, statusCode:
   const headers = translateToHeaderParams(response.headers || {});
   const objectifiedExamples = map(response.examples, toObject);
 
-  const contents: IMediaTypeContent[] = []
+  const contents: IMediaTypeContent[] = [];
 
   produces.forEach(produceElement => {
     if (response.examples && response.examples[produceElement]) {
@@ -19,22 +19,22 @@ function translateToResponse(produces: string[], response: Response, statusCode:
         mediaType: produceElement,
         schema: response.schema as JSONSchema4,
         examples: objectifiedExamples.filter(example => example.key === produceElement),
-      })
+      });
     }
-  })
+  });
 
   const translatedResponses = {
     code: statusCode,
     description: response.description,
     headers,
-    contents
+    contents,
   };
 
   if (translatedResponses.contents.length === 0)
     translatedResponses.contents[0] = {
       mediaType: '',
       schema: {},
-      examples: []
+      examples: [],
     };
 
   translatedResponses.contents[0].examples!.push(

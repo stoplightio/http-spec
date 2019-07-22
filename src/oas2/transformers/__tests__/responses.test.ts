@@ -71,9 +71,7 @@ describe('responses', () => {
   });
 
   describe('should keep foreign examples', () => {
-
     it('by creating a new content if necessary', () => {
-
       const responses = translateToResponses(
         {
           r1: {
@@ -91,8 +89,8 @@ describe('responses', () => {
       expect(responses[0].contents).toBeDefined();
       expect(responses[0].contents![0].examples).toBeDefined();
       expect(responses[0].contents![0].examples![0]).toBeDefined();
-      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/i-have-no-clue')
-    })
+      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/i-have-no-clue');
+    });
     it('aggregating to the first example', () => {
       const responses = translateToResponses(
         {
@@ -100,7 +98,7 @@ describe('responses', () => {
             description: 'd1',
             examples: {
               'application/i-have-no-clue': {},
-              'application/json': {}
+              'application/json': {},
             },
             headers: {},
             schema: {},
@@ -112,7 +110,7 @@ describe('responses', () => {
       expect(responses[0].contents).toBeDefined();
       expect(responses[0].contents![0].examples).toBeDefined();
       expect(responses[0].contents![0].examples![0]).toBeDefined();
-      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/json')
-    })
+      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/json');
+    });
   });
 });
