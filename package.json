@@ -54,8 +54,8 @@
     "typescript": "3.5.3"
   },
   "lint-staged": {
-    "*.{ts,tsx}$": [
-      "tslint -p tsconfig.build.json",
+    "src/**/*.ts": [
+      "yarn lint.fix",
       "git add"
     ]
   },

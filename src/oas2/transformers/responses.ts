@@ -32,16 +32,17 @@ function translateToResponse(produces: string[], response: Response, statusCode:
     contents,
   };
 
-  if (translatedResponses.contents.length === 0)
-    translatedResponses.contents[0] = {
-      mediaType: '',
-      schema: {},
-      examples: [],
-    };
+  const foreignExamples = objectifiedExamples.filter(example => !produces.includes(example.key));
+  if (foreignExamples.length > 0) {
+    if (translatedResponses.contents.length === 0)
+      translatedResponses.contents[0] = {
+        mediaType: '',
+        schema: {},
+        examples: [],
+      };
 
-  translatedResponses.contents[0].examples!.push(
-    ...objectifiedExamples.filter(example => !produces.includes(example.key)),
-  );
+    translatedResponses.contents[0].examples!.push(...foreignExamples);
+  }
 
   return translatedResponses;
 }

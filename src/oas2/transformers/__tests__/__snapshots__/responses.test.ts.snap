@@ -53,13 +53,7 @@ exports[`responses should translate to response w/o examples 1`] = `
 Array [
   Object {
     "code": "r1",
-    "contents": Array [
-      Object {
-        "examples": Array [],
-        "mediaType": "",
-        "schema": Object {},
-      },
-    ],
+    "contents": Array [],
     "description": "d1",
     "headers": Array [
       Object {
