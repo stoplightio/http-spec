@@ -1,15 +1,16 @@
 import { IHttpOperationResponse } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { compact, map, partial } from 'lodash';
+import { chain, compact, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from './params';
 
-const toObject = <T>(value: T, key: string) => ({ key, value });
-
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});
-  const objectifiedExamples = map(response.examples, toObject);
+  const objectifiedExamples = chain(response.examples)
+    .mapValues((value, key) => ({ key, value }))
+    .values()
+    .value();
 
   const contents = compact(
     produces.map(produceElement => {
