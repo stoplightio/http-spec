@@ -1,6 +1,6 @@
 import { IHttpOperationResponse } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { map, partial, compact } from 'lodash';
+import { compact, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from './params';
@@ -11,16 +11,18 @@ function translateToResponse(produces: string[], response: Response, statusCode:
   const headers = translateToHeaderParams(response.headers || {});
   const objectifiedExamples = map(response.examples, toObject);
 
-  const contents = compact(produces.map(produceElement => {
-    if (response.examples && response.examples[produceElement]) {
-      return {
-        mediaType: produceElement,
-        schema: response.schema as JSONSchema4,
-        examples: objectifiedExamples.filter(example => example.key === produceElement),
-      };
-    }
-    return undefined
-  }));
+  const contents = compact(
+    produces.map(produceElement => {
+      if (response.examples && response.examples[produceElement]) {
+        return {
+          mediaType: produceElement,
+          schema: response.schema as JSONSchema4,
+          examples: objectifiedExamples.filter(example => example.key === produceElement),
+        };
+      }
+      return undefined;
+    }),
+  );
 
   const translatedResponses = {
     code: statusCode,
