@@ -88,8 +88,9 @@ describe('responses', () => {
 
       expect(responses[0].contents).toBeDefined();
       expect(responses[0].contents![0].examples).toBeDefined();
+      expect(responses[0].contents![0]).toHaveProperty('mediaType', '');
+
       expect(responses[0].contents![0].examples![0]).toBeDefined();
-      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/i-have-no-clue');
     });
     it('aggregating to the first example', () => {
       const responses = translateToResponses(
@@ -109,8 +110,9 @@ describe('responses', () => {
 
       expect(responses[0].contents).toBeDefined();
       expect(responses[0].contents![0].examples).toBeDefined();
-      expect(responses[0].contents![0].examples![0]).toBeDefined();
-      expect(responses[0].contents![0].examples![0]).toHaveProperty('key', 'application/json');
+      expect(responses[0].contents![0].examples).toHaveLength(2);
+
+      expect(responses[0].contents![0]).toHaveProperty('mediaType', 'application/json');
     });
   });
 });
