@@ -125,7 +125,23 @@ describe('params.translator', () => {
           },
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toEqual({
+        contents: [
+          {
+            encodings: [
+              {
+                property: 'name',
+                style: 'form',
+              },
+            ],
+            mediaType: 'application/json',
+            schema: {
+              description: 'desc',
+              type: 'string',
+            },
+          },
+        ],
+      });
     });
 
     test('given request body with existing encoding should append', () => {
@@ -155,7 +171,29 @@ describe('params.translator', () => {
           },
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toEqual({
+        contents: [
+          {
+            encodings: [
+              {
+                headers: [],
+                property: 'prop',
+                style: 'spaceDelimited',
+              },
+              {
+                property: 'name',
+                style: 'form',
+              },
+            ],
+            examples: [],
+            mediaType: 'application/json',
+            schema: {
+              description: 'desc',
+              type: 'string',
+            },
+          },
+        ],
+      });
     });
 
     test('given no request body should create one', () => {
@@ -171,7 +209,24 @@ describe('params.translator', () => {
           null,
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toEqual({
+        allowEmptyValue: undefined,
+        contents: [
+          {
+            encodings: [
+              {
+                property: 'name',
+                style: 'form',
+              },
+            ],
+            mediaType: '*',
+            schema: {
+              description: 'desc',
+              type: 'string',
+            },
+          },
+        ],
+      });
     });
 
     test('given a request body it should add a property to the schema', () => {
@@ -202,7 +257,32 @@ describe('params.translator', () => {
           },
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toEqual({
+        contents: [
+          {
+            encodings: [
+              {
+                property: 'name',
+                style: 'form',
+              },
+            ],
+            examples: [],
+            mediaType: 'application/json',
+            schema: {
+              properties: {
+                count: {
+                  type: 'number',
+                },
+                id: {
+                  type: 'number',
+                },
+              },
+              required: ['id'],
+              type: 'object',
+            },
+          },
+        ],
+      });
     });
   });
 
