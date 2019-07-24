@@ -88,10 +88,10 @@ describe('responses', () => {
       );
 
       expect(responses[0].contents).toBeDefined();
+      expect(responses[0].contents![0]).toHaveProperty('mediaType', 'application/json');
+
       expect(responses[0].contents![0].examples).toBeDefined();
       expect(responses[0].contents![0].examples).toHaveLength(2);
-
-      expect(responses[0].contents![0]).toHaveProperty('mediaType', 'application/json');
     });
   });
 });
