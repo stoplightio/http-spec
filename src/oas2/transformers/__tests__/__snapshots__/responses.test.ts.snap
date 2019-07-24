@@ -15,6 +15,11 @@ Array [
         "mediaType": "application/json",
         "schema": Object {},
       },
+      Object {
+        "examples": Array [],
+        "mediaType": "application/xml",
+        "schema": Object {},
+      },
     ],
     "description": "d1",
     "headers": Array [
@@ -27,6 +32,11 @@ Array [
   Object {
     "code": "r2",
     "contents": Array [
+      Object {
+        "examples": Array [],
+        "mediaType": "application/json",
+        "schema": Object {},
+      },
       Object {
         "examples": Array [
           Object {
@@ -53,7 +63,18 @@ exports[`responses should translate to response w/o examples 1`] = `
 Array [
   Object {
     "code": "r1",
-    "contents": Array [],
+    "contents": Array [
+      Object {
+        "examples": Array [],
+        "mediaType": "application/json",
+        "schema": Object {},
+      },
+      Object {
+        "examples": Array [],
+        "mediaType": "application/xml",
+        "schema": Object {},
+      },
+    ],
     "description": "d1",
     "headers": Array [
       Object {
@@ -70,6 +91,11 @@ Array [
   Object {
     "code": "r1",
     "contents": Array [
+      Object {
+        "examples": Array [],
+        "mediaType": "application/json",
+        "schema": Object {},
+      },
       Object {
         "examples": Array [
           Object {

@@ -71,28 +71,7 @@ describe('responses', () => {
   });
 
   describe('should keep foreign examples', () => {
-    it('by creating a new content if necessary', () => {
-      const responses = translateToResponses(
-        {
-          r1: {
-            description: 'd1',
-            examples: {
-              'application/i-have-no-clue': {},
-            },
-            headers: {},
-            schema: {},
-          },
-        },
-        produces,
-      );
-
-      expect(responses[0].contents).toBeDefined();
-      expect(responses[0].contents![0].examples).toBeDefined();
-      expect(responses[0].contents![0]).toHaveProperty('mediaType', '');
-
-      expect(responses[0].contents![0].examples![0]).toBeDefined();
-    });
-    it('aggregating to the first example', () => {
+    it('aggregating them to the first example', () => {
       const responses = translateToResponses(
         {
           r1: {
