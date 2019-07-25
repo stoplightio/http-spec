@@ -1,5 +1,4 @@
-import { HttpParamStyles } from '@stoplight/types';
-import { QueryParameter } from 'swagger-schema-official';
+import { FormDataParameter, QueryParameter } from 'swagger-schema-official';
 
 import {
   translateFromFormDataParameter,
@@ -11,7 +10,7 @@ import {
 } from '../params';
 
 describe('params.translator', () => {
-  const consumes = ['*'];
+  let consumes = ['*'];
 
   describe('translateToHeaderParam', () => {
     test('should translate header param', () => {
@@ -106,184 +105,279 @@ describe('params.translator', () => {
   });
 
   describe('translateToFormDataParameter', () => {
-    test('given request body with empty encodings should create encoding', () => {
+    beforeAll(() => {
+      consumes = ['application/x-www-form-urlencoded', 'multipart/form-data'];
+    });
+
+    const formDataParameterString: FormDataParameter = {
+      in: 'formData',
+      name: 'str',
+      type: 'string',
+      format: 'date',
+      description: 'desc',
+      required: true,
+      allowEmptyValue: true,
+      default: '25-07-2019',
+    };
+
+    const formDataParameterArray: FormDataParameter = {
+      in: 'formData',
+      name: 'arr',
+      type: 'array',
+      description: 'desc',
+      collectionFormat: 'multi',
+      items: {
+        type: 'number',
+      },
+      required: true,
+      maxItems: 10,
+      minItems: 1,
+    };
+
+    const formDataParameterInteger: FormDataParameter = {
+      in: 'formData',
+      name: 'int',
+      type: 'integer',
+      description: 'desc',
+      required: true,
+      maximum: 3,
+      minimum: 0,
+    };
+
+    test('converts parameters into schema', () => {
+      const expectedContent = {
+        encodings: [
+          {
+            explode: true,
+            property: 'arr',
+            style: 'form',
+          },
+        ],
+        schema: {
+          properties: {
+            arr: {
+              description: 'desc',
+              items: {
+                type: 'number',
+              },
+              maxItems: 10,
+              minItems: 1,
+              type: 'array',
+            },
+            int: {
+              description: 'desc',
+              maximum: 3,
+              minimum: 0,
+              type: 'integer',
+            },
+            str: {
+              allowEmptyValue: true,
+              default: '25-07-2019',
+              description: 'desc',
+              format: 'date',
+              minLength: 1,
+              type: 'string',
+            },
+          },
+          required: ['str', 'arr', 'int'],
+          type: 'object',
+        },
+      };
+
       expect(
         translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          {
-            contents: [
-              {
-                mediaType: 'application/json',
-              },
-            ],
-          },
+          [formDataParameterString, formDataParameterArray, formDataParameterInteger],
           consumes,
         ),
       ).toEqual({
         contents: [
           {
-            encodings: [
-              {
-                property: 'name',
-                style: 'form',
-              },
-            ],
-            mediaType: 'application/json',
-            schema: {
-              description: 'desc',
-              type: 'string',
-            },
+            ...expectedContent,
+            mediaType: 'application/x-www-form-urlencoded',
+          },
+          {
+            ...expectedContent,
+            mediaType: 'multipart/form-data',
           },
         ],
       });
     });
 
-    test('given request body with existing encoding should append', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          {
-            contents: [
-              {
-                examples: [],
-                mediaType: 'application/json',
-                encodings: [
-                  {
-                    headers: [],
-                    property: 'prop',
-                    style: HttpParamStyles.SpaceDelimited,
-                  },
-                ],
-              },
-            ],
-          },
-          consumes,
-        ),
-      ).toEqual({
-        contents: [
-          {
-            encodings: [
-              {
-                headers: [],
-                property: 'prop',
-                style: 'spaceDelimited',
-              },
-              {
-                property: 'name',
-                style: 'form',
-              },
-            ],
-            examples: [],
-            mediaType: 'application/json',
-            schema: {
-              description: 'desc',
-              type: 'string',
-            },
-          },
-        ],
-      });
-    });
+    // test('given empty request bodies should fill up missing data', () => {
+    //   expect(
+    //     translateFromFormDataParameter(
+    //       formDataParameterString,
+    //       {
+    //         contents: [
+    //           {
+    //             mediaType: 'application/x-www-form-urlencoded',
+    //           },
+    //           {
+    //             mediaType: 'multipart/form-data',
+    //           },
+    //         ],
+    //       },
+    //       consumes,
+    //     ),
+    //   ).toEqual({
+    //     contents: [
+    //       {
+    //         encodings: [
+    //           {
+    //             property: 'name',
+    //             style: 'form',
+    //           },
+    //         ],
+    //         mediaType: 'application/json',
+    //         schema: {
+    //           description: 'desc',
+    //           type: 'string',
+    //         },
+    //       },
+    //     ],
+    //   });
+    // });
 
-    test('given no request body should create one', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          null,
-          consumes,
-        ),
-      ).toEqual({
-        allowEmptyValue: undefined,
-        contents: [
-          {
-            encodings: [
-              {
-                property: 'name',
-                style: 'form',
-              },
-            ],
-            mediaType: '*',
-            schema: {
-              description: 'desc',
-              type: 'string',
-            },
-          },
-        ],
-      });
-    });
+    // test('given request body with existing encoding should append', () => {
+    //   expect(
+    //     translateFromFormDataParameter(
+    //       {
+    //         name: 'name',
+    //         type: 'string',
+    //         description: 'desc',
+    //         required: true,
+    //         in: 'formData',
+    //       },
+    //       {
+    //         contents: [
+    //           {
+    //             examples: [],
+    //             mediaType: 'application/json',
+    //             encodings: [
+    //               {
+    //                 headers: [],
+    //                 property: 'prop',
+    //                 style: HttpParamStyles.SpaceDelimited,
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //       consumes,
+    //     ),
+    //   ).toEqual({
+    //     contents: [
+    //       {
+    //         encodings: [
+    //           {
+    //             headers: [],
+    //             property: 'prop',
+    //             style: 'spaceDelimited',
+    //           },
+    //           {
+    //             property: 'name',
+    //             style: 'form',
+    //           },
+    //         ],
+    //         examples: [],
+    //         mediaType: 'application/json',
+    //         schema: {
+    //           description: 'desc',
+    //           type: 'string',
+    //         },
+    //       },
+    //     ],
+    //   });
+    // });
 
-    test('given a request body it should add a property to the schema', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          {
-            contents: [
-              {
-                examples: [],
-                mediaType: 'application/json',
-                schema: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'number' },
-                    count: { type: 'number' },
-                  },
-                  required: ['id'],
-                },
-              },
-            ],
-          },
-          consumes,
-        ),
-      ).toEqual({
-        contents: [
-          {
-            encodings: [
-              {
-                property: 'name',
-                style: 'form',
-              },
-            ],
-            examples: [],
-            mediaType: 'application/json',
-            schema: {
-              properties: {
-                count: {
-                  type: 'number',
-                },
-                id: {
-                  type: 'number',
-                },
-              },
-              required: ['id'],
-              type: 'object',
-            },
-          },
-        ],
-      });
-    });
+    // test('given no request body should create one', () => {
+    //   expect(
+    //     translateFromFormDataParameter(
+    //       {
+    //         name: 'name',
+    //         type: 'string',
+    //         description: 'desc',
+    //         required: true,
+    //         in: 'formData',
+    //       },
+    //       null,
+    //       consumes,
+    //     ),
+    //   ).toEqual({
+    //     allowEmptyValue: undefined,
+    //     contents: [
+    //       {
+    //         encodings: [
+    //           {
+    //             property: 'name',
+    //             style: 'form',
+    //           },
+    //         ],
+    //         mediaType: '*',
+    //         schema: {
+    //           description: 'desc',
+    //           type: 'string',
+    //         },
+    //       },
+    //     ],
+    //   });
+    // });
+
+    // test('given a request body it should add a property to the schema', () => {
+    //   expect(
+    //     translateFromFormDataParameter(
+    //       {
+    //         name: 'name',
+    //         type: 'string',
+    //         description: 'desc',
+    //         required: true,
+    //         in: 'formData',
+    //       },
+    //       {
+    //         contents: [
+    //           {
+    //             examples: [],
+    //             mediaType: 'application/json',
+    //             schema: {
+    //               type: 'object',
+    //               properties: {
+    //                 id: { type: 'number' },
+    //                 count: { type: 'number' },
+    //               },
+    //               required: ['id'],
+    //             },
+    //           },
+    //         ],
+    //       },
+    //       consumes,
+    //     ),
+    //   ).toEqual({
+    //     contents: [
+    //       {
+    //         encodings: [
+    //           {
+    //             property: 'name',
+    //             style: 'form',
+    //           },
+    //         ],
+    //         examples: [],
+    //         mediaType: 'application/json',
+    //         schema: {
+    //           properties: {
+    //             count: {
+    //               type: 'number',
+    //             },
+    //             id: {
+    //               type: 'number',
+    //             },
+    //           },
+    //           required: ['id'],
+    //           type: 'object',
+    //         },
+    //       },
+    //     ],
+    //   });
+    // });
   });
 
   describe('translateToQueryParameter', () => {

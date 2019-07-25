@@ -1,13 +1,14 @@
 import {
   HttpParamStyles,
-  IHttpContent,
   IHttpEncoding,
   IHttpHeaderParam,
   IHttpOperationRequestBody,
   IHttpPathParam,
   IHttpQueryParam,
+  IMediaTypeContent,
 } from '@stoplight/types';
-import { defaults, get, map, pick, pickBy } from 'lodash';
+import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { get, map, pick, pickBy, set } from 'lodash';
 import {
   BodyParameter,
   FormDataParameter,
@@ -19,7 +20,7 @@ import {
 } from 'swagger-schema-official';
 
 function chooseQueryParameterStyle(
-  parameter: QueryParameter,
+  parameter: QueryParameter | FormDataParameter,
 ): HttpParamStyles.PipeDelimited | HttpParamStyles.SpaceDelimited | HttpParamStyles.Form {
   /** Must cast to 'any' because this field is missing from the types but it's defined in the spec
    * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
@@ -46,7 +47,7 @@ function chooseQueryParameterStyle(
 
 export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderParam {
   return (pickBy({
-    ...buildContentFromParameter(parameter),
+    ...buildSchemaForParameter(parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
@@ -56,7 +57,7 @@ export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderP
 export function translateToHeaderParams(headers: { [headerName: string]: Header }): IHttpHeaderParam[] {
   return map(headers, (header, name) => {
     const param: IHttpHeaderParam = {
-      ...buildContentFromParameter(Object.assign({ name }, header)),
+      ...buildSchemaForParameter(Object.assign({ name }, header)),
       name,
       style: HttpParamStyles.Simple,
     };
@@ -81,41 +82,84 @@ export function translateToBodyParameter(body: BodyParameter, consumes: string[]
 }
 
 export function translateFromFormDataParameter(
-  form: FormDataParameter,
-  requestBody: IHttpOperationRequestBody | null | undefined,
+  parameters: FormDataParameter[],
   consumes: string[],
 ): IHttpOperationRequestBody {
-  const baseContent = buildContentFromParameter(form);
+  const finalBody: IHttpOperationRequestBody = {
+    contents: consumes.map(mediaType => ({
+      mediaType,
+      schema: {
+        type: 'object',
+      },
+    })),
+  };
 
-  const requestBodyCopy: IHttpOperationRequestBody = Object.assign(
-    {},
-    requestBody || {
-      allowEmptyValue: form.allowEmptyValue,
-      contents: consumes.map(mediaType => ({
-        ...baseContent,
-        mediaType,
-      })),
-    },
-  );
-  const bodyContent = requestBodyCopy.contents && requestBodyCopy.contents[0];
+  return parameters.reduce((body, parameter) => {
+    const { schema } = buildSchemaForParameter(parameter);
+    (body.contents || []).forEach(content => {
+      // workaround... JSONSchema4 does not support `allowEmptyValue`
+      if ('allowEmptyValue' in parameter) {
+        // @ts-ignore
+        schema.allowEmptyValue = parameter.allowEmptyValue;
+      }
+      set(content, `schema.properties.${parameter.name}`, schema);
+      if (parameter.required) {
+        const requiredIndex = get(content, 'schema.required', []).length;
+        set(content, `schema.required.${requiredIndex}`, parameter.name);
+      }
+      if (parameter.collectionFormat) {
+        content.encodings = content.encodings || [];
+        const encoding = buildEncoding(parameter, content);
+        if (encoding) {
+          content.encodings.push(encoding);
+        }
+      }
+    });
+    return body;
+  }, finalBody);
+}
 
-  if (bodyContent) {
-    bodyContent.schema = bodyContent.schema || baseContent.schema;
-
-    const encoding: IHttpEncoding = {
-      property: form.name,
-      style: HttpParamStyles.Form,
-    };
-
-    bodyContent.encodings = (bodyContent.encodings || []).concat(encoding);
+function buildEncoding(parameter: FormDataParameter, content: IMediaTypeContent): IHttpEncoding | null {
+  switch (parameter.collectionFormat) {
+    case 'csv':
+      return {
+        property: parameter.name,
+        style: HttpParamStyles.Form,
+        explode: false,
+      };
+    case 'pipes':
+      return {
+        property: parameter.name,
+        style: HttpParamStyles.PipeDelimited,
+        explode: false,
+      };
+    case 'multi':
+      return {
+        property: parameter.name,
+        style: HttpParamStyles.Form,
+        explode: true,
+      };
+    case 'ssv':
+      return {
+        property: parameter.name,
+        style: HttpParamStyles.SpaceDelimited,
+        explode: false,
+      };
+    // TODO: TSV is not supported in OAS3, no compatibility
+    // case 'tsv':
+    //   content.encodings.push({
+    //     property: parameter.name,
+    //     style: HttpParamStyles.?,
+    //     explode: false,
+    //   });
+    //   break;
   }
-
-  return requestBodyCopy;
+  return null;
 }
 
 export function translateToQueryParameter(query: QueryParameter): IHttpQueryParam {
   return (pickBy({
-    ...buildContentFromParameter(query),
+    ...buildSchemaForParameter(query),
     allowEmptyValue: query.allowEmptyValue,
     name: query.name,
     style: chooseQueryParameterStyle(query),
@@ -125,16 +169,16 @@ export function translateToQueryParameter(query: QueryParameter): IHttpQueryPara
 
 export function translateToPathParameter(parameter: PathParameter): IHttpPathParam {
   return (pickBy({
-    ...buildContentFromParameter(parameter),
+    ...buildSchemaForParameter(parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
   }) as unknown) as IHttpPathParam;
 }
 
-function buildContentFromParameter(
+function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): IHttpContent {
+): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7 } {
   const schema: Schema = pick(
     param,
     'type',
@@ -157,11 +201,9 @@ function buildContentFromParameter(
     'multipleOf',
   );
 
-  return {
-    schema: pickBy(
-      defaults<Schema, Schema>(schema, {
-        minLength: 'allowEmptyValue' in param && param.allowEmptyValue ? 1 : undefined,
-      }),
-    ),
-  };
+  if ('allowEmptyValue' in param && param.allowEmptyValue) {
+    schema.minLength = 1;
+  }
+
+  return { schema };
 }
