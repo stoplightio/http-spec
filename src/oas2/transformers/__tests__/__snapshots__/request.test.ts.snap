@@ -90,7 +90,6 @@ exports[`request should translate mixed request 1`] = `
 Object {
   "body": Object {
     "in": "body",
-    "type": "form",
   },
   "headers": Array [
     Object {

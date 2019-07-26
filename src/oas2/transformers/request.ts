@@ -1,5 +1,5 @@
 import { IHttpOperationRequest } from '@stoplight/types';
-import { Parameter, BodyParameter, FormDataParameter } from 'swagger-schema-official';
+import { BodyParameter, FormDataParameter, Parameter } from 'swagger-schema-official';
 
 import { isBodyParameter, isFormDataParameter, isHeaderParameter, isPathParameter, isQueryParameter } from '../guards';
 import {
@@ -17,9 +17,9 @@ export function translateToRequest(parameters: Parameter[], consumes: string[]):
 
   // if 'body' and 'form data' defined prefer 'body'
   if (!!bodyParameters.length) {
-    // There can be only one body parameter (?)
+    // There can be only one body parameter (taking first one)
     request.body = translateToBodyParameter(bodyParameters[0], consumes);
-  } else if (!!formDataParameters) {
+  } else if (!!formDataParameters.length) {
     request.body = translateFromFormDataParameter(formDataParameters, consumes);
   }
 
