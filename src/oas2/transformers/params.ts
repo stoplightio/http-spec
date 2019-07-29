@@ -145,14 +145,6 @@ function buildEncoding(parameter: FormDataParameter, content: IMediaTypeContent)
         style: HttpParamStyles.SpaceDelimited,
         explode: false,
       };
-    // TODO: TSV is not supported in OAS3, no compatibility
-    // case 'tsv':
-    //   content.encodings.push({
-    //     property: parameter.name,
-    //     style: HttpParamStyles.?,
-    //     explode: false,
-    //   });
-    //   break;
   }
   return null;
 }
