@@ -5,7 +5,6 @@ import {
   IHttpOperationRequestBody,
   IHttpPathParam,
   IHttpQueryParam,
-  IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { get, map, pick, pickBy, set } from 'lodash';
@@ -103,7 +102,7 @@ export function translateFromFormDataParameter(
       }
       set(content, `schema.properties.${parameter.name}`, schema);
       if (parameter.required) {
-        const requiredIndex = get(content, 'schema.required', []).length;
+        const requiredIndex = get(content, 'schema.required.length', 0);
         set(content, `schema.required.${requiredIndex}`, parameter.name);
       }
       if (parameter.collectionFormat) {
