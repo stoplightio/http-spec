@@ -80,7 +80,7 @@ export function translateToBodyParameter(body: BodyParameter, consumes: string[]
   });
 }
 
-export function translateFromFormDataParameter(
+export function translateFromFormDataParameters(
   parameters: FormDataParameter[],
   consumes: string[],
 ): IHttpOperationRequestBody {

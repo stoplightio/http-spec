@@ -1,7 +1,7 @@
 import { FormDataParameter, QueryParameter } from 'swagger-schema-official';
 
 import {
-  translateFromFormDataParameter,
+  translateFromFormDataParameters,
   translateToBodyParameter,
   translateToHeaderParam,
   translateToHeaderParams,
@@ -185,7 +185,7 @@ describe('params.translator', () => {
       };
 
       expect(
-        translateFromFormDataParameter(
+        translateFromFormDataParameters(
           [formDataParameterString, formDataParameterArray, formDataParameterInteger],
           consumes,
         ),
