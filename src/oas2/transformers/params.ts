@@ -19,7 +19,7 @@ import {
 } from 'swagger-schema-official';
 
 function chooseQueryParameterStyle(
-  parameter: QueryParameter | FormDataParameter,
+  parameter: QueryParameter,
 ): HttpParamStyles.PipeDelimited | HttpParamStyles.SpaceDelimited | HttpParamStyles.Form {
   /** Must cast to 'any' because this field is missing from the types but it's defined in the spec
    * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
