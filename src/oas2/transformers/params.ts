@@ -109,7 +109,7 @@ export function translateFromFormDataParameter(
       }
       if (parameter.collectionFormat) {
         content.encodings = content.encodings || [];
-        const encoding = buildEncoding(parameter, content);
+        const encoding = buildEncoding(parameter);
         if (encoding) {
           content.encodings.push(encoding);
         }
@@ -119,7 +119,7 @@ export function translateFromFormDataParameter(
   }, finalBody);
 }
 
-function buildEncoding(parameter: FormDataParameter, content: IMediaTypeContent): IHttpEncoding | null {
+function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   switch (parameter.collectionFormat) {
     case 'csv':
       return {
