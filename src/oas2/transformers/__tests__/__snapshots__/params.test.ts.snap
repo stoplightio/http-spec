@@ -51,6 +51,7 @@ Object {
   "required": true,
   "schema": Object {
     "description": "desc",
+    "minLength": 1,
     "minimum": 12,
     "type": "integer",
   },
@@ -66,6 +67,7 @@ Array [
     "name": "header-name",
     "schema": Object {
       "description": "a description",
+      "minLength": 1,
       "type": "string",
     },
     "style": "simple",
@@ -74,6 +76,7 @@ Array [
     "name": "plain-tex",
     "schema": Object {
       "description": "another description",
+      "minLength": 1,
       "type": "string",
     },
     "style": "simple",
@@ -87,6 +90,7 @@ Array [
     "name": "header-name",
     "schema": Object {
       "description": "a description",
+      "minLength": 1,
       "type": "string",
     },
     "style": "simple",
@@ -100,6 +104,7 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
+    "minLength": 1,
     "type": "string",
   },
   "style": "simple",
@@ -113,7 +118,6 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
-    "minLength": 1,
     "type": "number",
   },
   "style": "form",
@@ -127,7 +131,6 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
-    "minLength": 1,
     "type": "number",
   },
   "style": "form",
@@ -141,7 +144,6 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
-    "minLength": 1,
     "type": "number",
   },
   "style": "pipeDelimited",
@@ -155,7 +157,6 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
-    "minLength": 1,
     "type": "number",
   },
   "style": "form",
@@ -169,7 +170,6 @@ Object {
   "required": true,
   "schema": Object {
     "description": "descr",
-    "minLength": 1,
     "type": "number",
   },
   "style": "spaceDelimited",

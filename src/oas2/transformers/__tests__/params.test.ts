@@ -162,12 +162,14 @@ describe('params.translator', () => {
               },
               maxItems: 10,
               minItems: 1,
+              minLength: 1,
               type: 'array',
             },
             int: {
               description: 'desc',
               maximum: 3,
               minimum: 0,
+              minLength: 1,
               type: 'integer',
             },
             str: {
@@ -175,7 +177,6 @@ describe('params.translator', () => {
               default: '25-07-2019',
               description: 'desc',
               format: 'date',
-              minLength: 1,
               type: 'string',
             },
           },

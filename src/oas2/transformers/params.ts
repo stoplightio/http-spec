@@ -192,6 +192,8 @@ function buildSchemaForParameter(
   );
 
   if ('allowEmptyValue' in param && param.allowEmptyValue) {
+    delete schema.minLength;
+  } else {
     schema.minLength = 1;
   }
 
