@@ -106,11 +106,24 @@ const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: stri
 };
 
 const transformSchema = (schema: SchemaObject) => {
-  if (schema && schema.nullable) {
-    return {
-      ...schema,
-      type: [schema.type, 'null'],
-    };
+  if (schema) {
+    if (schema.nullable)
+      return {
+        ...schema,
+        type: [schema.type, 'null'],
+      };
+
+    if (schema.properties) {
+      Object.keys(schema.properties).forEach(prop => {
+        schema.properties![prop] = transformSchema(schema.properties![prop]) as SchemaObject;
+      });
+      if (schema.anyOf) schema.anyOf = schema.anyOf.map(transformSchema) as SchemaObject[];
+      if (schema.allOf) schema.allOf = schema.allOf.map(transformSchema) as SchemaObject[];
+      if (schema.not) schema.not = transformSchema(schema.not) as SchemaObject;
+      if (schema.items) schema.items = transformSchema(schema.items) as SchemaObject;
+      if (schema.additionalProperties && typeof schema.additionalProperties !== 'boolean')
+        schema.additionalProperties = transformSchema(schema.additionalProperties) as SchemaObject;
+    }
   }
 
   return schema;
