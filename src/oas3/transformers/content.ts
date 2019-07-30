@@ -1,7 +1,9 @@
 import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
-import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject, SchemaObject } from 'openapi3-ts';
+// @ts-ignore
+import * as toJsonSchema from 'openapi-schema-to-json-schema';
+import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -82,7 +84,7 @@ export function translateMediaTypeObject(
 ): IMediaTypeContent {
   return {
     mediaType,
-    schema: transformSchema(schema as SchemaObject) as JSONSchema4,
+    schema: schema ? (toJsonSchema(schema, { cloneSchema: false }) as JSONSchema4) : undefined,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(
@@ -103,28 +105,4 @@ const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: stri
     value: get(source, ['examples', key, 'value']),
     key,
   };
-};
-
-const transformSchema = (schema: SchemaObject) => {
-  if (schema) {
-    if (schema.nullable)
-      return {
-        ...schema,
-        type: [schema.type, 'null'],
-      };
-
-    if (schema.properties) {
-      Object.keys(schema.properties).forEach(prop => {
-        schema.properties![prop] = transformSchema(schema.properties![prop]) as SchemaObject;
-      });
-      if (schema.anyOf) schema.anyOf = schema.anyOf.map(transformSchema) as SchemaObject[];
-      if (schema.allOf) schema.allOf = schema.allOf.map(transformSchema) as SchemaObject[];
-      if (schema.not) schema.not = transformSchema(schema.not) as SchemaObject;
-      if (schema.items) schema.items = transformSchema(schema.items) as SchemaObject;
-      if (schema.additionalProperties && typeof schema.additionalProperties !== 'boolean')
-        schema.additionalProperties = transformSchema(schema.additionalProperties) as SchemaObject;
-    }
-  }
-
-  return schema;
 };
