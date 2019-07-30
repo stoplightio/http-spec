@@ -1,6 +1,7 @@
 import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample } from '@stoplight/types';
+import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
-import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject, SchemaObject } from 'openapi3-ts';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -81,7 +82,7 @@ export function translateMediaTypeObject(
 ): IMediaTypeContent {
   return {
     mediaType,
-    schema: schema as any,
+    schema: transformSchema(schema as SchemaObject) as JSONSchema4,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(
@@ -102,4 +103,15 @@ const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: stri
     value: get(source, ['examples', key, 'value']),
     key,
   };
+};
+
+const transformSchema = (schema: SchemaObject) => {
+  if (schema && schema.nullable) {
+    return {
+      ...schema,
+      type: [schema.type, 'null'],
+    };
+  }
+
+  return schema;
 };
