@@ -16,7 +16,7 @@ function translateEncodingPropertyObject(
     HttpParamStyles.DeepObject,
   ];
 
-  if (!acceptableStyles.includes(encodingPropertyObject.style)) {
+  if (encodingPropertyObject.style && !acceptableStyles.includes(encodingPropertyObject.style)) {
     throw new Error(
       `Encoding property style: '${encodingPropertyObject.style}' is incorrect, must be one of: ${acceptableStyles}`,
     );
