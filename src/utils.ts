@@ -1,10 +1,10 @@
-import { flatten, map, uniq } from 'lodash';
+import { map } from 'lodash';
 import * as URIJS from 'urijs';
 
 import { pathToPointer, pointerToPath } from '@stoplight/json';
 
 export function uniqFlatMap<T>(collection?: T[]) {
-  return uniq(flatten(map(collection, Object.keys)));
+  return map(collection, Object.keys);
 }
 
 // wraps urijs to handle edge cases that would normally error out or cause unexpected behavior

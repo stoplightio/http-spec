@@ -1,13 +1,18 @@
-import { get, pick, values } from 'lodash';
-import { OpenAPIObject, OperationObject, SecuritySchemeObject } from 'openapi3-ts';
+import { get } from 'lodash';
+import { OpenAPIObject, OperationObject } from 'openapi3-ts';
 
 import { uniqFlatMap } from '../utils';
 
-export function getSecurities(
-  spec: Partial<OpenAPIObject>,
-  operation: Partial<OperationObject>,
-): SecuritySchemeObject[] {
+export function getSecurities(spec: Partial<OpenAPIObject>, operation: Partial<OperationObject>): any {
   const globalSchemes = uniqFlatMap(spec.security);
   const operationSchemes = uniqFlatMap(operation.security);
-  return values(pick(get(spec, 'components.securitySchemes'), operation.security ? operationSchemes : globalSchemes));
+
+  const opSchemesPairs = operation.security ? operationSchemes : globalSchemes;
+  const definitions = get(spec, 'components.securitySchemes');
+
+  return opSchemesPairs.map((opSchemePair: string[]) => {
+    return opSchemePair.map((opScheme: string) => {
+      return definitions[opScheme];
+    });
+  });
 }
