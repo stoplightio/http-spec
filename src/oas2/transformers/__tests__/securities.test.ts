@@ -16,7 +16,7 @@ describe('securities', () => {
         type: 'basic',
         description: 'a description',
       };
-      expect(translateToSecurities([security])).toMatchSnapshot();
+      expect(translateToSecurities([[security]])).toMatchSnapshot();
     });
 
     test('single apiKey security', () => {
@@ -26,7 +26,7 @@ describe('securities', () => {
         in: 'query',
         name: 'a name',
       };
-      expect(translateToSecurities([security])).toMatchSnapshot();
+      expect(translateToSecurities([[security]])).toMatchSnapshot();
     });
 
     describe('single oauth2 security', () => {
@@ -39,7 +39,7 @@ describe('securities', () => {
           scopes: { scope: 'value' },
           flow: 'implicit',
         };
-        expect(translateToSecurities([security])).toMatchSnapshot();
+        expect(translateToSecurities([[security]])).toMatchSnapshot();
       });
 
       test('with password flow', () => {
@@ -50,7 +50,7 @@ describe('securities', () => {
           scopes: { scope: 'value' },
           tokenUrl: 'a token url',
         };
-        expect(translateToSecurities([security])).toMatchSnapshot();
+        expect(translateToSecurities([[security]])).toMatchSnapshot();
       });
 
       test('with application flow', () => {
@@ -61,7 +61,7 @@ describe('securities', () => {
           scopes: { scope: 'value' },
           tokenUrl: 'a token url',
         };
-        expect(translateToSecurities([security])).toMatchSnapshot();
+        expect(translateToSecurities([[security]])).toMatchSnapshot();
       });
 
       test('with accessCode flow', () => {
@@ -73,7 +73,7 @@ describe('securities', () => {
           tokenUrl: 'a token url',
           authorizationUrl: 'an authorization url',
         };
-        expect(translateToSecurities([security])).toMatchSnapshot();
+        expect(translateToSecurities([[security]])).toMatchSnapshot();
       });
     });
 
@@ -95,7 +95,7 @@ describe('securities', () => {
         name: 'a name',
       };
 
-      expect(translateToSecurities([basicSecurity, implicitSecurity, apiSecurity])).toMatchSnapshot();
+      expect(translateToSecurities([[basicSecurity, implicitSecurity, apiSecurity]])).toMatchSnapshot();
     });
   });
 });

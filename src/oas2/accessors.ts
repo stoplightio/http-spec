@@ -1,14 +1,18 @@
 import { Dictionary } from '@stoplight/types';
-import { compact, get, map, merge } from 'lodash';
+import { compact, get, isEmpty, map, merge } from 'lodash';
+import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
 
 export function getSecurities(
   spec: Partial<Spec>,
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
-): Security[] {
+): Security[][] {
   const globalSecurities = getSecurity(spec.security, spec.securityDefinitions || {});
   const operationSecurities = getSecurity(operationSecurity, spec.securityDefinitions || {});
-  return !!operationSecurity ? operationSecurities : globalSecurities;
+
+  const securities = !!operationSecurity ? operationSecurities : globalSecurities;
+
+  return securities.filter(negate(isEmpty));
 }
 
 export function getProduces(spec: Partial<Spec>, operation: Partial<Operation>) {
