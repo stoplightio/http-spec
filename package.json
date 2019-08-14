@@ -35,8 +35,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.0.1",
-    "@stoplight/json-ref-resolver": "git://github.com/stoplightio/json-ref-resolver.git#fix/do-not-flatten-security",
-    "@stoplight/types": "git://github.com/stoplightio/types.git#fix/do-not-flatten-security",
+    "@stoplight/types": "^11.0.0",
     "@types/swagger-schema-official": "~2.0.18",
     "@types/urijs": "~1.19.1",
     "lodash": "^4.17.11",
