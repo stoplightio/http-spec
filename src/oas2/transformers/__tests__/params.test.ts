@@ -1,8 +1,7 @@
-import { HttpParamStyles } from '@stoplight/types';
-import { QueryParameter } from 'swagger-schema-official';
+import { FormDataParameter, QueryParameter } from 'swagger-schema-official';
 
 import {
-  translateFromFormDataParameter,
+  translateFromFormDataParameters,
   translateToBodyParameter,
   translateToHeaderParam,
   translateToHeaderParams,
@@ -11,7 +10,7 @@ import {
 } from '../params';
 
 describe('params.translator', () => {
-  const consumes = ['*'];
+  let consumes = ['*'];
 
   describe('translateToHeaderParam', () => {
     test('should translate header param', () => {
@@ -106,103 +105,102 @@ describe('params.translator', () => {
   });
 
   describe('translateToFormDataParameter', () => {
-    test('given request body with empty encodings should create encoding', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          {
-            contents: [
-              {
-                mediaType: 'application/json',
-              },
-            ],
-          },
-          consumes,
-        ),
-      ).toMatchSnapshot();
+    beforeAll(() => {
+      consumes = ['application/x-www-form-urlencoded', 'multipart/form-data'];
     });
 
-    test('given request body with existing encoding should append', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          {
-            contents: [
-              {
-                examples: [],
-                mediaType: 'application/json',
-                encodings: [
-                  {
-                    headers: [],
-                    property: 'prop',
-                    style: HttpParamStyles.SpaceDelimited,
-                  },
-                ],
-              },
-            ],
-          },
-          consumes,
-        ),
-      ).toMatchSnapshot();
-    });
+    const formDataParameterString: FormDataParameter = {
+      in: 'formData',
+      name: 'str',
+      type: 'string',
+      format: 'date',
+      description: 'desc',
+      required: true,
+      allowEmptyValue: true,
+      default: '25-07-2019',
+    };
 
-    test('given no request body should create one', () => {
-      expect(
-        translateFromFormDataParameter(
-          {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
-          },
-          null,
-          consumes,
-        ),
-      ).toMatchSnapshot();
-    });
+    const formDataParameterArray: FormDataParameter = {
+      in: 'formData',
+      name: 'arr',
+      type: 'array',
+      description: 'desc',
+      collectionFormat: 'multi',
+      items: {
+        type: 'number',
+      },
+      required: true,
+      maxItems: 10,
+      minItems: 1,
+    };
 
-    test('given a request body it should add a property to the schema', () => {
-      expect(
-        translateFromFormDataParameter(
+    const formDataParameterInteger: FormDataParameter = {
+      in: 'formData',
+      name: 'int',
+      type: 'integer',
+      description: 'desc',
+      required: true,
+      maximum: 3,
+      minimum: 0,
+    };
+
+    test('converts parameters into schema', () => {
+      const expectedContent = {
+        encodings: [
           {
-            name: 'name',
-            type: 'string',
-            description: 'desc',
-            required: true,
-            in: 'formData',
+            explode: true,
+            property: 'arr',
+            style: 'form',
           },
-          {
-            contents: [
-              {
-                examples: [],
-                mediaType: 'application/json',
-                schema: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'number' },
-                    count: { type: 'number' },
-                  },
-                  required: ['id'],
-                },
+        ],
+        schema: {
+          properties: {
+            arr: {
+              description: 'desc',
+              items: {
+                type: 'number',
               },
-            ],
+              maxItems: 10,
+              minItems: 1,
+              type: 'array',
+            },
+            int: {
+              description: 'desc',
+              maximum: 3,
+              minimum: 0,
+              type: 'integer',
+            },
+            str: {
+              allowEmptyValue: true,
+              default: '25-07-2019',
+              description: 'desc',
+              minLength: 1,
+              format: 'date',
+              type: 'string',
+            },
           },
+          required: ['str', 'arr', 'int'],
+          type: 'object',
+        },
+      };
+
+      expect(
+        translateFromFormDataParameters(
+          [formDataParameterString, formDataParameterArray, formDataParameterInteger],
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toEqual({
+        contents: [
+          {
+            ...expectedContent,
+            mediaType: 'application/x-www-form-urlencoded',
+          },
+          {
+            ...expectedContent,
+            mediaType: 'multipart/form-data',
+          },
+        ],
+      });
     });
   });
 

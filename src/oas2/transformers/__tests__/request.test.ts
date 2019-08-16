@@ -8,7 +8,7 @@ import {
   isQueryParameter,
 } from '../../guards';
 import {
-  translateFromFormDataParameter,
+  translateFromFormDataParameters,
   translateToBodyParameter,
   translateToHeaderParam,
   translateToPathParameter,
@@ -34,7 +34,7 @@ describe('request', () => {
 
   beforeEach(() => {
     (translateToBodyParameter as jest.Mock).mockReturnValue(fakeBodyParameter);
-    (translateFromFormDataParameter as jest.Mock).mockReturnValue(fakeFormParameter);
+    (translateFromFormDataParameters as jest.Mock).mockReturnValue(fakeFormParameter);
     (translateToQueryParameter as jest.Mock).mockReturnValue(fakeQueryParameter);
     (translateToPathParameter as jest.Mock).mockReturnValue(fakePathParameter);
     (translateToHeaderParam as jest.Mock).mockReturnValue(fakeHeaderParameter);

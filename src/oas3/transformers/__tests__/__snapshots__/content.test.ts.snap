@@ -58,7 +58,9 @@ Object {
     },
   ],
   "mediaType": "mediaType",
-  "schema": Object {},
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+  },
 }
 `;
 
@@ -107,7 +109,9 @@ Object {
     },
   ],
   "mediaType": "mediaType",
-  "schema": Object {},
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+  },
 }
 `;
 
@@ -121,7 +125,9 @@ Object {
     },
   ],
   "mediaType": "mediaType",
-  "schema": Object {},
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+  },
 }
 `;
 
@@ -135,6 +141,8 @@ Object {
     },
   ],
   "mediaType": "mediaType",
-  "schema": Object {},
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+  },
 }
 `;

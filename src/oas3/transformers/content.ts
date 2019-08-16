@@ -1,5 +1,8 @@
 import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample } from '@stoplight/types';
+import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
+// @ts-ignore
+import * as toJsonSchema from 'openapi-schema-to-json-schema';
 import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
 
 function translateEncodingPropertyObject(
@@ -13,7 +16,7 @@ function translateEncodingPropertyObject(
     HttpParamStyles.DeepObject,
   ];
 
-  if (!acceptableStyles.includes(encodingPropertyObject.style)) {
+  if (encodingPropertyObject.style && !acceptableStyles.includes(encodingPropertyObject.style)) {
     throw new Error(
       `Encoding property style: '${encodingPropertyObject.style}' is incorrect, must be one of: ${acceptableStyles}`,
     );
@@ -81,7 +84,7 @@ export function translateMediaTypeObject(
 ): IMediaTypeContent {
   return {
     mediaType,
-    schema: schema as any,
+    schema: schema ? (toJsonSchema(schema, { cloneSchema: false }) as JSONSchema4) : undefined,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(

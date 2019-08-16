@@ -114,6 +114,24 @@ describe('translateMediaTypeObject', () => {
     };
     expect(testedFunction).toThrowErrorMatchingSnapshot();
   });
+
+  test('given encoding with no style it should not throw an error', () => {
+    const testedFunction = () => {
+      translateMediaTypeObject(
+        {
+          schema: {},
+          examples: { example: { summary: 'multi example' } },
+          encoding: {
+            enc1: {
+              contentType: 'text/plain',
+            },
+          },
+        },
+        'mediaType',
+      );
+    };
+    expect(() => testedFunction()).not.toThrow();
+  });
 });
 
 describe('translateHeaderObject', () => {
