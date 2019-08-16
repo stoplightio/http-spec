@@ -77,7 +77,7 @@ describe('securities', () => {
       });
     });
 
-    test('multiple mixed securities', () => {
+    describe('multiple mixed securities', () => {
       const basicSecurity: BasicAuthenticationSecurity = {
         type: 'basic',
         description: 'a description',
@@ -95,7 +95,13 @@ describe('securities', () => {
         name: 'a name',
       };
 
-      expect(translateToSecurities([[basicSecurity, implicitSecurity, apiSecurity]])).toMatchSnapshot();
+      test('OR relation between security schemes', () => {
+        expect(translateToSecurities([[basicSecurity], [implicitSecurity], [apiSecurity]])).toMatchSnapshot();
+      });
+
+      test('AND relation between security schemes', () => {
+        expect(translateToSecurities([[basicSecurity, implicitSecurity, apiSecurity]])).toMatchSnapshot();
+      });
     });
   });
 });

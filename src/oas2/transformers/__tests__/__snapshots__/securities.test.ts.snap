@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`securities translateToSecurities multiple mixed securities 1`] = `
+exports[`securities translateToSecurities multiple mixed securities AND relation between security schemes 1`] = `
 Array [
   Array [
     Object {
@@ -18,6 +18,38 @@ Array [
       },
       "type": "oauth2",
     },
+    Object {
+      "description": "a description",
+      "in": "query",
+      "name": "a name",
+      "type": "apiKey",
+    },
+  ],
+]
+`;
+
+exports[`securities translateToSecurities multiple mixed securities OR relation between security schemes 1`] = `
+Array [
+  Array [
+    Object {
+      "description": "a description",
+      "scheme": "basic",
+      "type": "http",
+    },
+  ],
+  Array [
+    Object {
+      "description": "a description",
+      "flows": Object {
+        "implicit": Object {
+          "authorizationUrl": "a url",
+          "scopes": Object {},
+        },
+      },
+      "type": "oauth2",
+    },
+  ],
+  Array [
     Object {
       "description": "a description",
       "in": "query",
