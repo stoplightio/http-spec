@@ -13,11 +13,5 @@ export function getSecurities(
   const opSchemesPairs = operation.security ? operationSchemes : globalSchemes;
   const definitions = get(spec, 'components.securitySchemes');
 
-  return !definitions
-    ? []
-    : opSchemesPairs.map((opSchemePair: string[]) => {
-        return opSchemePair.map((opScheme: string) => {
-          return definitions[opScheme];
-        });
-      });
+  return !definitions ? [] : opSchemesPairs.map(opSchemePair => opSchemePair.map(opScheme => definitions[opScheme]));
 }

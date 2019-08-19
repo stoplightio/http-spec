@@ -1,10 +1,8 @@
 import { Dictionary } from '@stoplight/types';
-import { Security as SecurityDefinition } from 'swagger-schema-official';
+import { Security } from 'swagger-schema-official';
 import { getConsumes, getProduces, getSecurities } from '../accessors';
 
-type Security = Dictionary<string[], string>;
-
-const securityDefinitionsFixture: Dictionary<SecurityDefinition> = {
+const securityDefinitionsFixture: Dictionary<Security> = {
   api_key: {
     type: 'apiKey',
     name: 'api_key',
@@ -22,7 +20,7 @@ const securityDefinitionsFixture: Dictionary<SecurityDefinition> = {
 };
 
 describe('accessors', () => {
-  const securityFixture: Security[] = [
+  const securityFixture: Array<Dictionary<string[], string>> = [
     {
       api_key: [],
       petstore_auth: ['write:pets', 'read:pets'],
@@ -30,7 +28,7 @@ describe('accessors', () => {
   ];
 
   describe('relation between schemes', () => {
-    describe('when all fo the given schemes are expected to be validated against', () => {
+    describe('when all of the given schemes are expected to be validated against', () => {
       const securityFixtureWithAndRelation = securityFixture;
 
       it('returns an array containing multiple elements', () => {
@@ -63,9 +61,9 @@ describe('accessors', () => {
       });
     });
 
-    describe('when one fo the given schemes is expected to be validated against', () => {
+    describe('when one of the given schemes is expected to be validated against', () => {
       it('returns arrays containing one element each', () => {
-        const securityFixtureWithOrRelation: Security[] = [
+        const securityFixtureWithOrRelation: Array<Dictionary<string[], string>> = [
           {
             petstore_auth: ['write:pets', 'read:pets'],
           },

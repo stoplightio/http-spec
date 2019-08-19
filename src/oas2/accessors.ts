@@ -26,7 +26,7 @@ export function getConsumes(spec: Partial<Spec>, operation: Partial<Operation>) 
 function getSecurity(
   security: Array<Dictionary<string[], string>> | undefined,
   definitions: Dictionary<Security, string>,
-): any {
+): Security[][] {
   return map(security, sec => {
     return compact(
       map(Object.keys(sec), (key: string) => {
