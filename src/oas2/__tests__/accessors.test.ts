@@ -20,12 +20,89 @@ const securityDefinitionsFixture: Dictionary<Security> = {
 };
 
 describe('accessors', () => {
-  const securityFixture = [
+  const securityFixture: Array<Dictionary<string[], string>> = [
     {
       api_key: [],
       petstore_auth: ['write:pets', 'read:pets'],
     },
   ];
+
+  describe('relation between schemes', () => {
+    describe('when all of the given schemes are expected to be validated against', () => {
+      const securityFixtureWithAndRelation = securityFixture;
+
+      it('returns an array containing multiple elements', () => {
+        expect(
+          getSecurities(
+            {
+              securityDefinitions: securityDefinitionsFixture,
+              security: [],
+            },
+            securityFixtureWithAndRelation,
+          ),
+        ).toEqual([
+          [
+            {
+              in: 'header',
+              name: 'api_key',
+              type: 'apiKey',
+            },
+            {
+              authorizationUrl: 'http://swagger.io/api/oauth/dialog',
+              flow: 'implicit',
+              scopes: {
+                'read:pets': 'read your pets',
+                'write:pets': 'modify pets in your account',
+              },
+              type: 'oauth2',
+            },
+          ],
+        ]);
+      });
+    });
+
+    describe('when one of the given schemes is expected to be validated against', () => {
+      it('returns arrays containing one element each', () => {
+        const securityFixtureWithOrRelation: Array<Dictionary<string[], string>> = [
+          {
+            petstore_auth: ['write:pets', 'read:pets'],
+          },
+          {
+            api_key: [],
+          },
+        ];
+
+        expect(
+          getSecurities(
+            {
+              securityDefinitions: securityDefinitionsFixture,
+              security: [],
+            },
+            securityFixtureWithOrRelation,
+          ),
+        ).toEqual([
+          [
+            {
+              authorizationUrl: 'http://swagger.io/api/oauth/dialog',
+              flow: 'implicit',
+              scopes: {
+                'read:pets': 'read your pets',
+                'write:pets': 'modify pets in your account',
+              },
+              type: 'oauth2',
+            },
+          ],
+          [
+            {
+              in: 'header',
+              name: 'api_key',
+              type: 'apiKey',
+            },
+          ],
+        ]);
+      });
+    });
+  });
 
   describe('getSecurities', () => {
     test('given no security definitions should return empty array', () => {
@@ -87,7 +164,7 @@ describe('accessors', () => {
             },
           ],
         ),
-      ).toEqual([{ in: 'header', name: 'api_key', type: 'apiKey' }]);
+      ).toEqual([[{ in: 'header', name: 'api_key', type: 'apiKey' }]]);
     });
 
     test('given security with custom scopes should override global definition', () => {
@@ -104,12 +181,14 @@ describe('accessors', () => {
           ],
         ),
       ).toEqual([
-        {
-          authorizationUrl: 'http://swagger.io/api/oauth/dialog',
-          flow: 'implicit',
-          scopes: { 'read:pets': 'read your pets', 'write:pets': 'modify pets in your account' },
-          type: 'oauth2',
-        },
+        [
+          {
+            authorizationUrl: 'http://swagger.io/api/oauth/dialog',
+            flow: 'implicit',
+            scopes: { 'read:pets': 'read your pets', 'write:pets': 'modify pets in your account' },
+            type: 'oauth2',
+          },
+        ],
       ]);
     });
 
@@ -123,13 +202,15 @@ describe('accessors', () => {
           securityFixture,
         ),
       ).toEqual([
-        { in: 'header', name: 'api_key', type: 'apiKey' },
-        {
-          authorizationUrl: 'http://swagger.io/api/oauth/dialog',
-          flow: 'implicit',
-          scopes: { 'write:pets': 'modify pets in your account', 'read:pets': 'read your pets' },
-          type: 'oauth2',
-        },
+        [
+          { in: 'header', name: 'api_key', type: 'apiKey' },
+          {
+            authorizationUrl: 'http://swagger.io/api/oauth/dialog',
+            flow: 'implicit',
+            scopes: { 'write:pets': 'modify pets in your account', 'read:pets': 'read your pets' },
+            type: 'oauth2',
+          },
+        ],
       ]);
     });
   });
