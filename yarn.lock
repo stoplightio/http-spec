@@ -794,13 +794,13 @@
     lodash "^4.17.4"
     read-pkg-up "^6.0.0"
 
-"@stoplight/json@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.0.4.tgz#53f0e22aa9392003f70f35a42091ae80491b5a89"
-  integrity sha512-ptFgfHiyHzOwHvHzAH0VojYXUFSWhKUPW8KORmxlnA0qz11bzGoZFS2+7r3B0o8ZzyoOp4GU2AU4SGnZJjln8Q==
+"@stoplight/json@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.1.0.tgz#a03bd8d065a62eb00cd42cf003df431f23d7a5dd"
+  integrity sha512-8Fev+RW+UJNYtcpDgvQPH6MuHEf5cr95KnAyMBNNXlVIeRAIJqYK3r5FWZv4/KFH08ozQy4QpMM9MdsR8J3cZQ==
   dependencies:
-    "@stoplight/types" "^10.0.1"
-    jsonc-parser "~2.1"
+    "@stoplight/types" "^11.0.0"
+    jsonc-parser "~2.1.1"
     lodash "^4.17.15"
     safe-stable-stringify "^1.1"
 
@@ -835,13 +835,6 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@stoplight/test-utils/-/test-utils-0.0.1.tgz#b0d38c8a0abebda2dacbc2aa6a4f9bec44878e7b"
   integrity sha512-Cj3waLFR9bYLG8yvgkjXMxOfiVdewRyrKdH5RQpttVNfKj5UF+mElofPcHn/UfiOuxK3t5rbsdMfS26LK5tdQg==
-
-"@stoplight/types@^10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-10.0.1.tgz#aad7ddf667fc4a86b71b4813a22285e959300595"
-  integrity sha512-NC/LV+p9UQL18RfiKuTmPnuyA/ZqRFpYaQYGU0Z60/snluiRDDBIsq3FPjPwQQFYn0L5lqbNMiRcPs0yUZ2wNA==
-  dependencies:
-    "@types/json-schema" "^7.0.3"
 
 "@stoplight/types@^11.0.0":
   version "11.0.0"
@@ -4561,10 +4554,10 @@ json5@2.x, json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@~2.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.1.0.tgz#eb0d0c7a3c33048524ce3574c57c7278fb2f1bf3"
-  integrity sha512-n9GrT8rrr2fhvBbANa1g+xFmgGK5X91KFeDwlKQ3+SJfmH5+tKv/M/kahx/TXOMflfWHKGKqKyfHQaLKTNzJ6w==
+jsonc-parser@~2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.1.1.tgz#83dc3d7a6e7186346b889b1280eefa04446c6d3e"
+  integrity sha512-VC0CjnWJylKB1iov4u76/W/5Ef0ydDkjtYWxoZ9t3HdWlSnZQwZL5MgFikaB/EtQ4RmMEw3tmQzuYnZA2/Ja1g==
 
 jsonfile@^4.0.0:
   version "4.0.0"
