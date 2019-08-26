@@ -132,6 +132,27 @@ describe('translateMediaTypeObject', () => {
     };
     expect(() => testedFunction()).not.toThrow();
   });
+
+  test('will not modify the original schema so it can be reused in references ', () => {
+    const schema = {
+      type: 'string',
+      nullable: true,
+      description: 'A simple string',
+    };
+
+    const originalSchema = JSON.parse(JSON.stringify(schema));
+
+    translateMediaTypeObject(
+      {
+        schema,
+        example: 'hey',
+        encoding: {},
+      },
+      'mediaType',
+    );
+
+    expect(schema).toStrictEqual(originalSchema);
+  });
 });
 
 describe('translateHeaderObject', () => {
