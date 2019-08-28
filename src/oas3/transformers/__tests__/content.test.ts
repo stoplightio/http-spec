@@ -133,25 +133,40 @@ describe('translateMediaTypeObject', () => {
     expect(() => testedFunction()).not.toThrow();
   });
 
-  test('will not modify the original schema so it can be reused in references ', () => {
+  describe('schema integrity after transform', () => {
     const schema = {
       type: 'string',
       nullable: true,
       description: 'A simple string',
+      example: 'hello',
     };
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
 
-    translateMediaTypeObject(
-      {
-        schema,
-        example: 'hey',
-        encoding: {},
-      },
-      'mediaType',
-    );
+    test('will not modify the original schema so it can be reused in references ', () => {
+      translateMediaTypeObject(
+        {
+          schema,
+          example: 'hey',
+          encoding: {},
+        },
+        'mediaType',
+      );
 
-    expect(schema).toStrictEqual(originalSchema);
+      expect(schema).toStrictEqual(originalSchema);
+    });
+
+    test('will keep the example property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          example: 'hey',
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('example', 'hello');
+    });
   });
 });
 
