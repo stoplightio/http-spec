@@ -84,7 +84,9 @@ export function translateMediaTypeObject(
 ): IMediaTypeContent {
   return {
     mediaType,
-    schema: schema ? (toJsonSchema(schema, { cloneSchema: true }) as JSONSchema4) : undefined,
+    schema: schema
+      ? (toJsonSchema(schema, { cloneSchema: true, keepNotSupported: ['example'] }) as JSONSchema4)
+      : undefined,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(
