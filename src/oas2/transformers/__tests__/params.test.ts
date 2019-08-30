@@ -116,7 +116,7 @@ describe('params.translator', () => {
       format: 'date',
       description: 'desc',
       required: true,
-      allowEmptyValue: true,
+      allowEmptyValue: false,
       default: '25-07-2019',
     };
 
@@ -139,7 +139,6 @@ describe('params.translator', () => {
       name: 'int',
       type: 'integer',
       description: 'desc',
-      allowEmptyValue: false,
       required: true,
       maximum: 3,
       minimum: 0,
@@ -166,15 +165,14 @@ describe('params.translator', () => {
               type: 'array',
             },
             int: {
-              allowEmptyValue: false,
               description: 'desc',
               maximum: 3,
               minimum: 0,
-              minLength: 1,
               type: 'integer',
             },
             str: {
-              allowEmptyValue: true,
+              allowEmptyValue: false,
+              minLength: 1,
               default: '25-07-2019',
               description: 'desc',
               format: 'date',
