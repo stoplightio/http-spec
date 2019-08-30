@@ -794,10 +794,10 @@
     lodash "^4.17.4"
     read-pkg-up "^6.0.0"
 
-"@stoplight/json@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.1.0.tgz#a03bd8d065a62eb00cd42cf003df431f23d7a5dd"
-  integrity sha512-8Fev+RW+UJNYtcpDgvQPH6MuHEf5cr95KnAyMBNNXlVIeRAIJqYK3r5FWZv4/KFH08ozQy4QpMM9MdsR8J3cZQ==
+"@stoplight/json@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.1.1.tgz#531d966a62247bf2ab1e8a06a685fa62e36cf890"
+  integrity sha512-DK2ufmnPvfW9Mv0q4DYtldjicTTcBY+j4kiEUOEmc9hL+mzMDV08+5ix4tmPtheUDZH6OtEqEmGcf8ZKCHFbpg==
   dependencies:
     "@stoplight/types" "^11.0.0"
     jsonc-parser "~2.1.1"
@@ -840,6 +840,13 @@
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.0.0.tgz#fd234cfcb1a1cee28ef9642735d9206e009a8fa6"
   integrity sha512-Tt8doUE2E5HACigjBHyBpMHS+Td+9tBmGvf4giDH9jK7mS6Q7dyLOeE2QSKyMrslmzd1mRuKBvPhS18g9EEjog==
+  dependencies:
+    "@types/json-schema" "^7.0.3"
+
+"@stoplight/types@^11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.0.tgz#b29ecd8c8ad27bb564c7820c99f93c27f1d11bf1"
+  integrity sha512-z4VqnYIDTcj9R0f8AIDitBWkiAKKJ4W/Z5GJz/3fnBZBa/TD9Oak0xHbicXFXUvqTVCv/7D32PjPYiUX6W/EfQ==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
@@ -946,10 +953,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
   integrity sha512-Il2DtDVRGDcqjDtE+rF8iqg1CArehSK84HZJCT7AMITlyXRBpuPhqGLDQMowraqqu1coEaimg4ZOqggt6L6L+A==
 
-"@types/lodash@4.14.137":
-  version "4.14.137"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.137.tgz#8a4804937dc6462274ffcc088df8f14fc1b368e2"
-  integrity sha512-g4rNK5SRKloO+sUGbuO7aPtwbwzMgjK+bm9BBhLD7jGUiGR7zhwYEhSln/ihgYQBeIJ5j7xjyaYzrWTcu3UotQ==
+"@types/lodash@4.14.138":
+  version "4.14.138"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.138.tgz#34f52640d7358230308344e579c15b378d91989e"
+  integrity sha512-A4uJgHz4hakwNBdHNPdxOTkYmXNgmUAKLbXZ7PKGslgeV0Mb8P3BlbYfPovExek1qnod4pDfRbxuzcVs3dlFLg==
 
 "@types/lodash@^4.14.110":
   version "4.14.136"
@@ -8292,10 +8299,10 @@ typescript@3.2.x:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.4.tgz#c585cb952912263d915b462726ce244ba510ef3d"
   integrity sha512-0RNDbSdEokBeEAkgNbxJ+BLwSManFy9TeXz8uW+48j/xhEXv1ePME60olyzw2XzUqUBNAYFeJadIqAgNqIACwg==
 
-typescript@3.5.3:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
-  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
+typescript@3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.2.tgz#105b0f1934119dde543ac8eb71af3a91009efe54"
+  integrity sha512-lmQ4L+J6mnu3xweP8+rOrUwzmN+MRAj7TgtJtDaXE5PMyX2kCrklhg3rvOsOIfNeAWMQWO2F1GPc1kMD2vLAfw==
 
 uglify-js@^3.1.4:
   version "3.6.0"
