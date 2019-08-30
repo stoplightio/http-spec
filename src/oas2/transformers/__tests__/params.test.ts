@@ -191,14 +191,8 @@ describe('params.translator', () => {
         ),
       ).toEqual({
         contents: [
-          {
-            ...expectedContent,
-            mediaType: 'application/x-www-form-urlencoded',
-          },
-          {
-            ...expectedContent,
-            mediaType: 'multipart/form-data',
-          },
+          Object.assign({}, expectedContent, { mediaType: 'application/x-www-form-urlencoded' }),
+          Object.assign({}, expectedContent, { mediaType: 'multipart/form-data' }),
         ],
       });
     });

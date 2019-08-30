@@ -20,7 +20,11 @@ import {
 
 function chooseQueryParameterStyle(
   parameter: QueryParameter,
-): HttpParamStyles.PipeDelimited | HttpParamStyles.SpaceDelimited | HttpParamStyles.Form {
+):
+  | HttpParamStyles.PipeDelimited
+  | HttpParamStyles.SpaceDelimited
+  | HttpParamStyles.Form
+  | HttpParamStyles.CommaDelimited {
   /** Must cast to 'any' because this field is missing from the types but it's defined in the spec
    * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
    */
@@ -30,6 +34,7 @@ function chooseQueryParameterStyle(
     case 'ssv':
       return HttpParamStyles.SpaceDelimited;
     case 'csv':
+      return HttpParamStyles.CommaDelimited;
     case 'multi':
     default:
       /**
@@ -122,7 +127,7 @@ function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
     case 'csv':
       return {
         property: parameter.name,
-        style: HttpParamStyles.Form,
+        style: HttpParamStyles.CommaDelimited,
         explode: false,
       };
     case 'pipes':

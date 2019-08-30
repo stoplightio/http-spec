@@ -115,7 +115,7 @@ Object {
     "description": "descr",
     "type": "number",
   },
-  "style": "form",
+  "style": "commaDelimited",
 }
 `;
 
