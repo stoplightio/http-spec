@@ -116,7 +116,7 @@ describe('params.translator', () => {
       format: 'date',
       description: 'desc',
       required: true,
-      allowEmptyValue: true,
+      allowEmptyValue: false,
       default: '25-07-2019',
     };
 
@@ -171,10 +171,10 @@ describe('params.translator', () => {
               type: 'integer',
             },
             str: {
-              allowEmptyValue: true,
+              allowEmptyValue: false,
+              minLength: 1,
               default: '25-07-2019',
               description: 'desc',
-              minLength: 1,
               format: 'date',
               type: 'string',
             },

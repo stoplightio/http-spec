@@ -191,7 +191,7 @@ function buildSchemaForParameter(
     'multipleOf',
   );
 
-  if ('allowEmptyValue' in param && param.allowEmptyValue) {
+  if ('allowEmptyValue' in param && param.allowEmptyValue === false) {
     schema.minLength = 1;
   }
 
