@@ -3,7 +3,7 @@ import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
 // @ts-ignore
 import * as toJsonSchema from 'openapi-schema-to-json-schema';
-import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -93,7 +93,7 @@ export function translateMediaTypeObject(
         example ? [{ key: 'default', value: example }] : undefined,
         Object.keys(examples).map<INodeExample>(exampleKey => ({
           key: exampleKey,
-          value: (examples[exampleKey] as ExampleObject).value,
+          value: examples[exampleKey],
         })),
       ),
     ),

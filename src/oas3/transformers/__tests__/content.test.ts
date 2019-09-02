@@ -36,7 +36,13 @@ describe('translateMediaTypeObject', () => {
       translateMediaTypeObject(
         {
           schema: {},
-          examples: { example: { summary: 'multi example', value: 'hey' } },
+          examples: {
+            example: {
+              id: 12133433,
+              summary: 'multi example',
+              value: 'hey',
+            },
+          },
           encoding: {
             enc1: {
               contentType: 'text/plain',

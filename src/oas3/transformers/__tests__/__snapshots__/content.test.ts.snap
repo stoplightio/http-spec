@@ -54,7 +54,10 @@ Object {
   "examples": Array [
     Object {
       "key": "example",
-      "value": "hey",
+      "value": Object {
+        "summary": "multi example",
+        "value": "hey",
+      },
     },
   ],
   "mediaType": "mediaType",
@@ -105,7 +108,11 @@ Object {
   "examples": Array [
     Object {
       "key": "example",
-      "value": "hey",
+      "value": Object {
+        "id": 12133433,
+        "summary": "multi example",
+        "value": "hey",
+      },
     },
   ],
   "mediaType": "mediaType",
@@ -121,7 +128,10 @@ Object {
   "examples": Array [
     Object {
       "key": "example",
-      "value": "hey",
+      "value": Object {
+        "summary": "multi example",
+        "value": "hey",
+      },
     },
   ],
   "mediaType": "mediaType",
