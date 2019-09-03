@@ -1,5 +1,6 @@
 import { FormDataParameter, QueryParameter } from 'swagger-schema-official';
 
+import { HttpParamStyles } from '@stoplight/types';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -116,7 +117,7 @@ describe('params.translator', () => {
       format: 'date',
       description: 'desc',
       required: true,
-      allowEmptyValue: true,
+      allowEmptyValue: false,
       default: '25-07-2019',
     };
 
@@ -171,10 +172,10 @@ describe('params.translator', () => {
               type: 'integer',
             },
             str: {
-              allowEmptyValue: true,
+              allowEmptyValue: false,
+              minLength: 1,
               default: '25-07-2019',
               description: 'desc',
-              minLength: 1,
               format: 'date',
               type: 'string',
             },
@@ -191,14 +192,8 @@ describe('params.translator', () => {
         ),
       ).toEqual({
         contents: [
-          {
-            ...expectedContent,
-            mediaType: 'application/x-www-form-urlencoded',
-          },
-          {
-            ...expectedContent,
-            mediaType: 'multipart/form-data',
-          },
+          Object.assign({}, expectedContent, { mediaType: 'application/x-www-form-urlencoded' }),
+          Object.assign({}, expectedContent, { mediaType: 'multipart/form-data' }),
         ],
       });
     });
@@ -214,8 +209,17 @@ describe('params.translator', () => {
       allowEmptyValue: true,
     };
 
-    test.each(['pipes', 'ssv', 'csv', 'multi', 'something-else'])('translate style: %s', style => {
-      expect(translateToQueryParameter({ ...parameter, collectionFormat: style } as QueryParameter)).toMatchSnapshot();
+    test.each([
+      { oasStyle: 'pipes', expectedStyle: HttpParamStyles.PipeDelimited },
+      { oasStyle: 'ssv', expectedStyle: HttpParamStyles.SpaceDelimited },
+      { oasStyle: 'csv', expectedStyle: HttpParamStyles.CommaDelimited },
+      { oasStyle: 'multi', expectedStyle: HttpParamStyles.Form },
+      { oasStyle: 'nasino', expectedStyle: HttpParamStyles.Form },
+    ])('translate style: %s', ({ oasStyle, expectedStyle }) => {
+      expect(translateToQueryParameter({ ...parameter, collectionFormat: oasStyle } as QueryParameter)).toHaveProperty(
+        'style',
+        expectedStyle,
+      );
     });
   });
 

@@ -3,7 +3,7 @@ import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
 // @ts-ignore
 import * as toJsonSchema from 'openapi-schema-to-json-schema';
-import { EncodingPropertyObject, ExampleObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -84,14 +84,16 @@ export function translateMediaTypeObject(
 ): IMediaTypeContent {
   return {
     mediaType,
-    schema: schema ? (toJsonSchema(schema, { cloneSchema: false }) as JSONSchema4) : undefined,
+    schema: schema
+      ? (toJsonSchema(schema, { cloneSchema: true, keepNotSupported: ['example'] }) as JSONSchema4)
+      : undefined,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(
         example ? [{ key: 'default', value: example }] : undefined,
         Object.keys(examples).map<INodeExample>(exampleKey => ({
           key: exampleKey,
-          value: (examples[exampleKey] as ExampleObject).value,
+          value: examples[exampleKey],
         })),
       ),
     ),

@@ -76,6 +76,6 @@ export function translateToSingleSecurity(security: DeepPartial<Security>) {
   return;
 }
 
-export function translateToSecurities(securities: Array<DeepPartial<Security>>): HttpSecurityScheme[] {
-  return compact(securities.map(translateToSingleSecurity));
+export function translateToSecurities(securities: Security[][]): HttpSecurityScheme[][] {
+  return securities.map(security => compact(security.map(translateToSingleSecurity)));
 }
