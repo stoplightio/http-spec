@@ -1,25 +1,43 @@
 import { IHttpOperationResponse } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { map, partial } from 'lodash';
+import { chain, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from './params';
 
-const toObject = <T>(value: T, key: string) => ({ key, value });
-
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});
-  return {
+  const objectifiedExamples = chain(response.examples)
+    .mapValues((value, key) => ({ key, value }))
+    .values()
+    .value();
+
+  const contents = produces.map(produceElement => ({
+    mediaType: produceElement,
+    schema: response.schema as JSONSchema4,
+    examples: objectifiedExamples.filter(example => example.key === produceElement),
+  }));
+
+  const translatedResponses = {
     code: statusCode,
     description: response.description,
     headers,
-    contents: produces.map(mediaType => ({
-      mediaType,
-      schema: response.schema as JSONSchema4,
-      examples: map(response.examples, toObject).filter(example => example.key === mediaType),
-    })),
-    // `links` not supported by oas2
+    contents,
   };
+
+  const foreignExamples = objectifiedExamples.filter(example => !produces.includes(example.key));
+  if (foreignExamples.length > 0) {
+    if (translatedResponses.contents.length === 0)
+      translatedResponses.contents[0] = {
+        mediaType: '',
+        schema: {},
+        examples: [],
+      };
+
+    translatedResponses.contents[0].examples!.push(...foreignExamples);
+  }
+
+  return translatedResponses;
 }
 
 export function translateToResponses(
