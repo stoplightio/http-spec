@@ -1,3 +1,4 @@
+import { SchemaObject } from 'openapi3-ts';
 import { translateHeaderObject, translateMediaTypeObject } from '../content';
 
 describe('translateMediaTypeObject', () => {
@@ -140,12 +141,11 @@ describe('translateMediaTypeObject', () => {
   });
 
   describe('schema integrity after transform', () => {
-    const schema = {
-      type: 'string',
-      nullable: true,
+    const schema = ({
+      type: ['string', 'object'],
       description: 'A simple string',
       example: 'hello',
-    };
+    } as unknown) as SchemaObject;
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
 

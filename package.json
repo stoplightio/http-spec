@@ -28,13 +28,16 @@
     "test": "jest",
     "test.prod": "yarn lint && yarn test --coverage --maxWorkers=2"
   },
+  "resolutions": {
+    "openapi-schema-to-json-schema": "philsturgeon/openapi-schema-to-json-schema#9692af184c6a3e3d952a88968da07491e47135fb"
+  },
   "dependencies": {
     "@stoplight/json": "^3.1.1",
     "@stoplight/types": "^11.1.0",
     "@types/swagger-schema-official": "~2.0.18",
     "@types/urijs": "~1.19.1",
     "lodash": "^4.17.15",
-    "openapi-schema-to-json-schema": "2.2.0",
+    "openapi-schema-to-json-schema": "philsturgeon/openapi-schema-to-json-schema#9692af184c6a3e3d952a88968da07491e47135fb",
     "openapi3-ts": "~1.3.0",
     "urijs": "~1.19.1"
   },
