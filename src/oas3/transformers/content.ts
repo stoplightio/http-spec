@@ -98,7 +98,9 @@ export function translateMediaTypeObject(
         example ? [{ key: 'default', value: example }] : undefined,
         Object.keys(examples).map<INodeExample>(exampleKey => ({
           key: exampleKey,
-          value: examples[exampleKey],
+          summary: get(examples, [exampleKey, 'summary']),
+          description: get(examples, [exampleKey, 'description']),
+          value: get(examples, [exampleKey, 'value']),
         })),
       ),
     ),
@@ -106,8 +108,9 @@ export function translateMediaTypeObject(
   };
 }
 
-const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string) => {
+const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
   return {
+    summary: get(source, ['examples', key, 'summary']),
     description: get(source, ['examples', key, 'description']),
     value: get(source, ['examples', key, 'value']),
     key,
