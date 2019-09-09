@@ -141,11 +141,12 @@ describe('translateMediaTypeObject', () => {
   });
 
   describe('schema integrity after transform', () => {
-    const schema = ({
-      type: ['string', 'object'],
+    const schema = {
+      type: 'string',
+      nullable: true,
       description: 'A simple string',
       example: 'hello',
-    } as unknown) as SchemaObject;
+    };
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
 
@@ -173,6 +174,25 @@ describe('translateMediaTypeObject', () => {
       );
       expect(translatedObject.schema).toHaveProperty('example', 'hello');
     });
+  });
+});
+
+describe('shcmea invalid', () => {
+  test('type as array does not throw error', () => {
+    const schema = ({
+      type: ['string', 'object'],
+      description: 'A simple string',
+      example: 'hello',
+    } as unknown) as SchemaObject;
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
   });
 });
 
