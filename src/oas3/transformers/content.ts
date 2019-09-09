@@ -1,6 +1,7 @@
 import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
+
 // @ts-ignore
 import * as toJsonSchema from 'openapi-schema-to-json-schema';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
@@ -85,7 +86,11 @@ export function translateMediaTypeObject(
   return {
     mediaType,
     schema: schema
-      ? (toJsonSchema(schema, { cloneSchema: true, keepNotSupported: ['example'] }) as JSONSchema4)
+      ? (toJsonSchema(schema, {
+          cloneSchema: true,
+          strictMode: false,
+          keepNotSupported: ['example'],
+        }) as JSONSchema4)
       : undefined,
     // Note that I'm assuming all references are resolved
     examples: compact(

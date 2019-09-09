@@ -1,3 +1,4 @@
+import { SchemaObject } from 'openapi3-ts';
 import { translateHeaderObject, translateMediaTypeObject } from '../content';
 
 describe('translateMediaTypeObject', () => {
@@ -173,6 +174,25 @@ describe('translateMediaTypeObject', () => {
       );
       expect(translatedObject.schema).toHaveProperty('example', 'hello');
     });
+  });
+});
+
+describe('shcmea invalid', () => {
+  test('type as array does not throw error', () => {
+    const schema = ({
+      type: ['string', 'object'],
+      description: 'A simple string',
+      example: 'hello',
+    } as unknown) as SchemaObject;
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
   });
 });
 
