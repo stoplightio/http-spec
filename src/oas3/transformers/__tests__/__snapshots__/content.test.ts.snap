@@ -11,6 +11,7 @@ Object {
     Object {
       "description": undefined,
       "key": "a",
+      "summary": "example summary",
       "value": "hey",
     },
     Object {
@@ -39,6 +40,7 @@ Object {
             Object {
               "description": undefined,
               "key": "a",
+              "summary": "example summary",
               "value": "hey",
             },
           ],
@@ -53,11 +55,10 @@ Object {
   ],
   "examples": Array [
     Object {
+      "description": undefined,
       "key": "example",
-      "value": Object {
-        "summary": "multi example",
-        "value": "hey",
-      },
+      "summary": "multi example",
+      "value": "hey",
     },
   ],
   "mediaType": "mediaType",
@@ -107,12 +108,10 @@ Object {
   ],
   "examples": Array [
     Object {
+      "description": undefined,
       "key": "example",
-      "value": Object {
-        "id": 12133433,
-        "summary": "multi example",
-        "value": "hey",
-      },
+      "summary": "multi example",
+      "value": "hey",
     },
   ],
   "mediaType": "mediaType",
@@ -127,11 +126,10 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
+      "description": undefined,
       "key": "example",
-      "value": Object {
-        "summary": "multi example",
-        "value": "hey",
-      },
+      "summary": "multi example",
+      "value": "hey",
     },
   ],
   "mediaType": "mediaType",
