@@ -1,6 +1,6 @@
-import { DeepPartial, IHttpOperation } from '@stoplight/types';
+import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
-import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
+import { Operation, Parameter, Path, Response } from 'swagger-schema-official';
 
 import { getOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
@@ -10,11 +10,6 @@ import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
-
-// TODO
-export function computeOas2Operations(spec: DeepPartial<Spec>): IHttpOperation[] {
-  return [];
-}
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
   const pathObj = get(document, ['paths', path]) as Path;
