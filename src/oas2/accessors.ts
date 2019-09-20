@@ -43,5 +43,5 @@ function getSecurity(
 
 function getProducesOrConsumes(which: 'produces' | 'consumes', spec: Partial<Spec>, operation: Partial<Operation>) {
   const mimeTypes = get(operation, which, get(spec, which, [])) as string[];
-  return mimeTypes.length ? mimeTypes : ['*/*'];
+  return mimeTypes;
 }
