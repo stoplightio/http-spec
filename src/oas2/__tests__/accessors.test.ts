@@ -216,9 +216,9 @@ describe('accessors', () => {
   });
 
   describe('getProduces', () => {
-    test('given all empty arrays should return asterisk', () => {
-      expect(getProduces({}, {})).toEqual(['*/*']);
-      expect(getProduces({ produces: [] }, { produces: [] })).toEqual(['*/*']);
+    test('given all empty arrays should return an empty array', () => {
+      expect(getProduces({}, {})).toEqual([]);
+      expect(getProduces({ produces: [] }, { produces: [] })).toEqual([]);
     });
 
     test('should fallback to spec produces', () => {
@@ -231,9 +231,9 @@ describe('accessors', () => {
   });
 
   describe('getConsumes', () => {
-    test('given all empty arrays should return asterisk', () => {
-      expect(getConsumes({}, {})).toEqual(['*/*']);
-      expect(getConsumes({ consumes: [] }, { consumes: [] })).toEqual(['*/*']);
+    test('given all empty arrays should return an empty array', () => {
+      expect(getConsumes({}, {})).toEqual([]);
+      expect(getConsumes({ consumes: [] }, { consumes: [] })).toEqual([]);
     });
 
     test('should fallback to spec consumes', () => {
