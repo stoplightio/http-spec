@@ -7,6 +7,10 @@ export function mapToKeys<T>(collection?: T[]) {
   return map(collection, Object.keys);
 }
 
+export function isObject(maybeObj: unknown): maybeObj is object {
+  return maybeObj !== null && typeof maybeObj === 'object';
+}
+
 // wraps urijs to handle edge cases that would normally error out or cause unexpected behavior
 // in all funcs set a default empty string, since URI.func() !== URI.func(undefined) [<- undefined throw error in most cases]
 // in all funcs set a default empty string, since URI.func('') will reset fields back to null while URI.func() will not

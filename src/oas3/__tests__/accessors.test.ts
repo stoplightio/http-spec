@@ -2,13 +2,12 @@ import { getSecurities } from '../accessors';
 
 describe('getOas3Securities', () => {
   test('given no global securities should return empty array', () => {
-    expect(getSecurities({}, {})).toMatchSnapshot();
+    expect(getSecurities({}, {})).toEqual([]);
   });
 
   test('give global securities but no schemes should return empty array', () => {
     expect(
       getSecurities(
-        {},
         {
           components: {
             securitySchemes: {
@@ -18,8 +17,9 @@ describe('getOas3Securities', () => {
             },
           },
         },
+        {},
       ),
-    ).toMatchSnapshot();
+    ).toEqual([]);
   });
 
   test('given global securities and matching operation scheme should take from operation', () => {
@@ -27,8 +27,6 @@ describe('getOas3Securities', () => {
       getSecurities(
         {
           security: [{ operationScheme: [] }],
-        },
-        {
           components: {
             securitySchemes: {
               operationScheme: {
@@ -37,16 +35,21 @@ describe('getOas3Securities', () => {
             },
           },
         },
+        {},
       ),
-    ).toMatchSnapshot();
+    ).toStrictEqual([
+      [
+        {
+          type: 'apiKey',
+        },
+      ],
+    ]);
   });
 
   test('given global securities and matching spec scheme should take from spec', () => {
     expect(
       getSecurities(
-        {},
         {
-          security: [{ specScheme: [] }],
           components: {
             securitySchemes: {
               specScheme: {
@@ -55,8 +58,17 @@ describe('getOas3Securities', () => {
             },
           },
         },
+        {
+          security: [{ specScheme: [] }],
+        },
       ),
-    ).toMatchSnapshot();
+    ).toStrictEqual([
+      [
+        {
+          type: 'apiKey',
+        },
+      ],
+    ]);
   });
 
   test('given global securities and matching spec and operation scheme should take from operation', () => {
@@ -64,9 +76,6 @@ describe('getOas3Securities', () => {
       getSecurities(
         {
           security: [{ operationScheme: [] }],
-        },
-        {
-          security: [{ specScheme: [] }],
           components: {
             securitySchemes: {
               operationScheme: {
@@ -78,18 +87,24 @@ describe('getOas3Securities', () => {
             },
           },
         },
+        {
+          security: [{ specScheme: [] }],
+        },
       ),
-    ).toMatchSnapshot();
+    ).toStrictEqual([
+      [
+        {
+          type: 'apiKey',
+        },
+      ],
+    ]);
   });
 
   test('given global securities and matching spec and invalid operation scheme should return empty array', () => {
     expect(
       getSecurities(
         {
-          security: [{ operationSchemeX: [] }],
-        },
-        {
-          security: [{ specScheme: [] }],
+          security: [{ operationScheme: [] }],
           components: {
             securitySchemes: {
               operationScheme: {
@@ -101,7 +116,10 @@ describe('getOas3Securities', () => {
             },
           },
         },
+        {
+          security: [{ operationSchemeX: [] }],
+        },
       ),
-    ).toMatchSnapshot();
+    ).toStrictEqual([[]]);
   });
 });
