@@ -3,7 +3,7 @@ import * as URIJS from 'urijs';
 
 import { pathToPointer, pointerToPath } from '@stoplight/json';
 
-export function mapToKeys<T>(collection?: T[]) {
+export function mapToKeys<T>(collection: Optional<T[]>) {
   return map(collection, Object.keys);
 }
 
