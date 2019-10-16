@@ -1,7 +1,7 @@
-import { get } from 'lodash';
+import { get, isObject } from 'lodash';
 import { OpenAPIObject, OperationObject, SecuritySchemeObject } from 'openapi3-ts';
 
-import { isObject, mapToKeys } from '../utils';
+import { mapToKeys } from '../utils';
 
 export function getSecurities(
   spec: Partial<OpenAPIObject>,
