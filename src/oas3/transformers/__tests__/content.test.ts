@@ -177,13 +177,57 @@ describe('translateMediaTypeObject', () => {
   });
 });
 
-describe('shcmea invalid', () => {
+describe('schema invalid', () => {
   test('type as array does not throw error', () => {
     const schema = ({
       type: ['string', 'object'],
       description: 'A simple string',
       example: 'hello',
     } as unknown) as SchemaObject;
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
+  });
+
+  test('nullish values in arrays', () => {
+    /*
+      # Equivalent in YAML
+      type: array
+      items:
+        -
+        - object
+     */
+    const schema = {
+      type: 'array',
+      items: [null, 'object'],
+    };
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
+  });
+
+  test('nullish mapping value', () => {
+    /*
+     # Equivalent in YAML
+     type: array
+     items:
+    */
+    const schema = {
+      type: 'array',
+      items: null,
+    } as any;
 
     expect(() =>
       translateMediaTypeObject(
