@@ -1,3 +1,4 @@
+import { Optional } from '@stoplight/types';
 import { map } from 'lodash';
 import * as URIJS from 'urijs';
 
