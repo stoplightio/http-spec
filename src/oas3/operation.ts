@@ -6,6 +6,7 @@ import { getOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { getSecurities } from './accessors';
+import { translateToCallbacks } from './transformers/callbacks';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
@@ -41,6 +42,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
       getOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
       operation.requestBody as RequestBodyObject,
     ),
+    callbacks: translateToCallbacks(operation.callbacks),
     tags: translateToTags(operation.tags || []),
     security: translateToSecurities(getSecurities(document, operation)),
   };

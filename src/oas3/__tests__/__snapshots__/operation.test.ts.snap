@@ -1,5 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`transformOas3Operation callback 1`] = `
+Object {
+  "callbacks": Array [
+    Object {
+      "callbackName": "myCallback",
+      "id": "?http-operation-id?",
+      "iid": "cbId",
+      "method": "post",
+      "path": "http://prism.com?transactionId={$request.body#/id}",
+      "request": Object {
+        "body": Object {
+          "contents": Array [],
+        },
+        "cookie": Array [],
+        "headers": Array [],
+        "path": Array [],
+        "query": Array [],
+      },
+      "responses": Array [],
+      "security": Array [],
+      "servers": Array [],
+      "tags": Array [],
+    },
+  ],
+  "id": "?http-operation-id?",
+  "iid": "opid",
+  "method": "post",
+  "path": "/subscribe",
+  "request": Object {
+    "body": Object {
+      "contents": Array [
+        Object {
+          "encodings": Array [],
+          "examples": Array [],
+          "mediaType": "application/json",
+          "schema": Object {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "properties": Object {
+              "id": "string",
+            },
+            "type": "object",
+          },
+        },
+      ],
+      "description": undefined,
+      "required": undefined,
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [],
+  "security": Array [],
+  "servers": Array [],
+  "tags": Array [],
+}
+`;
+
 exports[`transformOas3Operation given no tags should translate operation with empty tags array 1`] = `
 Object {
   "deprecated": true,
