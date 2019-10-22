@@ -103,6 +103,27 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
+  test('given complex nested media type object with nullish headers should translate correctly', () => {
+    expect(
+      translateMediaTypeObject(
+        {
+          schema: {},
+          examples: { example: { summary: 'multi example', value: 'hey' } },
+          encoding: {
+            enc1: {
+              contentType: 'text/plain',
+              style: 'form',
+              headers: {
+                '0': null,
+              },
+            },
+          },
+        },
+        'mediaType',
+      ),
+    ).toMatchSnapshot();
+  });
+
   test('given encoding with incorrect style should throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
@@ -265,5 +286,9 @@ describe('translateHeaderObject', () => {
         'header-name',
       ),
     ).toMatchSnapshot();
+  });
+
+  test('should handle nullish value gracefully', () => {
+    expect(translateHeaderObject(null, 'header')).toBeUndefined();
   });
 });
