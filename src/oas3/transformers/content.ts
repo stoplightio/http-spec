@@ -1,10 +1,11 @@
-import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample } from '@stoplight/types';
+import { Dictionary, HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample, Optional } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { compact, get, keys, map, omit, pickBy, union, values } from 'lodash';
+import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 
 // @ts-ignore
 import * as toJsonSchema from 'openapi-schema-to-json-schema';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { isHeaderObject } from '../guards';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -29,11 +30,27 @@ function translateEncodingPropertyObject(
     // workaround for 'style' being one of the accepted HttpParamStyles
     style: encodingPropertyObject.style as any,
     mediaType: encodingPropertyObject.contentType,
-    headers: map<any, IHttpHeaderParam>(encodingPropertyObject.headers, translateHeaderObject),
+    headers: compact<IHttpHeaderParam>(
+      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(
+        encodingPropertyObject.headers,
+        translateHeaderObject,
+      ),
+    ),
   };
 }
 
-export function translateHeaderObject(headerObject: HeaderObject, name: string): IHttpHeaderParam {
+export function translateHeaderObject(headerObject: unknown, name: string): Optional<IHttpHeaderParam> {
+  if (!isObject(headerObject)) return;
+
+  if (!isHeaderObject(headerObject)) {
+    return {
+      encodings: [],
+      examples: [],
+      name,
+      style: HttpParamStyles.Simple,
+    };
+  }
+
   const { content: contentObject } = headerObject;
 
   const contentValue = values(contentObject)[0];
@@ -43,7 +60,7 @@ export function translateHeaderObject(headerObject: HeaderObject, name: string):
     // examples: parameterObject.examples,
     ...omit(headerObject, 'content', 'style', 'examples', 'example', 'schema'),
     name,
-    style: (headerObject.style as any) || HttpParamStyles.Simple,
+    style: headerObject?.style ?? HttpParamStyles.Simple,
   };
 
   const examples: INodeExample[] = [];

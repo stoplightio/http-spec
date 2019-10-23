@@ -45,4 +45,23 @@ describe('translateToOas3Responses', () => {
       }),
     ).toMatchSnapshot();
   });
+
+  test('given a response with nullish headers in dictionary should translate', () => {
+    expect(
+      translateToResponses({
+        200: {
+          headers: {
+            '0': null,
+          },
+        },
+      }),
+    ).toStrictEqual([
+      {
+        code: '200',
+        contents: [],
+        description: void 0,
+        headers: [],
+      },
+    ]);
+  });
 });
