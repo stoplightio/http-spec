@@ -1,22 +1,22 @@
 import { HttpSecurityScheme, IServer } from '@stoplight/types';
-import { compact, flatMap, get } from 'lodash';
+import { compact, flatMap, get, isObject } from 'lodash';
 import { SecuritySchemeObject } from 'openapi3-ts';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
 import { transformToSingleSecurity } from './transformers/securities';
 
 export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
-  const servers = compact(
-    (document.servers || []).map(server =>
+  const servers = compact<IServer>(
+    document.servers?.map?.(server =>
       server
         ? {
-            name: get(document.info, 'title'),
+            name: document.info?.title ?? '',
             description: server.description,
             url: server.url,
           }
         : null,
     ),
-  ) as IServer[];
+  );
 
   // @ts-ignore TODO: fix typing
   const security = compact(
@@ -31,15 +31,15 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     ),
   ) as HttpSecurityScheme[];
 
-  const securitySchemes = compact(
-    Object.values((document.components && document.components.securitySchemes) || [])
-      .filter(scheme => typeof scheme === 'object')
+  const securitySchemes = compact<HttpSecurityScheme>(
+    Object.values(document.components?.securitySchemes || [])
+      .filter(isObject)
       .map(sec => (sec ? transformToSingleSecurity(sec as SecuritySchemeObject) : undefined)),
-  ) as HttpSecurityScheme[];
+  );
 
   return {
     id: '?http-service-id?',
-    name: get(document.info, 'title') || 'no-title',
+    name: document.info?.title ?? 'no-title',
     ...document.info,
     servers,
     // @ts-ignore

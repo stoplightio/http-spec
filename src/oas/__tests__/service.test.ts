@@ -18,21 +18,4 @@ describe('oas service', () => {
     const oas3MappedService = transformOas3Service({ document: oas3KitchenSinkJson as any });
     expect(oas2MappedService).toEqual(oas3MappedService);
   });
-
-  test('should handle non object security objects', () => {
-    const retObject = transformOas3Service({
-      document: {
-        components: {
-          securitySchemes: {
-            t1: {},
-            t2: 4,
-            t3: 2,
-            t4: undefined,
-          },
-        },
-      } as any,
-    });
-
-    expect(retObject.securitySchemes).toHaveLength(1);
-  });
 });
