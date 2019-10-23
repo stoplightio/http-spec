@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { compact, get, isEmpty, map, merge } from 'lodash';
+import { compact, get, isEmpty, isString, map, merge } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
 
@@ -41,7 +41,11 @@ function getSecurity(
   });
 }
 
-function getProducesOrConsumes(which: 'produces' | 'consumes', spec: Partial<Spec>, operation: Partial<Operation>) {
-  const mimeTypes = get(operation, which, get(spec, which, [])) as string[];
-  return mimeTypes;
+function getProducesOrConsumes(which: 'produces' | 'consumes', spec: Partial<Spec>, operation: Partial<Operation>): string[] {
+  const mimeTypes = get(operation, which, get(spec, which, []));
+  if (!Array.isArray(mimeTypes)) {
+    return [];
+  }
+
+  return mimeTypes.filter(isString);
 }
