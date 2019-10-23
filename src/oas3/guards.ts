@@ -1,7 +1,6 @@
-import { Dictionary } from '@stoplight/types/dist';
+import { Dictionary } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { HeaderObject, SecuritySchemeObject } from 'openapi3-ts';
-import { BaseParameterObject } from 'openapi3-ts/src/model/OpenApi';
+import { BaseParameterObject, HeaderObject, SecuritySchemeObject } from 'openapi3-ts';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
   isObject(maybeSecurityScheme) &&
