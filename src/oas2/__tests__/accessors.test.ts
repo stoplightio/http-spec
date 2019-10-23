@@ -228,6 +228,13 @@ describe('accessors', () => {
     test('should prefer operation produces', () => {
       expect(getProduces({ produces: ['text/plain'] }, { produces: ['text/poem'] })).toEqual(['text/poem']);
     });
+
+    test('should handle malformed produces gracefully', () => {
+      expect(getProduces({ produces: ['text/plain'] } as any, { produces: 2 as any })).toEqual([]);
+      expect(getProduces({ produces: 2 } as any, {})).toEqual([]);
+      expect(getProduces({}, { produces: ['text/plain', null] } as any)).toEqual(['text/plain']);
+      expect(getProduces({ produces: ['text/plain', null] } as any, {})).toEqual(['text/plain']);
+    });
   });
 
   describe('getConsumes', () => {
@@ -242,6 +249,13 @@ describe('accessors', () => {
 
     test('should prefer operation consumes', () => {
       expect(getConsumes({ consumes: ['text/plain'] }, { consumes: ['text/poem'] })).toEqual(['text/poem']);
+    });
+
+    test('should handle malformed consumes gracefully', () => {
+      expect(getConsumes({ consumes: ['text/plain'] } as any, { consumes: 2 as any })).toEqual([]);
+      expect(getConsumes({ consumes: 2 } as any, {})).toEqual([]);
+      expect(getConsumes({}, { consumes: ['text/plain', null] } as any)).toEqual(['text/plain']);
+      expect(getConsumes({ consumes: ['text/plain', null] } as any, {})).toEqual(['text/plain']);
     });
   });
 });
