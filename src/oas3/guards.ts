@@ -9,6 +9,8 @@ export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecuritySch
 
 export const isBaseParameterObject = (maybeBaseParameterObject: unknown): maybeBaseParameterObject is BaseParameterObject =>
   isObject(maybeBaseParameterObject) && (
+    'description' in maybeBaseParameterObject ||
+    'required' in maybeBaseParameterObject ||
     'content' in maybeBaseParameterObject ||
     'style' in maybeBaseParameterObject ||
     'examples' in maybeBaseParameterObject ||
