@@ -42,7 +42,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
       getOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
       operation.requestBody as RequestBodyObject,
     ),
-    callbacks: translateToCallbacks(operation.callbacks),
+    callbacks: translateToCallbacks(operation.callbacks || {}),
     tags: translateToTags(operation.tags || []),
     security: translateToSecurities(getSecurities(document, operation)),
   };

@@ -2,10 +2,11 @@ import { IHttpCallbackOperation } from '@stoplight/types';
 import { CallbacksObject } from 'openapi3-ts';
 import { transformOas3Operation } from '../operation';
 
-export function translateToCallbacks(callbacks?: CallbacksObject): IHttpCallbackOperation[] | undefined {
-  if (!callbacks) return;
+export function translateToCallbacks(callbacks: CallbacksObject): IHttpCallbackOperation[] | undefined {
+  const entries = Object.entries(callbacks);
+  if (!entries.length) return;
 
-  return Object.entries(callbacks).reduce((results: IHttpCallbackOperation[], [callbackName, path2Methods]) => {
+  return entries.reduce((results: IHttpCallbackOperation[], [callbackName, path2Methods]) => {
     for (const [path, method2Op] of Object.entries(path2Methods)) {
       for (const [method, op] of Object.entries(method2Op as { [key: string]: {} })) {
         results.push({
