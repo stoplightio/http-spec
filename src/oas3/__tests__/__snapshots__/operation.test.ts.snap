@@ -8,7 +8,7 @@ Object {
       "id": "?http-operation-id?",
       "iid": "cbId",
       "method": "post",
-      "path": "http://prism.com?transactionId={$request.body#/id}",
+      "path": "http://example.com?transactionId={$request.body#/id}",
       "request": Object {
         "body": Object {
           "contents": Array [],

@@ -176,7 +176,7 @@ describe('transformOas3Operation', () => {
                 },
                 callbacks: {
                   myCallback: {
-                    'http://prism.com?transactionId={$request.body#/id}': {
+                    'http://example.com?transactionId={$request.body#/id}': {
                       post: {
                         operationId: 'cbId',
                         responses: {},
