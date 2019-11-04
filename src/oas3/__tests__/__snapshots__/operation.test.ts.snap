@@ -38,11 +38,10 @@ Object {
           "schema": Object {
             "$schema": "http://json-schema.org/draft-04/schema#",
             "properties": Object {
-              "id": "string",
+              "id": Object {
+                "type": "string",
+              },
             },
-            "required": Array [
-              "id",
-            ],
             "type": "object",
           },
         },

@@ -168,9 +168,10 @@ describe('transformOas3Operation', () => {
                       schema: {
                         type: 'object',
                         properties: {
-                          id: 'string',
+                          id: {
+                            type: 'string',
+                          },
                         },
-                        required: ['id'],
                       },
                     },
                   },
