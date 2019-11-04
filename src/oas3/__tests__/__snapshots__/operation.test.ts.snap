@@ -40,6 +40,9 @@ Object {
             "properties": Object {
               "id": "string",
             },
+            "required": Array [
+              "id",
+            ],
             "type": "object",
           },
         },

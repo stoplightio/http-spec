@@ -170,6 +170,7 @@ describe('transformOas3Operation', () => {
                         properties: {
                           id: 'string',
                         },
+                        required: ['id'],
                       },
                     },
                   },
