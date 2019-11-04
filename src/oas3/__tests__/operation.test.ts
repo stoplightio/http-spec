@@ -54,18 +54,6 @@ describe('transformOas3Operation', () => {
                 description: 'descr',
                 summary: 'summary',
                 tags: ['tag1'],
-                requestBody: {
-                  content: {
-                    'application/json': {
-                      schema: {
-                        type: 'object',
-                        properties: {
-                          id: 'string',
-                        },
-                      },
-                    },
-                  },
-                },
               },
             },
           },

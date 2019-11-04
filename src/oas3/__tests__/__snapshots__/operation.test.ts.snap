@@ -156,22 +156,7 @@ Object {
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
-      "contents": Array [
-        Object {
-          "encodings": Array [],
-          "examples": Array [],
-          "mediaType": "application/json",
-          "schema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "id": "string",
-            },
-            "type": "object",
-          },
-        },
-      ],
-      "description": undefined,
-      "required": undefined,
+      "contents": Array [],
     },
     "cookie": Array [],
     "headers": Array [],
