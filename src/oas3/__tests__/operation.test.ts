@@ -145,4 +145,52 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot();
   });
+
+  test('callback', () => {
+    expect(
+      transformOas3Operation({
+        path: '/subscribe',
+        method: 'post',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          paths: {
+            '/subscribe': {
+              post: {
+                operationId: 'opid',
+                responses: {},
+                requestBody: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          id: {
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                callbacks: {
+                  myCallback: {
+                    'http://example.com?transactionId={$request.body#/id}': {
+                      post: {
+                        operationId: 'cbId',
+                        responses: {},
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+    ).toMatchSnapshot();
+  });
 });

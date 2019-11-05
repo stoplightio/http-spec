@@ -843,10 +843,10 @@
   dependencies:
     "@types/json-schema" "^7.0.3"
 
-"@stoplight/types@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.0.tgz#b29ecd8c8ad27bb564c7820c99f93c27f1d11bf1"
-  integrity sha512-z4VqnYIDTcj9R0f8AIDitBWkiAKKJ4W/Z5GJz/3fnBZBa/TD9Oak0xHbicXFXUvqTVCv/7D32PjPYiUX6W/EfQ==
+"@stoplight/types@^11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.2.0.tgz#1f9c9c6dcf481f21e68a01cfa6e81b1ea41d4faa"
+  integrity sha512-c4zMAaf+NusHxcfruYDnzBwX3VJ8h1E6KYW/11QqmtsmE+ua3tKYL3PNbrzWh7nz/Vmv0U8zoYMw42F1XxylaA==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
