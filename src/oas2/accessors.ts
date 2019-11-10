@@ -41,7 +41,11 @@ function getSecurity(
   });
 }
 
-function getProducesOrConsumes(which: 'produces' | 'consumes', spec: Partial<Spec>, operation: Partial<Operation>): string[] {
+function getProducesOrConsumes(
+  which: 'produces' | 'consumes',
+  spec: Partial<Spec>,
+  operation: Partial<Operation>,
+): string[] {
   const mimeTypes = get(operation, which, get(spec, which, []));
   if (!Array.isArray(mimeTypes)) {
     return [];

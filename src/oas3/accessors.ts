@@ -8,7 +8,7 @@ import { isSecurityScheme } from './guards';
 export function getSecurities(
   spec: DeepPartial<OpenAPIObject>,
   operation: DeepPartial<OperationObject>,
-): (SecuritySchemeObject)[][] {
+): SecuritySchemeObject[][] {
   const opSchemesPairs = operation.security ? mapToKeys(operation.security) : mapToKeys(spec.security);
   const definitions = spec.components?.securitySchemes;
 

@@ -1,4 +1,12 @@
-import { Dictionary, HttpParamStyles, IHttpEncoding, IHttpHeaderParam, IMediaTypeContent, INodeExample, Optional } from '@stoplight/types';
+import {
+  Dictionary,
+  HttpParamStyles,
+  IHttpEncoding,
+  IHttpHeaderParam,
+  IMediaTypeContent,
+  INodeExample,
+  Optional,
+} from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 

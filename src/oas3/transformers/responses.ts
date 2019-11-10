@@ -9,10 +9,7 @@ function translateToResponse(response: ResponseObject, statusCode: string): IHtt
     code: statusCode,
     description: response.description,
     headers: compact<IHttpHeaderParam>(
-      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(
-        response.headers,
-        translateHeaderObject,
-      ),
+      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(response.headers, translateHeaderObject),
     ),
     contents: map<ContentObject, IMediaTypeContent>(response.content, translateMediaTypeObject),
   };
