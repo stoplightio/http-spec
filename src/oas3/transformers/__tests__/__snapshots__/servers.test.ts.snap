@@ -28,5 +28,3 @@ Array [
   },
 ]
 `;
-
-exports[`translateToServers translate undefined to empty array 1`] = `Array []`;
