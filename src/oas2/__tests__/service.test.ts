@@ -14,7 +14,7 @@ describe('oas2 service', () => {
       security: [],
       securitySchemes: [],
       servers: [],
-      tags: []
+      tags: [],
     });
   });
 
@@ -48,7 +48,7 @@ describe('oas2 service', () => {
           url: 'http://petstore.swagger.io/v2',
         },
       ],
-      tags: []
+      tags: [],
     });
   });
 });

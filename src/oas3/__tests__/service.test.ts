@@ -31,7 +31,7 @@ describe('oas3 service', () => {
       security: [],
       securitySchemes: [],
       servers: [],
-      tags: []
+      tags: [],
     });
   });
 
@@ -43,11 +43,11 @@ describe('oas3 service', () => {
         },
         servers: [
           {
-            url: 'https://petstore.swagger.io/v2'
+            url: 'https://petstore.swagger.io/v2',
           },
           {
-            url: 'http://petstore.swagger.io/v2'
-          }
+            url: 'http://petstore.swagger.io/v2',
+          },
         ],
       } as any,
     });
@@ -70,7 +70,7 @@ describe('oas3 service', () => {
           url: 'http://petstore.swagger.io/v2',
         },
       ],
-      tags: []
+      tags: [],
     });
   });
 });

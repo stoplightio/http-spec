@@ -7,7 +7,7 @@ import { translateToSingleSecurity } from './transformers/securities';
 export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
   const securitySchemes = compact<HttpSecurityScheme>(
     values(document.securityDefinitions).map<Optional<HttpSecurityScheme>>(sec =>
-      sec ? translateToSingleSecurity(sec) : void 0
+      sec ? translateToSingleSecurity(sec) : void 0,
     ),
   );
 
