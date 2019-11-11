@@ -51,7 +51,7 @@ describe('translateToServers', () => {
         variables: {
           b: {
             default: '123',
-            description: '123',
+            description: 'b - descr',
             enum: ['1', '2', '3'],
           },
         },

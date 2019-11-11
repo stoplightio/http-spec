@@ -90,6 +90,71 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
+  test.each([2, '', null, [null]])(
+    'given invalid operation servers should translate operation with those servers',
+    servers => {
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document: {
+            openapi: '3',
+            info: {
+              title: 'title',
+              version: '2',
+            },
+            paths: {
+              '/users/{userId}': {
+                get: {
+                  operationId: 'opid',
+                  responses: {},
+                  deprecated: true,
+                  description: 'descr',
+                  summary: 'summary',
+                  servers,
+                },
+              },
+            },
+          },
+        }),
+      ).toHaveProperty('servers', []);
+    },
+  );
+
+  test('given partially invalid operation servers should translate operation with valid only servers', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          paths: {
+            '/users/{userId}': {
+              get: {
+                operationId: 'opid',
+                responses: {},
+                deprecated: true,
+                description: 'descr',
+                summary: 'summary',
+                servers: [null, { url: 'operation/server' }, 0, []],
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('servers', [
+      {
+        description: void 0,
+        url: 'operation/server',
+        variables: {},
+      },
+    ]);
+  });
+
   test('given path servers should translate operation with those servers', () => {
     expect(
       transformOas3Operation({
@@ -118,6 +183,71 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
+  test.each([2, '', null, [null]])(
+    'given invalid path servers should translate operation with those servers',
+    servers => {
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document: {
+            openapi: '3',
+            info: {
+              title: 'title',
+              version: '2',
+            },
+            paths: {
+              '/users/{userId}': {
+                servers,
+                get: {
+                  operationId: 'opid',
+                  responses: {},
+                  deprecated: true,
+                  description: 'descr',
+                  summary: 'summary',
+                },
+              },
+            },
+          },
+        }),
+      ).toHaveProperty('servers', []);
+    },
+  );
+
+  test('given partially invalid path servers should translate operation with valid only servers', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          paths: {
+            '/users/{userId}': {
+              servers: [null, { url: 'path/server' }, 2, {}],
+              get: {
+                operationId: 'opid',
+                responses: {},
+                deprecated: true,
+                description: 'descr',
+                summary: 'summary',
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('servers', [
+      {
+        description: void 0,
+        url: 'path/server',
+        variables: {},
+      },
+    ]);
+  });
+
   test('given spec servers should translate operation with those servers', () => {
     expect(
       transformOas3Operation({
@@ -144,6 +274,71 @@ describe('transformOas3Operation', () => {
         },
       }),
     ).toMatchSnapshot();
+  });
+
+  test.each([2, '', null, [null]])(
+    'given invalid spec servers should translate operation with those servers',
+    (servers: any) => {
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document: {
+            openapi: '3',
+            info: {
+              title: 'title',
+              version: '2',
+            },
+            servers,
+            paths: {
+              '/users/{userId}': {
+                get: {
+                  operationId: 'opid',
+                  responses: {},
+                  deprecated: true,
+                  description: 'descr',
+                  summary: 'summary',
+                },
+              },
+            },
+          },
+        }),
+      ).toHaveProperty('servers', []);
+    },
+  );
+
+  test('given partially spec servers should translate operation with valid only servers', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          servers: [null, 1, {}, { url: 'spec/server' }] as any,
+          paths: {
+            '/users/{userId}': {
+              get: {
+                operationId: 'opid',
+                responses: {},
+                deprecated: true,
+                description: 'descr',
+                summary: 'summary',
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('servers', [
+      {
+        description: void 0,
+        url: 'spec/server',
+        variables: {},
+      },
+    ]);
   });
 
   test('callback', () => {

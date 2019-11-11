@@ -1,6 +1,12 @@
 import { Dictionary } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { BaseParameterObject, HeaderObject, SecuritySchemeObject, ServerVariableObject } from 'openapi3-ts';
+import {
+  BaseParameterObject,
+  HeaderObject,
+  SecuritySchemeObject,
+  ServerObject,
+  ServerVariableObject,
+} from 'openapi3-ts';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
   isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
@@ -19,6 +25,9 @@ export const isBaseParameterObject = (
 
 export const isHeaderObject = (maybeHeaderObject: unknown): maybeHeaderObject is HeaderObject =>
   isBaseParameterObject(maybeHeaderObject);
+
+export const isServerObject = (maybeServerObject: unknown): maybeServerObject is ServerObject =>
+  isObject(maybeServerObject) && typeof (maybeServerObject as Dictionary<unknown>).url === 'string';
 
 export const isServerVariableObject = (
   maybeServerVariableObject: unknown,
