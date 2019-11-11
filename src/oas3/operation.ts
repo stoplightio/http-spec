@@ -2,7 +2,7 @@ import { DeepPartial, IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
-import { getOasParameters } from '../oas/accessors';
+import { getOasOperationTags, getOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { getSecurities } from './accessors';
@@ -43,7 +43,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
       operation.requestBody as RequestBodyObject,
     ),
     callbacks: operation.callbacks && translateToCallbacks(operation.callbacks),
-    tags: translateToTags(operation.tags || []),
+    tags: translateToTags(getOasOperationTags(operation)),
     security: translateToSecurities(getSecurities(document, operation)),
   };
 
