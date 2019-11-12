@@ -11,7 +11,7 @@ export function translateToServers(servers: ServerObject[] | undefined): IServer
       (value: ServerVariableObject) =>
         ({
           default: String(value.default),
-          description: String(value.default),
+          description: String(value.description),
           enum: map(value.enum, String),
         } as INodeVariable),
     ),
