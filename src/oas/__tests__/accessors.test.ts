@@ -1,4 +1,4 @@
-import { getOasParameters } from '../accessors';
+import { getOasParameters, getOasTags } from '../accessors';
 
 describe('getOasParameters', () => {
   test('should return empty array', () => {
@@ -71,5 +71,21 @@ describe('getOasParameters', () => {
         name: 'np3',
       },
     ]);
+  });
+});
+
+describe('getOasTags', () => {
+  describe.each([2, null, {}, '', 0])('when tags property is not an array', tags => {
+    test('should return empty array', () => {
+      expect(getOasTags(tags)).toEqual([]);
+    });
+  });
+
+  test('should filter out invalid values', () => {
+    expect(getOasTags([{}, null, 'foo'])).toEqual(['foo']);
+  });
+
+  test('should normalize values', () => {
+    expect(getOasTags([0, 'foo', true])).toEqual(['0', 'foo', 'true']);
   });
 });

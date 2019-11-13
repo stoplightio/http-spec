@@ -62,6 +62,72 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
+  test('given invalid tags should translate operation as there were no tags specified', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          paths: {
+            '/users/{userId}': {
+              get: {
+                operationId: 'opid',
+                responses: {},
+                deprecated: true,
+                description: 'descr',
+                summary: 'summary',
+                tags: null as any,
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('tags', []);
+  });
+
+  test('given tags with invalid values should translate operation as all tags were strings', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          openapi: '3',
+          info: {
+            title: 'title',
+            version: '2',
+          },
+          paths: {
+            '/users/{userId}': {
+              get: {
+                operationId: 'opid',
+                responses: {},
+                deprecated: true,
+                description: 'descr',
+                summary: 'summary',
+                tags: [2, 'test', false, {}, null],
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('tags', [
+      {
+        name: '2',
+      },
+      {
+        name: 'test',
+      },
+      {
+        name: 'false',
+      },
+    ]);
+  });
+
   test('given operation servers should translate operation with those servers', () => {
     expect(
       transformOas3Operation({
