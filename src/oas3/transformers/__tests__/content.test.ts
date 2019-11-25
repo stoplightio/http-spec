@@ -167,6 +167,7 @@ describe('translateMediaTypeObject', () => {
       nullable: true,
       description: 'A simple string',
       example: 'hello',
+      deprecated: true,
     };
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
@@ -194,6 +195,17 @@ describe('translateMediaTypeObject', () => {
         'mediaType',
       );
       expect(translatedObject.schema).toHaveProperty('example', 'hello');
+    });
+
+    test('will keep the deprecated property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('deprecated', true);
     });
   });
 });
