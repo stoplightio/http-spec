@@ -165,6 +165,7 @@ export function translateToQueryParameter(query: QueryParameter): IHttpQueryPara
 export function translateToPathParameter(parameter: PathParameter): IHttpPathParam {
   return (pickBy({
     ...buildSchemaForParameter(parameter),
+    description: get(parameter, 'description'),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
@@ -179,7 +180,6 @@ function buildSchemaForParameter(
     'type',
     'format',
     'default',
-    'description',
     'enum',
     'exclusiveMaximum',
     'exclusiveMinimum',

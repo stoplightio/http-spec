@@ -207,3 +207,71 @@ Object {
   "tags": Array [],
 }
 `;
+
+exports[`transformOas3Operation should return deprecated property 1`] = `
+Object {
+  "deprecated": true,
+  "id": "?http-operation-id?",
+  "iid": "get-test",
+  "method": "get",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [
+      Object {
+        "deprecated": true,
+        "examples": Array [],
+        "name": "query-param",
+        "schema": Object {
+          "type": "string",
+        },
+      },
+    ],
+  },
+  "responses": Array [
+    Object {
+      "code": "200",
+      "contents": Array [
+        Object {
+          "encodings": Array [],
+          "examples": Array [],
+          "mediaType": "application/json",
+          "schema": Object {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "properties": Object {
+              "foo": Object {
+                "default": "bar",
+                "deprecated": true,
+                "enum": Array [
+                  "foo",
+                ],
+                "example": "doo",
+                "format": "date",
+                "type": "string",
+              },
+            },
+            "type": "objec",
+          },
+        },
+      ],
+      "description": "OK",
+      "headers": Array [],
+    },
+  ],
+  "security": Array [],
+  "servers": Array [
+    Object {
+      "description": undefined,
+      "url": "http://localhost:3000",
+      "variables": Object {},
+    },
+  ],
+  "summary": "Your GET endpoint",
+  "tags": Array [],
+}
+`;

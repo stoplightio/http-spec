@@ -50,7 +50,6 @@ Object {
   "name": "name",
   "required": true,
   "schema": Object {
-    "description": "desc",
     "minimum": 12,
     "type": "integer",
   },
@@ -65,7 +64,6 @@ Array [
   Object {
     "name": "header-name",
     "schema": Object {
-      "description": "a description",
       "type": "string",
     },
     "style": "simple",
@@ -73,7 +71,6 @@ Array [
   Object {
     "name": "plain-tex",
     "schema": Object {
-      "description": "another description",
       "type": "string",
     },
     "style": "simple",
@@ -86,7 +83,6 @@ Array [
   Object {
     "name": "header-name",
     "schema": Object {
-      "description": "a description",
       "type": "string",
     },
     "style": "simple",
@@ -94,12 +90,24 @@ Array [
 ]
 `;
 
-exports[`params.translator translateToPathParameter should translate 1`] = `
+exports[`params.translator translateToPathParameter should render description in root 1`] = `
 Object {
+  "description": "descr",
   "name": "name",
   "required": true,
   "schema": Object {
-    "description": "descr",
+    "type": "string",
+  },
+  "style": "simple",
+}
+`;
+
+exports[`params.translator translateToPathParameter should translate 1`] = `
+Object {
+  "description": "descr",
+  "name": "name",
+  "required": true,
+  "schema": Object {
     "type": "string",
   },
   "style": "simple",

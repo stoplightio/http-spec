@@ -157,7 +157,6 @@ describe('params.translator', () => {
         schema: {
           properties: {
             arr: {
-              description: 'desc',
               items: {
                 type: 'number',
               },
@@ -166,7 +165,6 @@ describe('params.translator', () => {
               type: 'array',
             },
             int: {
-              description: 'desc',
               maximum: 3,
               minimum: 0,
               type: 'integer',
@@ -175,7 +173,6 @@ describe('params.translator', () => {
               allowEmptyValue: false,
               minLength: 1,
               default: '25-07-2019',
-              description: 'desc',
               format: 'date',
               type: 'string',
             },
@@ -225,6 +222,18 @@ describe('params.translator', () => {
 
   describe('translateToPathParameter', () => {
     test('should translate', () => {
+      expect(
+        translateToPathParameter({
+          required: true,
+          description: 'descr',
+          name: 'name',
+          in: 'path',
+          type: 'string',
+        }),
+      ).toMatchSnapshot();
+    });
+
+    test('should render description in root', () => {
       expect(
         translateToPathParameter({
           required: true,
