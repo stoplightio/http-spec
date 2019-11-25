@@ -3,11 +3,11 @@ import { flatten, get, keys, map } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
-import { HttpOperationTransformer } from '../oas/types';
+import { HttpOperationTransformer } from './types';
 
 const methods = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
-export function computeOasOperations(
+export function transformOasOperations(
   document: Spec | OpenAPIObject,
   transformer: HttpOperationTransformer<any>,
 ): IHttpOperation[] {

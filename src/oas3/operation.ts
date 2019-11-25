@@ -3,7 +3,7 @@ import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
 import { getOasParameters, getOasTags } from '../oas/accessors';
-import { computeOasOperations } from '../oas/computeOperations';
+import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { getSecurities } from './accessors';
@@ -14,8 +14,8 @@ import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
 
-export function computeOas3Operations(document: OpenAPIObject): IHttpOperation[] {
-  return computeOasOperations(document, transformOas3Operation);
+export function transformOas3Operations(document: OpenAPIObject): IHttpOperation[] {
+  return transformOasOperations(document, transformOas3Operation);
 }
 
 export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document, path, method }) => {

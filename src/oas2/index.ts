@@ -1,2 +1,2 @@
-export { transformOas2Operation } from './operation';
-export { transformOas2Service } from './service';
+export * from './operation';
+export * from './service';

@@ -1,1 +1,1 @@
-export { computeOasOperations } from './computeOperations';
+export * from './operation';
