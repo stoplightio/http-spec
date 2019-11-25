@@ -1,17 +1,18 @@
-import { get } from 'lodash';
+import { DeepPartial } from '@stoplight/types';
+import { isObject } from 'lodash';
 import { OpenAPIObject, OperationObject, SecuritySchemeObject } from 'openapi3-ts';
 
 import { mapToKeys } from '../utils';
+import { isSecurityScheme } from './guards';
 
 export function getSecurities(
-  spec: Partial<OpenAPIObject>,
-  operation: Partial<OperationObject>,
+  spec: DeepPartial<OpenAPIObject>,
+  operation: DeepPartial<OperationObject>,
 ): SecuritySchemeObject[][] {
-  const globalSchemes = mapToKeys(spec.security);
-  const operationSchemes = mapToKeys(operation.security);
+  const opSchemesPairs = operation.security ? mapToKeys(operation.security) : mapToKeys(spec.security);
+  const definitions = spec.components?.securitySchemes;
 
-  const opSchemesPairs = operation.security ? operationSchemes : globalSchemes;
-  const definitions = get(spec, 'components.securitySchemes');
-
-  return !definitions ? [] : opSchemesPairs.map(opSchemePair => opSchemePair.map(opScheme => definitions[opScheme]));
+  return !isObject(definitions)
+    ? []
+    : opSchemesPairs.map(opSchemePair => opSchemePair.map(opScheme => definitions[opScheme]).filter(isSecurityScheme));
 }

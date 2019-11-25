@@ -2,11 +2,13 @@ import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
-import { getOasParameters } from '../oas/accessors';
+import { getOasParameters, getOasTags } from '../oas/accessors';
 import { computeOasOperations } from '../oas/computeOperations';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { getSecurities } from './accessors';
+import { isServerObject } from './guards';
+import { translateToCallbacks } from './transformers/callbacks';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
@@ -27,6 +29,8 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
 
+  const servers = operation.servers || pathObj.servers || document.servers;
+
   const httpOperation: IHttpOperation = {
     id: '?http-operation-id?',
     iid: operation.operationId,
@@ -36,12 +40,13 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     path,
     summary: operation.summary,
     responses: translateToResponses(operation.responses),
-    servers: translateToServers(operation.servers || pathObj.servers || document.servers),
+    servers: Array.isArray(servers) ? translateToServers(servers.filter(isServerObject)) : [],
     request: translateToRequest(
       getOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
       operation.requestBody as RequestBodyObject,
     ),
-    tags: translateToTags(operation.tags || []),
+    callbacks: operation.callbacks && translateToCallbacks(operation.callbacks),
+    tags: translateToTags(getOasTags(operation.tags)),
     security: translateToSecurities(getSecurities(document, operation)),
   };
 

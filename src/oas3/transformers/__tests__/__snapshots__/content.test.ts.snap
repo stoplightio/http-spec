@@ -68,6 +68,32 @@ Object {
 }
 `;
 
+exports[`translateMediaTypeObject given complex nested media type object with nullish headers should translate correctly 1`] = `
+Object {
+  "encodings": Array [
+    Object {
+      "contentType": "text/plain",
+      "headers": Array [],
+      "mediaType": "text/plain",
+      "property": "enc1",
+      "style": "form",
+    },
+  ],
+  "examples": Array [
+    Object {
+      "description": undefined,
+      "key": "example",
+      "summary": "multi example",
+      "value": "hey",
+    },
+  ],
+  "mediaType": "mediaType",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+  },
+}
+`;
+
 exports[`translateMediaTypeObject given encoding with incorrect style should throw an error 1`] = `"Encoding property style: 'xyz' is incorrect, must be one of: form,spaceDelimited,pipeDelimited,deepObject"`;
 
 exports[`translateMediaTypeObject given encodings should translate each encoding to array item 1`] = `

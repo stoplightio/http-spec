@@ -1,4 +1,4 @@
-import { getOasParameters } from '../accessors';
+import { getOasParameters, getOasTags } from '../accessors';
 
 describe('getOasParameters', () => {
   test('should return empty array', () => {
@@ -6,7 +6,15 @@ describe('getOasParameters', () => {
   });
 
   test('should fallback to operation parameters', () => {
-    expect(getOasParameters([{ name: 'n1', in: 'i1' }, { name: 'n2', in: 'i2' }], undefined)).toEqual([
+    expect(
+      getOasParameters(
+        [
+          { name: 'n1', in: 'i1' },
+          { name: 'n2', in: 'i2' },
+        ],
+        undefined,
+      ),
+    ).toEqual([
       {
         in: 'i1',
         name: 'n1',
@@ -19,7 +27,12 @@ describe('getOasParameters', () => {
   });
 
   test('should fallback to path parameters', () => {
-    expect(getOasParameters(undefined, [{ name: 'n1', in: 'i1' }, { name: 'n2', in: 'i2' }])).toEqual([
+    expect(
+      getOasParameters(undefined, [
+        { name: 'n1', in: 'i1' },
+        { name: 'n2', in: 'i2' },
+      ]),
+    ).toEqual([
       {
         in: 'i1',
         name: 'n1',
@@ -34,8 +47,14 @@ describe('getOasParameters', () => {
   test('should prefer operation parameters', () => {
     expect(
       getOasParameters(
-        [{ name: 'n1', in: 'n1', type: 'array' }, { name: 'no2', in: 'io2' }],
-        [{ name: 'n1', in: 'n1', type: 'string' }, { name: 'np3', in: 'ip3' }],
+        [
+          { name: 'n1', in: 'n1', type: 'array' },
+          { name: 'no2', in: 'io2' },
+        ],
+        [
+          { name: 'n1', in: 'n1', type: 'string' },
+          { name: 'np3', in: 'ip3' },
+        ],
       ),
     ).toEqual([
       {
@@ -52,5 +71,21 @@ describe('getOasParameters', () => {
         name: 'np3',
       },
     ]);
+  });
+});
+
+describe('getOasTags', () => {
+  describe.each([2, null, {}, '', 0])('when tags property is not an array', tags => {
+    test('should return empty array', () => {
+      expect(getOasTags(tags)).toEqual([]);
+    });
+  });
+
+  test('should filter out invalid values', () => {
+    expect(getOasTags([{}, null, 'foo'])).toEqual(['foo']);
+  });
+
+  test('should normalize values', () => {
+    expect(getOasTags([0, 'foo', true])).toEqual(['0', 'foo', 'true']);
   });
 });

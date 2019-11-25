@@ -103,6 +103,27 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
+  test('given complex nested media type object with nullish headers should translate correctly', () => {
+    expect(
+      translateMediaTypeObject(
+        {
+          schema: {},
+          examples: { example: { summary: 'multi example', value: 'hey' } },
+          encoding: {
+            enc1: {
+              contentType: 'text/plain',
+              style: 'form',
+              headers: {
+                '0': null,
+              },
+            },
+          },
+        },
+        'mediaType',
+      ),
+    ).toMatchSnapshot();
+  });
+
   test('given encoding with incorrect style should throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
@@ -177,13 +198,57 @@ describe('translateMediaTypeObject', () => {
   });
 });
 
-describe('shcmea invalid', () => {
+describe('schema invalid', () => {
   test('type as array does not throw error', () => {
     const schema = ({
       type: ['string', 'object'],
       description: 'A simple string',
       example: 'hello',
     } as unknown) as SchemaObject;
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
+  });
+
+  test('nullish values in arrays', () => {
+    /*
+      # Equivalent in YAML
+      type: array
+      items:
+        -
+        - object
+     */
+    const schema = {
+      type: 'array',
+      items: [null, 'object'],
+    };
+
+    expect(() =>
+      translateMediaTypeObject(
+        {
+          schema,
+        },
+        'mediaType',
+      ),
+    ).not.toThrow();
+  });
+
+  test('nullish mapping value', () => {
+    /*
+     # Equivalent in YAML
+     type: array
+     items:
+    */
+    const schema = {
+      type: 'array',
+      items: null,
+    } as any;
 
     expect(() =>
       translateMediaTypeObject(
@@ -221,5 +286,9 @@ describe('translateHeaderObject', () => {
         'header-name',
       ),
     ).toMatchSnapshot();
+  });
+
+  test('should handle nullish value gracefully', () => {
+    expect(translateHeaderObject(null, 'header')).toBeUndefined();
   });
 });

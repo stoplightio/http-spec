@@ -3,6 +3,7 @@ import { get, isNil, omitBy } from 'lodash';
 import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
 
 import { getOasParameters } from '../oas/accessors';
+import { getOasParameters, getOasTags } from '../oas/accessors';
 import { computeOasOperations } from '../oas/computeOperations';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
@@ -48,7 +49,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
       getOasParameters(operation.parameters as Parameter[], pathObj.parameters as Parameter[]),
       consumes,
     ),
-    tags: translateToTags(operation.tags || []),
+    tags: translateToTags(getOasTags(operation.tags)),
     security: translateToSecurities(getSecurities(document, operationSecurity)),
   };
 
