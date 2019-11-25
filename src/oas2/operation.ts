@@ -1,8 +1,9 @@
 import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
-import { Operation, Parameter, Path, Response } from 'swagger-schema-official';
+import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
 
 import { getOasParameters, getOasTags } from '../oas/accessors';
+import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
 import { getConsumes, getProduces, getSecurities } from './accessors';
@@ -10,6 +11,10 @@ import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
+
+export function transformOas2Operations(document: Spec): IHttpOperation[] {
+  return transformOasOperations(document, transformOas2Operation);
+}
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
   const pathObj = get(document, ['paths', path]) as Path;
