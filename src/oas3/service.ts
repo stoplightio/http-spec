@@ -1,8 +1,9 @@
 import { HttpSecurityScheme, IServer } from '@stoplight/types';
-import { compact, flatMap, get, isObject } from 'lodash';
+import { compact, flatMap, isObject } from 'lodash';
 import { SecuritySchemeObject } from 'openapi3-ts';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
+import { isSecurityScheme } from './guards';
 import { transformToSingleSecurity } from './transformers/securities';
 
 export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
@@ -23,9 +24,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     flatMap(document.security || [], sec =>
       sec
         ? compact(
-            Object.keys(sec).map(n =>
-              n ? transformToSingleSecurity(get(document, ['components', 'securitySchemes', n])) : null,
-            ),
+            Object.keys(sec).map(n => {
+              const definition = document?.components?.securitySchemes?.[n];
+              return isSecurityScheme(definition) && transformToSingleSecurity(definition);
+            }),
           )
         : null,
     ),
