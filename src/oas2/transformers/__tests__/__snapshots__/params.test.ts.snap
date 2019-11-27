@@ -90,18 +90,6 @@ Array [
 ]
 `;
 
-exports[`params.translator translateToPathParameter should render description in root 1`] = `
-Object {
-  "description": "descr",
-  "name": "name",
-  "required": true,
-  "schema": Object {
-    "type": "string",
-  },
-  "style": "simple",
-}
-`;
-
 exports[`params.translator translateToPathParameter should translate 1`] = `
 Object {
   "description": "descr",

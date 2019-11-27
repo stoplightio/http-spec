@@ -242,7 +242,7 @@ describe('params.translator', () => {
           in: 'path',
           type: 'string',
         }),
-      ).toMatchSnapshot();
+      ).toHaveProperty('description', 'descr');
     });
   });
 });

@@ -64,7 +64,7 @@ describe('transformOas3Operation', () => {
           },
         },
       }),
-    ).toMatchSnapshot();
+    ).toHaveProperty('deprecated', true);
   });
 
   test('given no tags should translate operation with empty tags array', () => {
