@@ -1,3 +1,4 @@
+import { Spec } from 'swagger-schema-official';
 import { transformOas2Service } from '../service';
 
 describe('oas2 service', () => {
@@ -50,5 +51,14 @@ describe('oas2 service', () => {
       ],
       tags: [],
     });
+  });
+
+  test('should handle invalid document securities gracefully', () => {
+    const document: Partial<Spec> = {
+      securityDefinitions: {},
+      security: ['API-Key'] as any,
+    };
+
+    expect(transformOas2Service({ document } as any)).toHaveProperty('security', []);
   });
 });
