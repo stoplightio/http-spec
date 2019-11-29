@@ -7,7 +7,7 @@ import { URI } from '../../utils';
 export function translateToServers(spec: Partial<Spec>, operation: Partial<Operation>): IServer[] {
   const schemes = operation.schemes || spec.schemes;
   const { host, basePath } = spec;
-  if (!host) {
+  if (typeof host !== 'string' || host.length === 0) {
     return [];
   }
 
@@ -20,8 +20,8 @@ export function translateToServers(spec: Partial<Spec>, operation: Partial<Opera
       .scheme(scheme)
       .host(host);
 
-    if (basePath) {
-      uri = uri.path(basePath);
+    if (typeof basePath === 'string' && basePath.length > 0) {
+      uri = uri.path(String(basePath));
     }
 
     return {
