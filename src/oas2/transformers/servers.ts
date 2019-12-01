@@ -21,7 +21,7 @@ export function translateToServers(spec: Partial<Spec>, operation: Partial<Opera
       .host(host);
 
     if (typeof basePath === 'string' && basePath.length > 0) {
-      uri = uri.path(String(basePath));
+      uri = uri.path(basePath);
     }
 
     return {
