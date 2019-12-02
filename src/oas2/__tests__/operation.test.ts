@@ -57,4 +57,29 @@ describe('transformOas2Operation', () => {
       }),
     ).toMatchSnapshot();
   });
+
+  test('should return deprecated property in http operation root', () => {
+    expect(
+      transformOas2Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document: {
+          swagger: '2.0',
+          servers: [
+            {
+              url: 'http://localhost:3000',
+            },
+          ],
+          paths: {
+            '/users/{userId}': {
+              // @ts-ignore
+              get: {
+                deprecated: true,
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('deprecated', true);
+  });
 });

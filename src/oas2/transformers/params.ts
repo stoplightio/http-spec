@@ -110,6 +110,9 @@ export function translateFromFormDataParameters(
         const requiredIndex = get(content, 'schema.required.length', 0);
         set(content, `schema.required.${requiredIndex}`, parameter.name);
       }
+      if (parameter.description) {
+        set(content, `schema.description`, parameter.description);
+      }
       if (parameter.collectionFormat) {
         content.encodings = content.encodings || [];
         const encoding = buildEncoding(parameter);
