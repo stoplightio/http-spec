@@ -1,3 +1,4 @@
+import { OpenAPIObject } from 'openapi3-ts';
 import { transformOas3Service } from '../service';
 
 describe('oas3 service', () => {
@@ -72,5 +73,16 @@ describe('oas3 service', () => {
       ],
       tags: [],
     });
+  });
+
+  test('should handle invalid document securities gracefully', () => {
+    const document: Partial<OpenAPIObject> = {
+      components: {
+        securitySchemes: {},
+      },
+      security: ['api-key'] as any,
+    };
+
+    expect(transformOas3Service({ document } as any)).toHaveProperty('security', []);
   });
 });

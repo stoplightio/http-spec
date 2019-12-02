@@ -1,5 +1,5 @@
 import { HttpSecurityScheme, IServer, Optional } from '@stoplight/types';
-import { compact, flatMap, get, isString, values } from 'lodash';
+import { compact, flatMap, isString, values } from 'lodash';
 
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { translateToSingleSecurity } from './transformers/securities';
@@ -13,7 +13,12 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
 
   const security = compact<HttpSecurityScheme>(
     flatMap(document.security, sec =>
-      sec ? Object.keys(sec).map(n => translateToSingleSecurity(get(document, ['securityDefinitions', n]))) : [],
+      sec
+        ? Object.keys(sec).map(n => {
+            const definition = document?.securityDefinitions?.[n];
+            return definition && translateToSingleSecurity(definition);
+          })
+        : [],
     ),
   );
 
