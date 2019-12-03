@@ -99,12 +99,17 @@ export function translateFromFormDataParameters(
   };
 
   return parameters.reduce((body, parameter) => {
-    const { schema } = buildSchemaForParameter(parameter);
+    const { schema, description } = buildSchemaForParameter(parameter);
     (body.contents || []).forEach(content => {
       // workaround... JSONSchema4 does not support `allowEmptyValue`
       if ('allowEmptyValue' in parameter) {
         Object.assign(schema, { allowEmptyValue: parameter.allowEmptyValue });
       }
+
+      if (description) {
+        schema.description = description;
+      }
+
       set(content, `schema.properties.${parameter.name}`, schema);
 
       if (parameter.required) {

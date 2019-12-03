@@ -16,6 +16,7 @@ describe('translateOas3ToRequest', () => {
         {
           name: 'param-name-1',
           in: 'query',
+          description: 'descr',
           content: {
             'content-a': {
               schema: {},
@@ -25,6 +26,7 @@ describe('translateOas3ToRequest', () => {
         {
           name: 'param-name-2',
           in: 'query',
+          description: 'descr',
           content: {
             'content-b': {
               schema: {},
@@ -34,6 +36,7 @@ describe('translateOas3ToRequest', () => {
         {
           name: 'param-name-3',
           in: 'header',
+          description: 'descr',
           content: {
             'content-c': {
               schema: {},
