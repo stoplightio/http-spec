@@ -17,6 +17,7 @@ describe('translateOas3ToRequest', () => {
           name: 'param-name-1',
           in: 'query',
           description: 'descr',
+          deprecated: true,
           content: {
             'content-a': {
               schema: {},
@@ -54,7 +55,9 @@ describe('translateOas3ToRequest', () => {
         required: true,
         content: {
           'content-a': {
-            schema: {},
+            schema: {
+              deprecated: true,
+            },
           },
         },
       }),

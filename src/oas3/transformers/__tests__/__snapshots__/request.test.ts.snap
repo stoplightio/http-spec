@@ -4,7 +4,7 @@ exports[`translateOas3ToRequest give a request body should translate it 1`] = `
 Object {
   "body": Object {
     "contents": Array [
-      "translateMediaTypeObject({\\"schema\\":{}}, content-a, {\\"content-a\\":{\\"schema\\":{}}})",
+      "translateMediaTypeObject({\\"schema\\":{\\"deprecated\\":true}}, content-a, {\\"content-a\\":{\\"schema\\":{\\"deprecated\\":true}}})",
     ],
     "description": "descr",
     "required": true,
@@ -42,6 +42,7 @@ Object {
           "schema": Object {},
         },
       },
+      "deprecated": true,
       "description": "descr",
       "examples": Array [],
       "name": "param-name-1",
