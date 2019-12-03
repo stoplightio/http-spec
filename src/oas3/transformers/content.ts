@@ -114,7 +114,7 @@ export function translateMediaTypeObject(
       ? (toJsonSchema(schema, {
           cloneSchema: true,
           strictMode: false,
-          keepNotSupported: ['example'],
+          keepNotSupported: ['example', 'deprecated'],
         }) as JSONSchema4)
       : undefined,
     // Note that I'm assuming all references are resolved

@@ -1,6 +1,31 @@
 import { transformOas3Operation } from '../operation';
 
 describe('transformOas3Operation', () => {
+  test('should return deprecated property in http operation root', () => {
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        // @ts-ignore
+        document: {
+          openapi: '3.0.0',
+          servers: [
+            {
+              url: 'http://localhost:3000',
+            },
+          ],
+          paths: {
+            '/users/{userId}': {
+              get: {
+                deprecated: true,
+              },
+            },
+          },
+        },
+      }),
+    ).toHaveProperty('deprecated', true);
+  });
+
   test('given no tags should translate operation with empty tags array', () => {
     expect(
       transformOas3Operation({

@@ -99,17 +99,24 @@ export function translateFromFormDataParameters(
   };
 
   return parameters.reduce((body, parameter) => {
-    const { schema } = buildSchemaForParameter(parameter);
+    const { schema, description } = buildSchemaForParameter(parameter);
     (body.contents || []).forEach(content => {
       // workaround... JSONSchema4 does not support `allowEmptyValue`
       if ('allowEmptyValue' in parameter) {
         Object.assign(schema, { allowEmptyValue: parameter.allowEmptyValue });
       }
+
+      if (description) {
+        schema.description = description;
+      }
+
       set(content, `schema.properties.${parameter.name}`, schema);
+
       if (parameter.required) {
         const requiredIndex = get(content, 'schema.required.length', 0);
         set(content, `schema.required.${requiredIndex}`, parameter.name);
       }
+
       if (parameter.collectionFormat) {
         content.encodings = content.encodings || [];
         const encoding = buildEncoding(parameter);
@@ -173,13 +180,12 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 
 function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7 } {
+): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
   const schema: Schema = pick(
     param,
     'type',
     'format',
     'default',
-    'description',
     'enum',
     'exclusiveMaximum',
     'exclusiveMinimum',
@@ -200,5 +206,5 @@ function buildSchemaForParameter(
     schema.minLength = 1;
   }
 
-  return { schema };
+  return { schema, description: param.description };
 }
