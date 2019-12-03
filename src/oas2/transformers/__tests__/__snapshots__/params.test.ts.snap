@@ -47,6 +47,7 @@ Object {
 
 exports[`params.translator translateToHeaderParam should translate header param 1`] = `
 Object {
+  "description": "desc",
   "name": "name",
   "required": true,
   "schema": Object {
@@ -62,6 +63,7 @@ exports[`params.translator translateToHeaderParams should translate empty dictio
 exports[`params.translator translateToHeaderParams should translate to multiple header params 1`] = `
 Array [
   Object {
+    "description": "a description",
     "name": "header-name",
     "schema": Object {
       "type": "string",
@@ -69,6 +71,7 @@ Array [
     "style": "simple",
   },
   Object {
+    "description": "another description",
     "name": "plain-tex",
     "schema": Object {
       "type": "string",
@@ -81,6 +84,7 @@ Array [
 exports[`params.translator translateToHeaderParams should translate to simple header param 1`] = `
 Array [
   Object {
+    "description": "a description",
     "name": "header-name",
     "schema": Object {
       "type": "string",

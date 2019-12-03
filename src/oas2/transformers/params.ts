@@ -106,13 +106,12 @@ export function translateFromFormDataParameters(
         Object.assign(schema, { allowEmptyValue: parameter.allowEmptyValue });
       }
       set(content, `schema.properties.${parameter.name}`, schema);
+
       if (parameter.required) {
         const requiredIndex = get(content, 'schema.required.length', 0);
         set(content, `schema.required.${requiredIndex}`, parameter.name);
       }
-      if (parameter.description) {
-        set(content, `schema.description`, parameter.description);
-      }
+
       if (parameter.collectionFormat) {
         content.encodings = content.encodings || [];
         const encoding = buildEncoding(parameter);
@@ -168,7 +167,6 @@ export function translateToQueryParameter(query: QueryParameter): IHttpQueryPara
 export function translateToPathParameter(parameter: PathParameter): IHttpPathParam {
   return (pickBy({
     ...buildSchemaForParameter(parameter),
-    description: parameter?.description,
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
@@ -177,7 +175,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 
 function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7 } {
+): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
   const schema: Schema = pick(
     param,
     'type',
@@ -203,5 +201,5 @@ function buildSchemaForParameter(
     schema.minLength = 1;
   }
 
-  return { schema };
+  return { schema, description: param.description };
 }

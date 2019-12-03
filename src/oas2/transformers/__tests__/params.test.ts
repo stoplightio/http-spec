@@ -179,7 +179,6 @@ describe('params.translator', () => {
           },
           required: ['str', 'arr', 'int'],
           type: 'object',
-          description: 'desc',
         },
       };
 
