@@ -43,6 +43,7 @@ describe('accessors', () => {
         ).toEqual([
           [
             {
+              key: 'api_key',
               in: 'header',
               name: 'api_key',
               type: 'apiKey',
@@ -55,6 +56,7 @@ describe('accessors', () => {
                 'write:pets': 'modify pets in your account',
               },
               type: 'oauth2',
+              key: 'petstore_auth',
             },
           ],
         ]);
@@ -90,6 +92,7 @@ describe('accessors', () => {
                 'write:pets': 'modify pets in your account',
               },
               type: 'oauth2',
+              key: 'petstore_auth',
             },
           ],
           [
@@ -97,6 +100,7 @@ describe('accessors', () => {
               in: 'header',
               name: 'api_key',
               type: 'apiKey',
+              key: 'api_key',
             },
           ],
         ]);
@@ -164,7 +168,7 @@ describe('accessors', () => {
             },
           ],
         ),
-      ).toEqual([[{ in: 'header', name: 'api_key', type: 'apiKey' }]]);
+      ).toEqual([[{ in: 'header', name: 'api_key', type: 'apiKey', key: 'api_key' }]]);
     });
 
     test('given security with custom scopes should override global definition', () => {
@@ -187,6 +191,7 @@ describe('accessors', () => {
             flow: 'implicit',
             scopes: { 'read:pets': 'read your pets', 'write:pets': 'modify pets in your account' },
             type: 'oauth2',
+            key: 'petstore_auth',
           },
         ],
       ]);
@@ -203,12 +208,13 @@ describe('accessors', () => {
         ),
       ).toEqual([
         [
-          { in: 'header', name: 'api_key', type: 'apiKey' },
+          { in: 'header', name: 'api_key', type: 'apiKey', key: 'api_key' },
           {
             authorizationUrl: 'http://swagger.io/api/oauth/dialog',
             flow: 'implicit',
             scopes: { 'write:pets': 'modify pets in your account', 'read:pets': 'read your pets' },
             type: 'oauth2',
+            key: 'petstore_auth',
           },
         ],
       ]);

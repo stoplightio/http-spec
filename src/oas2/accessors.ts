@@ -33,6 +33,8 @@ function getSecurity(
         const def = definitions[key];
         if (def) {
           const defCopy = merge<Object, Security>({}, def);
+          // tslint:disable-next-line: no-string-literal
+          defCopy['key'] = key;
           return defCopy;
         }
         return null;
