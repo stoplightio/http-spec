@@ -42,6 +42,7 @@ describe('getOas3Securities', () => {
       [
         {
           type: 'apiKey',
+          key: 'operationScheme',
         },
       ],
     ]);
@@ -67,6 +68,7 @@ describe('getOas3Securities', () => {
       [
         {
           type: 'apiKey',
+          key: 'specScheme',
         },
       ],
     ]);
@@ -96,6 +98,7 @@ describe('getOas3Securities', () => {
       [
         {
           type: 'apiKey',
+          key: 'specScheme',
         },
       ],
     ]);

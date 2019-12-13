@@ -1,6 +1,5 @@
 import { HttpSecurityScheme, IServer } from '@stoplight/types';
-import { compact, flatMap, isObject } from 'lodash';
-import { SecuritySchemeObject } from 'openapi3-ts';
+import { compact, flatMap } from 'lodash';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
 import { isSecurityScheme } from './guards';
@@ -19,25 +18,27 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     ),
   );
 
+  const securitySchemes = compact<HttpSecurityScheme>(
+    Object.keys(document.components?.securitySchemes || []).map(key => {
+      const definition = document?.components?.securitySchemes?.[key];
+      return isSecurityScheme(definition) && transformToSingleSecurity(definition, key);
+    }),
+  );
+
   // @ts-ignore TODO: fix typing
   const security = compact(
     flatMap(document.security || [], sec =>
       sec
         ? compact(
-            Object.keys(sec).map(n => {
-              const definition = document?.components?.securitySchemes?.[n];
-              return isSecurityScheme(definition) && transformToSingleSecurity(definition);
+            Object.keys(sec).map(key => {
+              return securitySchemes.find(securityScheme => {
+                return securityScheme.key === key;
+              });
             }),
           )
         : null,
     ),
   ) as HttpSecurityScheme[];
-
-  const securitySchemes = compact<HttpSecurityScheme>(
-    Object.values(document.components?.securitySchemes || [])
-      .filter(isObject)
-      .map(sec => (sec ? transformToSingleSecurity(sec as SecuritySchemeObject) : undefined)),
-  );
 
   return {
     id: '?http-service-id?',

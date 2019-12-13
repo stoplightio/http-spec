@@ -2,18 +2,24 @@ import { DeepPartial, HttpSecurityScheme, IOauthFlowObjects } from '@stoplight/t
 import { pickBy } from 'lodash';
 import { OAuthFlowsObject, SecuritySchemeObject } from 'openapi3-ts';
 
-export function translateToSecurities(securities: SecuritySchemeObject[][]): HttpSecurityScheme[][] {
+export function translateToSecurities(securities: Partial<SecuritySchemeObject[][]>): HttpSecurityScheme[][] {
+  if (!securities) return [];
   return securities.map(security => {
-    return security.map(transformToSingleSecurity);
+    if (!security) return [];
+    return security.map(sec => transformToSingleSecurity(sec, sec.key));
   });
 }
 
-export function transformToSingleSecurity(securityScheme: DeepPartial<SecuritySchemeObject>): HttpSecurityScheme {
+export function transformToSingleSecurity(
+  securityScheme: DeepPartial<SecuritySchemeObject>,
+  key: string,
+): HttpSecurityScheme {
   const baseObject: HttpSecurityScheme = {
     name: securityScheme.name as string,
     description: securityScheme.description,
     in: securityScheme.in as 'query' | 'header' | 'cookie',
     type: securityScheme.type as any,
+    key,
   };
 
   if (securityScheme.flows) {

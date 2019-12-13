@@ -11,6 +11,7 @@ describe('translateOas3ToSecurities', () => {
           description: 'Description',
           in: 'header',
           name: 'oauth2',
+          key: 'API_Key_-_1',
           openIdConnectUrl: 'https://oaid.com/login',
           scheme: 'scheme',
           type: 'oauth2',
