@@ -179,7 +179,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 }
 
 function buildSchemaForParameter(
-  param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
+  param: (QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header) & { readOnly?: boolean },
 ): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
   const schema: Schema = pick(
     param,
