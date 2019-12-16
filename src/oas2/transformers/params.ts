@@ -200,6 +200,7 @@ function buildSchemaForParameter(
     'pattern',
     'uniqueItems',
     'multipleOf',
+    'readOnly',
   );
 
   if ('allowEmptyValue' in param && param.allowEmptyValue === false) {
