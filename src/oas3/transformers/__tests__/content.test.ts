@@ -168,6 +168,10 @@ describe('translateMediaTypeObject', () => {
       description: 'A simple string',
       example: 'hello',
       deprecated: true,
+      writeOnly: true,
+      readOnly: true,
+      externalDocs: { url: 'http://example.com/docs', description: 'Shiny docs' },
+      xml: {},
     };
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
@@ -206,6 +210,53 @@ describe('translateMediaTypeObject', () => {
         'mediaType',
       );
       expect(translatedObject.schema).toHaveProperty('deprecated', true);
+    });
+
+    test('will keep the writeOnly property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('writeOnly', true);
+    });
+
+    test('will keep the readOnly property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('readOnly', true);
+    });
+
+    test('will keep the xml property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('xml', {});
+    });
+
+    test('will keep the externalDocs property', () => {
+      const translatedObject = translateMediaTypeObject(
+        {
+          schema,
+          encoding: {},
+        },
+        'mediaType',
+      );
+      expect(translatedObject.schema).toHaveProperty('externalDocs', {
+        url: 'http://example.com/docs',
+        description: 'Shiny docs',
+      });
     });
   });
 });
