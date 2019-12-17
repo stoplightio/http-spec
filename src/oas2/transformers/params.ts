@@ -59,14 +59,11 @@ export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderP
 }
 
 export function translateToHeaderParams(headers: { [headerName: string]: Header }): IHttpHeaderParam[] {
-  return map(headers, (header, name) => {
-    const param: IHttpHeaderParam = {
-      ...buildSchemaForParameter(Object.assign({ name }, header)),
-      name,
-      style: HttpParamStyles.Simple,
-    };
-    return param;
-  });
+  return map(headers, (header, name) => ({
+    ...buildSchemaForParameter(Object.assign({ name }, header)),
+    name,
+    style: HttpParamStyles.Simple,
+  }));
 }
 
 export function translateToBodyParameter(body: BodyParameter, consumes: string[]): IHttpOperationRequestBody {

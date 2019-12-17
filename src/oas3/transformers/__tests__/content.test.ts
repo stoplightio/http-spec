@@ -168,44 +168,51 @@ describe('translateMediaTypeObject', () => {
       description: 'A simple string',
       example: 'hello',
       deprecated: true,
+      writeOnly: true,
+      readOnly: true,
+      externalDocs: { url: 'http://example.com/docs', description: 'Shiny docs' },
+      xml: {},
     };
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
+    const translatedObject = translateMediaTypeObject(
+      {
+        schema,
+        example: 'hey',
+        encoding: {},
+      },
+      'mediaType',
+    );
 
     test('will not modify the original schema so it can be reused in references ', () => {
-      translateMediaTypeObject(
-        {
-          schema,
-          example: 'hey',
-          encoding: {},
-        },
-        'mediaType',
-      );
-
       expect(schema).toStrictEqual(originalSchema);
     });
 
     test('will keep the example property', () => {
-      const translatedObject = translateMediaTypeObject(
-        {
-          schema,
-          example: 'hey',
-          encoding: {},
-        },
-        'mediaType',
-      );
       expect(translatedObject.schema).toHaveProperty('example', 'hello');
     });
 
     test('will keep the deprecated property', () => {
-      const translatedObject = translateMediaTypeObject(
-        {
-          schema,
-          encoding: {},
-        },
-        'mediaType',
-      );
       expect(translatedObject.schema).toHaveProperty('deprecated', true);
+    });
+
+    test('will keep the writeOnly property', () => {
+      expect(translatedObject.schema).toHaveProperty('writeOnly', true);
+    });
+
+    test('will keep the readOnly property', () => {
+      expect(translatedObject.schema).toHaveProperty('readOnly', true);
+    });
+
+    test('will keep the xml property', () => {
+      expect(translatedObject.schema).toHaveProperty('xml', {});
+    });
+
+    test('will keep the externalDocs property', () => {
+      expect(translatedObject.schema).toHaveProperty('externalDocs', {
+        url: 'http://example.com/docs',
+        description: 'Shiny docs',
+      });
     });
   });
 });
