@@ -59,14 +59,11 @@ export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderP
 }
 
 export function translateToHeaderParams(headers: { [headerName: string]: Header }): IHttpHeaderParam[] {
-  return map(headers, (header, name) => {
-    const param: IHttpHeaderParam = {
-      ...buildSchemaForParameter(Object.assign({ name }, header)),
-      name,
-      style: HttpParamStyles.Simple,
-    };
-    return param;
-  });
+  return map(headers, (header, name) => ({
+    ...buildSchemaForParameter(Object.assign({ name }, header)),
+    name,
+    style: HttpParamStyles.Simple,
+  }));
 }
 
 export function translateToBodyParameter(body: BodyParameter, consumes: string[]): IHttpOperationRequestBody {
@@ -179,7 +176,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 }
 
 function buildSchemaForParameter(
-  param: (QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header) & { readOnly?: boolean },
+  param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
 ): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
   const schema: Schema = pick(
     param,
@@ -200,7 +197,6 @@ function buildSchemaForParameter(
     'pattern',
     'uniqueItems',
     'multipleOf',
-    'readOnly',
   );
 
   if ('allowEmptyValue' in param && param.allowEmptyValue === false) {
