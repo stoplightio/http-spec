@@ -7,9 +7,13 @@ import {
   ServerObject,
   ServerVariableObject,
 } from 'openapi3-ts';
+import { SecurityWithKey } from './accessors';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
   isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+
+export const isSecuritySchemeWithKey = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecurityWithKey =>
+  isSecurityScheme(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).key === 'string';
 
 export const isBaseParameterObject = (
   maybeBaseParameterObject: unknown,

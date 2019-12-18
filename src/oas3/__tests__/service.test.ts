@@ -7,7 +7,7 @@ describe('oas3 service', () => {
       document: {
         components: {
           securitySchemes: {
-            t1: {},
+            t1: { type: 'apiKey' },
             t2: 4,
             t3: 2,
             t4: undefined,

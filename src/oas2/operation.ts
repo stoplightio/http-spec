@@ -49,7 +49,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
       consumes,
     ),
     tags: translateToTags(getOasTags(operation.tags)),
-    security: translateToSecurities(getSecurities(document, operationSecurity)),
+    security: translateToSecurities(document, operationSecurity),
   };
 
   return omitBy(httpOperation, isNil) as IHttpOperation;

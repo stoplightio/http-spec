@@ -3,10 +3,12 @@ import { compact, get, isEmpty, isString, map, merge } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
 
+export type SecurityWithKey = Security & { key: string };
+
 export function getSecurities(
   spec: Partial<Spec>,
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
-): Security[][] {
+): SecurityWithKey[][] {
   const globalSecurities = getSecurity(spec.security, spec.securityDefinitions || {});
   const operationSecurities = getSecurity(operationSecurity, spec.securityDefinitions || {});
 
@@ -26,15 +28,16 @@ export function getConsumes(spec: Partial<Spec>, operation: Partial<Operation>) 
 function getSecurity(
   security: Array<Dictionary<string[], string>> | undefined,
   definitions: Dictionary<Security, string>,
-): Security[][] {
+): SecurityWithKey[][] {
+  if (security === undefined) {
+    return [];
+  }
   return map(security, sec => {
     return compact(
       map(Object.keys(sec), (key: string) => {
         const def = definitions[key];
         if (def) {
-          const defCopy = merge<Object, Security>({}, def);
-          // tslint:disable-next-line: no-string-literal
-          defCopy['key'] = key;
+          const defCopy: SecurityWithKey = merge<{ key: string }, Security>({ key }, def);
           return defCopy;
         }
         return null;

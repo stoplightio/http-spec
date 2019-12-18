@@ -1,8 +1,14 @@
-import { DeepPartial, HttpSecurityScheme, IOauthFlowObjects } from '@stoplight/types';
+import { DeepPartial, IOauthFlowObjects } from '@stoplight/types';
 import { pickBy } from 'lodash';
-import { OAuthFlowsObject, SecuritySchemeObject } from 'openapi3-ts';
+import { OAuthFlowsObject, OpenAPIObject } from 'openapi3-ts';
+import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
 
-export function translateToSecurities(securities: Partial<SecuritySchemeObject[][]>): HttpSecurityScheme[][] {
+export function translateToSecurities(
+  document: DeepPartial<OpenAPIObject>,
+  operationSecurities: OperationSecurities,
+): SecurityWithKey[][] {
+  const securities = getSecurities(document, operationSecurities);
+
   if (!securities) return [];
   return securities.map(security => {
     if (!security) return [];
@@ -10,17 +16,21 @@ export function translateToSecurities(securities: Partial<SecuritySchemeObject[]
   });
 }
 
-export function transformToSingleSecurity(
-  securityScheme: DeepPartial<SecuritySchemeObject>,
-  key: string,
-): HttpSecurityScheme {
-  const baseObject: HttpSecurityScheme = {
-    name: securityScheme.name as string,
-    description: securityScheme.description,
-    in: securityScheme.in as 'query' | 'header' | 'cookie',
-    type: securityScheme.type as any,
+export function transformToSingleSecurity(securityScheme: any, key: string): SecurityWithKey {
+  // @ts-ignore
+  const baseObject: SecurityWithKey = {
     key,
+    description: securityScheme.description,
+    type: securityScheme.type as any,
   };
+
+  if (securityScheme.in) {
+    Object.assign(baseObject, { name: securityScheme.name as string });
+  }
+
+  if (securityScheme.in) {
+    Object.assign(baseObject, { in: securityScheme.in as 'query' | 'header' | 'cookie' });
+  }
 
   if (securityScheme.flows) {
     Object.assign(baseObject, {
