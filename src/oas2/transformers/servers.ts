@@ -1,10 +1,10 @@
-import { IServer } from '@stoplight/types';
+import { DeepPartial, IServer } from '@stoplight/types';
 import { isString } from 'lodash';
 import { Operation, Spec } from 'swagger-schema-official';
 
 import { URI } from '../../utils';
 
-export function translateToServers(spec: Partial<Spec>, operation: Partial<Operation>): IServer[] {
+export function translateToServers(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>): IServer[] {
   const schemes = operation.schemes || spec.schemes;
   const { host, basePath } = spec;
   if (!host) {

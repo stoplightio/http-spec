@@ -1,3 +1,4 @@
+import { Dictionary } from '@stoplight/types';
 import { isObject } from 'lodash';
 import {
   BodyParameter,
@@ -6,8 +7,13 @@ import {
   Parameter,
   PathParameter,
   QueryParameter,
+  Security,
   Tag,
 } from 'swagger-schema-official';
+
+export function isSecurityScheme(maybeSecurityScheme: unknown): maybeSecurityScheme is Security {
+  return isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+}
 
 export function isBodyParameter(parameter: Parameter): parameter is BodyParameter {
   return parameter.in === 'body';

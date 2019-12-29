@@ -1,12 +1,13 @@
 import { DeepPartial, Dictionary } from '@stoplight/types';
-import { compact, get, isEmpty, isString, map, merge } from 'lodash';
+import { compact, get, isEmpty, isString, keys, map, merge } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
+import { isSecurityScheme } from './guards';
 
 export type SecurityWithKey = Security & { key: string };
 
 export function getSecurities(
-  spec: Partial<Spec>,
+  spec: DeepPartial<Spec>,
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
 ): SecurityWithKey[][] {
   const globalSecurities = getSecurity(spec.security, spec.securityDefinitions || {});
@@ -26,19 +27,19 @@ export function getConsumes(spec: DeepPartial<Spec>, operation: DeepPartial<Oper
 }
 
 function getSecurity(
-  security: Array<Dictionary<string[], string>> | undefined,
-  definitions: Dictionary<Security, string>,
+  security: DeepPartial<Spec['security']>,
+  definitions: DeepPartial<Spec['securityDefinitions']>,
 ): SecurityWithKey[][] {
-  if (security === undefined) {
+  if (!security || !definitions) {
     return [];
   }
+
   return map(security, sec => {
     return compact(
-      map(Object.keys(sec), (key: string) => {
+      keys(sec).map((key: string) => {
         const def = definitions[key];
-        if (def) {
-          const defCopy: SecurityWithKey = merge<{ key: string }, Security>({ key }, def);
-          return defCopy;
+        if (isSecurityScheme(def)) {
+          return merge<{ key: string }, Security>({ key }, def);
         }
         return null;
       }),

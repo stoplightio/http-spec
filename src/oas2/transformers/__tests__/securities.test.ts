@@ -17,18 +17,16 @@ describe('securities', () => {
           },
           [{ 'basic-security': [] }],
         ),
-      ).toEqual(
-        expect.arrayContaining([
-          [
-            {
-              scheme: 'basic',
-              type: 'http',
-              description: 'a description',
-              key: 'basic-security',
-            },
-          ],
-        ]),
-      );
+      ).toEqual([
+        [
+          {
+            scheme: 'basic',
+            type: 'http',
+            description: 'a description',
+            key: 'basic-security',
+          },
+        ],
+      ]);
     });
 
     test('single apiKey security', () => {

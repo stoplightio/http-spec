@@ -82,7 +82,7 @@ export function translateToSingleSecurity(security: any, key: string) {
 }
 
 export function translateToSecurities(
-  document: Partial<Spec>,
+  document: DeepPartial<Spec>,
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
 ): HttpSecurityScheme[][] {
   const securities = getSecurities(document, operationSecurity);

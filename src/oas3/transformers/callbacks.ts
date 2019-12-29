@@ -1,21 +1,24 @@
 import { IHttpCallbackOperation } from '@stoplight/types';
-import { CallbacksObject } from 'openapi3-ts';
+import { entries } from 'lodash';
+import { CallbacksObject, OpenAPIObject } from 'openapi3-ts';
 import { transformOas3Operation } from '../operation';
 
 export function translateToCallbacks(callbacks: CallbacksObject): IHttpCallbackOperation[] | undefined {
-  const entries = Object.entries(callbacks);
-  if (!entries.length) return;
+  const callbackEntries = entries(callbacks);
+  if (!callbackEntries.length) return;
 
-  return entries.reduce((results: IHttpCallbackOperation[], [callbackName, path2Methods]) => {
-    for (const [path, method2Op] of Object.entries(path2Methods)) {
-      for (const [method, op] of Object.entries(method2Op as { [key: string]: {} })) {
+  return callbackEntries.reduce((results: IHttpCallbackOperation[], [callbackName, path2Methods]) => {
+    for (const [path, method2Op] of entries(path2Methods)) {
+      for (const [method, op] of entries(method2Op as { [key: string]: {} })) {
+        const document: Partial<OpenAPIObject> = {
+          openapi: '3',
+          info: { title: '', version: '1' },
+          paths: { [path]: { [method]: op } },
+        };
+
         results.push({
           ...transformOas3Operation({
-            document: {
-              openapi: '3',
-              info: { title: '', version: '1' },
-              paths: { [path]: { [method]: op } },
-            },
+            document,
             method,
             path,
           }),
