@@ -820,10 +820,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/test-utils/-/test-utils-0.0.1.tgz#b0d38c8a0abebda2dacbc2aa6a4f9bec44878e7b"
   integrity sha512-Cj3waLFR9bYLG8yvgkjXMxOfiVdewRyrKdH5RQpttVNfKj5UF+mElofPcHn/UfiOuxK3t5rbsdMfS26LK5tdQg==
 
-"@stoplight/types@^11.1.1", "@stoplight/types@^11.2.0":
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.2.0.tgz#1f9c9c6dcf481f21e68a01cfa6e81b1ea41d4faa"
-  integrity sha512-c4zMAaf+NusHxcfruYDnzBwX3VJ8h1E6KYW/11QqmtsmE+ua3tKYL3PNbrzWh7nz/Vmv0U8zoYMw42F1XxylaA==
+"@stoplight/types@^11.1.1", "@stoplight/types@^11.4.0":
+  version "11.4.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.4.0.tgz#a2bedbbec37700d3c5a8c7d36c763a61d7a8bce7"
+  integrity sha512-kMh1Sv7bA8BdbUaRXsRyi2K8Y5PzPOUWNSjB4qKOi0P6+dLczjlKggEIw9Xzuu1tCgBFdEvNwjnYDey0iqgeZQ==
   dependencies:
     "@types/json-schema" "^7.0.3"
 

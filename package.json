@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.2.1",
-    "@stoplight/types": "^11.2.0",
+    "@stoplight/types": "^11.4.0",
     "@types/swagger-schema-official": "~2.0.19",
     "@types/urijs": "~1.19.4",
     "lodash": "^4.17.15",
