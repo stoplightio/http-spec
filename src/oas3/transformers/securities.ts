@@ -1,6 +1,6 @@
-import { DeepPartial, IOauthFlowObjects } from '@stoplight/types';
+import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects } from '@stoplight/types';
 import { compact, pickBy } from 'lodash';
-import { OAuthFlowsObject, OpenAPIObject } from 'openapi3-ts';
+import { OAuthFlowsObject, OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
 import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
 
 export function translateToSecurities(document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) {
@@ -9,7 +9,10 @@ export function translateToSecurities(document: DeepPartial<OpenAPIObject>, oper
   return securities.map(security => compact(security.map(sec => transformToSingleSecurity(sec, sec.key))));
 }
 
-export function transformToSingleSecurity(securityScheme: SecurityWithKey, key: string): SecurityWithKey | undefined {
+export function transformToSingleSecurity(
+  securityScheme: SecuritySchemeObject,
+  key: string,
+): SecurityWithKey | undefined {
   const baseObject: { key: string; description?: string } = {
     key,
   };
@@ -22,8 +25,8 @@ export function transformToSingleSecurity(securityScheme: SecurityWithKey, key: 
     return {
       ...baseObject,
       type: 'apiKey',
-      name: securityScheme.name,
-      in: securityScheme.in,
+      name: securityScheme.name as string,
+      in: securityScheme.in as IApiKeySecurityScheme['in'],
     };
   }
 
@@ -40,7 +43,7 @@ export function transformToSingleSecurity(securityScheme: SecurityWithKey, key: 
     return {
       ...baseObject,
       type: 'http',
-      scheme: securityScheme.scheme,
+      scheme: securityScheme.scheme as 'basic' | 'digest',
     };
   }
 
@@ -56,7 +59,7 @@ export function transformToSingleSecurity(securityScheme: SecurityWithKey, key: 
     return {
       ...baseObject,
       type: 'openIdConnect',
-      openIdConnectUrl: securityScheme.openIdConnectUrl,
+      openIdConnectUrl: securityScheme.openIdConnectUrl as string,
     };
   }
 

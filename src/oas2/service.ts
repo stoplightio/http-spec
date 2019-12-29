@@ -44,6 +44,8 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
   const securitySchemes = compact<HttpSecurityScheme>(
     keys(document.securityDefinitions).map(key => {
       const definition = document?.securityDefinitions?.[key];
+      if (!definition) return undefined;
+
       return translateToSingleSecurity(definition, key);
     }),
   );
