@@ -78,6 +78,27 @@ describe('params.translator', () => {
       ).toMatchSnapshot();
     });
 
+    test('should preserve readOnly flag in schema', () => {
+      expect(
+        translateToBodyParameter(
+          {
+            in: 'body',
+            name: 'name',
+            required: true,
+            description: 'descr',
+            schema: {
+              readOnly: true,
+            },
+          },
+          consumes,
+        ),
+      ).toEqual(
+        expect.objectContaining({
+          contents: expect.arrayContaining([expect.objectContaining({ schema: { readOnly: true } })]),
+        }),
+      );
+    });
+
     test('given x-examples should translate to body parameter with multiple examples', () => {
       expect(
         translateToBodyParameter(

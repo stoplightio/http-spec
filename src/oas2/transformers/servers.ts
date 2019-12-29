@@ -5,23 +5,24 @@ import { Operation, Spec } from 'swagger-schema-official';
 import { URI } from '../../utils';
 
 export function translateToServers(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>): IServer[] {
-  const schemes = operation.schemes || spec.schemes;
-  const { host, basePath } = spec;
-  if (!host) {
+  if (typeof spec.host !== 'string' || spec.host.length === 0) {
     return [];
   }
 
+  const schemes = operation.schemes || spec.schemes;
   if (!Array.isArray(schemes)) {
     return [];
   }
 
+  const hasBasePath = typeof spec.basePath === 'string' && spec.basePath.length > 0;
+
   return schemes.filter(isString).map(scheme => {
     let uri = URI()
       .scheme(scheme)
-      .host(host);
+      .host(spec.host);
 
-    if (basePath) {
-      uri = uri.path(basePath);
+    if (hasBasePath) {
+      uri = uri.path(spec.basePath);
     }
 
     return {
