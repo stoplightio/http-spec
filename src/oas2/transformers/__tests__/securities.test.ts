@@ -4,7 +4,22 @@ import { translateToSecurities } from '../securities';
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
-    test('single basic security', () => {
+    it('should return empty for invalid security type', () => {
+      expect(
+        translateToSecurities(
+          {
+            securityDefinitions: {
+              'invalid-security': {
+                type: 'invalid' as any,
+              },
+            },
+          },
+          [{ 'invalid-security': [] }],
+        ),
+      ).toEqual([[]]);
+    });
+
+    it('should return correct scheme for basic security', () => {
       expect(
         translateToSecurities(
           {
@@ -29,7 +44,7 @@ describe('securities', () => {
       ]);
     });
 
-    test('single apiKey security', () => {
+    it('should return correct scheme for apiKey security', () => {
       expect(
         translateToSecurities(
           {
@@ -57,8 +72,51 @@ describe('securities', () => {
       ]);
     });
 
+    it('should return empty string for apiKey security without name', () => {
+      expect(
+        translateToSecurities(
+          {
+            securityDefinitions: {
+              'apiKey-security': {
+                type: 'apiKey',
+                in: 'header',
+                description: 'a description',
+              },
+            },
+          },
+          [{ 'apiKey-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            name: '',
+            type: 'apiKey',
+            in: 'header',
+            key: 'apiKey-security',
+            description: 'a description',
+          },
+        ],
+      ]);
+    });
+
+    it('should return empty for apiKey security with invalid in', () => {
+      expect(
+        translateToSecurities(
+          {
+            securityDefinitions: {
+              'apiKey-security': {
+                type: 'apiKey',
+                in: 'invalid' as any,
+              },
+            },
+          },
+          [{ 'apiKey-security': [] }],
+        ),
+      ).toEqual([[]]);
+    });
+
     describe('single oauth2 security', () => {
-      test('with implicit flow', () => {
+      it('implicit flow with scopes', () => {
         expect(
           translateToSecurities(
             {
@@ -86,7 +144,34 @@ describe('securities', () => {
         ]);
       });
 
-      test('with password flow', () => {
+      it('implicit flow without scopes', () => {
+        expect(
+          translateToSecurities(
+            {
+              securityDefinitions: {
+                'implicit-flow-security': {
+                  type: 'oauth2',
+                  description: 'a description',
+                  authorizationUrl: 'a url',
+                  flow: 'implicit',
+                },
+              },
+            },
+            [{ 'implicit-flow-security': [] }],
+          ),
+        ).toEqual([
+          [
+            {
+              description: 'a description',
+              flows: { implicit: { authorizationUrl: 'a url', scopes: {} } },
+              key: 'implicit-flow-security',
+              type: 'oauth2',
+            },
+          ],
+        ]);
+      });
+
+      it('with password flow', () => {
         expect(
           translateToSecurities(
             {
@@ -114,7 +199,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('with application flow', () => {
+      it('with application flow', () => {
         expect(
           translateToSecurities(
             {
@@ -142,7 +227,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('with accessCode flow', () => {
+      it('with accessCode flow', () => {
         expect(
           translateToSecurities(
             {
@@ -176,6 +261,22 @@ describe('securities', () => {
           ],
         ]);
       });
+
+      it('with invalid flow', () => {
+        expect(
+          translateToSecurities(
+            {
+              securityDefinitions: {
+                'accessCode-flow-security': {
+                  type: 'oauth2',
+                  flow: 'invalid-flow' as any,
+                },
+              },
+            },
+            [{ 'accessCode-flow-security': [] }],
+          ),
+        ).toEqual([[]]);
+      });
     });
 
     describe('multiple mixed securities', () => {
@@ -201,7 +302,7 @@ describe('securities', () => {
         },
       };
 
-      test('OR relation between security schemes', () => {
+      it('OR relation between security schemes', () => {
         expect(
           translateToSecurities(document, [
             { 'basic-security': [] },
@@ -237,7 +338,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('AND relation between security schemes', () => {
+      it('AND relation between security schemes', () => {
         expect(
           translateToSecurities(document, [{ 'basic-security': [], 'implicit-security': [], 'api-security': [] }]),
         ).toEqual([

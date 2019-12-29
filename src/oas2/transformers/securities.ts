@@ -23,21 +23,41 @@ import { getSecurities } from '../accessors';
  * @param security the union with 'any' is purposeful. Passing strict types does not help much here,
  * because all these checks happen in runtime. I'm leaving 'Security' only for visibility.
  */
-function translateToFlows(security: DeepPartial<Security> | any): IOauthFlowObjects {
-  const tokenAndScope = {
-    tokenUrl: security.tokenUrl,
-    scopes: security.scopes || {},
-  };
+function translateToFlows(
+  security: DeepPartial<
+    OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
+  >,
+): IOauthFlowObjects {
+  const flows: IOauthFlowObjects = {};
 
-  const flowsDict = {
-    implicit: ['implicit', { scopes: tokenAndScope.scopes, authorizationUrl: security.authorizationUrl }],
-    password: ['password', tokenAndScope],
-    application: ['clientCredentials', tokenAndScope],
-    accessCode: ['authorizationCode', { ...tokenAndScope, authorizationUrl: security.authorizationUrl }],
-  };
+  const scopes = (security.scopes as Dictionary<string>) || {};
+  const authorizationUrl = 'authorizationUrl' in security ? security.authorizationUrl || '' : '';
+  const tokenUrl = 'tokenUrl' in security ? security.tokenUrl || '' : '';
 
-  const flow = flowsDict[security.flow];
-  return flow ? { [flow[0]]: flow[1] } : {};
+  if (security.flow === 'implicit') {
+    flows.implicit = {
+      authorizationUrl,
+      scopes,
+    };
+  } else if (security.flow === 'password') {
+    flows.password = {
+      tokenUrl,
+      scopes,
+    };
+  } else if (security.flow === 'application') {
+    flows.clientCredentials = {
+      tokenUrl,
+      scopes,
+    };
+  } else if (security.flow === 'accessCode') {
+    flows.authorizationCode = {
+      authorizationUrl,
+      tokenUrl,
+      scopes,
+    };
+  }
+
+  return flows;
 }
 
 function translateToBasicSecurityScheme(security: DeepPartial<Security>, key: string): IBasicSecurityScheme {
@@ -58,7 +78,7 @@ function translateToApiKeySecurityScheme(
   if ('in' in security && security.in && acceptableSecurityOrigins.includes(security.in)) {
     return {
       type: 'apiKey',
-      name: security.name || 'no name',
+      name: security.name || '',
       in: security.in,
       description: security.description,
       key,
@@ -68,12 +88,16 @@ function translateToApiKeySecurityScheme(
   return undefined;
 }
 
+const VALID_OAUTH2_FLOWS = ['implicit', 'password', 'application', 'accessCode'];
+
 function translateToOauth2SecurityScheme(
   security: DeepPartial<
     OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
   >,
   key: string,
-): IOauth2SecurityScheme {
+): IOauth2SecurityScheme | undefined {
+  if (!security.flow || !VALID_OAUTH2_FLOWS.includes(security.flow)) return undefined;
+
   return {
     type: 'oauth2',
     flows: translateToFlows(security),

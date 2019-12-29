@@ -4,7 +4,7 @@ import { translateToSecurities } from '../securities';
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
-    test('single http security', () => {
+    it('should return empty if type is invalid', () => {
       expect(
         translateToSecurities(
           {
@@ -20,27 +20,172 @@ describe('securities', () => {
             },
             components: {
               securitySchemes: {
-                'http-security': {
-                  type: 'http',
-                  description: 'a description',
+                'invalid-security': {
+                  type: 'invalid' as any,
                 },
               },
             },
           } as OpenAPIObject,
-          [{ 'http-security': [] }],
+          [{ 'invalid-security': [] }],
+        ),
+      ).toEqual([[]]);
+    });
+
+    it('should return correct scheme for http basic security', () => {
+      expect(
+        translateToSecurities(
+          {
+            openapi: '3.0.0',
+            info: {
+              title: 'OAS3',
+              version: '1.0',
+            },
+            paths: {
+              '/path': {
+                $ref: '../test-api/openapi.yaml#/paths/~1path',
+              },
+            },
+            components: {
+              securitySchemes: {
+                'basic-security': {
+                  type: 'http',
+                  description: 'a description',
+                  scheme: 'basic',
+                },
+              },
+            },
+          } as OpenAPIObject,
+          [{ 'basic-security': [] }],
         ),
       ).toEqual([
         [
           {
+            key: 'basic-security',
             type: 'http',
             description: 'a description',
-            key: 'http-security',
+            scheme: 'basic',
           },
         ],
       ]);
     });
 
-    test('single apiKey security', () => {
+    it('should return correct scheme for http digest security', () => {
+      expect(
+        translateToSecurities(
+          {
+            openapi: '3.0.0',
+            info: {
+              title: 'OAS3',
+              version: '1.0',
+            },
+            paths: {
+              '/path': {
+                $ref: '../test-api/openapi.yaml#/paths/~1path',
+              },
+            },
+            components: {
+              securitySchemes: {
+                'digest-security': {
+                  type: 'http',
+                  description: 'a description',
+                  scheme: 'digest',
+                },
+              },
+            },
+          } as OpenAPIObject,
+          [{ 'digest-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            key: 'digest-security',
+            type: 'http',
+            description: 'a description',
+            scheme: 'digest',
+          },
+        ],
+      ]);
+    });
+
+    it('should return correct scheme for http bearer security', () => {
+      expect(
+        translateToSecurities(
+          {
+            openapi: '3.0.0',
+            info: {
+              title: 'OAS3',
+              version: '1.0',
+            },
+            paths: {
+              '/path': {
+                $ref: '../test-api/openapi.yaml#/paths/~1path',
+              },
+            },
+            components: {
+              securitySchemes: {
+                'bearer-security': {
+                  type: 'http',
+                  description: 'a description',
+                  scheme: 'bearer',
+                  bearerFormat: 'authorization',
+                },
+              },
+            },
+          } as OpenAPIObject,
+          [{ 'bearer-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            key: 'bearer-security',
+            type: 'http',
+            description: 'a description',
+            scheme: 'bearer',
+            bearerFormat: 'authorization',
+          },
+        ],
+      ]);
+    });
+
+    it('should return correct scheme for openIdConnect security', () => {
+      expect(
+        translateToSecurities(
+          {
+            openapi: '3.0.0',
+            info: {
+              title: 'OAS3',
+              version: '1.0',
+            },
+            paths: {
+              '/path': {
+                $ref: '../test-api/openapi.yaml#/paths/~1path',
+              },
+            },
+            components: {
+              securitySchemes: {
+                'openIdConnect-security': {
+                  type: 'openIdConnect',
+                  description: 'a description',
+                  openIdConnectUrl: 'openIdConnectUrl',
+                },
+              },
+            },
+          } as OpenAPIObject,
+          [{ 'openIdConnect-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            key: 'openIdConnect-security',
+            type: 'openIdConnect',
+            description: 'a description',
+            openIdConnectUrl: 'openIdConnectUrl',
+          },
+        ],
+      ]);
+    });
+
+    it('should return correct scheme for apiKey security', () => {
       expect(
         translateToSecurities(
           {
@@ -80,8 +225,8 @@ describe('securities', () => {
       ]);
     });
 
-    describe('single oauth2 security', () => {
-      test('with implicit flow', () => {
+    describe('oauth2 security', () => {
+      it('with implicit flow', () => {
         expect(
           translateToSecurities(
             {
@@ -124,7 +269,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('with password flow', () => {
+      it('with password flow', () => {
         expect(
           translateToSecurities(
             {
@@ -167,7 +312,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('with client credentials flow', () => {
+      it('with client credentials flow', () => {
         expect(
           translateToSecurities(
             {
@@ -210,7 +355,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('with authorizationCode flow', () => {
+      it('with authorizationCode flow', () => {
         expect(
           translateToSecurities(
             {
@@ -299,7 +444,7 @@ describe('securities', () => {
         },
       };
 
-      test('OR relation between security schemes', () => {
+      it('OR relation between security schemes', () => {
         expect(
           translateToSecurities(document, [
             { 'http-security': [] },
@@ -334,7 +479,7 @@ describe('securities', () => {
         ]);
       });
 
-      test('AND relation between security schemes', () => {
+      it('AND relation between security schemes', () => {
         expect(
           translateToSecurities(document, [{ 'http-security': [], 'implicit-security': [], 'api-security': [] }]),
         ).toEqual([
