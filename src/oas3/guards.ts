@@ -6,10 +6,15 @@ import {
   SecuritySchemeObject,
   ServerObject,
   ServerVariableObject,
+  TagObject,
 } from 'openapi3-ts';
+import { SecurityWithKey } from './accessors';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
   isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+
+export const isSecuritySchemeWithKey = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecurityWithKey =>
+  isSecurityScheme(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).key === 'string';
 
 export const isBaseParameterObject = (
   maybeBaseParameterObject: unknown,
@@ -35,4 +40,12 @@ export const isServerVariableObject = (
   if (!isObject(maybeServerVariableObject)) return false;
   const typeofDefault = typeof (maybeServerVariableObject as Dictionary<unknown>).default;
   return typeofDefault === 'string' || typeofDefault === 'boolean' || typeofDefault === 'number';
+};
+
+export const isTagObject = (maybeTagObject: unknown): maybeTagObject is TagObject => {
+  if (isObject(maybeTagObject) && 'name' in maybeTagObject) {
+    return typeof (maybeTagObject as TagObject).name === 'string';
+  }
+
+  return false;
 };

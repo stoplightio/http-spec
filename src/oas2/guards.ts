@@ -1,3 +1,5 @@
+import { Dictionary } from '@stoplight/types';
+import { isObject } from 'lodash';
 import {
   BodyParameter,
   FormDataParameter,
@@ -5,7 +7,13 @@ import {
   Parameter,
   PathParameter,
   QueryParameter,
+  Security,
+  Tag,
 } from 'swagger-schema-official';
+
+export function isSecurityScheme(maybeSecurityScheme: unknown): maybeSecurityScheme is Security {
+  return isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+}
 
 export function isBodyParameter(parameter: Parameter): parameter is BodyParameter {
   return parameter.in === 'body';
@@ -26,3 +34,11 @@ export function isPathParameter(parameter: Parameter): parameter is PathParamete
 export function isHeaderParameter(parameter: Parameter): parameter is HeaderParameter {
   return parameter.in === 'header';
 }
+
+export const isTagObject = (maybeTagObject: unknown): maybeTagObject is Tag => {
+  if (isObject(maybeTagObject) && 'name' in maybeTagObject) {
+    return typeof (maybeTagObject as Tag).name === 'string';
+  }
+
+  return false;
+};

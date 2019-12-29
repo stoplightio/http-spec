@@ -6,7 +6,6 @@ import { getOasParameters, getOasTags } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
-import { getSecurities } from './accessors';
 import { isServerObject } from './guards';
 import { translateToCallbacks } from './transformers/callbacks';
 import { translateToRequest } from './transformers/request';
@@ -47,7 +46,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     ),
     callbacks: operation.callbacks && translateToCallbacks(operation.callbacks),
     tags: translateToTags(getOasTags(operation.tags)),
-    security: translateToSecurities(getSecurities(document, operation)),
+    security: translateToSecurities(document, operation.security),
   };
 
   return omitBy(httpOperation, isNil) as IHttpOperation;

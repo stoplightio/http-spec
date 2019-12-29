@@ -3,45 +3,40 @@ import { getSecurities } from '../accessors';
 
 describe('getOas3Securities', () => {
   test('given no global securities should return empty array', () => {
-    expect(getSecurities({}, {})).toEqual([]);
+    expect(getSecurities({})).toEqual([]);
   });
 
   test('give global securities but no schemes should return empty array', () => {
     expect(
-      getSecurities(
-        {
-          components: {
-            securitySchemes: {
-              scheme: {
-                type: 'apiKey',
-              } as SecuritySchemeObject,
-            },
+      getSecurities({
+        components: {
+          securitySchemes: {
+            scheme: {
+              type: 'apiKey',
+            } as SecuritySchemeObject,
           },
         },
-        {},
-      ),
+      }),
     ).toEqual([]);
   });
 
   test('given global securities and matching operation scheme should take from operation', () => {
     expect(
-      getSecurities(
-        {
-          security: [{ operationScheme: [] }],
-          components: {
-            securitySchemes: {
-              operationScheme: {
-                type: 'apiKey',
-              } as SecuritySchemeObject,
-            },
+      getSecurities({
+        security: [{ operationScheme: [] }],
+        components: {
+          securitySchemes: {
+            operationScheme: {
+              type: 'apiKey',
+            } as SecuritySchemeObject,
           },
         },
-        {},
-      ),
+      }),
     ).toStrictEqual([
       [
         {
           type: 'apiKey',
+          key: 'operationScheme',
         },
       ],
     ]);
@@ -59,14 +54,13 @@ describe('getOas3Securities', () => {
             },
           },
         },
-        {
-          security: [{ specScheme: [] }],
-        },
+        [{ specScheme: [] }],
       ),
     ).toStrictEqual([
       [
         {
           type: 'apiKey',
+          key: 'specScheme',
         },
       ],
     ]);
@@ -88,14 +82,13 @@ describe('getOas3Securities', () => {
             },
           },
         },
-        {
-          security: [{ specScheme: [] }],
-        },
+        [{ specScheme: [] }],
       ),
     ).toStrictEqual([
       [
         {
           type: 'apiKey',
+          key: 'specScheme',
         },
       ],
     ]);
@@ -117,9 +110,7 @@ describe('getOas3Securities', () => {
             },
           },
         },
-        {
-          security: [{ operationSchemeX: [] }],
-        },
+        [{ operationSchemeX: [] }],
       ),
     ).toStrictEqual([[]]);
   });

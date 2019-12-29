@@ -1,18 +1,27 @@
-import { DeepPartial } from '@stoplight/types';
+import { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { OpenAPIObject, OperationObject, SecuritySchemeObject } from 'openapi3-ts';
+import { OpenAPIObject } from 'openapi3-ts';
 
 import { mapToKeys } from '../utils';
-import { isSecurityScheme } from './guards';
+import { isSecuritySchemeWithKey } from './guards';
+
+export type OperationSecurities = Array<Dictionary<string[], string>> | undefined;
+export type SecurityWithKey = HttpSecurityScheme & { key: string };
 
 export function getSecurities(
-  spec: DeepPartial<OpenAPIObject>,
-  operation: DeepPartial<OperationObject>,
-): SecuritySchemeObject[][] {
-  const opSchemesPairs = operation.security ? mapToKeys(operation.security) : mapToKeys(spec.security);
-  const definitions = spec.components?.securitySchemes;
+  document: DeepPartial<OpenAPIObject>,
+  operationSecurity?: OperationSecurities,
+): SecurityWithKey[][] {
+  const opSchemesPairs = operationSecurity ? mapToKeys(operationSecurity) : mapToKeys(document.security);
+  const definitions = document.components?.securitySchemes;
 
-  return !isObject(definitions)
-    ? []
-    : opSchemesPairs.map(opSchemePair => opSchemePair.map(opScheme => definitions[opScheme]).filter(isSecurityScheme));
+  if (!isObject(definitions)) return [];
+
+  return opSchemesPairs.map(opSchemePair =>
+    opSchemePair
+      .map(opScheme => {
+        return { ...definitions[opScheme], key: opScheme };
+      })
+      .filter(isSecuritySchemeWithKey),
+  );
 }

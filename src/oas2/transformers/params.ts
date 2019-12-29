@@ -59,11 +59,18 @@ export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderP
 }
 
 export function translateToHeaderParams(headers: { [headerName: string]: Header }): IHttpHeaderParam[] {
-  return map(headers, (header, name) => ({
-    ...buildSchemaForParameter(Object.assign({ name }, header)),
-    name,
-    style: HttpParamStyles.Simple,
-  }));
+  return map(headers, (header, name) => {
+    const { schema, description } = buildSchemaForParameter(Object.assign({ name }, header));
+
+    const param: IHttpHeaderParam = {
+      name,
+      style: HttpParamStyles.Simple,
+      schema: schema as JSONSchema4 | JSONSchema6 | JSONSchema7,
+      description,
+    };
+
+    return param;
+  });
 }
 
 export function translateToBodyParameter(body: BodyParameter, consumes: string[]): IHttpOperationRequestBody {
@@ -177,8 +184,8 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 
 function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): { schema: JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
-  const schema: Schema = pick(
+): { schema: Schema | JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
+  const schema = pick(
     param,
     'type',
     'format',

@@ -1,12 +1,15 @@
-import { Dictionary } from '@stoplight/types';
-import { compact, get, isEmpty, isString, map, merge } from 'lodash';
+import { DeepPartial, Dictionary } from '@stoplight/types';
+import { compact, get, isEmpty, isString, keys, map, merge } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
+import { isSecurityScheme } from './guards';
+
+export type SecurityWithKey = Security & { key: string };
 
 export function getSecurities(
-  spec: Partial<Spec>,
+  spec: DeepPartial<Spec>,
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
-): Security[][] {
+): SecurityWithKey[][] {
   const globalSecurities = getSecurity(spec.security, spec.securityDefinitions || {});
   const operationSecurities = getSecurity(operationSecurity, spec.securityDefinitions || {});
 
@@ -15,25 +18,28 @@ export function getSecurities(
   return securities.filter(negate(isEmpty));
 }
 
-export function getProduces(spec: Partial<Spec>, operation: Partial<Operation>) {
+export function getProduces(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>) {
   return getProducesOrConsumes('produces', spec, operation);
 }
 
-export function getConsumes(spec: Partial<Spec>, operation: Partial<Operation>) {
+export function getConsumes(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>) {
   return getProducesOrConsumes('consumes', spec, operation);
 }
 
 function getSecurity(
-  security: Array<Dictionary<string[], string>> | undefined,
-  definitions: Dictionary<Security, string>,
-): Security[][] {
+  security: DeepPartial<Spec['security']>,
+  definitions: DeepPartial<Spec['securityDefinitions']>,
+): SecurityWithKey[][] {
+  if (!security || !definitions) {
+    return [];
+  }
+
   return map(security, sec => {
     return compact(
-      map(Object.keys(sec), (key: string) => {
+      keys(sec).map((key: string) => {
         const def = definitions[key];
-        if (def) {
-          const defCopy = merge<Object, Security>({}, def);
-          return defCopy;
+        if (isSecurityScheme(def)) {
+          return merge<{ key: string }, Security>({ key }, def);
         }
         return null;
       }),
@@ -43,13 +49,13 @@ function getSecurity(
 
 function getProducesOrConsumes(
   which: 'produces' | 'consumes',
-  spec: Partial<Spec>,
-  operation: Partial<Operation>,
+  spec: DeepPartial<Spec>,
+  operation: DeepPartial<Operation>,
 ): string[] {
   const mimeTypes = get(operation, which, get(spec, which, []));
   if (!Array.isArray(mimeTypes)) {
     return [];
   }
 
-  return mimeTypes.filter(isString);
+  return compact(mimeTypes).filter(v => v && isString(v));
 }
