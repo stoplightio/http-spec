@@ -29,17 +29,15 @@ describe('securities', () => {
           } as OpenAPIObject,
           [{ 'http-security': [] }],
         ),
-      ).toEqual(
-        expect.arrayContaining([
-          [
-            {
-              type: 'http',
-              description: 'a description',
-              key: 'http-security',
-            },
-          ],
-        ]),
-      );
+      ).toEqual([
+        [
+          {
+            type: 'http',
+            description: 'a description',
+            key: 'http-security',
+          },
+        ],
+      ]);
     });
 
     test('single apiKey security', () => {
@@ -69,19 +67,17 @@ describe('securities', () => {
           } as OpenAPIObject,
           [{ 'apiKey-security': [] }],
         ),
-      ).toEqual(
-        expect.arrayContaining([
-          [
-            {
-              name: 'a name',
-              type: 'apiKey',
-              in: 'header',
-              key: 'apiKey-security',
-              description: 'a description',
-            },
-          ],
-        ]),
-      );
+      ).toEqual([
+        [
+          {
+            name: 'a name',
+            type: 'apiKey',
+            in: 'header',
+            key: 'apiKey-security',
+            description: 'a description',
+          },
+        ],
+      ]);
     });
 
     describe('single oauth2 security', () => {
@@ -116,18 +112,16 @@ describe('securities', () => {
             } as OpenAPIObject,
             [{ 'implicit-flow-security': [] }],
           ),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                description: 'a description',
-                flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
-                key: 'implicit-flow-security',
-                type: 'oauth2',
-              },
-            ],
-          ]),
-        );
+        ).toEqual([
+          [
+            {
+              description: 'a description',
+              flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
+              key: 'implicit-flow-security',
+              type: 'oauth2',
+            },
+          ],
+        ]);
       });
 
       test('with password flow', () => {
@@ -161,18 +155,16 @@ describe('securities', () => {
             } as OpenAPIObject,
             [{ 'password-flow-security': [] }],
           ),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                description: 'a description',
-                flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
-                key: 'password-flow-security',
-                type: 'oauth2',
-              },
-            ],
-          ]),
-        );
+        ).toEqual([
+          [
+            {
+              description: 'a description',
+              flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
+              key: 'password-flow-security',
+              type: 'oauth2',
+            },
+          ],
+        ]);
       });
 
       test('with client credentials flow', () => {
@@ -206,18 +198,16 @@ describe('securities', () => {
             } as OpenAPIObject,
             [{ 'clientCredentials-flow-security': [] }],
           ),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                description: 'a description',
-                flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
-                key: 'clientCredentials-flow-security',
-                type: 'oauth2',
-              },
-            ],
-          ]),
-        );
+        ).toEqual([
+          [
+            {
+              description: 'a description',
+              flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
+              key: 'clientCredentials-flow-security',
+              type: 'oauth2',
+            },
+          ],
+        ]);
       });
 
       test('with authorizationCode flow', () => {
@@ -252,29 +242,27 @@ describe('securities', () => {
             } as OpenAPIObject,
             [{ 'authorizationCode-flow-security': [] }],
           ),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                description: 'a description',
-                flows: {
-                  authorizationCode: {
-                    tokenUrl: 'a token url',
-                    scopes: { scope: 'value' },
-                    authorizationUrl: 'an authorization url',
-                  },
+        ).toEqual([
+          [
+            {
+              description: 'a description',
+              flows: {
+                authorizationCode: {
+                  tokenUrl: 'a token url',
+                  scopes: { scope: 'value' },
+                  authorizationUrl: 'an authorization url',
                 },
-                key: 'authorizationCode-flow-security',
-                type: 'oauth2',
               },
-            ],
-          ]),
-        );
+              key: 'authorizationCode-flow-security',
+              type: 'oauth2',
+            },
+          ],
+        ]);
       });
     });
 
     describe('multiple mixed securities', () => {
-      const securitiesObject: OpenAPIObject = {
+      const document: OpenAPIObject = {
         openapi: '3.0.0',
         info: {
           title: 'OAS3',
@@ -313,70 +301,64 @@ describe('securities', () => {
 
       test('OR relation between security schemes', () => {
         expect(
-          translateToSecurities(securitiesObject, [
+          translateToSecurities(document, [
             { 'http-security': [] },
             { 'implicit-security': [] },
             { 'api-security': [] },
           ]),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                type: 'http',
-                description: 'a description',
-                key: 'http-security',
-              },
-            ],
-            [
-              {
-                description: 'a description',
-                flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
-                key: 'implicit-security',
-                type: 'oauth2',
-              },
-            ],
-            [
-              {
-                name: 'a name',
-                type: 'apiKey',
-                in: 'query',
-                key: 'api-security',
-                description: 'a description',
-              },
-            ],
-          ]),
-        );
+        ).toEqual([
+          [
+            {
+              type: 'http',
+              description: 'a description',
+              key: 'http-security',
+            },
+          ],
+          [
+            {
+              description: 'a description',
+              flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
+              key: 'implicit-security',
+              type: 'oauth2',
+            },
+          ],
+          [
+            {
+              name: 'a name',
+              type: 'apiKey',
+              in: 'query',
+              key: 'api-security',
+              description: 'a description',
+            },
+          ],
+        ]);
       });
 
       test('AND relation between security schemes', () => {
         expect(
-          translateToSecurities(securitiesObject, [
-            { 'http-security': [], 'implicit-security': [], 'api-security': [] },
-          ]),
-        ).toEqual(
-          expect.arrayContaining([
-            [
-              {
-                type: 'http',
-                description: 'a description',
-                key: 'http-security',
-              },
-              {
-                description: 'a description',
-                flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
-                key: 'implicit-security',
-                type: 'oauth2',
-              },
-              {
-                name: 'a name',
-                type: 'apiKey',
-                in: 'query',
-                key: 'api-security',
-                description: 'a description',
-              },
-            ],
-          ]),
-        );
+          translateToSecurities(document, [{ 'http-security': [], 'implicit-security': [], 'api-security': [] }]),
+        ).toEqual([
+          [
+            {
+              type: 'http',
+              description: 'a description',
+              key: 'http-security',
+            },
+            {
+              description: 'a description',
+              flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
+              key: 'implicit-security',
+              type: 'oauth2',
+            },
+            {
+              name: 'a name',
+              type: 'apiKey',
+              in: 'query',
+              key: 'api-security',
+              description: 'a description',
+            },
+          ],
+        ]);
       });
     });
   });
