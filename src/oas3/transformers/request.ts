@@ -21,13 +21,13 @@ function translateRequestBody(requestBodyObject: RequestBodyObject): IHttpOperat
   };
 }
 
-function translateParameterObject(parameterObject: any): IHttpParam | any {
+function translateParameterObject(parameterObject: ParameterObject): IHttpParam | any {
   return pickBy({
     ...omit(parameterObject, 'in', 'schema'),
     name: parameterObject.name,
     style: parameterObject.style,
     schema: parameterObject.schema,
-    examples: map(parameterObject.examples, (example: any, key) => ({
+    examples: map(parameterObject.examples, (example, key) => ({
       key,
       ...example,
     })),

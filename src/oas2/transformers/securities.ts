@@ -8,7 +8,15 @@ import {
   IOauthFlowObjects,
 } from '@stoplight/types';
 import { compact } from 'lodash';
-import { Security, Spec } from 'swagger-schema-official';
+import {
+  ApiKeySecurity,
+  OAuth2AccessCodeSecurity,
+  OAuth2ApplicationSecurity,
+  OAuth2ImplicitSecurity,
+  OAuth2PasswordSecurity,
+  Security,
+  Spec,
+} from 'swagger-schema-official';
 import { getSecurities } from '../accessors';
 
 /**
@@ -32,7 +40,7 @@ function translateToFlows(security: DeepPartial<Security> | any): IOauthFlowObje
   return flow ? { [flow[0]]: flow[1] } : {};
 }
 
-function translateToBasicSecurityScheme(security: any, key: string): IBasicSecurityScheme {
+function translateToBasicSecurityScheme(security: DeepPartial<Security>, key: string): IBasicSecurityScheme {
   return {
     type: 'http',
     scheme: 'basic',
@@ -41,25 +49,31 @@ function translateToBasicSecurityScheme(security: any, key: string): IBasicSecur
   };
 }
 
-function translateToApiKeySecurityScheme(security: any, key: string): IApiKeySecurityScheme {
-  const acceptableSecurityOrigins = ['query', 'header', 'cookie'];
+function translateToApiKeySecurityScheme(
+  security: DeepPartial<ApiKeySecurity>,
+  key: string,
+): IApiKeySecurityScheme | undefined {
+  const acceptableSecurityOrigins: Array<ApiKeySecurity['in']> = ['query', 'header'];
 
-  if (!security.in || !acceptableSecurityOrigins.includes(security.in)) {
-    throw new Error(
-      `Provided security origin (the 'in' property): '${security.in}' is not valid. Should be one of the following: ${acceptableSecurityOrigins}`,
-    );
+  if ('in' in security && security.in && acceptableSecurityOrigins.includes(security.in)) {
+    return {
+      type: 'apiKey',
+      name: security.name || 'no name',
+      in: security.in,
+      description: security.description,
+      key,
+    };
   }
 
-  return {
-    type: 'apiKey',
-    name: security.name || 'no name',
-    in: security.in as 'query' | 'header' | 'cookie',
-    description: security.description,
-    key,
-  };
+  return undefined;
 }
 
-function translateToOauth2SecurityScheme(security: any, key: string): IOauth2SecurityScheme {
+function translateToOauth2SecurityScheme(
+  security: DeepPartial<
+    OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
+  >,
+  key: string,
+): IOauth2SecurityScheme {
   return {
     type: 'oauth2',
     flows: translateToFlows(security),
@@ -68,7 +82,7 @@ function translateToOauth2SecurityScheme(security: any, key: string): IOauth2Sec
   };
 }
 
-export function translateToSingleSecurity(security: any, key: string) {
+export function translateToSingleSecurity(security: DeepPartial<Security>, key: string) {
   switch (security.type) {
     case 'basic':
       return translateToBasicSecurityScheme(security, key);
@@ -86,11 +100,5 @@ export function translateToSecurities(
   operationSecurity: Array<Dictionary<string[], string>> | undefined,
 ): HttpSecurityScheme[][] {
   const securities = getSecurities(document, operationSecurity);
-  return securities.map(security =>
-    compact(
-      security.map(sec => {
-        return translateToSingleSecurity(sec, sec.key);
-      }),
-    ),
-  );
+  return securities.map(security => compact(security.map(sec => translateToSingleSecurity(sec, sec.key))));
 }

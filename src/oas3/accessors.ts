@@ -15,13 +15,13 @@ export function getSecurities(
   const opSchemesPairs = operationSecurity ? mapToKeys(operationSecurity) : mapToKeys(document.security);
   const definitions = document.components?.securitySchemes;
 
-  return !isObject(definitions)
-    ? []
-    : opSchemesPairs.map(opSchemePair =>
-        opSchemePair
-          .map(opScheme => {
-            return { ...definitions[opScheme], key: opScheme };
-          })
-          .filter(isSecuritySchemeWithKey),
-      );
+  if (!isObject(definitions)) return [];
+
+  return opSchemesPairs.map(opSchemePair =>
+    opSchemePair
+      .map(opScheme => {
+        return { ...definitions[opScheme], key: opScheme };
+      })
+      .filter(isSecuritySchemeWithKey),
+  );
 }

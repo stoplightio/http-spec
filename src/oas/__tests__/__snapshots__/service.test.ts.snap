@@ -88,7 +88,6 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
-      "description": undefined,
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -102,7 +101,6 @@ Object {
       "type": "oauth2",
     },
     Object {
-      "description": undefined,
       "in": "header",
       "key": "api_key",
       "name": "api_key",

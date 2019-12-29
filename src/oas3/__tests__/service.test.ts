@@ -26,7 +26,8 @@ describe('oas3 service', () => {
         {
           key: 't1',
           type: 'apiKey',
-          description: undefined,
+          in: undefined,
+          name: undefined,
         },
       ],
     });

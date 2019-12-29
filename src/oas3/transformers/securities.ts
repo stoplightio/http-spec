@@ -1,56 +1,66 @@
 import { DeepPartial, IOauthFlowObjects } from '@stoplight/types';
-import { pickBy } from 'lodash';
+import { compact, pickBy } from 'lodash';
 import { OAuthFlowsObject, OpenAPIObject } from 'openapi3-ts';
 import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
 
-export function translateToSecurities(
-  document: DeepPartial<OpenAPIObject>,
-  operationSecurities: OperationSecurities,
-): SecurityWithKey[][] {
+export function translateToSecurities(document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) {
   const securities = getSecurities(document, operationSecurities);
 
-  if (!securities) return [];
-  return securities.map(security => {
-    if (!security) return [];
-    return security.map(sec => transformToSingleSecurity(sec, sec.key));
-  });
+  return securities.map(security => compact(security.map(sec => transformToSingleSecurity(sec, sec.key))));
 }
 
-export function transformToSingleSecurity(securityScheme: any, key: string): SecurityWithKey {
-  // @ts-ignore
-  const baseObject: SecurityWithKey = {
+export function transformToSingleSecurity(securityScheme: SecurityWithKey, key: string): SecurityWithKey | undefined {
+  const baseObject: { key: string; description?: string } = {
     key,
-    description: securityScheme.description,
-    type: securityScheme.type as any,
   };
 
-  if (securityScheme.in) {
-    Object.assign(baseObject, { name: securityScheme.name as string });
+  if (securityScheme.description) {
+    baseObject.description = securityScheme.description;
   }
 
-  if (securityScheme.in) {
-    Object.assign(baseObject, { in: securityScheme.in as 'query' | 'header' | 'cookie' });
+  if (securityScheme.type === 'apiKey') {
+    return {
+      ...baseObject,
+      type: 'apiKey',
+      name: securityScheme.name,
+      in: securityScheme.in,
+    };
   }
 
-  if (securityScheme.flows) {
-    Object.assign(baseObject, {
-      flows: (securityScheme.flows && transformFlows(securityScheme.flows)) || {},
-    });
+  if (securityScheme.type === 'http') {
+    if (securityScheme.scheme === 'bearer') {
+      return {
+        ...baseObject,
+        type: 'http',
+        scheme: securityScheme.scheme,
+        bearerFormat: securityScheme.bearerFormat,
+      };
+    }
+
+    return {
+      ...baseObject,
+      type: 'http',
+      scheme: securityScheme.scheme,
+    };
   }
 
-  if (securityScheme.openIdConnectUrl) {
-    Object.assign(baseObject, { openIdConnectUrl: securityScheme.openIdConnectUrl });
+  if (securityScheme.type === 'oauth2') {
+    return {
+      ...baseObject,
+      type: 'oauth2',
+      flows: transformFlows(securityScheme.flows as OAuthFlowsObject),
+    };
   }
 
-  if (securityScheme.scheme) {
-    Object.assign(baseObject, { scheme: securityScheme.scheme });
+  if (securityScheme.type === 'openIdConnect') {
+    return {
+      ...baseObject,
+      type: 'openIdConnect',
+      openIdConnectUrl: securityScheme.openIdConnectUrl,
+    };
   }
 
-  if (securityScheme.bearerFormat) {
-    Object.assign(baseObject, { bearerFormat: securityScheme.bearerFormat });
-  }
-
-  return baseObject;
+  return undefined;
 }
 
 function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects {
@@ -60,8 +70,8 @@ function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects
     Object.assign(transformedFlows, {
       password: pickBy({
         refreshUrl: flows.password.refreshUrl,
-        scopes: flows.password.scopes || {},
-        tokenUrl: flows.password.tokenUrl || '',
+        scopes: flows.password.scopes,
+        tokenUrl: flows.password.tokenUrl,
       }),
     });
   }
@@ -69,9 +79,9 @@ function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects
   if (flows.implicit) {
     Object.assign(transformedFlows, {
       implicit: pickBy({
-        authorizationUrl: flows.implicit.authorizationUrl || '',
+        authorizationUrl: flows.implicit.authorizationUrl,
         refreshUrl: flows.implicit.refreshUrl,
-        scopes: flows.implicit.scopes || {},
+        scopes: flows.implicit.scopes,
       }),
     });
   }
@@ -79,10 +89,10 @@ function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects
   if (flows.authorizationCode) {
     Object.assign(transformedFlows, {
       authorizationCode: pickBy({
-        authorizationUrl: flows.authorizationCode.authorizationUrl || '',
+        authorizationUrl: flows.authorizationCode.authorizationUrl,
         refreshUrl: flows.authorizationCode.refreshUrl,
-        scopes: flows.authorizationCode.scopes || {},
-        tokenUrl: flows.authorizationCode.tokenUrl || '',
+        scopes: flows.authorizationCode.scopes,
+        tokenUrl: flows.authorizationCode.tokenUrl,
       }),
     });
   }
@@ -90,9 +100,9 @@ function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects
   if (flows.clientCredentials) {
     Object.assign(transformedFlows, {
       clientCredentials: pickBy({
-        tokenUrl: flows.clientCredentials.tokenUrl || '',
+        tokenUrl: flows.clientCredentials.tokenUrl,
         refreshUrl: flows.clientCredentials.refreshUrl,
-        scopes: flows.clientCredentials.scopes || {},
+        scopes: flows.clientCredentials.scopes,
       }),
     });
   }
