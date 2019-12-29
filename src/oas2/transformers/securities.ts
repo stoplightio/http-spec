@@ -8,7 +8,7 @@ import {
   IOauthFlowObjects,
 } from '@stoplight/types';
 import { compact } from 'lodash';
-import { ApiKeySecurity, BaseOAuthSecurity, Security, Spec } from 'swagger-schema-official';
+import { Security, Spec } from 'swagger-schema-official';
 import { getSecurities } from '../accessors';
 
 /**

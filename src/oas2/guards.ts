@@ -1,3 +1,4 @@
+import { isObject } from 'lodash';
 import {
   BodyParameter,
   FormDataParameter,
@@ -5,6 +6,7 @@ import {
   Parameter,
   PathParameter,
   QueryParameter,
+  Tag,
 } from 'swagger-schema-official';
 
 export function isBodyParameter(parameter: Parameter): parameter is BodyParameter {
@@ -26,3 +28,11 @@ export function isPathParameter(parameter: Parameter): parameter is PathParamete
 export function isHeaderParameter(parameter: Parameter): parameter is HeaderParameter {
   return parameter.in === 'header';
 }
+
+export const isTagObject = (maybeTagObject: unknown): maybeTagObject is Tag => {
+  if (isObject(maybeTagObject) && 'name' in maybeTagObject) {
+    return typeof (maybeTagObject as Tag).name === 'string';
+  }
+
+  return false;
+};

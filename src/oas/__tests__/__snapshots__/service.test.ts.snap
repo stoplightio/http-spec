@@ -12,7 +12,6 @@ Object {
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",
   },
   "name": "Swagger Petstore",
-  "security": Array [],
   "securitySchemes": Array [
     Object {
       "description": undefined,
@@ -71,7 +70,6 @@ Object {
     },
   ],
   "termsOfService": "http://swagger.io/terms/",
-  "title": "Swagger Petstore",
   "version": "1.0.0",
 }
 `;
@@ -88,7 +86,6 @@ Object {
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",
   },
   "name": "Swagger Petstore",
-  "security": Array [],
   "securitySchemes": Array [
     Object {
       "description": undefined,
@@ -147,7 +144,6 @@ Object {
     },
   ],
   "termsOfService": "http://swagger.io/terms/",
-  "title": "Swagger Petstore",
   "version": "1.0.0",
 }
 `;

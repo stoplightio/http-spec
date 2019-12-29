@@ -3,40 +3,40 @@ import { transformOas2Service } from '../service';
 
 describe('oas2 service', () => {
   test('should handle non array schemes', () => {
-    const retObject = transformOas2Service({
-      document: {
-        schemes: 2,
-      } as any,
-    });
+    const document: Partial<Spec> = {
+      schemes: 2 as any,
+    };
 
-    expect(retObject).toStrictEqual({
+    expect(
+      transformOas2Service({
+        document,
+      }),
+    ).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
-      security: [],
-      securitySchemes: [],
-      servers: [],
-      tags: [],
+      version: '',
     });
   });
 
   test('should accept empty title', () => {
-    const retObject = transformOas2Service({
-      document: {
-        host: 'petstore.swagger.io',
-        basePath: '/v2',
-        info: {
-          title: '',
-        },
-        schemes: ['https', 'http'],
-      } as any,
-    });
+    const document: Partial<Spec> = {
+      host: 'petstore.swagger.io',
+      basePath: '/v2',
+      info: {
+        title: '',
+        version: '1.0',
+      },
+      schemes: ['https', 'http'],
+    };
 
-    expect(retObject).toStrictEqual({
+    expect(
+      transformOas2Service({
+        document,
+      }),
+    ).toStrictEqual({
       id: '?http-service-id?',
       name: '',
-      title: '',
-      security: [],
-      securitySchemes: [],
+      version: '1.0',
       servers: [
         {
           description: void 0,
@@ -49,7 +49,6 @@ describe('oas2 service', () => {
           url: 'http://petstore.swagger.io/v2',
         },
       ],
-      tags: [],
     });
   });
 
@@ -59,6 +58,10 @@ describe('oas2 service', () => {
       security: ['API-Key'] as any,
     };
 
-    expect(transformOas2Service({ document } as any)).toHaveProperty('security', []);
+    expect(transformOas2Service({ document })).toStrictEqual({
+      id: '?http-service-id?',
+      name: 'no-title',
+      version: '',
+    });
   });
 });

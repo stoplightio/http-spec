@@ -1,4 +1,4 @@
-import { Dictionary } from '@stoplight/types';
+import { DeepPartial, Dictionary } from '@stoplight/types';
 import { compact, get, isEmpty, isString, map, merge } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
@@ -17,11 +17,11 @@ export function getSecurities(
   return securities.filter(negate(isEmpty));
 }
 
-export function getProduces(spec: Partial<Spec>, operation: Partial<Operation>) {
+export function getProduces(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>) {
   return getProducesOrConsumes('produces', spec, operation);
 }
 
-export function getConsumes(spec: Partial<Spec>, operation: Partial<Operation>) {
+export function getConsumes(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>) {
   return getProducesOrConsumes('consumes', spec, operation);
 }
 
@@ -48,13 +48,13 @@ function getSecurity(
 
 function getProducesOrConsumes(
   which: 'produces' | 'consumes',
-  spec: Partial<Spec>,
-  operation: Partial<Operation>,
+  spec: DeepPartial<Spec>,
+  operation: DeepPartial<Operation>,
 ): string[] {
   const mimeTypes = get(operation, which, get(spec, which, []));
   if (!Array.isArray(mimeTypes)) {
     return [];
   }
 
-  return mimeTypes.filter(isString);
+  return compact(mimeTypes).filter(v => v && isString(v));
 }
