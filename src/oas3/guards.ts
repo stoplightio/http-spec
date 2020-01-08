@@ -26,6 +26,7 @@ export const isBaseParameterObject = (
     'style' in maybeBaseParameterObject ||
     'examples' in maybeBaseParameterObject ||
     'example' in maybeBaseParameterObject ||
+    'schema' in maybeBaseParameterObject ||
     'name' in maybeBaseParameterObject);
 
 export const isHeaderObject = (maybeHeaderObject: unknown): maybeHeaderObject is HeaderObject =>
