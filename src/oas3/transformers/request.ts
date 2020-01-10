@@ -8,7 +8,7 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { map, omit, pickBy } from 'lodash';
+import { isObject, map, omit, pickBy } from 'lodash';
 import { MediaTypeObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
 import { translateMediaTypeObject } from './content';
@@ -51,6 +51,7 @@ export function translateToRequest(
   };
 
   for (const parameter of parameters) {
+    if (!isObject(parameter)) continue; // just in case (handled by `getOasParameters` already)
     const { in: key } = parameter;
     if (!params.hasOwnProperty(key)) continue;
 

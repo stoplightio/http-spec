@@ -509,4 +509,65 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot();
   });
+
+  test('given malformed parameters should translate operation with those parameters', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/users/{userId}': {
+          get: {
+            parameters: [
+              {
+                in: 'header',
+                name: 'name',
+                schema: {
+                  type: 'string',
+                },
+                example: 'test',
+              },
+              null,
+            ],
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document,
+      }),
+    ).toStrictEqual({
+      id: '?http-operation-id?',
+      method: 'get',
+      path: '/users/{userId}',
+      request: {
+        body: {
+          contents: [],
+        },
+        cookie: [],
+        headers: [
+          {
+            example: 'test',
+            examples: [],
+            name: 'name',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        path: [],
+        query: [],
+      },
+      responses: [],
+      security: [],
+      servers: [],
+      tags: [],
+    });
+  });
 });
