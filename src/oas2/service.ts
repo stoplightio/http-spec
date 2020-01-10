@@ -68,7 +68,7 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
     httpService.security = security;
   }
 
-  const tags = filter(document.tags, tag => isTagObject(tag)) as INodeTag[];
+  const tags = filter(document.tags, isTagObject);
   if (tags.length) {
     httpService.tags = tags;
   }
