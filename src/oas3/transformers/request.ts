@@ -8,7 +8,7 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { isObject, map, omit, pickBy } from 'lodash';
+import { map, omit, pickBy } from 'lodash';
 import { MediaTypeObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
 import { translateMediaTypeObject } from './content';
