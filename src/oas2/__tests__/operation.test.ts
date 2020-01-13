@@ -1,4 +1,5 @@
 import { DeepPartial } from '@stoplight/types';
+import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 import { transformOas2Operation } from '../operation';
 
@@ -89,5 +90,53 @@ describe('transformOas2Operation', () => {
         document,
       }),
     ).toHaveProperty('deprecated', true);
+  });
+
+  test('given malformed parameters should translate operation with those parameters', () => {
+    const document: Partial<OpenAPIObject> = {
+      swagger: '2.0',
+      paths: {
+        '/users/{userId}': {
+          get: {
+            parameters: [
+              {
+                in: 'header',
+                name: 'name',
+                schema: {
+                  type: 'string',
+                },
+                example: 'test',
+              },
+              null,
+            ],
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas2Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document,
+      }),
+    ).toStrictEqual({
+      id: '?http-operation-id?',
+      method: 'get',
+      path: '/users/{userId}',
+      request: {
+        headers: [
+          {
+            name: 'name',
+            schema: {},
+            style: 'simple',
+          },
+        ],
+      },
+      responses: [],
+      security: [],
+      servers: [],
+      tags: [],
+    });
   });
 });
