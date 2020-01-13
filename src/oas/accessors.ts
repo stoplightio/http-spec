@@ -1,6 +1,6 @@
 import { isObject, unionBy } from 'lodash';
 
-export function getOasParameters<ParamType extends { name: string; in: string }>(
+export function getValidOasParameters<ParamType extends { name: string; in: string }>(
   operationParameters: ParamType[] | undefined,
   pathParameters: ParamType[] | undefined,
 ) {

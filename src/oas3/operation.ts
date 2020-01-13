@@ -2,7 +2,7 @@ import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
-import { getOasParameters, getOasTags } from '../oas/accessors';
+import { getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
@@ -41,7 +41,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     responses: translateToResponses(operation.responses),
     servers: Array.isArray(servers) ? translateToServers(servers.filter(isServerObject)) : [],
     request: translateToRequest(
-      getOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
+      getValidOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
       operation.requestBody as RequestBodyObject,
     ),
     callbacks: operation.callbacks && translateToCallbacks(operation.callbacks),

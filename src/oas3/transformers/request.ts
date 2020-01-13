@@ -51,7 +51,6 @@ export function translateToRequest(
   };
 
   for (const parameter of parameters) {
-    if (!isObject(parameter)) continue; // just in case (handled by `getOasParameters` already)
     const { in: key } = parameter;
     if (!params.hasOwnProperty(key)) continue;
 
