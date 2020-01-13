@@ -102,10 +102,6 @@ describe('transformOas2Operation', () => {
               {
                 in: 'header',
                 name: 'name',
-                schema: {
-                  type: 'string',
-                },
-                example: 'test',
               },
               null,
             ],
