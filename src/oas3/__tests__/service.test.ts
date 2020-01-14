@@ -33,6 +33,33 @@ describe('oas3 service', () => {
     });
   });
 
+  test('should handle lacking flows for oauth2 security object', () => {
+    const document: Partial<OpenAPIObject> = {
+      components: {
+        securitySchemes: {
+          t1: { type: 'oauth2' },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Service({
+        document,
+      }),
+    ).toStrictEqual({
+      id: '?http-service-id?',
+      name: 'no-title',
+      version: '',
+      securitySchemes: [
+        {
+          flows: {},
+          key: 't1',
+          type: 'oauth2',
+        },
+      ],
+    });
+  });
+
   test('should handle non array servers', () => {
     const document: Partial<OpenAPIObject> = {
       servers: 2 as any,

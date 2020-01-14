@@ -1,4 +1,4 @@
-import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects } from '@stoplight/types';
+import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
 import { compact, pickBy } from 'lodash';
 import { OAuthFlowsObject, OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
 import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
@@ -51,7 +51,7 @@ export function transformToSingleSecurity(
     return {
       ...baseObject,
       type: 'oauth2',
-      flows: transformFlows(securityScheme.flows as OAuthFlowsObject),
+      flows: transformFlows(securityScheme.flows),
     };
   }
 
@@ -66,8 +66,12 @@ export function transformToSingleSecurity(
   return undefined;
 }
 
-function transformFlows(flows: DeepPartial<OAuthFlowsObject>): IOauthFlowObjects {
+function transformFlows(flows: Optional<DeepPartial<OAuthFlowsObject>>): IOauthFlowObjects {
   const transformedFlows: IOauthFlowObjects = {};
+
+  if (flows === void 0) {
+    return transformedFlows;
+  }
 
   if (flows.password) {
     Object.assign(transformedFlows, {
