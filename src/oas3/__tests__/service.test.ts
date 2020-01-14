@@ -33,15 +33,43 @@ describe('oas3 service', () => {
     });
   });
 
-  test('should handle lacking flows for oauth2 security object', () => {
-    const document: Partial<OpenAPIObject> = {
+  test.each<Partial<OpenAPIObject>>([
+    {
       components: {
         securitySchemes: {
           t1: { type: 'oauth2' },
         },
+      } as Partial<OpenAPIObject>,
+    },
+    {
+      components: {
+        securitySchemes: {
+          t1: { type: 'oauth2', flows: 'invalid' },
+        },
       },
-    };
-
+    },
+    {
+      components: {
+        securitySchemes: {
+          t1: { type: 'oauth2', flows: null },
+        },
+      },
+    },
+    {
+      components: {
+        securitySchemes: {
+          t1: { type: 'oauth2', flows: 999 },
+        },
+      },
+    },
+    {
+      components: {
+        securitySchemes: {
+          t1: { type: 'oauth2', flows: [] },
+        },
+      },
+    },
+  ])('should handle lacking flows for oauth2 security object', document => {
     expect(
       transformOas3Service({
         document,
