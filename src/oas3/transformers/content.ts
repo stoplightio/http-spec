@@ -11,7 +11,7 @@ import { JSONSchema4 } from 'json-schema';
 import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 
 // @ts-ignore
-import * as toJsonSchema from 'openapi-schema-to-json-schema';
+import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
 import { isHeaderObject } from '../guards';
 
