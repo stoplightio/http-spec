@@ -1,19 +1,32 @@
-import { Collection, CollectionDefinition, RequestAuth } from 'postman-collection';
-import { HttpServiceTransformer } from '../oas/types';
+import { HttpSecurityScheme } from '@stoplight/types/dist';
+import { Collection, CollectionDefinition, Item, ItemGroup } from 'postman-collection';
+import { HttpServiceTransformer } from '../types';
+import { transformSecurityScheme } from './transformers/securityScheme';
+import { traverseItemsAndGroups } from './util';
 
-export const transformPostmanCollection: HttpServiceTransformer<CollectionDefinition> = collectionDefinition => {
+export const transformPostmanCollectionService: HttpServiceTransformer<CollectionDefinition> = collectionDefinition => {
   const collection = new Collection(collectionDefinition);
   const resolvedCollection = new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
 
-  const itemGroupAuth: RequestAuth[] = [];
-  const itemAuth: RequestAuth[] = [];
+  const securitySchemes: HttpSecurityScheme[] = [];
+  let securitySchemeIdx = 0;
 
-  resolvedCollection.forEachItemGroup(itemGroup => {
-    if (itemGroup.auth) itemGroupAuth.push(itemGroup.auth);
-  });
-  resolvedCollection.forEachItem(item => {
-    if (item.auth) itemAuth.push(item.auth);
-  });
+  traverseItemsAndGroups(
+    (resolvedCollection as unknown) as ItemGroup<Item>,
+    item => {
+      const auth = item.getAuth();
+      if (auth) {
+        const transformed = transformSecurityScheme(auth, () => `scheme-${securitySchemeIdx++}`);
+        if (transformed) securitySchemes.push(transformed);
+      }
+    },
+    itemGroup => {
+      if (itemGroup.auth) {
+        const transformed = transformSecurityScheme(itemGroup.auth, () => `scheme-${securitySchemeIdx++}`);
+        if (transformed) securitySchemes.push(transformed);
+      }
+    },
+  );
 
   return {
     id: resolvedCollection.id,
@@ -24,5 +37,7 @@ export const transformPostmanCollection: HttpServiceTransformer<CollectionDefini
         : `${resolvedCollection.version.major}.${resolvedCollection.version.minor}.${resolvedCollection.version.patch}-${resolvedCollection.version.prerelease}`
       : '1.0.0',
     description: resolvedCollection.description?.toString(),
+    // @todo deduplicate
+    securitySchemes,
   };
 };

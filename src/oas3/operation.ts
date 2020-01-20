@@ -2,8 +2,8 @@ import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
+import { transformOasOperations } from '../oas';
 import { getOasTags, getValidOasParameters } from '../oas/accessors';
-import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { isServerObject } from './guards';
