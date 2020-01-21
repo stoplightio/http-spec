@@ -52,6 +52,7 @@ export function transformSecurityScheme(
               name: 'Authorization',
               style: HttpParamStyles.Simple,
               description: 'OAuth1 Authorization Header',
+              required: true,
             },
           ],
         };
@@ -61,25 +62,27 @@ export function transformSecurityScheme(
         return {
           type: 'queryParams',
           queryParams: [
-            { name: 'oauth_consumer_key', style: HttpParamStyles.Form },
-            { name: 'oauth_token', style: HttpParamStyles.Form },
+            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
+            { name: 'oauth_token', style: HttpParamStyles.Form, required: true },
             {
               name: 'oauth_signature_method',
               style: HttpParamStyles.Form,
+              required: true,
               examples: auth.parameters().has('signatureMethod')
                 ? [{ key: 'signature_method', value: auth.parameters().get('signatureMethod') }]
                 : [],
             },
-            { name: 'oauth_timestamp', style: HttpParamStyles.Form, schema: { type: 'integer' } },
-            { name: 'oauth_nonce', style: HttpParamStyles.Form },
+            { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
+            { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
             {
               name: 'oauth_version',
               style: HttpParamStyles.Form,
+              required: true,
               examples: auth.parameters().has('version')
                 ? [{ key: 'version', value: auth.parameters().get('version') }]
                 : [],
             },
-            { name: 'oauth_signature', style: HttpParamStyles.Form },
+            { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
           ],
         };
       }
@@ -92,6 +95,7 @@ export function transformSecurityScheme(
               name: 'access_token',
               description: 'OAuth2 Access Token',
               style: HttpParamStyles.Form,
+              required: true,
             },
           ],
         };
@@ -104,6 +108,7 @@ export function transformSecurityScheme(
               name: 'Authorization',
               description: 'OAuth2 Access Token',
               style: HttpParamStyles.Simple,
+              required: true,
               schema: {
                 type: 'string',
                 pattern: '^Bearer .+$',
@@ -134,6 +139,65 @@ export function transformSecurityScheme(
           type: 'http',
           scheme: auth.type,
         },
+      };
+
+    case 'hawk':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            description: 'Hawk Authorization Header',
+            required: true,
+            style: HttpParamStyles.Simple,
+            schema: {
+              type: 'string',
+              pattern: '^Hawk .+$',
+            },
+          },
+        ],
+      };
+
+    case 'awsv4':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'X-Amz-Security-Token',
+            style: HttpParamStyles.Simple,
+            required: true,
+          },
+          {
+            name: 'X-Amz-Date',
+            style: HttpParamStyles.Simple,
+            required: true,
+          },
+          {
+            name: 'Authorization',
+            style: HttpParamStyles.Simple,
+            required: true,
+            description: 'AWS v4 Authorization Header',
+          },
+          // @todo: should be there or not?
+          {
+            name: 'Host',
+            style: HttpParamStyles.Simple,
+            required: true,
+          },
+        ],
+      };
+
+    case 'edgegrid':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            style: HttpParamStyles.Simple,
+            required: true,
+            description: 'Akamai EdgeGrid Authorization Header',
+          },
+        ],
       };
 
     case 'noauth':
