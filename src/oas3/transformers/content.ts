@@ -13,7 +13,7 @@ import { compact, get, isObject, keys, map, omit, pickBy, union, values } from '
 // @ts-ignore
 import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
-import { isHeaderObject } from '../guards';
+import { isHeaderObject, isMediaObject } from '../guards';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -104,10 +104,11 @@ export function translateHeaderObject(headerObject: unknown, name: string): Opti
   }) as unknown) as IHttpHeaderParam;
 }
 
-export function translateMediaTypeObject(
-  { schema, example, examples = {}, encoding }: MediaTypeObject,
-  mediaType: string,
-): IMediaTypeContent {
+export function translateMediaTypeObject(mediaObject: unknown, mediaType: string): Optional<IMediaTypeContent> {
+  if (!isMediaObject(mediaObject)) return;
+
+  const { schema, example, examples = {}, encoding } = mediaObject;
+
   return {
     mediaType,
     schema: schema

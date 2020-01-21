@@ -3,6 +3,7 @@ import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
+  MediaTypeObject,
   SecuritySchemeObject,
   ServerObject,
   ServerVariableObject,
@@ -50,3 +51,10 @@ export const isTagObject = (maybeTagObject: unknown): maybeTagObject is TagObjec
 
   return false;
 };
+
+export const isMediaObject = (maybeMediaObject: unknown): maybeMediaObject is MediaTypeObject =>
+  isObject(maybeMediaObject) &&
+  ('schema' in maybeMediaObject ||
+    'examples' in maybeMediaObject ||
+    'example' in maybeMediaObject ||
+    'encoding' in maybeMediaObject);

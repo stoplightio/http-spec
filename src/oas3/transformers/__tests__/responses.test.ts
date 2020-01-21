@@ -35,7 +35,9 @@ describe('translateToOas3Responses', () => {
         },
         200: {
           content: {
-            'fake-content-type-200': {},
+            'fake-content-type-200': {
+              example: 'dumb',
+            },
           },
           description: 'descr 200',
           headers: {

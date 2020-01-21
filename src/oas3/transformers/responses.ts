@@ -1,6 +1,6 @@
 import { Dictionary, IHttpHeaderParam, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
 import { compact, map } from 'lodash';
-import { ContentObject, ResponseObject, ResponsesObject } from 'openapi3-ts';
+import { ResponseObject, ResponsesObject } from 'openapi3-ts';
 
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
@@ -11,7 +11,9 @@ function translateToResponse(response: ResponseObject, statusCode: string): IHtt
     headers: compact<IHttpHeaderParam>(
       map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(response.headers, translateHeaderObject),
     ),
-    contents: map<ContentObject, IMediaTypeContent>(response.content, translateMediaTypeObject),
+    contents: compact<IMediaTypeContent>(
+      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(response.content, translateMediaTypeObject),
+    ),
   };
 }
 
