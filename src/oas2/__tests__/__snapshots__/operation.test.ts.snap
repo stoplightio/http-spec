@@ -45,8 +45,7 @@ Object {
           "implicit": Object {
             "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
             "scopes": Object {
-              "read:pets": "read your pets",
-              "write:pets": "modify pets in your account",
+              "write:pets": "",
             },
           },
         },
