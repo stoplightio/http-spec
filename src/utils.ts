@@ -1,8 +1,7 @@
-import { Optional } from '@stoplight/types';
-import { map } from 'lodash';
-import * as URIJS from 'urijs';
-
 import { pathToPointer, pointerToPath } from '@stoplight/json';
+import { Dictionary, Optional } from '@stoplight/types';
+import { isObjectLike, map } from 'lodash';
+import * as URIJS from 'urijs';
 
 export function mapToKeys<T>(collection: Optional<T[]>) {
   return map(collection, Object.keys);
@@ -52,3 +51,6 @@ export function URI(url: string | uri.URI = '') {
     },
   };
 }
+
+export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
+  isObjectLike(maybeDictionary);

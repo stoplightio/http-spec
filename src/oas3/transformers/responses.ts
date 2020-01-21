@@ -2,7 +2,8 @@ import { Dictionary, IHttpHeaderParam, IHttpOperationResponse, IMediaTypeContent
 import { compact, map } from 'lodash';
 import { ContentObject } from 'openapi3-ts';
 
-import { isDictionary, isResponseObject } from '../guards';
+import { isDictionary } from '../../utils';
+import { isResponseObject } from '../guards';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
 function translateToResponse(response: unknown, statusCode: string): IHttpOperationResponse | null {

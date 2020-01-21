@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { isObject, isObjectLike } from 'lodash';
+import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
@@ -58,6 +58,3 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'headers' in maybeResponseObject ||
     'content' in maybeResponseObject ||
     'links' in maybeResponseObject);
-
-export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
-  isObjectLike(maybeDictionary);
