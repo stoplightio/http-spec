@@ -5,44 +5,129 @@ import {
   IBearerSecurityScheme,
   IOauth2SecurityScheme,
 } from '@stoplight/types';
+import { HttpParamStyles, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types/dist';
 import { isEqual, omit } from 'lodash';
 import { RequestAuth } from 'postman-collection';
+
+export type SecuritySchemeOutcome = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
+
+export type StandardSecurityScheme = {
+  type: 'securityScheme';
+  securityScheme: HttpSecurityScheme;
+};
+
+export type QuerySecurityScheme = {
+  type: 'queryParams';
+  queryParams: IHttpQueryParam[];
+};
+
+export type HeaderSecurityScheme = {
+  type: 'headerParams';
+  headerParams: IHttpHeaderParam[];
+};
 
 export function transformSecurityScheme(
   auth: RequestAuth,
   nextKey: (type: HttpSecurityScheme['type']) => string,
-): HttpSecurityScheme | undefined {
+): SecuritySchemeOutcome | undefined {
   switch (auth.type) {
+    case 'oauth1':
+      if (auth.parameters().get('addParamsToHeader')) {
+        return {
+          type: 'headerParams',
+          headerParams: [
+            {
+              name: 'Authorization',
+              style: HttpParamStyles.Simple,
+              description: 'OAuth1 Authorization Header',
+            },
+          ],
+        };
+      } else {
+        // unsupported case:
+        // when body is x-www-form-urlencoded
+        return {
+          type: 'queryParams',
+          queryParams: [
+            { name: 'oauth_consumer_key', style: HttpParamStyles.Form },
+            { name: 'oauth_token', style: HttpParamStyles.Form },
+            {
+              name: 'oauth_signature_method',
+              style: HttpParamStyles.Form,
+              examples: auth.parameters().has('signatureMethod')
+                ? [{ key: 'signature_method', value: auth.parameters().get('signatureMethod') }]
+                : [],
+            },
+            { name: 'oauth_timestamp', style: HttpParamStyles.Form, schema: { type: 'integer' } },
+            { name: 'oauth_nonce', style: HttpParamStyles.Form },
+            {
+              name: 'oauth_version',
+              style: HttpParamStyles.Form,
+              examples: auth.parameters().has('version')
+                ? [{ key: 'version', value: auth.parameters().get('version') }]
+                : [],
+            },
+            { name: 'oauth_signature', style: HttpParamStyles.Form },
+          ],
+        };
+      }
     case 'oauth2':
-      return {
-        key: nextKey('oauth2'),
-        type: 'oauth2',
-        flows: {},
-      } as IOauth2SecurityScheme;
+      if (auth.parameters().get('addTokenTo') === 'queryParams') {
+        return {
+          type: 'queryParams',
+          queryParams: [
+            {
+              name: 'access_token',
+              description: 'OAuth2 Access Token',
+              style: HttpParamStyles.Form,
+            },
+          ],
+        };
+      } else {
+        // @todo question: isn't it just Bearer authorization?
+        return {
+          type: 'headerParams',
+          headerParams: [
+            {
+              name: 'Authorization',
+              description: 'OAuth2 Access Token',
+              style: HttpParamStyles.Simple,
+              schema: {
+                type: 'string',
+                pattern: '^Bearer .+$',
+              },
+            },
+          ],
+        };
+      }
 
     case 'apikey':
       return {
-        key: nextKey('apiKey'),
-        type: 'apiKey',
-        name: auth.parameters().get('key'),
-        in: auth.parameters().get('in') || 'header',
-      } as IApiKeySecurityScheme;
+        type: 'securityScheme',
+        securityScheme: {
+          key: nextKey('apiKey'),
+          type: 'apiKey',
+          name: auth.parameters().get('key'),
+          in: auth.parameters().get('in') || 'header',
+        },
+      };
 
     case 'basic':
     case 'digest':
     case 'bearer':
       return {
-        key: nextKey('http'),
-        type: 'http',
-        scheme: auth.type,
-      } as IBasicSecurityScheme | IBearerSecurityScheme;
+        type: 'securityScheme',
+        securityScheme: {
+          key: nextKey('http'),
+          type: 'http',
+          scheme: auth.type,
+        },
+      };
 
     case 'noauth':
       return;
 
     default:
-      // @todo this is temporary
-      console.warn(`Unsupported Postman security scheme: ${auth.type}`);
       return;
   }
 }
