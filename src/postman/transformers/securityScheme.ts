@@ -26,6 +26,18 @@ export type HeaderSecurityScheme = {
   headerParams: IHttpHeaderParam[];
 };
 
+export function isStandardSecurityScheme(outcome: SecuritySchemeOutcome): outcome is StandardSecurityScheme {
+  return outcome.type === 'securityScheme';
+}
+
+export function isQuerySecurityScheme(outcome: SecuritySchemeOutcome): outcome is QuerySecurityScheme {
+  return outcome.type === 'queryParams';
+}
+
+export function isHeaderSecurityScheme(outcome: SecuritySchemeOutcome): outcome is HeaderSecurityScheme {
+  return outcome.type === 'headerParams';
+}
+
 export function transformSecurityScheme(
   auth: RequestAuth,
   nextKey: (type: HttpSecurityScheme['type']) => string,
@@ -84,7 +96,7 @@ export function transformSecurityScheme(
           ],
         };
       } else {
-        // @todo question: isn't it just Bearer authorization?
+        // @todo question: isn't that just Bearer authorization?
         return {
           type: 'headerParams',
           headerParams: [
@@ -132,6 +144,12 @@ export function transformSecurityScheme(
   }
 }
 
-export function isSecuritySchemeEqual(securityScheme1: HttpSecurityScheme, securityScheme2: HttpSecurityScheme) {
-  return isEqual(omit(securityScheme1, 'key'), omit(securityScheme2, 'key'));
+export function isSecuritySchemeOutcomeEqual(outcome1: SecuritySchemeOutcome, outcome2: SecuritySchemeOutcome) {
+  if (outcome1.type !== outcome2.type) return false;
+
+  if (isStandardSecurityScheme(outcome1) && isStandardSecurityScheme(outcome2)) {
+    return isEqual(omit(outcome1.securityScheme, 'key'), omit(outcome2.securityScheme, 'key'));
+  }
+
+  return isEqual(outcome1, outcome2);
 }

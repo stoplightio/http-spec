@@ -1,19 +1,23 @@
-import { HttpSecurityScheme } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, ItemGroup } from 'postman-collection';
 import { HttpServiceTransformer } from '../types';
-import { isSecuritySchemeEqual, transformSecurityScheme } from './transformers/securityScheme';
+import {
+  isSecuritySchemeOutcomeEqual,
+  isStandardSecurityScheme,
+  SecuritySchemeOutcome,
+  transformSecurityScheme,
+} from './transformers/securityScheme';
 import { traverseItemsAndGroups } from './util';
 
 export const transformPostmanCollectionService: HttpServiceTransformer<CollectionDefinition> = collectionDefinition => {
   const collection = new Collection(collectionDefinition);
   const resolvedCollection = new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
 
-  const securitySchemes: HttpSecurityScheme[] = [];
+  const securitySchemeOutcomes: SecuritySchemeOutcome[] = [];
   let securitySchemeIdx = 0;
 
-  function addSecurityScheme(securityScheme: HttpSecurityScheme) {
-    if (!securitySchemes.find(ss => isSecuritySchemeEqual(ss, securityScheme))) {
-      securitySchemes.push(securityScheme);
+  function addSecurityScheme(outcome: SecuritySchemeOutcome) {
+    if (!securitySchemeOutcomes.find(o => isSecuritySchemeOutcomeEqual(o, outcome))) {
+      securitySchemeOutcomes.push(outcome);
     }
   }
 
@@ -43,6 +47,6 @@ export const transformPostmanCollectionService: HttpServiceTransformer<Collectio
         : `${resolvedCollection.version.major}.${resolvedCollection.version.minor}.${resolvedCollection.version.patch}-${resolvedCollection.version.prerelease}`
       : '1.0.0',
     description: resolvedCollection.description?.toString(),
-    securitySchemes,
+    securitySchemes: securitySchemeOutcomes.filter(isStandardSecurityScheme).map(outcome => outcome.securityScheme),
   };
 };
