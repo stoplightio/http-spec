@@ -26,23 +26,18 @@ export function transformSecurityScheme(auth: RequestAuth, nextKey: () => string
 
     case 'basic':
     case 'digest':
-      return {
-        key: nextKey(),
-        type: 'http',
-        scheme: auth.type,
-      } as IBasicSecurityScheme;
-
     case 'bearer':
       return {
         key: nextKey(),
         type: 'http',
-        scheme: 'bearer',
-      } as IBearerSecurityScheme;
+        scheme: auth.type,
+      } as IBasicSecurityScheme | IBearerSecurityScheme;
 
     case 'noauth':
       return;
 
     default:
+      // @todo this is temporary
       console.warn(`Unsupported Postman security scheme: ${auth.type}`);
       return;
   }
