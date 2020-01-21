@@ -8,6 +8,11 @@ import {
   ITransformServiceOpts,
 } from '../types';
 
+export const enum OasVersion {
+  OAS2 = 2,
+  OAS3 = 3,
+}
+
 /**
  * Service
  */
