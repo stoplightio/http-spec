@@ -1,10 +1,15 @@
 import { Dictionary, IHttpHeaderParam, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
 import { compact, map } from 'lodash';
-import { ContentObject, ResponseObject, ResponsesObject } from 'openapi3-ts';
+import { ContentObject } from 'openapi3-ts';
 
+import { isDictionary, isResponseObject } from '../guards';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-function translateToResponse(response: ResponseObject, statusCode: string): IHttpOperationResponse {
+function translateToResponse(response: unknown, statusCode: string): IHttpOperationResponse | null {
+  if (!isResponseObject(response)) {
+    return null;
+  }
+
   return {
     code: statusCode,
     description: response.description,
@@ -15,10 +20,16 @@ function translateToResponse(response: ResponseObject, statusCode: string): IHtt
   };
 }
 
-export function translateToResponses(
-  responses: ResponsesObject,
-): IHttpOperationResponse[] & { 0: IHttpOperationResponse } {
-  return map<ResponsesObject, IHttpOperationResponse>(responses, translateToResponse) as IHttpOperationResponse[] & {
-    0: IHttpOperationResponse;
-  };
+function isHttpOperationResponse(item: IHttpOperationResponse | null): item is IHttpOperationResponse {
+  return item !== null;
+}
+
+export function translateToResponses(responses: unknown): IHttpOperationResponse[] {
+  if (!isDictionary(responses)) {
+    return [];
+  }
+
+  return map<Dictionary<unknown>, IHttpOperationResponse | null>(responses, translateToResponse).filter<
+    IHttpOperationResponse
+  >(isHttpOperationResponse);
 }
