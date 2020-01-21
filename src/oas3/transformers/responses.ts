@@ -6,10 +6,8 @@ import { isDictionary } from '../../utils';
 import { isResponseObject } from '../guards';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-function translateToResponse(response: unknown, statusCode: string): IHttpOperationResponse | null {
-  if (!isResponseObject(response)) {
-    return null;
-  }
+function translateToResponse(response: unknown, statusCode: string): Optional<IHttpOperationResponse> {
+  if (!isResponseObject(response)) return;
 
   return {
     code: statusCode,
@@ -21,16 +19,12 @@ function translateToResponse(response: unknown, statusCode: string): IHttpOperat
   };
 }
 
-function isHttpOperationResponse(item: IHttpOperationResponse | null): item is IHttpOperationResponse {
-  return item !== null;
-}
-
 export function translateToResponses(responses: unknown): IHttpOperationResponse[] {
   if (!isDictionary(responses)) {
     return [];
   }
 
-  return map<Dictionary<unknown>, IHttpOperationResponse | null>(responses, translateToResponse).filter<
-    IHttpOperationResponse
-  >(isHttpOperationResponse);
+  return compact<IHttpOperationResponse>(
+    map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(responses, translateToResponse),
+  );
 }
