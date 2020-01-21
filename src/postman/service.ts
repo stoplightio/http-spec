@@ -1,7 +1,7 @@
 import { HttpSecurityScheme } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, ItemGroup } from 'postman-collection';
 import { HttpServiceTransformer } from '../types';
-import { transformSecurityScheme } from './transformers/securityScheme';
+import { isSecuritySchemeEqual, transformSecurityScheme } from './transformers/securityScheme';
 import { traverseItemsAndGroups } from './util';
 
 export const transformPostmanCollectionService: HttpServiceTransformer<CollectionDefinition> = collectionDefinition => {
@@ -11,19 +11,25 @@ export const transformPostmanCollectionService: HttpServiceTransformer<Collectio
   const securitySchemes: HttpSecurityScheme[] = [];
   let securitySchemeIdx = 0;
 
+  function addSecurityScheme(securityScheme: HttpSecurityScheme) {
+    if (!securitySchemes.find(ss => isSecuritySchemeEqual(ss, securityScheme))) {
+      securitySchemes.push(securityScheme);
+    }
+  }
+
   traverseItemsAndGroups(
     (resolvedCollection as unknown) as ItemGroup<Item>,
     item => {
       const auth = item.getAuth();
       if (auth) {
-        const transformed = transformSecurityScheme(auth, () => `scheme-${securitySchemeIdx++}`);
-        if (transformed) securitySchemes.push(transformed);
+        const transformed = transformSecurityScheme(auth, type => `${type}-${securitySchemeIdx++}`);
+        if (transformed) addSecurityScheme(transformed);
       }
     },
     itemGroup => {
       if (itemGroup.auth) {
-        const transformed = transformSecurityScheme(itemGroup.auth, () => `scheme-${securitySchemeIdx++}`);
-        if (transformed) securitySchemes.push(transformed);
+        const transformed = transformSecurityScheme(itemGroup.auth, type => `${type}-${securitySchemeIdx++}`);
+        if (transformed) addSecurityScheme(transformed);
       }
     },
   );
@@ -37,7 +43,6 @@ export const transformPostmanCollectionService: HttpServiceTransformer<Collectio
         : `${resolvedCollection.version.major}.${resolvedCollection.version.minor}.${resolvedCollection.version.patch}-${resolvedCollection.version.prerelease}`
       : '1.0.0',
     description: resolvedCollection.description?.toString(),
-    // @todo deduplicate
     securitySchemes,
   };
 };

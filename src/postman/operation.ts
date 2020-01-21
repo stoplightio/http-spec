@@ -1,6 +1,3 @@
-import { PostmanCollectionHttpOperationTransformer } from './types';
+// import { PostmanCollectionHttpOperationTransformer } from './types';
 
-export function transformPostmanCollectionOperation({  }): PostmanCollectionHttpOperationTransformer {
-
-}
-
+// export function transformPostmanCollectionOperation({}): PostmanCollectionHttpOperationTransformer {}

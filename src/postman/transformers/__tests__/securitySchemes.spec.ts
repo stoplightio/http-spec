@@ -20,10 +20,10 @@ describe('transformSecurityScheme', () => {
             },
           ],
         } as RequestAuthDefinition),
-        () => 'a',
+        type => `auth-${type}`,
       ),
     ).toEqual({
-      key: 'a',
+      key: 'auth-http',
       type: 'http',
       scheme: 'basic',
     });
@@ -52,10 +52,10 @@ describe('transformSecurityScheme', () => {
             },
           ],
         } as RequestAuthDefinition),
-        () => 'a',
+        type => `auth-${type}`,
       ),
     ).toEqual({
-      key: 'a',
+      key: 'auth-http',
       type: 'http',
       scheme: 'digest',
     });
@@ -85,10 +85,10 @@ describe('transformSecurityScheme', () => {
               },
             ],
           } as RequestAuthDefinition),
-          () => 'a',
+          type => `auth-${type}`,
         ),
       ).toEqual({
-        key: 'a',
+        key: 'auth-apiKey',
         type: 'apiKey',
         name: 'TestApiKey',
         in: 'query',
@@ -113,10 +113,10 @@ describe('transformSecurityScheme', () => {
               },
             ],
           } as RequestAuthDefinition),
-          () => 'a',
+          type => `auth-${type}`,
         ),
       ).toEqual({
-        key: 'a',
+        key: 'auth-apiKey',
         type: 'apiKey',
         name: 'TestApiKey',
         in: 'header',
@@ -137,12 +137,39 @@ describe('transformSecurityScheme', () => {
             },
           ],
         } as RequestAuthDefinition),
-        () => 'a',
+        type => `auth-${type}`,
       ),
     ).toEqual({
-      key: 'a',
+      key: 'auth-http',
       type: 'http',
       scheme: 'bearer',
+    });
+  });
+
+  it('transforms OAuth2', () => {
+    expect(
+      transformSecurityScheme(
+        new RequestAuth({
+          type: 'oauth2',
+          oauth2: [
+            {
+              key: 'addTokenTo',
+              value: 'queryParams',
+              type: 'string',
+            },
+            {
+              key: 'accessToken',
+              value: '123',
+              type: 'string',
+            },
+          ],
+        } as RequestAuthDefinition),
+        type => `auth-${type}`,
+      ),
+    ).toEqual({
+      key: 'auth-oauth2',
+      type: 'oauth2',
+      flows: {},
     });
   });
 

@@ -7,7 +7,6 @@ export interface ITransformServiceOpts<T> {
 
 export type HttpServiceTransformer<T> = (opts: T) => IHttpService;
 
-
 export interface ITransformOperationOpts<T> {
   document: DeepPartial<T>;
   path: string;
