@@ -64,4 +64,22 @@ describe('translateToOas3Responses', () => {
       },
     ]);
   });
+
+  test('should skip nullish responses', () => {
+    expect(
+      translateToResponses({
+        200: null,
+        201: {
+          description: 'description 201',
+        },
+      }),
+    ).toStrictEqual([
+      {
+        code: '201',
+        contents: [],
+        description: 'description 201',
+        headers: [],
+      },
+    ]);
+  });
 });

@@ -3,6 +3,7 @@ import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
+  ResponseObject,
   SecuritySchemeObject,
   ServerObject,
   ServerVariableObject,
@@ -50,3 +51,10 @@ export const isTagObject = (maybeTagObject: unknown): maybeTagObject is TagObjec
 
   return false;
 };
+
+export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObject is ResponseObject =>
+  isObject(maybeResponseObject) &&
+  ('description' in maybeResponseObject ||
+    'headers' in maybeResponseObject ||
+    'content' in maybeResponseObject ||
+    'links' in maybeResponseObject);
