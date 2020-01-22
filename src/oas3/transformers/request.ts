@@ -1,4 +1,5 @@
 import {
+  Dictionary,
   IHttpCookieParam,
   IHttpHeaderParam,
   IHttpOperationRequest,
@@ -7,9 +8,10 @@ import {
   IHttpPathParam,
   IHttpQueryParam,
   IMediaTypeContent,
+  Optional,
 } from '@stoplight/types';
-import { map, omit, pickBy } from 'lodash';
-import { MediaTypeObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
+import { compact, map, omit, pickBy } from 'lodash';
+import { ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
 import { translateMediaTypeObject } from './content';
 
@@ -17,7 +19,12 @@ function translateRequestBody(requestBodyObject: RequestBodyObject): IHttpOperat
   return {
     required: requestBodyObject.required,
     description: requestBodyObject.description,
-    contents: map<MediaTypeObject, IMediaTypeContent>(requestBodyObject.content, translateMediaTypeObject),
+    contents: compact<IMediaTypeContent>(
+      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
+        requestBodyObject.content,
+        translateMediaTypeObject,
+      ),
+    ),
   };
 }
 

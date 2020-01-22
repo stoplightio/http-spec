@@ -35,7 +35,9 @@ describe('translateToOas3Responses', () => {
         },
         200: {
           content: {
-            'fake-content-type-200': {},
+            'fake-content-type-200': {
+              example: 'dumb',
+            },
           },
           description: 'descr 200',
           headers: {
@@ -60,6 +62,24 @@ describe('translateToOas3Responses', () => {
         code: '200',
         contents: [],
         description: void 0,
+        headers: [],
+      },
+    ]);
+  });
+
+  test('should skip nullish responses', () => {
+    expect(
+      translateToResponses({
+        200: null,
+        201: {
+          description: 'description 201',
+        },
+      }),
+    ).toStrictEqual([
+      {
+        code: '201',
+        contents: [],
+        description: 'description 201',
         headers: [],
       },
     ]);
