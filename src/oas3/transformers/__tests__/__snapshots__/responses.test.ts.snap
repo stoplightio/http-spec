@@ -29,7 +29,14 @@ Array [
   },
   Object {
     "code": "default",
-    "contents": Array [],
+    "contents": Array [
+      Object {
+        "encodings": Array [],
+        "examples": Array [],
+        "mediaType": "fake-content-type",
+        "schema": undefined,
+      },
+    ],
     "description": "descr",
     "headers": Array [
       Object {

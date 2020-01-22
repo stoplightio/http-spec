@@ -11,7 +11,12 @@ describe('translateMediaTypeObject', () => {
   });
 
   test('given empty object, should return nothing', () => {
-    expect(translateMediaTypeObject({}, 'mediaType')).toBeUndefined();
+    expect(translateMediaTypeObject({}, 'mediaType')).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
+    });
   });
 
   test('given single example should translate to IHttpContent', () => {

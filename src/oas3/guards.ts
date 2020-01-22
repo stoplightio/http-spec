@@ -59,10 +59,3 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'headers' in maybeResponseObject ||
     'content' in maybeResponseObject ||
     'links' in maybeResponseObject);
-
-export const isMediaObject = (maybeMediaObject: unknown): maybeMediaObject is MediaTypeObject =>
-  isObject(maybeMediaObject) &&
-  ('schema' in maybeMediaObject ||
-    'examples' in maybeMediaObject ||
-    'example' in maybeMediaObject ||
-    'encoding' in maybeMediaObject);
