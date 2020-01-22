@@ -52,8 +52,8 @@ describe('accessors', () => {
               authorizationUrl: 'http://swagger.io/api/oauth/dialog',
               flow: 'implicit',
               scopes: {
-                'read:pets': '',
-                'write:pets': '',
+                'write:pets': 'modify pets in your account',
+                'read:pets': 'read your pets',
               },
               type: 'oauth2',
               key: 'petstore_auth',
@@ -88,8 +88,8 @@ describe('accessors', () => {
               authorizationUrl: 'http://swagger.io/api/oauth/dialog',
               flow: 'implicit',
               scopes: {
-                'read:pets': '',
-                'write:pets': '',
+                'write:pets': 'modify pets in your account',
+                'read:pets': 'read your pets',
               },
               type: 'oauth2',
               key: 'petstore_auth',
@@ -189,7 +189,7 @@ describe('accessors', () => {
           {
             authorizationUrl: 'http://swagger.io/api/oauth/dialog',
             flow: 'implicit',
-            scopes: { 'write:pets': '' },
+            scopes: { 'write:pets': 'modify pets in your account' },
             type: 'oauth2',
             key: 'petstore_auth',
           },
@@ -212,7 +212,10 @@ describe('accessors', () => {
           {
             authorizationUrl: 'http://swagger.io/api/oauth/dialog',
             flow: 'implicit',
-            scopes: { 'write:pets': '', 'read:pets': '' },
+            scopes: {
+              'write:pets': 'modify pets in your account',
+              'read:pets': 'read your pets',
+            },
             type: 'oauth2',
             key: 'petstore_auth',
           },

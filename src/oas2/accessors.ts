@@ -1,5 +1,5 @@
 import { DeepPartial, Dictionary } from '@stoplight/types';
-import { compact, get, isArray, isEmpty, isString, keys, map, merge } from 'lodash';
+import { compact, get, isArray, isEmpty, isString, keys, map, merge, pickBy } from 'lodash';
 import { negate } from 'lodash/fp';
 import { BaseOAuthSecurity, OAuthScope, Operation, Security, Spec } from 'swagger-schema-official';
 import { isSecurityScheme } from './guards';
@@ -43,12 +43,9 @@ function getSecurity(
           const defCopy = merge<{ key: string }, Security>({ key }, def);
           const scopes = sec[key] || [];
 
-          // Override definition scopes with operation scopes
+          // Filter definition scopes by operation scopes
           if (defCopy.type === 'oauth2' && scopes.length) {
-            (defCopy as BaseOAuthSecurity).scopes = scopes.reduce(
-              (acc: OAuthScope, s: string) => ({ ...acc, [s]: '' }),
-              {},
-            );
+            defCopy.scopes = pickBy(defCopy.scopes, (_val, s: string) => scopes.includes(s));
           }
 
           return defCopy;
