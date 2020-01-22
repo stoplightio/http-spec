@@ -3,6 +3,7 @@ import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
+  MediaTypeObject,
   ResponseObject,
   SecuritySchemeObject,
   ServerObject,
