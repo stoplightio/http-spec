@@ -1,10 +1,10 @@
 import { CollectionDefinition } from 'postman-collection';
 import { transformPostmanCollectionService } from '../service';
 
-describe('postman collection service', () => {
+describe('transformPostmanCollectionService()', () => {
   const postmanCollection = require('./fixtures/petstore.json') as CollectionDefinition;
 
-  it('transform info section', () => {
+  it('transforms info section', () => {
     expect(transformPostmanCollectionService(postmanCollection)).toEqual({
       id: '000bb1af-1d34-4263-8ef5-c06230bdc905',
       name: 'Swagger Petstore',
