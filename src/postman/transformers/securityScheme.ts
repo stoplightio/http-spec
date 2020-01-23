@@ -54,28 +54,29 @@ export function transformSecurityScheme(
       } else {
         // unsupported case:
         // when body is x-www-form-urlencoded
+        const required = parameters.get('addEmptyParamsToSign') || false;
         return {
           type: 'queryParams',
           queryParams: [
-            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
-            { name: 'oauth_token', style: HttpParamStyles.Form, required: true },
+            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required },
+            { name: 'oauth_token', style: HttpParamStyles.Form, required },
             {
               name: 'oauth_signature_method',
               style: HttpParamStyles.Form,
-              required: true,
+              required,
               examples: parameters.has('signatureMethod')
                 ? [{ key: 'signature_method', value: parameters.get('signatureMethod') }]
                 : [],
             },
-            { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
-            { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
+            { name: 'oauth_timestamp', style: HttpParamStyles.Form, required, schema: { type: 'integer' } },
+            { name: 'oauth_nonce', style: HttpParamStyles.Form, required },
             {
               name: 'oauth_version',
               style: HttpParamStyles.Form,
-              required: true,
+              required,
               examples: parameters.has('version') ? [{ key: 'version', value: parameters.get('version') }] : [],
             },
-            { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
+            { name: 'oauth_signature', style: HttpParamStyles.Form, required },
           ],
         };
       }

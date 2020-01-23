@@ -173,7 +173,7 @@ describe('transformSecurityScheme()', () => {
   });
 
   describe('given oauth1 auth', () => {
-    const params = (addParamsToHeader: boolean) => [
+    const params = (addParamsToHeader: boolean, addEmptyParamsToSign: boolean) => [
       { key: 'addParamsToHeader', value: addParamsToHeader, type: 'boolean' },
       { key: 'realm', value: 'karol@stoplight.io', type: 'string' },
       { key: 'nonce', value: 'Nonce', type: 'string' },
@@ -184,7 +184,7 @@ describe('transformSecurityScheme()', () => {
       { key: 'consumerKey', value: 'ConsumerKey', type: 'string' },
       { key: 'signatureMethod', value: 'HMAC-SHA1', type: 'string' },
       { key: 'version', value: '1.0', type: 'string' },
-      { key: 'addEmptyParamsToSign', value: false, type: 'boolean' },
+      { key: 'addEmptyParamsToSign', value: addEmptyParamsToSign, type: 'boolean' },
     ];
 
     describe('parameters in header', () => {
@@ -193,7 +193,7 @@ describe('transformSecurityScheme()', () => {
           transformSecurityScheme(
             new RequestAuth({
               type: 'oauth1',
-              oauth1: params(true),
+              oauth1: params(true, false),
             } as RequestAuthDefinition),
             type => `auth-${type}`,
           ),
@@ -212,36 +212,73 @@ describe('transformSecurityScheme()', () => {
     });
 
     describe('parameters in query', () => {
-      it('transforms to query security scheme', () => {
-        expect(
-          transformSecurityScheme(
-            new RequestAuth({
-              type: 'oauth1',
-              oauth1: params(false),
-            } as RequestAuthDefinition),
-            type => `auth-${type}`,
-          ),
-        ).toEqual({
-          type: 'queryParams',
-          queryParams: [
-            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
-            { name: 'oauth_token', style: HttpParamStyles.Form, required: true },
-            {
-              name: 'oauth_signature_method',
-              style: HttpParamStyles.Form,
-              required: true,
-              examples: [{ key: 'signature_method', value: 'HMAC-SHA1' }],
-            },
-            { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
-            { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
-            {
-              name: 'oauth_version',
-              style: HttpParamStyles.Form,
-              required: true,
-              examples: [{ key: 'version', value: '1.0' }],
-            },
-            { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
-          ],
+      describe('addEmptyParamsToSign is false', () => {
+        it('transforms to query security scheme with nullable properties', () => {
+          expect(
+            transformSecurityScheme(
+              new RequestAuth({
+                type: 'oauth1',
+                oauth1: params(false, false),
+              } as RequestAuthDefinition),
+              type => `auth-${type}`,
+            ),
+          ).toEqual({
+            type: 'queryParams',
+            queryParams: [
+              { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
+              { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
+              {
+                name: 'oauth_signature_method',
+                style: HttpParamStyles.Form,
+                required: false,
+                examples: [{ key: 'signature_method', value: 'HMAC-SHA1' }],
+              },
+              { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: false, schema: { type: 'integer' } },
+              { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
+              {
+                name: 'oauth_version',
+                style: HttpParamStyles.Form,
+                required: false,
+                examples: [{ key: 'version', value: '1.0' }],
+              },
+              { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
+            ],
+          });
+        });
+      });
+
+      describe('addEmptyParamsToSign is true', () => {
+        it('transforms to query security scheme with required properties', () => {
+          expect(
+            transformSecurityScheme(
+              new RequestAuth({
+                type: 'oauth1',
+                oauth1: params(false, true),
+              } as RequestAuthDefinition),
+              type => `auth-${type}`,
+            ),
+          ).toEqual({
+            type: 'queryParams',
+            queryParams: [
+              { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
+              { name: 'oauth_token', style: HttpParamStyles.Form, required: true },
+              {
+                name: 'oauth_signature_method',
+                style: HttpParamStyles.Form,
+                required: true,
+                examples: [{ key: 'signature_method', value: 'HMAC-SHA1' }],
+              },
+              { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
+              { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
+              {
+                name: 'oauth_version',
+                style: HttpParamStyles.Form,
+                required: true,
+                examples: [{ key: 'version', value: '1.0' }],
+              },
+              { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
+            ],
+          });
         });
       });
     });
