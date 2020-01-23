@@ -1,10 +1,4 @@
-import {
-  HttpSecurityScheme,
-  IApiKeySecurityScheme,
-  IBasicSecurityScheme,
-  IBearerSecurityScheme,
-  IOauth2SecurityScheme,
-} from '@stoplight/types';
+import { HttpSecurityScheme } from '@stoplight/types';
 import { HttpParamStyles, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types/dist';
 import { isEqual, omit } from 'lodash';
 import { RequestAuth } from 'postman-collection';
