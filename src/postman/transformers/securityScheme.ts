@@ -1,9 +1,8 @@
-import { HttpSecurityScheme } from '@stoplight/types';
-import { HttpParamStyles, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types/dist';
+import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
 import { isEqual, omit } from 'lodash';
 import { RequestAuth } from 'postman-collection';
 
-export type SecuritySchemeOutcome = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
+export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
 
 export type StandardSecurityScheme = {
   type: 'securityScheme';
@@ -20,25 +19,27 @@ export type HeaderSecurityScheme = {
   headerParams: IHttpHeaderParam[];
 };
 
-export function isStandardSecurityScheme(outcome: SecuritySchemeOutcome): outcome is StandardSecurityScheme {
-  return outcome.type === 'securityScheme';
+export function isStandardSecurityScheme(pss: PostmanSecurityScheme): pss is StandardSecurityScheme {
+  return pss.type === 'securityScheme';
 }
 
-export function isQuerySecurityScheme(outcome: SecuritySchemeOutcome): outcome is QuerySecurityScheme {
-  return outcome.type === 'queryParams';
+export function isQuerySecurityScheme(pss: PostmanSecurityScheme): pss is QuerySecurityScheme {
+  return pss.type === 'queryParams';
 }
 
-export function isHeaderSecurityScheme(outcome: SecuritySchemeOutcome): outcome is HeaderSecurityScheme {
-  return outcome.type === 'headerParams';
+export function isHeaderSecurityScheme(pss: PostmanSecurityScheme): pss is HeaderSecurityScheme {
+  return pss.type === 'headerParams';
 }
 
 export function transformSecurityScheme(
   auth: RequestAuth,
   nextKey: (type: HttpSecurityScheme['type']) => string,
-): SecuritySchemeOutcome | undefined {
+): PostmanSecurityScheme | undefined {
+  const parameters = auth.parameters();
+
   switch (auth.type) {
     case 'oauth1':
-      if (auth.parameters().get('addParamsToHeader')) {
+      if (parameters.get('addParamsToHeader')) {
         return {
           type: 'headerParams',
           headerParams: [
@@ -62,8 +63,8 @@ export function transformSecurityScheme(
               name: 'oauth_signature_method',
               style: HttpParamStyles.Form,
               required: true,
-              examples: auth.parameters().has('signatureMethod')
-                ? [{ key: 'signature_method', value: auth.parameters().get('signatureMethod') }]
+              examples: parameters.has('signatureMethod')
+                ? [{ key: 'signature_method', value: parameters.get('signatureMethod') }]
                 : [],
             },
             { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
@@ -72,8 +73,8 @@ export function transformSecurityScheme(
               name: 'oauth_version',
               style: HttpParamStyles.Form,
               required: true,
-              examples: auth.parameters().has('version')
-                ? [{ key: 'version', value: auth.parameters().get('version') }]
+              examples: parameters.has('version')
+                ? [{ key: 'version', value: parameters.get('version') }]
                 : [],
             },
             { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
@@ -81,7 +82,7 @@ export function transformSecurityScheme(
         };
       }
     case 'oauth2':
-      if (auth.parameters().get('addTokenTo') === 'queryParams') {
+      if (parameters.get('addTokenTo') === 'queryParams') {
         return {
           type: 'queryParams',
           queryParams: [
@@ -118,8 +119,8 @@ export function transformSecurityScheme(
         securityScheme: {
           key: nextKey('apiKey'),
           type: 'apiKey',
-          name: auth.parameters().get('key'),
-          in: auth.parameters().get('in') || 'header',
+          name: parameters.get('key'),
+          in: parameters.get('in') || 'header',
         },
       };
 
@@ -202,12 +203,12 @@ export function transformSecurityScheme(
   }
 }
 
-export function isSecuritySchemeOutcomeEqual(outcome1: SecuritySchemeOutcome, outcome2: SecuritySchemeOutcome) {
-  if (outcome1.type !== outcome2.type) return false;
+export function isPostmanSecuritySchemeEqual(pss1: PostmanSecurityScheme, pss2: PostmanSecurityScheme) {
+  if (pss1.type !== pss2.type) return false;
 
-  if (isStandardSecurityScheme(outcome1) && isStandardSecurityScheme(outcome2)) {
-    return isEqual(omit(outcome1.securityScheme, 'key'), omit(outcome2.securityScheme, 'key'));
+  if (isStandardSecurityScheme(pss1) && isStandardSecurityScheme(pss2)) {
+    return isEqual(omit(pss1.securityScheme, 'key'), omit(pss2.securityScheme, 'key'));
   }
 
-  return isEqual(outcome1, outcome2);
+  return isEqual(pss1, pss2);
 }
