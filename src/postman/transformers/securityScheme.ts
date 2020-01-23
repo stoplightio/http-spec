@@ -54,7 +54,7 @@ export function transformSecurityScheme(
       } else {
         // unsupported case:
         // when body is x-www-form-urlencoded
-        const required = parameters.get('addEmptyParamsToSign') || false;
+        const required = !parameters.get('addEmptyParamsToSign');
         return {
           type: 'queryParams',
           queryParams: [

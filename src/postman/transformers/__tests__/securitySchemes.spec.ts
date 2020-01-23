@@ -212,13 +212,13 @@ describe('transformSecurityScheme()', () => {
     });
 
     describe('parameters in query', () => {
-      describe('addEmptyParamsToSign is false', () => {
-        it('transforms to query security scheme with nullable properties', () => {
+      describe('addEmptyParamsToSign is true', () => {
+        it('transforms to query security scheme with required properties', () => {
           expect(
             transformSecurityScheme(
               new RequestAuth({
                 type: 'oauth1',
-                oauth1: params(false, false),
+                oauth1: params(false, true),
               } as RequestAuthDefinition),
               type => `auth-${type}`,
             ),
@@ -247,13 +247,13 @@ describe('transformSecurityScheme()', () => {
         });
       });
 
-      describe('addEmptyParamsToSign is true', () => {
-        it('transforms to query security scheme with required properties', () => {
+      describe('addEmptyParamsToSign is false', () => {
+        it('transforms to query security scheme with nullable properties', () => {
           expect(
             transformSecurityScheme(
               new RequestAuth({
                 type: 'oauth1',
-                oauth1: params(false, true),
+                oauth1: params(false, false),
               } as RequestAuthDefinition),
               type => `auth-${type}`,
             ),
