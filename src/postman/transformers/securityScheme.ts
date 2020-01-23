@@ -48,6 +48,25 @@ export function transformSecurityScheme(
               style: HttpParamStyles.Simple,
               description: 'OAuth1 Authorization Header',
               required: true,
+              examples: [
+                {
+                  key: 'default',
+                  value:
+                    'OAuth ' +
+                    [
+                      ['realm', parameters.get('realm') || 'a_realm'],
+                      ['oauth_consumer_key', 'a_consumer_key'],
+                      ['oauth_token', 'a_token'],
+                      ['oauth_signature_method', parameters.get('signatureMethod') || 'HMAC-SHA1'],
+                      ['oauth_timestamp', parameters.get('timestamp') || '0'],
+                      ['oauth_nonce', 'a'],
+                      ['oauth_version', parameters.get('version')],
+                      ['oauth_signature', 'a_signature'],
+                    ]
+                      .map(([k, v]) => `${k}="${v}"`)
+                      .join(','),
+                },
+              ],
             },
           ],
         };
@@ -65,16 +84,22 @@ export function transformSecurityScheme(
               style: HttpParamStyles.Form,
               required,
               examples: parameters.has('signatureMethod')
-                ? [{ key: 'signature_method', value: parameters.get('signatureMethod') }]
+                ? [{ key: 'default', value: parameters.get('signatureMethod') }]
                 : [],
             },
-            { name: 'oauth_timestamp', style: HttpParamStyles.Form, required, schema: { type: 'integer' } },
+            {
+              name: 'oauth_timestamp',
+              style: HttpParamStyles.Form,
+              required,
+              schema: { type: 'string' },
+              examples: parameters.has('timestamp') ? [{ key: 'default', value: parameters.get('timestamp') }] : [],
+            },
             { name: 'oauth_nonce', style: HttpParamStyles.Form, required },
             {
               name: 'oauth_version',
               style: HttpParamStyles.Form,
               required,
-              examples: parameters.has('version') ? [{ key: 'version', value: parameters.get('version') }] : [],
+              examples: parameters.has('version') ? [{ key: 'default', value: parameters.get('version') }] : [],
             },
             { name: 'oauth_signature', style: HttpParamStyles.Form, required },
           ],

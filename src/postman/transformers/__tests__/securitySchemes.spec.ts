@@ -193,7 +193,7 @@ describe('transformSecurityScheme()', () => {
           transformSecurityScheme(
             new RequestAuth({
               type: 'oauth1',
-              oauth1: params(true, false),
+              oauth1: params(true, true),
             } as RequestAuthDefinition),
             type => `auth-${type}`,
           ),
@@ -205,6 +205,13 @@ describe('transformSecurityScheme()', () => {
               style: HttpParamStyles.Simple,
               description: 'OAuth1 Authorization Header',
               required: true,
+              examples: [
+                {
+                  key: 'default',
+                  value:
+                    'OAuth realm="karol@stoplight.io",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="123123123123",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
+                },
+              ],
             },
           ],
         });
@@ -231,15 +238,21 @@ describe('transformSecurityScheme()', () => {
                 name: 'oauth_signature_method',
                 style: HttpParamStyles.Form,
                 required: false,
-                examples: [{ key: 'signature_method', value: 'HMAC-SHA1' }],
+                examples: [{ key: 'default', value: 'HMAC-SHA1' }],
               },
-              { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: false, schema: { type: 'integer' } },
+              {
+                name: 'oauth_timestamp',
+                style: HttpParamStyles.Form,
+                required: false,
+                schema: { type: 'string' },
+                examples: [{ key: 'default', value: '123123123123' }],
+              },
               { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
               {
                 name: 'oauth_version',
                 style: HttpParamStyles.Form,
                 required: false,
-                examples: [{ key: 'version', value: '1.0' }],
+                examples: [{ key: 'default', value: '1.0' }],
               },
               { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
             ],
@@ -266,15 +279,21 @@ describe('transformSecurityScheme()', () => {
                 name: 'oauth_signature_method',
                 style: HttpParamStyles.Form,
                 required: true,
-                examples: [{ key: 'signature_method', value: 'HMAC-SHA1' }],
+                examples: [{ key: 'default', value: 'HMAC-SHA1' }],
               },
-              { name: 'oauth_timestamp', style: HttpParamStyles.Form, required: true, schema: { type: 'integer' } },
+              {
+                name: 'oauth_timestamp',
+                style: HttpParamStyles.Form,
+                required: true,
+                schema: { type: 'string' },
+                examples: [{ key: 'default', value: '123123123123' }],
+              },
               { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
               {
                 name: 'oauth_version',
                 style: HttpParamStyles.Form,
                 required: true,
-                examples: [{ key: 'version', value: '1.0' }],
+                examples: [{ key: 'default', value: '1.0' }],
               },
               { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
             ],
