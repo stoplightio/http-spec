@@ -73,9 +73,7 @@ export function transformSecurityScheme(
               name: 'oauth_version',
               style: HttpParamStyles.Form,
               required: true,
-              examples: parameters.has('version')
-                ? [{ key: 'version', value: parameters.get('version') }]
-                : [],
+              examples: parameters.has('version') ? [{ key: 'version', value: parameters.get('version') }] : [],
             },
             { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
           ],
@@ -95,21 +93,14 @@ export function transformSecurityScheme(
           ],
         };
       } else {
-        // @todo question: isn't that just Bearer authorization?
         return {
-          type: 'headerParams',
-          headerParams: [
-            {
-              name: 'Authorization',
-              description: 'OAuth2 Access Token',
-              style: HttpParamStyles.Simple,
-              required: true,
-              schema: {
-                type: 'string',
-                pattern: '^Bearer .+$',
-              },
-            },
-          ],
+          type: 'securityScheme',
+          securityScheme: {
+            key: nextKey('oauth2'),
+            type: 'http',
+            scheme: 'bearer',
+            description: 'OAuth2 Access Token',
+          },
         };
       }
 
@@ -172,12 +163,6 @@ export function transformSecurityScheme(
             style: HttpParamStyles.Simple,
             required: true,
             description: 'AWS v4 Authorization Header',
-          },
-          // @todo: should be there or not?
-          {
-            name: 'Host',
-            style: HttpParamStyles.Simple,
-            required: true,
           },
         ],
       };

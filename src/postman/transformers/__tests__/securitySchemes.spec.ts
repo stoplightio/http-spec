@@ -270,24 +270,18 @@ describe('transformSecurityScheme()', () => {
             type => `auth-${type}`,
           ),
         ).toEqual({
-          type: 'headerParams',
-          headerParams: [
-            {
-              name: 'Authorization',
-              style: HttpParamStyles.Simple,
-              description: 'OAuth2 Access Token',
-              required: true,
-              schema: {
-                type: 'string',
-                pattern: '^Bearer .+$',
-              },
-            },
-          ],
+          type: 'securityScheme',
+          securityScheme: {
+            key: 'auth-oauth2',
+            scheme: 'bearer',
+            type: 'http',
+            description: 'OAuth2 Access Token',
+          },
         });
       });
     });
 
-    describe('access token  in query', () => {
+    describe('access token in query', () => {
       it('transforms to query security scheme', () => {
         expect(
           transformSecurityScheme(
@@ -395,11 +389,6 @@ describe('transformSecurityScheme()', () => {
             style: HttpParamStyles.Simple,
             required: true,
             description: 'AWS v4 Authorization Header',
-          },
-          {
-            name: 'Host',
-            style: HttpParamStyles.Simple,
-            required: true,
           },
         ],
       });
