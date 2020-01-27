@@ -2,7 +2,7 @@ import { DeepPartial, IHttpOperation, IHttpService } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
-export const enum OasVersion {
+export enum OasVersion {
   OAS2 = 2,
   OAS3 = 3,
 }
