@@ -1,6 +1,12 @@
 import { DeepPartial, IHttpOperation, IHttpService } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
+import {
+  HttpOperationTransformer,
+  HttpServiceTransformer,
+  ITransformOperationOpts,
+  ITransformServiceOpts,
+} from '../types';
 
 export enum OasVersion {
   OAS2 = 2,
@@ -10,13 +16,6 @@ export enum OasVersion {
 /**
  * Service
  */
-
-export interface ITransformServiceOpts<T> {
-  document: DeepPartial<T>;
-}
-
-export type HttpServiceTransformer<T> = (opts: T) => IHttpService;
-
 export type Oas2TransformServiceOpts = ITransformServiceOpts<Spec>;
 export type Oas3TransformServiceOpts = ITransformServiceOpts<OpenAPIObject>;
 export type Oas2HttpServiceTransformer = HttpServiceTransformer<Oas2TransformServiceOpts>;
@@ -25,15 +24,6 @@ export type Oas3HttpServiceTransformer = HttpServiceTransformer<Oas3TransformSer
 /**
  * Operation
  */
-
-export interface ITransformOperationOpts<T> {
-  document: DeepPartial<T>;
-  path: string;
-  method: string;
-}
-
-export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;
-
 export type Oas2TransformOperationOpts = ITransformOperationOpts<Spec>;
 export type Oas3TransformOperationOpts = ITransformOperationOpts<OpenAPIObject>;
 export type Oas2HttpOperationTransformer = HttpOperationTransformer<Oas2TransformOperationOpts>;

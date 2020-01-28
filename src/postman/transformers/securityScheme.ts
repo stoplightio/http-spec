@@ -1,0 +1,242 @@
+import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
+import { isEqual, omit } from 'lodash';
+import { RequestAuth } from 'postman-collection';
+
+export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
+
+export type StandardSecurityScheme = {
+  type: 'securityScheme';
+  securityScheme: HttpSecurityScheme;
+};
+
+export type QuerySecurityScheme = {
+  type: 'queryParams';
+  queryParams: IHttpQueryParam[];
+};
+
+export type HeaderSecurityScheme = {
+  type: 'headerParams';
+  headerParams: IHttpHeaderParam[];
+};
+
+export function isStandardSecurityScheme(pss: PostmanSecurityScheme): pss is StandardSecurityScheme {
+  return pss.type === 'securityScheme';
+}
+
+export function isQuerySecurityScheme(pss: PostmanSecurityScheme): pss is QuerySecurityScheme {
+  return pss.type === 'queryParams';
+}
+
+export function isHeaderSecurityScheme(pss: PostmanSecurityScheme): pss is HeaderSecurityScheme {
+  return pss.type === 'headerParams';
+}
+
+export function transformSecurityScheme(
+  auth: RequestAuth,
+  nextKey: (type: HttpSecurityScheme['type']) => string,
+): PostmanSecurityScheme | undefined {
+  const parameters = auth.parameters();
+
+  switch (auth.type) {
+    case 'oauth1':
+      if (parameters.get('addParamsToHeader')) {
+        return {
+          type: 'headerParams',
+          headerParams: [
+            {
+              name: 'Authorization',
+              style: HttpParamStyles.Simple,
+              description: 'OAuth1 Authorization Header',
+              required: true,
+              examples: [
+                {
+                  key: 'default',
+                  value:
+                    'OAuth ' +
+                    [
+                      ['realm', parameters.get('realm') || 'a_realm'],
+                      ['oauth_consumer_key', 'a_consumer_key'],
+                      ['oauth_token', 'a_token'],
+                      ['oauth_signature_method', parameters.get('signatureMethod') || 'HMAC-SHA1'],
+                      ['oauth_timestamp', parameters.get('timestamp') || '0'],
+                      ['oauth_nonce', 'a'],
+                      ['oauth_version', parameters.get('version')],
+                      ['oauth_signature', 'a_signature'],
+                    ]
+                      .map(([k, v]) => `${k}="${v}"`)
+                      .join(','),
+                },
+              ],
+            },
+          ],
+        };
+      } else {
+        // unsupported case:
+        // when body is x-www-form-urlencoded
+        const required = !parameters.get('addEmptyParamsToSign');
+        return {
+          type: 'queryParams',
+          queryParams: [
+            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required },
+            { name: 'oauth_token', style: HttpParamStyles.Form, required },
+            {
+              name: 'oauth_signature_method',
+              style: HttpParamStyles.Form,
+              required,
+              examples: parameters.has('signatureMethod')
+                ? [{ key: 'default', value: parameters.get('signatureMethod') }]
+                : [],
+            },
+            {
+              name: 'oauth_timestamp',
+              style: HttpParamStyles.Form,
+              required,
+              schema: { type: 'string' },
+              examples: parameters.has('timestamp') ? [{ key: 'default', value: parameters.get('timestamp') }] : [],
+            },
+            { name: 'oauth_nonce', style: HttpParamStyles.Form, required },
+            {
+              name: 'oauth_version',
+              style: HttpParamStyles.Form,
+              required,
+              examples: parameters.has('version') ? [{ key: 'default', value: parameters.get('version') }] : [],
+            },
+            { name: 'oauth_signature', style: HttpParamStyles.Form, required },
+          ],
+        };
+      }
+    case 'oauth2':
+      if (parameters.get('addTokenTo') === 'queryParams') {
+        return {
+          type: 'queryParams',
+          queryParams: [
+            {
+              name: 'access_token',
+              description: 'OAuth2 Access Token',
+              style: HttpParamStyles.Form,
+              required: true,
+            },
+          ],
+        };
+      } else {
+        return {
+          type: 'securityScheme',
+          securityScheme: {
+            key: nextKey('oauth2'),
+            type: 'http',
+            scheme: 'bearer',
+            description: 'OAuth2 Access Token',
+          },
+        };
+      }
+
+    case 'apikey':
+      return {
+        type: 'securityScheme',
+        securityScheme: {
+          key: nextKey('apiKey'),
+          type: 'apiKey',
+          name: parameters.get('key'),
+          in: parameters.get('in') || 'header',
+        },
+      };
+
+    case 'basic':
+    case 'digest':
+    case 'bearer':
+      return {
+        type: 'securityScheme',
+        securityScheme: {
+          key: nextKey('http'),
+          type: 'http',
+          scheme: auth.type,
+        },
+      };
+
+    case 'hawk':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            description: 'Hawk Authorization Header',
+            required: true,
+            style: HttpParamStyles.Simple,
+            schema: {
+              type: 'string',
+              pattern: '^Hawk .+$',
+            },
+          },
+        ],
+      };
+
+    case 'awsv4':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'X-Amz-Security-Token',
+            style: HttpParamStyles.Simple,
+            required: true,
+          },
+          {
+            name: 'X-Amz-Date',
+            style: HttpParamStyles.Simple,
+            required: true,
+          },
+          {
+            name: 'Authorization',
+            style: HttpParamStyles.Simple,
+            required: true,
+            description: 'AWS v4 Authorization Header',
+          },
+        ],
+      };
+
+    case 'edgegrid':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            style: HttpParamStyles.Simple,
+            required: true,
+            description: 'Akamai EdgeGrid Authorization Header',
+          },
+        ],
+      };
+
+    case 'ntlm':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            description: 'NTLM Authorization Header',
+            required: true,
+            style: HttpParamStyles.Simple,
+            schema: {
+              type: 'string',
+              pattern: '^NTLM .+$',
+            },
+          },
+        ],
+      };
+
+    case 'noauth':
+      return;
+
+    default:
+      return;
+  }
+}
+
+export function isPostmanSecuritySchemeEqual(pss1: PostmanSecurityScheme, pss2: PostmanSecurityScheme) {
+  if (pss1.type !== pss2.type) return false;
+
+  if (isStandardSecurityScheme(pss1) && isStandardSecurityScheme(pss2)) {
+    return isEqual(omit(pss1.securityScheme, 'key'), omit(pss2.securityScheme, 'key'));
+  }
+
+  return isEqual(pss1, pss2);
+}

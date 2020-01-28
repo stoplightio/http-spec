@@ -2,8 +2,7 @@ import { IHttpOperation } from '@stoplight/types';
 import { flatten, get, keys, map } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
-
-import { HttpOperationTransformer } from './types';
+import { HttpOperationTransformer } from '../types';
 
 const methods = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
