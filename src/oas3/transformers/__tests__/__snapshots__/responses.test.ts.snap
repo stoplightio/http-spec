@@ -7,7 +7,12 @@ Array [
     "contents": Array [
       Object {
         "encodings": Array [],
-        "examples": Array [],
+        "examples": Array [
+          Object {
+            "key": "default",
+            "value": "dumb",
+          },
+        ],
         "mediaType": "fake-content-type-200",
         "schema": undefined,
       },

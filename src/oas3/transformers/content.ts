@@ -11,8 +11,9 @@ import { JSONSchema4 } from 'json-schema';
 import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 
 // @ts-ignore
-import * as toJsonSchema from 'openapi-schema-to-json-schema';
+import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { isDictionary } from '../../utils';
 import { isHeaderObject } from '../guards';
 
 function translateEncodingPropertyObject(
@@ -104,10 +105,11 @@ export function translateHeaderObject(headerObject: unknown, name: string): Opti
   }) as unknown) as IHttpHeaderParam;
 }
 
-export function translateMediaTypeObject(
-  { schema, example, examples = {}, encoding }: MediaTypeObject,
-  mediaType: string,
-): IMediaTypeContent {
+export function translateMediaTypeObject(mediaObject: unknown, mediaType: string): Optional<IMediaTypeContent> {
+  if (!isDictionary(mediaObject)) return;
+
+  const { schema, example, examples, encoding } = mediaObject;
+
   return {
     mediaType,
     schema: schema
@@ -121,12 +123,14 @@ export function translateMediaTypeObject(
     examples: compact(
       union<INodeExample>(
         example ? [{ key: 'default', value: example }] : undefined,
-        Object.keys(examples).map<INodeExample>(exampleKey => ({
-          key: exampleKey,
-          summary: get(examples, [exampleKey, 'summary']),
-          description: get(examples, [exampleKey, 'description']),
-          value: get(examples, [exampleKey, 'value']),
-        })),
+        isDictionary(examples)
+          ? Object.keys(examples).map<INodeExample>(exampleKey => ({
+              key: exampleKey,
+              summary: get(examples, [exampleKey, 'summary']),
+              description: get(examples, [exampleKey, 'description']),
+              value: get(examples, [exampleKey, 'value']),
+            }))
+          : [],
       ),
     ),
     encodings: map<any, IHttpEncoding>(encoding, translateEncodingPropertyObject),

@@ -6,6 +6,19 @@ describe('translateMediaTypeObject', () => {
     jest.restoreAllMocks();
   });
 
+  test('should gracefully handle invalid data', () => {
+    expect(translateMediaTypeObject(null, 'mediaType')).toBeUndefined();
+  });
+
+  test('given empty object, should return nothing', () => {
+    expect(translateMediaTypeObject({}, 'mediaType')).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
+    });
+  });
+
   test('given single example should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
@@ -182,7 +195,7 @@ describe('translateMediaTypeObject', () => {
         encoding: {},
       },
       'mediaType',
-    );
+    )!;
 
     test('will not modify the original schema so it can be reused in references ', () => {
       expect(schema).toStrictEqual(originalSchema);

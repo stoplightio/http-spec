@@ -1,4 +1,5 @@
 import { IHttpOperation } from '@stoplight/types';
+import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
@@ -38,7 +39,8 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     method,
     path,
     summary: operation.summary,
-    responses: translateToResponses(operation.responses),
+    // fixme: this doesn't make sense, since the array could be empty
+    responses: translateToResponses(operation.responses) as IHttpOperationResponse[] & { 0: IHttpOperationResponse },
     servers: Array.isArray(servers) ? translateToServers(servers.filter(isServerObject)) : [],
     request: translateToRequest(
       getValidOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
