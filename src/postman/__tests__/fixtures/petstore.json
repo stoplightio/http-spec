@@ -207,12 +207,7 @@
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"name\": \"<string>\",\n    \"photoUrls\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"id\": \"<long>\",\n    \"category\": {\n        \"name\": \"<string>\"\n    },\n    \"status\": \"<string>\"\n}",
-          "options": {
-            "raw": {
-              "language": "html"
-            }
-          }
+          "raw": "{\n    \"name\": \"<string>\",\n    \"photoUrls\": [\n        \"<string>\",\n        \"<string>\"\n    ],\n    \"id\": \"<long>\",\n    \"category\": {\n        \"name\": \"<string>\"\n    },\n    \"status\": \"<string>\"\n}"
         }
       },
       "response": [
