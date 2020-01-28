@@ -184,8 +184,20 @@ describe('transformBody()', () => {
     });
 
     describe('body is not defined', () => {
+      it('returns default empty body', () => {
+        expect(transformBody(new RequestBody({ mode: 'formdata' }))).toEqual({
+          contents: [
+            {
+              examples: [{ key: 'default', value: {} }],
+              mediaType: 'multipart/form-data',
+              schema: { properties: {}, type: 'object' },
+            },
+          ],
+        });
+      });
+
       it('returns no body', () => {
-        expect(transformBody(new RequestBody({ mode: 'formadata' }))).toBeUndefined();
+        expect(transformBody({ mode: 'formdata' } as RequestBody)).toBeUndefined();
       });
     });
   });
@@ -251,7 +263,7 @@ describe('transformBody()', () => {
     });
 
     describe('body is not defined', () => {
-      it('returns body containing schema and example for empty param list', () => {
+      it('returns default empty body', () => {
         expect(transformBody(new RequestBody({ mode: 'urlencoded' }))).toEqual({
           contents: [
             {
@@ -262,6 +274,16 @@ describe('transformBody()', () => {
           ],
         });
       });
+
+      it('returns no body', () => {
+        expect(transformBody({ mode: 'urlencoded' } as RequestBody)).toBeUndefined();
+      });
+    });
+  });
+
+  describe('body is passed in unknown mode', () => {
+    it('returns no body', () => {
+      expect(transformBody({ mode: 'unknown' } as RequestBody)).toBeUndefined();
     });
   });
 });
