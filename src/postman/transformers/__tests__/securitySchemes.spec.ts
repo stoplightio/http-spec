@@ -483,6 +483,41 @@ describe('transformSecurityScheme()', () => {
     });
   });
 
+  describe('given ntlm auth', () => {
+    it('transforms to header security scheme', () => {
+      expect(
+        transformSecurityScheme(
+          new RequestAuth({
+            type: 'ntlm',
+            ntlm: [
+              [
+                { key: 'workstation', value: 'Karol-MacBook', type: 'string' },
+                { key: 'domain', value: 'example.com', type: 'string' },
+                { key: 'password', value: '1235', type: 'string' },
+                { key: 'username', value: 'Karol', type: 'string' },
+              ],
+            ],
+          } as RequestAuthDefinition),
+          type => `auth-${type}`,
+        ),
+      ).toEqual({
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            style: HttpParamStyles.Simple,
+            description: 'NTLM Authorization Header',
+            required: true,
+            schema: {
+              type: 'string',
+              pattern: '^NTLM .+$',
+            },
+          },
+        ],
+      });
+    });
+  });
+
   it('omits noauth', () => {
     expect(
       transformSecurityScheme(new RequestAuth({ type: 'noauth' } as RequestAuthDefinition), () => 'a'),

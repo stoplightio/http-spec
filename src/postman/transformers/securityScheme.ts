@@ -206,6 +206,23 @@ export function transformSecurityScheme(
         ],
       };
 
+    case 'ntlm':
+      return {
+        type: 'headerParams',
+        headerParams: [
+          {
+            name: 'Authorization',
+            description: 'NTLM Authorization Header',
+            required: true,
+            style: HttpParamStyles.Simple,
+            schema: {
+              type: 'string',
+              pattern: '^NTLM .+$',
+            },
+          },
+        ],
+      };
+
     case 'noauth':
       return;
 
