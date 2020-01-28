@@ -2,16 +2,27 @@ import { QueryParam, RequestBody } from 'postman-collection';
 import { transformBody, transformHeader, transformPathParams, transformQueryParam } from '../request';
 
 describe('transformQueryParam()', () => {
-  it('transforms correctly', () => {
-    expect(transformQueryParam(new QueryParam({ key: 'testKey', value: 'testValue' }))).toEqual({
-      examples: [
-        {
-          key: 'default',
-          value: 'testValue',
-        },
-      ],
-      name: 'testKey',
-      style: 'form',
+  describe('value is set', () => {
+    it('transforms correctly', () => {
+      expect(transformQueryParam(new QueryParam({ key: 'testKey', value: 'testValue' }))).toEqual({
+        examples: [
+          {
+            key: 'default',
+            value: 'testValue',
+          },
+        ],
+        name: 'testKey',
+        style: 'form',
+      });
+    });
+  });
+
+  describe('value is null', () => {
+    it('transforms correctly', () => {
+      expect(transformQueryParam(new QueryParam({ key: 'testKey', value: null }))).toEqual({
+        name: 'testKey',
+        style: 'form',
+      });
     });
   });
 });

@@ -88,13 +88,39 @@ describe('transformPostmanCollectionOperation()', () => {
         ).toEqual(expect.objectContaining({ description: undefined }));
       });
     });
+
+    describe('content-type is set', () => {
+      it('returns operation with body media-type set', () => {
+        expect(
+          transformPostmanCollectionOperation({
+            document: {
+              item: [
+                {
+                  request: {
+                    method: 'get',
+                    url: '/path',
+                    header: [{ key: 'content-type', value: 'application/json' }] as HeaderDefinition,
+                    body: {
+                      mode: 'raw',
+                      raw: '{}',
+                    } as RequestBody,
+                  },
+                },
+              ],
+            },
+            method: 'get',
+            path: '/path',
+          }),
+        ).toEqual(expect.objectContaining({ description: undefined }));
+      });
+    });
   });
 
   describe('operation cannot be found', () => {
     it('throws an error', () => {
       expect(() =>
         transformPostmanCollectionOperation({
-          document: { item: [] },
+          document: { item: [{ request: { method: 'get', url: '/path' } }] },
           method: 'get',
           path: '/non-existing',
         }),
