@@ -80,8 +80,11 @@ describe('transformBody()', () => {
                   examples: [{ key: 'default', value: { a: 'b' } }],
                   mediaType: 'application/nice+json',
                   schema: {
+                    additionalProperties: false,
                     properties: { a: { type: 'string' } },
                     type: 'object',
+                    required: [],
+                    title: 'InferredJSONSchema',
                   },
                 },
               ],
@@ -97,8 +100,11 @@ describe('transformBody()', () => {
                   examples: [{ key: 'default', value: { a: 'b' } }],
                   mediaType: 'application/json',
                   schema: {
+                    additionalProperties: false,
                     properties: { a: { type: 'string' } },
                     type: 'object',
+                    required: [],
+                    title: 'InferredJSONSchema',
                   },
                 },
               ],

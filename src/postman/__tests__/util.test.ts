@@ -1,5 +1,10 @@
 import { ItemGroup } from 'postman-collection';
-import { transformDescriptionDefinition, transformValueToHttpParam, traverseItemsAndGroups } from '../util';
+import {
+  inferJSONSchema,
+  transformDescriptionDefinition,
+  transformValueToHttpParam,
+  traverseItemsAndGroups,
+} from '../util';
 
 describe('transformValueToHttpParam()', () => {
   it('returns param with schema and example', () => {
@@ -44,6 +49,30 @@ describe('traverseItemsAndGroups()', () => {
       traverseItemsAndGroups(new ItemGroup({ item: [{ item: [{}] }] }), mockItemCallback);
 
       expect(mockItemCallback).toHaveBeenCalledTimes(2);
+    });
+  });
+});
+
+describe('inferJSONSchema()', () => {
+  describe('JSON is valid', () => {
+    it('produces JSON Schema correctly', () => {
+      expect(inferJSONSchema('{"a":"b"}')).toEqual({
+        additionalProperties: false,
+        properties: {
+          a: {
+            type: 'string',
+          },
+        },
+        required: [],
+        title: 'InferredJSONSchema',
+        type: 'object',
+      });
+    });
+  });
+
+  describe('JSON is invalid', () => {
+    it('produces JSON Schema correctly', () => {
+      expect(() => inferJSONSchema('a')).toThrow();
     });
   });
 });
