@@ -11,6 +11,9 @@ describe('transformQueryParam()', () => {
             value: 'testValue',
           },
         ],
+        schema: {
+          type: 'string',
+        },
         name: 'testKey',
         style: 'form',
       });
@@ -30,12 +33,18 @@ describe('transformQueryParam()', () => {
 describe('transformHeader()', () => {
   describe('value is defined', () => {
     it('result contains schema', () => {
-      expect(transformHeader({ key: 'testKey', value: '<string>' })).toEqual({
+      expect(transformHeader({ key: 'testKey', value: 'some string' })).toEqual({
         name: 'testKey',
         schema: {
           type: 'string',
         },
         style: 'simple',
+        examples: [
+          {
+            key: 'default',
+            value: 'some string',
+          },
+        ],
       });
     });
   });

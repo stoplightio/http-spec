@@ -14,7 +14,7 @@ describe('transformPostmanCollectionOperation()', () => {
                     method: 'get',
                     url: '/path/:param?a=b',
                     body: { mode: 'raw', raw: 'test' } as RequestBody,
-                    header: [{ key: 'header', value: '<string>' }] as HeaderDefinition,
+                    header: [{ key: 'header', value: 'a header' }] as HeaderDefinition,
                   },
                   description: 'desc',
                 },
@@ -49,6 +49,12 @@ describe('transformPostmanCollectionOperation()', () => {
                 schema: {
                   type: 'string',
                 },
+                examples: [
+                  {
+                    key: 'default',
+                    value: 'a header',
+                  },
+                ],
                 style: 'simple',
               },
             ],
@@ -66,6 +72,9 @@ describe('transformPostmanCollectionOperation()', () => {
                     value: 'b',
                   },
                 ],
+                schema: {
+                  type: 'string',
+                },
                 name: 'a',
                 style: 'form',
               },
