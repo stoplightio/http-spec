@@ -104,8 +104,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
     schema: {
       type: 'object',
       properties: params.all().reduce<NonNullable<JSONSchema4['properties']>>((props, item) => {
-        // @todo: !
-        props[item.key!] = {
+        props[item.key || ''] = {
           type: 'string',
           description: item.description && transformDescriptionDefinition(item.description),
         };
@@ -115,10 +114,9 @@ function transformParamsBody<T extends FormParam | QueryParam>(
     examples: [
       {
         key: 'default',
-        value: params.all().reduce((value, item) => {
-          // @todo: !
-          value[item.key!] = item.value;
-          return value;
+        value: params.all().reduce((paramValue, item) => {
+          paramValue[item.key || ''] = item.value;
+          return paramValue;
         }, {}),
       },
     ],
