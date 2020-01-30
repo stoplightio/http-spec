@@ -8,7 +8,7 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import { Collection, HeaderList, Item, ItemGroup, Url } from 'postman-collection';
-import { transformBody, transformHeader, transformPathParams, transformQueryParam } from './transformers/request';
+import { transformRequest } from './transformers/request';
 import { PostmanCollectionHttpOperationTransformer } from './types';
 import { transformDescriptionDefinition, traverseItemsAndGroups } from './util';
 
@@ -25,8 +25,6 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     throw new Error(`Unable to find "${method} ${path}"`);
   }
 
-  const header = item.request.headers.all().map(transformHeader);
-
   return {
     id: '?http-operation-id?',
     iid: item.id,
@@ -34,12 +32,7 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     method,
     path,
     summary: item.name,
-    request: {
-      query: item.request.url.query.all().map(transformQueryParam),
-      header,
-      path: transformPathParams(item.request.url.path),
-      body: item.request.body ? transformBody(item.request.body, findContentType(item.request.headers)) : undefined,
-    },
+    request: transformRequest(item.request),
     responses: [],
     /*
     servers: ...,
@@ -69,11 +62,6 @@ function findItem({
   });
 
   return found;
-}
-
-function findContentType(headers: HeaderList) {
-  const header = headers.all().find(h => h.key.toLowerCase() === 'content-type');
-  return header ? header.value.toLowerCase() : undefined;
 }
 
 function getPath(url: Url) {

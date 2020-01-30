@@ -29,57 +29,7 @@ describe('transformPostmanCollectionOperation()', () => {
           iid: expect.stringMatching(/^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/),
           method: 'get',
           path: '/path/{param}',
-          request: {
-            body: {
-              contents: [
-                {
-                  examples: [
-                    {
-                      key: 'default',
-                      value: 'test',
-                    },
-                  ],
-                  mediaType: 'text/plain',
-                },
-              ],
-            },
-            header: [
-              {
-                name: 'header',
-                schema: {
-                  type: 'string',
-                },
-                examples: [
-                  {
-                    key: 'default',
-                    value: 'a header',
-                  },
-                ],
-                style: 'simple',
-              },
-            ],
-            path: [
-              {
-                name: 'param',
-                style: 'simple',
-              },
-            ],
-            query: [
-              {
-                examples: [
-                  {
-                    key: 'default',
-                    value: 'b',
-                  },
-                ],
-                schema: {
-                  type: 'string',
-                },
-                name: 'a',
-                style: 'form',
-              },
-            ],
-          },
+          request: expect.any(Object),
           responses: [],
           summary: undefined,
         });

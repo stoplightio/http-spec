@@ -1,15 +1,38 @@
 import {
   HttpParamStyles,
   IHttpHeaderParam,
+  IHttpOperationRequest,
   IHttpOperationRequestBody,
   IHttpPathParam,
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { FormParam, HeaderDefinition, PropertyList, QueryParam, RequestBody } from 'postman-collection';
+import {
+  FormParam,
+  HeaderDefinition,
+  HeaderList,
+  PropertyList,
+  QueryParam,
+  Request,
+  RequestBody,
+} from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 import { transformDescriptionDefinition, transformValueToHttpParam } from '../util';
+
+export function transformRequest(request: Request): IHttpOperationRequest {
+  return {
+    query: request.url.query.all().map(transformQueryParam),
+    headers: request.headers.all().map(transformHeader),
+    path: transformPathParams(request.url.path),
+    body: request.body ? transformBody(request.body, findContentType(request.headers)) : undefined,
+  };
+}
+
+function findContentType(headers: HeaderList) {
+  const header = headers.all().find(h => h.key.toLowerCase() === 'content-type');
+  return header ? header.value.toLowerCase() : undefined;
+}
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
