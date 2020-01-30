@@ -28,6 +28,15 @@ describe('transformQueryParam()', () => {
       });
     });
   });
+
+  describe('key is null', () => {
+    it('transforms correctly with key being empty string', () => {
+      expect(transformQueryParam(new QueryParam({ key: null, value: null }))).toEqual({
+        name: '',
+        style: 'form',
+      });
+    });
+  });
 });
 
 describe('transformHeader()', () => {
@@ -71,43 +80,35 @@ describe('transformPathParams()', () => {
 describe('transformBody()', () => {
   describe('body is passed in raw mode', () => {
     describe('body is defined', () => {
-      describe('body is a json', () => {
-        describe('media type is defined', () => {
-          it('returns body containing example, schema and given media type', () => {
-            expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }), 'application/nice+json')).toEqual({
-              contents: [
-                {
-                  examples: [{ key: 'default', value: { a: 'b' } }],
-                  mediaType: 'application/nice+json',
-                  schema: {
-                    properties: { a: { type: 'string' } },
-                    type: 'object',
-                  },
+      describe('mediaType is JSON-ish', () => {
+        describe('body is correctly defined json', () => {
+          expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }), 'application/nice+json')).toEqual({
+            contents: [
+              {
+                examples: [{ key: 'default', value: { a: 'b' } }],
+                mediaType: 'application/nice+json',
+                schema: {
+                  properties: { a: { type: 'string' } },
+                  type: 'object',
                 },
-              ],
-            });
+              },
+            ],
           });
         });
 
-        describe('media type is not defined', () => {
-          it('returns body containing example, schema and application/json media type', () => {
-            expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }))).toEqual({
-              contents: [
-                {
-                  examples: [{ key: 'default', value: { a: 'b' } }],
-                  mediaType: 'application/json',
-                  schema: {
-                    properties: { a: { type: 'string' } },
-                    type: 'object',
-                  },
-                },
-              ],
-            });
+        describe('body is not a correct JSON', () => {
+          expect(transformBody(new RequestBody({ mode: 'raw', raw: '"a":"b"' }), 'application/json')).toEqual({
+            contents: [
+              {
+                examples: [{ key: 'default', value: '"a":"b"' }],
+                mediaType: 'application/json',
+              },
+            ],
           });
         });
       });
 
-      describe('body is not a json', () => {
+      describe('mediaType is not JSON-ish', () => {
         describe('media type is defined', () => {
           it('returns body containing example and given media type', () => {
             expect(transformBody(new RequestBody({ mode: 'raw', raw: '<a />' }), 'application/xml')).toEqual({

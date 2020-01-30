@@ -8,16 +8,9 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import {
-  FormParam,
-  Header,
-  HeaderList,
-  PropertyList,
-  QueryParam,
-  Request,
-  RequestBody,
-} from 'postman-collection';
+import { FormParam, Header, HeaderList, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
+import * as typeIs from 'type-is';
 import { transformDescriptionDefinition, transformValueToHttpParam } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
@@ -71,26 +64,28 @@ export function transformBody(body: RequestBody, mediaType?: string): IHttpOpera
   return;
 }
 
-function transformRawBody(raw: string, mediaType?: string): IMediaTypeContent {
-  try {
-    const parsed = JSON.parse(raw);
+function transformRawBody(raw: string, mediaType: string = 'text/plain'): IMediaTypeContent {
+  if (typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
+    try {
+      const parsed = JSON.parse(raw);
 
-    return {
-      mediaType: mediaType || 'application/json',
-      examples: [
-        {
-          key: 'default',
-          value: parsed,
-        },
-      ],
-      schema: toJsonSchema(parsed) as JSONSchema4,
-    };
-  } catch (e) {
-    /* noop */
+      return {
+        mediaType,
+        examples: [
+          {
+            key: 'default',
+            value: parsed,
+          },
+        ],
+        schema: toJsonSchema(parsed) as JSONSchema4,
+      };
+    } catch (e) {
+      /* noop, move on.. */
+    }
   }
 
   return {
-    mediaType: mediaType || 'text/plain',
+    mediaType,
     examples: [
       {
         key: 'default',
