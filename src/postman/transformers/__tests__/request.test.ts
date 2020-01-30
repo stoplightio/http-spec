@@ -1,4 +1,4 @@
-import { HeaderDefinition, QueryParam, Request, RequestBody } from 'postman-collection';
+import { Header, HeaderDefinition, QueryParam, Request, RequestBody } from 'postman-collection';
 import { transformBody, transformHeader, transformPathParams, transformQueryParam, transformRequest } from '../request';
 
 describe('transformQueryParam()', () => {
@@ -33,7 +33,7 @@ describe('transformQueryParam()', () => {
 describe('transformHeader()', () => {
   describe('value is defined', () => {
     it('result contains schema', () => {
-      expect(transformHeader({ key: 'testKey', value: 'some string' })).toEqual({
+      expect(transformHeader(new Header({ key: 'testKey', value: 'some string' }))).toEqual({
         name: 'testKey',
         schema: {
           type: 'string',
@@ -51,7 +51,7 @@ describe('transformHeader()', () => {
 
   describe('value is not defined', () => {
     it('results does not contain schema', () => {
-      expect(transformHeader({ key: 'testKey' })).toEqual({
+      expect(transformHeader(new Header({ key: 'testKey' }))).toEqual({
         name: 'testKey',
         style: 'simple',
       });

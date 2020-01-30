@@ -10,7 +10,7 @@ import {
 import { JSONSchema4 } from 'json-schema';
 import {
   FormParam,
-  HeaderDefinition,
+  Header,
   HeaderList,
   PropertyList,
   QueryParam,
@@ -20,31 +20,17 @@ import {
 import * as toJsonSchema from 'to-json-schema';
 import { transformDescriptionDefinition, transformValueToHttpParam } from '../util';
 
-export function transformRequest(request: Request): IHttpOperationRequest {
-  return {
-    query: request.url.query.all().map(transformQueryParam),
-    headers: request.headers.all().map(transformHeader),
-    path: transformPathParams(request.url.path),
-    body: request.body ? transformBody(request.body, findContentType(request.headers)) : undefined,
-  };
-}
-
-function findContentType(headers: HeaderList) {
-  const header = headers.all().find(h => h.key.toLowerCase() === 'content-type');
-  return header ? header.value.toLowerCase() : undefined;
-}
-
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
-    name: queryParam.key as string, // no key no game
+    name: queryParam.key || '',
     style: HttpParamStyles.Form,
     ...(queryParam.value ? transformValueToHttpParam(queryParam.value) : undefined),
   };
 }
 
-export function transformHeader(header: HeaderDefinition): IHttpHeaderParam {
+export function transformHeader(header: Header): IHttpHeaderParam {
   return {
-    name: header.key as string,
+    name: header.key,
     style: HttpParamStyles.Simple,
     ...(header.value ? transformValueToHttpParam(header.value) : undefined),
   };
@@ -142,4 +128,18 @@ function transformParamsBody<T extends FormParam | QueryParam>(
       },
     ],
   };
+}
+
+export function transformRequest(request: Request): IHttpOperationRequest {
+  return {
+    query: request.url.query.all().map(transformQueryParam),
+    headers: request.headers.all().map(transformHeader),
+    path: transformPathParams(request.url.path),
+    body: request.body ? transformBody(request.body, findContentType(request.headers)) : undefined,
+  };
+}
+
+function findContentType(headers: HeaderList) {
+  const header = headers.all().find(h => h.key.toLowerCase() === 'content-type');
+  return header ? header.value.toLowerCase() : undefined;
 }
