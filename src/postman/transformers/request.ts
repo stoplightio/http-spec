@@ -11,13 +11,13 @@ import { JSONSchema4 } from 'json-schema';
 import { FormParam, Header, HeaderList, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
-import { transformDescriptionDefinition, transformValueToHttpParam } from '../util';
+import { transformDescriptionDefinition, transformValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
     name: queryParam.key || '',
     style: HttpParamStyles.Form,
-    ...(queryParam.value ? transformValueToHttpParam(queryParam.value) : undefined),
+    ...(queryParam.value ? transformValueToSchema(queryParam.value) : undefined),
   };
 }
 
@@ -25,7 +25,7 @@ export function transformHeader(header: Header): IHttpHeaderParam {
   return {
     name: header.key,
     style: HttpParamStyles.Simple,
-    ...(header.value ? transformValueToHttpParam(header.value) : undefined),
+    ...(header.value ? transformValueToSchema(header.value) : undefined),
   };
 }
 

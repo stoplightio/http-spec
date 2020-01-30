@@ -3,7 +3,7 @@ import { JSONSchema4 } from 'json-schema';
 import { DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 
-export function transformValueToHttpParam(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
+export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
     examples: [
       {
