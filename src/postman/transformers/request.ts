@@ -8,15 +8,8 @@ import {
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { FormParam, HeaderDefinition, PropertyList, QueryParam, RequestBody } from 'postman-collection';
-import {
-  combineRenderResults,
-  InputData,
-  jsonInputForTargetLanguage,
-  JSONSchemaTargetLanguage,
-  quicktype,
-  quicktypeMultiFileSync,
-} from 'quicktype-core';
-import { inferJSONSchema, transformDescriptionDefinition, transformValueToHttpParam } from '../util';
+import * as toJsonSchema from 'to-json-schema';
+import { transformDescriptionDefinition, transformValueToHttpParam } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
@@ -81,7 +74,7 @@ function transformRawBody(raw: string, mediaType?: string): IMediaTypeContent {
           value: parsed,
         },
       ],
-      schema: inferJSONSchema(raw),
+      schema: toJsonSchema(parsed) as JSONSchema4,
     };
   } catch (e) {
     /* noop */

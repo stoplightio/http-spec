@@ -1,13 +1,7 @@
 import { IHttpParam } from '@stoplight/types';
-import { JSONSchema6 } from 'json-schema';
+import { JSONSchema4 } from 'json-schema';
 import { DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
-import {
-  combineRenderResults,
-  InputData,
-  jsonInputForTargetLanguage,
-  JSONSchemaTargetLanguage,
-  quicktypeMultiFileSync,
-} from 'quicktype-core';
+import * as toJsonSchema from 'to-json-schema';
 
 export function transformValueToHttpParam(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
@@ -17,7 +11,7 @@ export function transformValueToHttpParam(value: string): Pick<IHttpParam, 'sche
         value,
       },
     ],
-    schema: { type: 'string' },
+    schema: toJsonSchema(value) as JSONSchema4,
   };
 }
 
@@ -33,21 +27,4 @@ export function traverseItemsAndGroups(
   itemGroup.forEachItem(itemCallback);
   if (itemGroupCallback) itemGroup.forEachItemGroup(itemGroupCallback);
   itemGroup.forEachItemGroup(ig => traverseItemsAndGroups(ig, itemCallback, itemGroupCallback));
-}
-
-export function inferJSONSchema(json: string): JSONSchema6 | undefined {
-  const title = 'InferredJSONSchema';
-
-  const jsonInput = jsonInputForTargetLanguage(new JSONSchemaTargetLanguage());
-  jsonInput.addSourceSync({ name: title, samples: [json] });
-
-  const inputData = new InputData();
-  inputData.addInput(jsonInput);
-
-  const schemaString = combineRenderResults(
-    quicktypeMultiFileSync({ inputData, lang: new JSONSchemaTargetLanguage(), allPropertiesOptional: true }),
-  ).lines.join('');
-
-  const schema: JSONSchema6 = JSON.parse(schemaString);
-  return schema.definitions && (schema.definitions[title] as JSONSchema6);
 }
