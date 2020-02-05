@@ -1,3 +1,5 @@
+import { INodeExample } from '@stoplight/types/dist';
+import { JSONSchema4 } from 'json-schema';
 import { Header, HeaderDefinition, QueryParam, Request, RequestBody } from 'postman-collection';
 import { transformBody, transformHeader, transformPathParams, transformQueryParam, transformRequest } from '../request';
 
@@ -82,28 +84,32 @@ describe('transformBody()', () => {
     describe('body is defined', () => {
       describe('mediaType is JSON-ish', () => {
         describe('body is correctly defined json', () => {
-          expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }), 'application/nice+json')).toEqual({
-            contents: [
-              {
-                examples: [{ key: 'default', value: { a: 'b' } }],
-                mediaType: 'application/nice+json',
-                schema: {
-                  properties: { a: { type: 'string' } },
-                  type: 'object',
+          it('returns body containing example, schema and media type', () => {
+            expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }), 'application/nice+json')).toEqual({
+              contents: [
+                {
+                  examples: [{ key: 'default', value: { a: 'b' } }],
+                  mediaType: 'application/nice+json',
+                  schema: {
+                    properties: { a: { type: 'string' } },
+                    type: 'object',
+                  },
                 },
-              },
-            ],
+              ],
+            });
           });
         });
 
         describe('body is not a correct JSON', () => {
-          expect(transformBody(new RequestBody({ mode: 'raw', raw: '"a":"b"' }), 'application/json')).toEqual({
-            contents: [
-              {
-                examples: [{ key: 'default', value: '"a":"b"' }],
-                mediaType: 'application/json',
-              },
-            ],
+          it('returns body containing example and media type', () => {
+            expect(transformBody(new RequestBody({ mode: 'raw', raw: '"a":"b"' }), 'application/json')).toEqual({
+              contents: [
+                {
+                  examples: [{ key: 'default', value: '"a":"b"' }],
+                  mediaType: 'application/json',
+                },
+              ],
+            });
           });
         });
       });
@@ -201,6 +207,52 @@ describe('transformBody()', () => {
             ],
           });
         });
+      });
+    });
+
+    describe('some keys are not defined', () => {
+      it('returns body containing schema, example and given media type', () => {
+        const result = transformBody(
+          new RequestBody({
+            mode: 'formdata',
+            formdata: [{ value: 'v1' }, { value: 'v2', description: 'd2' }],
+          }),
+          'multipart/test+form-data',
+        );
+
+        expect(result).toEqual({
+          contents: [
+            {
+              examples: [{ key: 'default', value: expect.any(Object) }],
+              mediaType: 'multipart/test+form-data',
+              schema: {
+                type: 'object',
+                properties: expect.any(Object),
+              },
+            },
+          ],
+        });
+
+        // verify shape of schema object
+        expect(Object.entries(result!.contents![0].schema!.properties as JSONSchema4)).toEqual(
+          expect.arrayContaining([
+            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: undefined }],
+            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: 'd2' }],
+          ]),
+        );
+
+        // verify shape of example object
+        expect(Object.entries((result!.contents![0].examples![0] as INodeExample).value)).toEqual(
+          expect.arrayContaining([
+            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), 'v1'],
+            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), 'v2'],
+          ]),
+        );
+
+        // ensure both share exactly the same keys
+        expect(Object.keys(result!.contents![0].schema!.properties as JSONSchema4).sort()).toEqual(
+          Object.keys((result!.contents![0].examples![0] as INodeExample).value).sort(),
+        );
       });
     });
 

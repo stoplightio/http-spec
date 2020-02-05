@@ -99,24 +99,32 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   params: PropertyList<T>,
   mediaType: string,
 ): IMediaTypeContent {
+  const paramsList: Array<{ name: string; schema: JSONSchema4; value: any }> = params.map(item => {
+    return {
+      name: item.key || generateId(),
+      schema: {
+        type: 'string',
+        description: item.description && transformDescriptionDefinition(item.description),
+      },
+      value: item.value,
+    };
+  }, undefined);
+
   return {
     mediaType,
     schema: {
       type: 'object',
-      properties: params.all().reduce<NonNullable<JSONSchema4['properties']>>((props, item) => {
-        props[item.key || ''] = {
-          type: 'string',
-          description: item.description && transformDescriptionDefinition(item.description),
-        };
+      properties: paramsList.reduce((props, param) => {
+        props[param.name] = param.schema;
         return props;
       }, {}),
     },
     examples: [
       {
         key: 'default',
-        value: params.all().reduce((paramValue, item) => {
-          paramValue[item.key || ''] = item.value;
-          return paramValue;
+        value: paramsList.reduce((values, param) => {
+          values[param.name] = param.value;
+          return values;
         }, {}),
       },
     ],
@@ -128,11 +136,15 @@ export function transformRequest(request: Request): IHttpOperationRequest {
     query: request.url.query.all().map(transformQueryParam),
     headers: request.headers.all().map(transformHeader),
     path: transformPathParams(request.url.path),
-    body: request.body ? transformBody(request.body, findContentType(request.headers)) : undefined,
+    body: request.body ? transformBody(request.body, request.headers.get('content-type')?.toLowerCase()) : undefined,
   };
 }
 
-function findContentType(headers: HeaderList) {
-  const header = headers.all().find(h => h.key.toLowerCase() === 'content-type');
-  return header ? header.value.toLowerCase() : undefined;
+function generateId() {
+  return (
+    '_gen_' +
+    Math.round(Math.pow(8, 6) * Math.random())
+      .toString(16)
+      .padStart(6, '0')
+  );
 }
