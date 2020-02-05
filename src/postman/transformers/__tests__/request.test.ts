@@ -211,7 +211,7 @@ describe('transformBody()', () => {
     });
 
     describe('some keys are not defined', () => {
-      it('returns body containing schema, example and given media type', () => {
+      it('returns body containing schema and example with generated keys', () => {
         const result = transformBody(
           new RequestBody({
             mode: 'formdata',
@@ -234,7 +234,7 @@ describe('transformBody()', () => {
         });
 
         // verify shape of schema object
-        expect(Object.entries(result!.contents![0].schema!.properties as JSONSchema4)).toEqual(
+        expect(Object.entries(result!.contents![0].schema!.properties!)).toEqual(
           expect.arrayContaining([
             [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: undefined }],
             [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: 'd2' }],
@@ -250,7 +250,7 @@ describe('transformBody()', () => {
         );
 
         // ensure both share exactly the same keys
-        expect(Object.keys(result!.contents![0].schema!.properties as JSONSchema4).sort()).toEqual(
+        expect(Object.keys(result!.contents![0].schema!.properties!).sort()).toEqual(
           Object.keys((result!.contents![0].examples![0] as INodeExample).value).sort(),
         );
       });
