@@ -41,11 +41,7 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
   } as any;
 };
 
-function findItem(
-  collection: Collection,
-  method: string,
-  path: string,
-): Item | undefined {
+function findItem(collection: Collection, method: string, path: string): Item | undefined {
   let found;
 
   traverseItemsAndGroups((collection as unknown) as ItemGroup<Item>, item => {
