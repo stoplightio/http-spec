@@ -8,7 +8,7 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { FormParam, Header, HeaderList, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
+import { FormParam, Header, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
 import { transformDescriptionDefinition, transformValueToSchema } from '../util';

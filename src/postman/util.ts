@@ -1,7 +1,5 @@
 import { IHttpParam } from '@stoplight/types';
-import { JSONSchema4 } from 'json-schema';
 import { DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
-import * as toJsonSchema from 'to-json-schema';
 
 export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
@@ -11,7 +9,7 @@ export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema'
         value,
       },
     ],
-    schema: toJsonSchema(value) as JSONSchema4,
+    schema: { type: 'string' },
   };
 }
 
