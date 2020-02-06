@@ -4,6 +4,11 @@ import { transformPostmanCollectionOperation } from '../operation';
 describe('transformPostmanCollectionOperation()', () => {
   describe('operation can be found', () => {
     describe('description is set', () => {
+      it.only('', () => {
+        const petstore = require('./fixtures/petstore.json');
+        transformPostmanCollectionOperation({ document: petstore, path: '/pets', method: 'get' });
+      });
+
       it('returns operation with description', () => {
         expect(
           transformPostmanCollectionOperation({

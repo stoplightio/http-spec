@@ -7,8 +7,9 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { Collection, HeaderList, Item, ItemGroup, Url } from 'postman-collection';
+import { Collection, Item, ItemGroup, Url } from 'postman-collection';
 import { transformRequest } from './transformers/request';
+import { transformResponse } from './transformers/response';
 import { PostmanCollectionHttpOperationTransformer } from './types';
 import { transformDescriptionDefinition, traverseItemsAndGroups } from './util';
 
@@ -33,12 +34,12 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     path,
     summary: item.name,
     request: transformRequest(item.request),
-    responses: [],
+    responses: item.responses.map(transformResponse),
     /*
     servers: ...,
     security: ...,
     */
-  } as any;
+  };
 };
 
 function findItem(collection: Collection, method: string, path: string): Item | undefined {

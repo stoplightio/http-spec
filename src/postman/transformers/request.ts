@@ -23,7 +23,7 @@ export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
 
 export function transformHeader(header: Header): IHttpHeaderParam {
   return {
-    name: header.key,
+    name: header.key.toLowerCase(),
     style: HttpParamStyles.Simple,
     ...(header.value ? transformValueToSchema(header.value) : undefined),
   };
@@ -64,8 +64,8 @@ export function transformBody(body: RequestBody, mediaType?: string): IHttpOpera
   return;
 }
 
-function transformRawBody(raw: string, mediaType: string = 'text/plain'): IMediaTypeContent {
-  if (typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
+export function transformRawBody(raw?: string, mediaType: string = 'text/plain'): IMediaTypeContent {
+  if (raw && typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
     try {
       const parsed = JSON.parse(raw);
 
@@ -86,12 +86,15 @@ function transformRawBody(raw: string, mediaType: string = 'text/plain'): IMedia
 
   return {
     mediaType,
-    examples: [
-      {
-        key: 'default',
-        value: raw,
-      },
-    ],
+    examples:
+      raw === undefined // because '' is also false
+        ? undefined
+        : [
+            {
+              key: 'default',
+              value: raw,
+            },
+          ],
   };
 }
 

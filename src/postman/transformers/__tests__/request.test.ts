@@ -1,5 +1,4 @@
-import { INodeExample } from '@stoplight/types/dist';
-import { JSONSchema4 } from 'json-schema';
+import { INodeExample } from '@stoplight/types';
 import { Header, HeaderDefinition, QueryParam, Request, RequestBody } from 'postman-collection';
 import { transformBody, transformHeader, transformPathParams, transformQueryParam, transformRequest } from '../request';
 
@@ -45,7 +44,7 @@ describe('transformHeader()', () => {
   describe('value is defined', () => {
     it('result contains schema', () => {
       expect(transformHeader(new Header({ key: 'testKey', value: 'some string' }))).toEqual({
-        name: 'testKey',
+        name: 'testkey',
         schema: {
           type: 'string',
         },
@@ -63,7 +62,7 @@ describe('transformHeader()', () => {
   describe('value is not defined', () => {
     it('results does not contain schema', () => {
       expect(transformHeader(new Header({ key: 'testKey' }))).toEqual({
-        name: 'testKey',
+        name: 'testkey',
         style: 'simple',
       });
     });
