@@ -16,7 +16,7 @@ export function transformResponse(response: Response): IHttpOperationResponse {
 }
 
 function transformCookie(cookie: Cookie): IHttpHeaderParam | undefined {
-  // @ts-ignore @todo it is actually defined, it is just typing mistake
+  // @ts-ignore @todo fix typing bug in postman-collection
   const name = cookie.name;
 
   const params = [`${name || ''}=${cookie.value || ''}`];
