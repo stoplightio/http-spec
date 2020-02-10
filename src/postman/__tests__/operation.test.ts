@@ -1,4 +1,4 @@
-import { HeaderDefinition, RequestBody } from 'postman-collection';
+import { Collection, HeaderDefinition, RequestAuth, RequestAuthDefinition, RequestBody } from 'postman-collection';
 import { transformPostmanCollectionOperation } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {
@@ -72,6 +72,137 @@ describe('transformPostmanCollectionOperation()', () => {
             path: '/path',
           }),
         ).toEqual(expect.objectContaining({ description: undefined }));
+      });
+    });
+
+    describe('auth is set', () => {
+      describe('auth transforms to security scheme', () => {
+        it('', () => {
+          expect(
+            transformPostmanCollectionOperation({
+              document: {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path',
+                      auth: { type: 'basic' },
+                    },
+                  },
+                ],
+              },
+              method: 'get',
+              path: '/path',
+            }),
+          ).toEqual(
+            expect.objectContaining({
+              security: [[{ key: 'http-0', scheme: 'basic', type: 'http' }]],
+            }),
+          );
+        });
+      });
+
+      describe('auth transforms to header params', () => {
+        it('it appends authorization data to headers', () => {
+          expect(
+            transformPostmanCollectionOperation({
+              document: {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path',
+                      auth: { type: 'hawk' },
+                    },
+                  },
+                ],
+              },
+              method: 'get',
+              path: '/path',
+            }),
+          ).toEqual(
+            expect.objectContaining({
+              request: expect.objectContaining({
+                headers: [
+                  {
+                    description: 'Hawk Authorization Header',
+                    name: 'Authorization',
+                    required: true,
+                    schema: { pattern: '^Hawk .+$', type: 'string' },
+                    style: 'simple',
+                  },
+                ],
+              }),
+            }),
+          );
+        });
+      });
+
+      describe('auth transforms to query params', () => {
+        it('it appends authorization data to query params', () => {
+          expect(
+            transformPostmanCollectionOperation({
+              document: {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path',
+                      auth: {
+                        type: 'oauth2',
+                        oauth2: [
+                          {
+                            key: 'addTokenTo',
+                            value: 'queryParams',
+                            type: 'string',
+                          },
+                        ],
+                      } as RequestAuthDefinition,
+                    },
+                  },
+                ],
+              },
+              method: 'get',
+              path: '/path',
+            }),
+          ).toEqual(
+            expect.objectContaining({
+              request: expect.objectContaining({
+                query: [{ description: 'OAuth2 Access Token', name: 'access_token', required: true, style: 'form' }],
+              }),
+            }),
+          );
+        });
+      });
+
+      describe('auth is set to noauth', () => {
+        it('ignores it', () => {
+          expect(
+            transformPostmanCollectionOperation({
+              document: {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path',
+                      auth: { type: 'nooauth' },
+                    },
+                  },
+                ],
+              },
+              method: 'get',
+              path: '/path',
+            }),
+          ).toEqual(
+            expect.objectContaining({
+              request: expect.objectContaining({
+                headers: [],
+                query: [],
+              }),
+              security: [],
+            }),
+          );
+        });
       });
     });
   });

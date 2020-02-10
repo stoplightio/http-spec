@@ -24,14 +24,6 @@ export function isStandardSecurityScheme(pss: PostmanSecurityScheme): pss is Sta
   return pss.type === 'securityScheme';
 }
 
-export function isQuerySecurityScheme(pss: PostmanSecurityScheme): pss is QuerySecurityScheme {
-  return pss.type === 'queryParams';
-}
-
-export function isHeaderSecurityScheme(pss: PostmanSecurityScheme): pss is HeaderSecurityScheme {
-  return pss.type === 'headerParams';
-}
-
 export function transformSecurityScheme(
   auth: RequestAuth,
   nextKey: (type: HttpSecurityScheme['type']) => string,

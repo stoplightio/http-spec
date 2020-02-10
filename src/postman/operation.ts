@@ -48,8 +48,6 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
       case 'queryParams':
         request.query!.push(...postmanSecurity.queryParams);
         break;
-      default:
-        throw new Error('Unknown Postman Security type');
     }
   }
 
