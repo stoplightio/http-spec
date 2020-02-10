@@ -1,6 +1,11 @@
 import { HttpParamStyles } from '@stoplight/types/dist';
-import { RequestAuth, RequestAuthDefinition } from 'postman-collection';
-import { transformSecurityScheme } from '../securityScheme';
+import { Collection, HeaderDefinition, RequestAuth, RequestAuthDefinition, RequestBody } from 'postman-collection';
+import {
+  isPostmanSecuritySchemeEqual,
+  PostmanSecurityScheme,
+  transformSecurityScheme,
+  transformSecuritySchemes,
+} from '../securityScheme';
 
 describe('transformSecurityScheme()', () => {
   describe('given basic auth', () => {
@@ -522,5 +527,184 @@ describe('transformSecurityScheme()', () => {
     expect(
       transformSecurityScheme(new RequestAuth({ type: 'noauth' } as RequestAuthDefinition), () => 'a'),
     ).toBeUndefined();
+  });
+});
+
+describe('transformPostmanSecuritySchemes()', () => {
+  describe('has authorization defined on item group level', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+                auth: { type: 'basic' },
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'digest' },
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([
+        {
+          securityScheme: {
+            key: 'http-0',
+            scheme: 'basic',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+        {
+          securityScheme: {
+            key: 'http-1',
+            scheme: 'digest',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+      ]);
+    });
+  });
+
+  describe('authorization is not defined', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('authorization is defined as noauth', () => {
+    it('returns no security schemes', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+                auth: { type: 'noauth' },
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'noauth' },
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('has two similar request authorizations', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/a',
+                  auth: { type: 'basic' },
+                },
+                description: 'desc',
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'basic' },
+                },
+                description: 'desc',
+              },
+            ],
+          }),
+        ),
+      ).toEqual([
+        {
+          securityScheme: {
+            key: 'http-0',
+            scheme: 'basic',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+      ]);
+    });
+  });
+});
+
+describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
+  [
+    'two equal security schemes',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'basic' } },
+    true,
+  ],
+  [
+    'different types',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'headerParams', headerParams: [] },
+    false,
+  ],
+  [
+    'two different',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'digest' } },
+    false,
+  ],
+  [
+    'two equal query params',
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
+    true,
+  ],
+])('given %s security schemes', (desc, scheme1, scheme2, result) => {
+  it(`returns ${result ? 'true' : 'false'}`, () => {
+    expect(isPostmanSecuritySchemeEqual(scheme1, scheme2)).toEqual(result);
   });
 });

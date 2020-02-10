@@ -31,6 +31,7 @@ describe('transformPostmanCollectionOperation()', () => {
           path: '/path/{param}',
           request: expect.any(Object),
           responses: [],
+          security: [],
           summary: undefined,
         });
       });
