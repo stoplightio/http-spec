@@ -1,7 +1,8 @@
-import { Collection } from 'postman-collection';
-import { HttpOperationTransformer, ITransformOperationOpts } from '../types';
+import { CollectionDefinition } from 'postman-collection';
+import { HttpOperationTransformer } from '../types';
 
-export type PostmanCollectionTransformOperationOpts = ITransformOperationOpts<Collection>;
-export type PostmanCollectionHttpOperationTransformer = HttpOperationTransformer<
-  PostmanCollectionTransformOperationOpts
->;
+export type PostmanCollectionHttpOperationTransformer = HttpOperationTransformer<{
+  document: CollectionDefinition;
+  path: string;
+  method: string;
+}>;

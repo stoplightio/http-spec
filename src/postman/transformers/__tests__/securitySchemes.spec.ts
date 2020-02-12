@@ -329,9 +329,9 @@ describe('transformSecurityScheme()', () => {
           type: 'securityScheme',
           securityScheme: {
             key: 'auth-oauth2',
+            description: 'OAuth2 Access Token',
             scheme: 'bearer',
             type: 'http',
-            description: 'OAuth2 Access Token',
           },
         });
       });
