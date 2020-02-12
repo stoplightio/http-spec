@@ -1,7 +1,9 @@
 import { CollectionDefinition } from 'postman-collection';
 import { HttpServiceTransformer } from '../types';
 import { isStandardSecurityScheme, transformSecuritySchemes } from './transformers/securityScheme';
-import { resolveCollection } from './util';
+import { resolveCollection, resolveVersion, transformDescriptionDefinition } from './util';
+
+const DEFAULT_VERSION = '1.0.0';
 
 export const transformPostmanCollectionService: HttpServiceTransformer<CollectionDefinition> = document => {
   const collection = resolveCollection(document);
@@ -9,12 +11,8 @@ export const transformPostmanCollectionService: HttpServiceTransformer<Collectio
   return {
     id: collection.id,
     name: collection.name,
-    version: collection.version
-      ? collection.version.string
-        ? collection.version.string
-        : `${collection.version.major}.${collection.version.minor}.${collection.version.patch}-${collection.version.prerelease}`
-      : '1.0.0',
-    description: collection.description?.toString(),
+    version: collection.version ? resolveVersion(collection.version) : DEFAULT_VERSION,
+    description: collection.description && transformDescriptionDefinition(collection.description),
     securitySchemes: transformSecuritySchemes(collection)
       .filter(isStandardSecurityScheme)
       .map(pss => pss.securityScheme),

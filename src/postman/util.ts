@@ -1,5 +1,5 @@
 import { IHttpParam } from '@stoplight/types';
-import { Collection, CollectionDefinition, DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
+import { Collection, CollectionDefinition, DescriptionDefinition, Item, ItemGroup, Version } from 'postman-collection';
 
 export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
@@ -29,4 +29,8 @@ export function traverseItemsAndGroups(
 export function resolveCollection(collectionDefinition: CollectionDefinition): Collection {
   const collection = new Collection(collectionDefinition);
   return new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
+}
+
+export function resolveVersion(version: Version) {
+  return version.string ? version.string : `${version.major}.${version.minor}.${version.patch}-${version.prerelease}`;
 }

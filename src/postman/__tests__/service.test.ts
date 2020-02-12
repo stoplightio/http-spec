@@ -1,27 +1,47 @@
 import { transformPostmanCollectionService } from '../service';
 
 describe('transformPostmanCollectionService()', () => {
-  it.skip('transforms info section', () => {
-    expect(transformPostmanCollectionService({})).toEqual({
-      id: '000bb1af-1d34-4263-8ef5-c06230bdc905',
-      name: 'Swagger Petstore',
-      version: '1.0.0',
-      description:
-        'This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.\n\nContact Support:\n Email: apiteam@swagger.io',
-      securitySchemes: [
+  describe('version is defined', () => {
+    it('transforms version correctly', () => {
+      expect(transformPostmanCollectionService({ info: { version: '1.2.3-4' } })).toEqual({
+        version: '1.2.3-4',
+        description: undefined,
+        id: expect.any(String),
+        name: undefined,
+        securitySchemes: [],
+      });
+    });
+  });
+
+  describe('description is defined', () => {
+    it('transforms version correctly', () => {
+      expect(transformPostmanCollectionService({ description: 'a desc' })).toEqual({
+        description: 'a desc',
+        version: '1.0.0',
+        id: expect.any(String),
+        name: undefined,
+        securitySchemes: [],
+      });
+    });
+  });
+
+  describe('security scheme is defined', () => {
+    it('lists them', () => {
+      expect(transformPostmanCollectionService({ item: [{ request: { url: '/', auth: { type: 'basic' } } }] })).toEqual(
         {
-          description: 'OAuth2 Access Token',
-          key: 'oauth2-0',
-          scheme: 'bearer',
-          type: 'http',
+          description: undefined,
+          version: '1.0.0',
+          id: expect.any(String),
+          name: undefined,
+          securitySchemes: [
+            {
+              key: 'http-0',
+              scheme: 'basic',
+              type: 'http',
+            },
+          ],
         },
-        {
-          in: 'query',
-          key: 'apiKey-1',
-          name: 'ApiKey',
-          type: 'apiKey',
-        },
-      ],
+      );
     });
   });
 });

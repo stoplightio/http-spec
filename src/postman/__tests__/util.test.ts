@@ -1,5 +1,10 @@
-import { ItemGroup } from 'postman-collection';
-import { transformDescriptionDefinition, transformValueToSchema, traverseItemsAndGroups } from '../util';
+import { ItemGroup, Version } from 'postman-collection';
+import {
+  resolveVersion,
+  transformDescriptionDefinition,
+  transformValueToSchema,
+  traverseItemsAndGroups,
+} from '../util';
 
 describe('transformValueToSchema()', () => {
   it('returns param with schema and example', () => {
@@ -44,6 +49,20 @@ describe('traverseItemsAndGroups()', () => {
       traverseItemsAndGroups(new ItemGroup({ item: [{ item: [{}] }] }), mockItemCallback);
 
       expect(mockItemCallback).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe('resolveVersion()', () => {
+  describe('version is defined as string', () => {
+    it('transforms correctly', () => {
+      expect(resolveVersion(new Version('1.2.3-4'))).toEqual('1.2.3-4');
+    });
+  });
+
+  describe('version is defined as string', () => {
+    it('transforms correctly', () => {
+      expect(resolveVersion(new Version({ major: '1', minor: '2', patch: '3', prerelease: '4' }))).toEqual('1.2.3-4');
     });
   });
 });
