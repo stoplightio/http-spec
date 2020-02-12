@@ -1,7 +1,6 @@
 import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
 import { isEqual, omit } from 'lodash';
 import { Collection, Item, ItemGroup, RequestAuth } from 'postman-collection';
-import { traverseItemsAndGroups } from '../util';
 
 export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
 
@@ -244,22 +243,20 @@ export function transformSecuritySchemes(collection: Collection) {
     }
   }
 
-  traverseItemsAndGroups(
-    (collection as unknown) as ItemGroup<Item>,
-    item => {
-      const auth = item.getAuth();
-      if (auth) {
-        const transformed = transformSecurityScheme(auth, type => `${type}-${securitySchemeIdx++}`);
-        if (transformed) addSecurityScheme(transformed);
-      }
-    },
-    itemGroup => {
-      if (itemGroup.auth) {
-        const transformed = transformSecurityScheme(itemGroup.auth, type => `${type}-${securitySchemeIdx++}`);
-        if (transformed) addSecurityScheme(transformed);
-      }
-    },
-  );
+  ((collection as unknown) as ItemGroup<Item>).forEachItem(item => {
+    const auth = item.getAuth();
+    if (auth) {
+      const transformed = transformSecurityScheme(auth, type => `${type}-${securitySchemeIdx++}`);
+      if (transformed) addSecurityScheme(transformed);
+    }
+  });
+
+  ((collection as unknown) as ItemGroup<Item>).forEachItemGroup(itemGroup => {
+    if (itemGroup.auth) {
+      const transformed = transformSecurityScheme(itemGroup.auth, type => `${type}-${securitySchemeIdx++}`);
+      if (transformed) addSecurityScheme(transformed);
+    }
+  });
 
   return postmanSecuritySchemes;
 }

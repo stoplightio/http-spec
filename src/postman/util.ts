@@ -17,15 +17,6 @@ export function transformDescriptionDefinition(description: string | Description
   return typeof description === 'string' ? description : description.content;
 }
 
-export function traverseItemsAndGroups(
-  itemGroup: ItemGroup<Item>,
-  itemCallback: (item: Item) => void,
-  itemGroupCallback?: (itemGroup: ItemGroup<Item>) => void,
-) {
-  itemGroup.forEachItem(itemCallback);
-  if (itemGroupCallback) itemGroup.forEachItemGroup(itemGroupCallback);
-}
-
 export function resolveCollection(collectionDefinition: CollectionDefinition): Collection {
   const collection = new Collection(collectionDefinition);
   return new Collection(collection.toObjectResolved({ variables: collection.variables }, []));

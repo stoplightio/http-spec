@@ -20,14 +20,14 @@ import {
 } from './transformers/securityScheme';
 import { transformServer } from './transformers/server';
 import { PostmanCollectionHttpOperationTransformer } from './types';
-import { resolveCollection, transformDescriptionDefinition, traverseItemsAndGroups } from './util';
+import { resolveCollection, transformDescriptionDefinition } from './util';
 
 export const transformPostmanCollectionOperations = (document: CollectionDefinition): IHttpOperation[] => {
   const collection = resolveCollection(document);
   const securitySchemes = transformSecuritySchemes(collection);
   const operations: IHttpOperation[] = [];
 
-  traverseItemsAndGroups((collection as unknown) as ItemGroup<Item>, item =>
+  ((collection as unknown) as ItemGroup<Item>).forEachItem(item =>
     operations.push(transformItem(item, securitySchemes)),
   );
 
@@ -88,7 +88,7 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
 function findItem(collection: Collection, method: string, path: string): Item | undefined {
   let found;
 
-  traverseItemsAndGroups((collection as unknown) as ItemGroup<Item>, item => {
+  ((collection as unknown) as ItemGroup<Item>).forEachItem(item => {
     if (
       item.request.method.toLowerCase() === method.toLowerCase() &&
       getPath(item.request.url).toLowerCase() === path.toLowerCase()
