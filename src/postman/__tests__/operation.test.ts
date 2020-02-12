@@ -1,5 +1,6 @@
 import { HeaderDefinition, RequestAuthDefinition, RequestBody, VariableDefinition } from 'postman-collection';
-import { transformPostmanCollectionOperation } from '../operation';
+import { operation } from 'retry';
+import { transformPostmanCollectionOperation, transformPostmanCollectionOperations } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {
   describe('operation can be found', () => {
@@ -281,5 +282,98 @@ describe('transformPostmanCollectionOperation()', () => {
         }),
       ).toThrowError('Unable to find "get /non-existing"');
     });
+  });
+});
+
+describe('transformPostmanCollectionOperations()', () => {
+  it('transforms operations nested in folders', () => {
+    const operations = transformPostmanCollectionOperations({
+      item: [
+        {
+          item: [
+            { request: { method: 'get', url: '/a/a' } },
+            {
+              item: [{ request: { method: 'get', url: '/a/a/a' } }, { request: { method: 'get', url: '/a/a/b' } }],
+            },
+          ],
+        },
+        { request: { method: 'get', url: '/a' } },
+      ],
+    });
+
+    expect(operations).toEqual(
+      expect.arrayContaining([
+        {
+          description: undefined,
+          id: '?http-operation-id?',
+          iid: expect.any(String),
+          method: 'get',
+          path: '/a/a',
+          request: {
+            body: undefined,
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: undefined,
+          summary: undefined,
+        },
+        {
+          description: undefined,
+          id: '?http-operation-id?',
+          iid: expect.any(String),
+          method: 'get',
+          path: '/a/a/a',
+          request: {
+            body: undefined,
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: undefined,
+          summary: undefined,
+        },
+        {
+          description: undefined,
+          id: '?http-operation-id?',
+          iid: expect.any(String),
+          method: 'get',
+          path: '/a/a/b',
+          request: {
+            body: undefined,
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: undefined,
+          summary: undefined,
+        },
+        {
+          description: undefined,
+          id: '?http-operation-id?',
+          iid: expect.any(String),
+          method: 'get',
+          path: '/a',
+          request: {
+            body: undefined,
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: undefined,
+          summary: undefined,
+        },
+      ]),
+    );
+
+    expect(operations).toHaveLength(4);
   });
 });

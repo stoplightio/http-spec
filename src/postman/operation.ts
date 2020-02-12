@@ -2,23 +2,39 @@ import {
   HttpParamStyles,
   HttpSecurityScheme,
   IHttpHeaderParam,
+  IHttpOperation,
   IHttpOperationRequestBody,
   IHttpParam,
   IHttpPathParam,
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { Collection, Item, ItemGroup, RequestAuth, Url } from 'postman-collection';
+import { Collection, CollectionDefinition, Item, ItemGroup, RequestAuth, Url } from 'postman-collection';
 import { transformRequest } from './transformers/request';
 import { transformResponse } from './transformers/response';
 import {
   isPostmanSecuritySchemeEqual,
+  PostmanSecurityScheme,
   transformSecurityScheme,
   transformSecuritySchemes,
 } from './transformers/securityScheme';
 import { transformServer } from './transformers/server';
 import { PostmanCollectionHttpOperationTransformer } from './types';
 import { transformDescriptionDefinition, traverseItemsAndGroups } from './util';
+
+export const transformPostmanCollectionOperations = (document: CollectionDefinition): IHttpOperation[] => {
+  const collection = new Collection(document);
+  const resolvedCollection = new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
+
+  const securitySchemes = transformSecuritySchemes(collection);
+  const operations: IHttpOperation[] = [];
+
+  traverseItemsAndGroups((resolvedCollection as unknown) as ItemGroup<Item>, item =>
+    operations.push(transformItem(item, securitySchemes)),
+  );
+
+  return operations;
+};
 
 export const transformPostmanCollectionOperation: PostmanCollectionHttpOperationTransformer = ({
   document,
@@ -33,8 +49,12 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     throw new Error(`Unable to find "${method} ${path}"`);
   }
 
+  return transformItem(item, transformSecuritySchemes(collection));
+};
+
+function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IHttpOperation {
   const auth = item.getAuth();
-  const postmanSecurity = auth && findPostmanSecurityScheme(auth, collection);
+  const postmanSecurity = auth && findPostmanSecurityScheme(auth, securitySchemes);
   const request = transformRequest(item.request);
   const security: HttpSecurityScheme[][] = [];
 
@@ -58,15 +78,15 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     id: '?http-operation-id?',
     iid: item.id,
     description: item.description && transformDescriptionDefinition(item.description),
-    method,
-    path,
+    method: item.request.method.toLowerCase(),
+    path: getPath(item.request.url),
     summary: item.name,
     request,
     responses: item.responses.map(transformResponse),
     security,
     servers: server ? [server] : undefined,
   };
-};
+}
 
 function findItem(collection: Collection, method: string, path: string): Item | undefined {
   let found;
@@ -84,12 +104,11 @@ function findItem(collection: Collection, method: string, path: string): Item | 
 }
 
 // this func ensures that both this securityScheme and the one in HttpService share exactly the sme keys
-function findPostmanSecurityScheme(auth: RequestAuth, collection: Collection) {
+function findPostmanSecurityScheme(auth: RequestAuth, securitySchemes: PostmanSecurityScheme[]) {
   const securityScheme = transformSecurityScheme(auth, () => '1');
   if (!securityScheme) return;
 
-  const allSecuritySchemes = transformSecuritySchemes(collection);
-  return allSecuritySchemes.find(ss => isPostmanSecuritySchemeEqual(ss, securityScheme));
+  return securitySchemes.find(ss => isPostmanSecuritySchemeEqual(ss, securityScheme));
 }
 
 function getPath(url: Url) {
