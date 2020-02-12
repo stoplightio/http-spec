@@ -1,5 +1,5 @@
 import { IHttpParam } from '@stoplight/types';
-import { DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
+import { Collection, CollectionDefinition, DescriptionDefinition, Item, ItemGroup } from 'postman-collection';
 
 export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
@@ -24,4 +24,9 @@ export function traverseItemsAndGroups(
 ) {
   itemGroup.forEachItem(itemCallback);
   if (itemGroupCallback) itemGroup.forEachItemGroup(itemGroupCallback);
+}
+
+export function resolveCollection(collectionDefinition: CollectionDefinition): Collection {
+  const collection = new Collection(collectionDefinition);
+  return new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
 }
