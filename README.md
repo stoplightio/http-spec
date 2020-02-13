@@ -1,41 +1,27 @@
 # @stoplight/http-spec
 
-<!-- BADGES -->
+## What is this
 
-<!-- SUMMARY -->
+Http Spec is yet another, hopefully more pragmatic, attempt to standardise OpenAPI 2, OpenAPI 3, Postman Collections and other HTTP-related specification under a single AST to rule them all (at least in Stoplight)
 
-- View the changelog: [Releases](https://github.com/stoplightio/http-spec/releases)
+There have been a lot of other attempts to have this universal thing such as API Elements, API Flow and they all failed for a number of reason, some of them have been discussed [here](https://www.youtube.com/watch?v=jn_1lJr-DLY)
 
-### Features
+## So why doing this?
 
-- **Awesome**: It is.
-- .. more features
+Because we still need a way to interact with these documents in a standardised way, and relying on some dying intermediate format or something that neither the creators are using anymore does not make that much sense. It's better to accepts the sad state of the industry and work on the a mininal superset format that can encompass the majority of the use cases.
 
-### Installation
+## How's Http Spec formed?
 
-Supported in modern browsers and node.
+This repository contains *exclusively* the converters, which are the functions that take an OpenAPI2/3 document or a Postman Collection and turns it out into a tree whose structure is defined in another package, [`@stoplight/types`](https://github.com/stoplightio/types), specifically in the [http-spec file](https://github.com/stoplightio/types/blob/master/src/http-spec.ts)
 
-```bash
-# latest stable
-yarn add @stoplight/http-spec
-```
+You can explore the whole structure by looking at the [IHttpService](https://github.com/stoplightio/types/blob/master/src/http-spec.ts#L10) definition and checking out its descendands. You'll probably notice that it resembles a lot the current OpenAPI 3.x specification, and that's on purpose. OpenAPI 3.0 has first support and we gracefully upgrade/downgrade the other specification formats to it.
 
-### Usage
+## How do I write a converter
 
-```ts
-import { transformOas3Operation } from "@stoplight/http-spec";
+With such foreword, the steps should be pretty clear:
 
-// ...example
-```
-
-### Contributing
-
-1. Clone repo.
-2. Create / checkout `feature/{name}`, `chore/{name}`, or `fix/{name}` branch.
-3. Install deps: `yarn`.
-4. Make your changes.
-5. Run tests: `yarn test.prod`.
-6. Stage relevant files to git.
-7. Commit: `yarn commit`. _NOTE: Commits that don't follow the [conventional](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional) format will be rejected. `yarn commit` creates this format for you, or you can put it together manually and then do a regular `git commit`._
-8. Push: `git push`.
-9. Open PR targeting the `master` branch.
+1. Create a new directory in the `src/` directory
+2. Create a function that from your input returns an `IHttpService`
+3. Let TypeScript's error guide you while filling the missing fields (suchs as Security Scheems, Servers)
+4. Create a function that's able to return an array of `IHttpOperation` from your own input
+5. Profit
