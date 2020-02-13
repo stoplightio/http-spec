@@ -11,13 +11,13 @@ import { JSONSchema4 } from 'json-schema';
 import { FormParam, Header, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
-import { transformDescriptionDefinition, transformValueToSchema } from '../util';
+import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
     name: queryParam.key || '',
     style: HttpParamStyles.Form,
-    ...(queryParam.value ? transformValueToSchema(queryParam.value) : undefined),
+    ...(queryParam.value ? transformStringValueToSchema(queryParam.value) : undefined),
   };
 }
 
@@ -25,7 +25,7 @@ export function transformHeader(header: Header): IHttpHeaderParam {
   return {
     name: header.key.toLowerCase(),
     style: HttpParamStyles.Simple,
-    ...(header.value ? transformValueToSchema(header.value) : undefined),
+    ...(header.value ? transformStringValueToSchema(header.value) : undefined),
   };
 }
 
@@ -64,8 +64,8 @@ export function transformBody(body: RequestBody, mediaType?: string): IHttpOpera
   return;
 }
 
-export function transformRawBody(raw?: string, mediaType: string = 'text/plain'): IMediaTypeContent {
-  if (raw && typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
+export function transformRawBody(raw: string, mediaType: string = 'text/plain'): IMediaTypeContent {
+  if (typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
     try {
       const parsed = JSON.parse(raw);
 
@@ -86,15 +86,12 @@ export function transformRawBody(raw?: string, mediaType: string = 'text/plain')
 
   return {
     mediaType,
-    examples:
-      raw === undefined // because '' is also false
-        ? undefined
-        : [
-            {
-              key: 'default',
-              value: raw,
-            },
-          ],
+    examples: [
+      {
+        key: 'default',
+        value: raw,
+      },
+    ],
   };
 }
 
@@ -136,8 +133,8 @@ function transformParamsBody<T extends FormParam | QueryParam>(
 
 export function transformRequest(request: Request): IHttpOperationRequest {
   return {
-    query: request.url.query.all().map(transformQueryParam),
-    headers: request.headers.all().map(transformHeader),
+    query: request.url.query.map(transformQueryParam),
+    headers: request.headers.map(transformHeader),
     path: transformPathParams(request.url.path),
     body: request.body ? transformBody(request.body, request.headers.get('content-type')?.toLowerCase()) : undefined,
   };
