@@ -64,8 +64,8 @@ export function transformBody(body: RequestBody, mediaType?: string): IHttpOpera
   return;
 }
 
-export function transformRawBody(raw?: string, mediaType: string = 'text/plain'): IMediaTypeContent {
-  if (raw && typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
+export function transformRawBody(raw: string, mediaType: string = 'text/plain'): IMediaTypeContent {
+  if (typeIs.is(mediaType, ['application/json', 'application/*+json'])) {
     try {
       const parsed = JSON.parse(raw);
 
