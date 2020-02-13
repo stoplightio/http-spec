@@ -18,7 +18,7 @@ You can explore the whole structure by looking at the [IHttpService](https://git
 
 ## How do I write a converter
 
-With such foreword, the steps should be pretty clear:
+If you would like to add support for another API description format, like RAML, follow these steps:
 
 1. Create a new directory in the `src/` directory
 2. Create a function that from your input returns an `IHttpService`
