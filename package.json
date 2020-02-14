@@ -59,7 +59,8 @@
     "tslint-config-prettier": "1.18.x",
     "tslint-config-stoplight": "1.4.x",
     "tslint-plugin-prettier": "2.1.x",
-    "typescript": "3.7.4"
+    "typescript": "3.7.4",
+    "utility-types": "^3.10.0"
   },
   "lint-staged": {
     "src/**/*.ts": [

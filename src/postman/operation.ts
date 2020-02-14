@@ -43,10 +43,10 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
         security.push([postmanSecurity.securityScheme]);
         break;
       case 'headerParams':
-        request.headers!.push(...postmanSecurity.headerParams);
+        request.headers.push(...postmanSecurity.headerParams);
         break;
       case 'queryParams':
-        request.query!.push(...postmanSecurity.queryParams);
+        request.query.push(...postmanSecurity.queryParams);
         break;
     }
   }
@@ -92,5 +92,7 @@ function findPostmanSecurityScheme(auth: RequestAuth, collection: Collection) {
 }
 
 function getPath(url: Url) {
-  return '/' + url.path.map(segment => (segment.startsWith(':') ? `{${segment.substring(1)}}` : segment)).join('/');
+  return url.path
+    ? '/' + url.path.map(segment => (segment.startsWith(':') ? `{${segment.substring(1)}}` : segment)).join('/')
+    : '/';
 }
