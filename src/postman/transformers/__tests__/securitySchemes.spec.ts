@@ -1,6 +1,11 @@
 import { HttpParamStyles } from '@stoplight/types/dist';
-import { RequestAuth, RequestAuthDefinition } from 'postman-collection';
-import { transformSecurityScheme } from '../securityScheme';
+import { Collection, HeaderDefinition, RequestAuth, RequestAuthDefinition, RequestBody } from 'postman-collection';
+import {
+  isPostmanSecuritySchemeEqual,
+  PostmanSecurityScheme,
+  transformSecurityScheme,
+  transformSecuritySchemes,
+} from '../securityScheme';
 
 describe('transformSecurityScheme()', () => {
   describe('given basic auth', () => {
@@ -188,74 +193,154 @@ describe('transformSecurityScheme()', () => {
     ];
 
     describe('parameters in header', () => {
-      it('transforms to header security scheme', () => {
-        expect(
-          transformSecurityScheme(
-            new RequestAuth({
-              type: 'oauth1',
-              oauth1: params(true, true),
-            } as RequestAuthDefinition),
-            type => `auth-${type}`,
-          ),
-        ).toEqual({
-          type: 'headerParams',
-          headerParams: [
-            {
-              name: 'Authorization',
-              style: HttpParamStyles.Simple,
-              description: 'OAuth1 Authorization Header',
-              required: true,
-              examples: [
-                {
-                  key: 'default',
-                  value:
-                    'OAuth realm="karol@stoplight.io",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="123123123123",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
-                },
-              ],
-            },
-          ],
+      describe('all parameters are defined', () => {
+        it('transforms to header security scheme', () => {
+          expect(
+            transformSecurityScheme(
+              new RequestAuth({
+                type: 'oauth1',
+                oauth1: params(true, true),
+              } as RequestAuthDefinition),
+              type => `auth-${type}`,
+            ),
+          ).toEqual({
+            type: 'headerParams',
+            headerParams: [
+              {
+                name: 'Authorization',
+                style: HttpParamStyles.Simple,
+                description: 'OAuth1 Authorization Header',
+                required: true,
+                examples: [
+                  {
+                    key: 'default',
+                    value:
+                      'OAuth realm="karol@stoplight.io",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="123123123123",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
+                  },
+                ],
+              },
+            ],
+          });
+        });
+      });
+
+      describe('some parameters are not defined', () => {
+        it('transforms to header security scheme with some parameters set to defaults', () => {
+          expect(
+            transformSecurityScheme(
+              new RequestAuth({
+                type: 'oauth1',
+                oauth1: params(true, true).filter(
+                  ({ key }) => !['realm', 'timestamp', 'signatureMethod'].includes(key),
+                ),
+              } as RequestAuthDefinition),
+              type => `auth-${type}`,
+            ),
+          ).toEqual({
+            type: 'headerParams',
+            headerParams: [
+              {
+                name: 'Authorization',
+                style: HttpParamStyles.Simple,
+                description: 'OAuth1 Authorization Header',
+                required: true,
+                examples: [
+                  {
+                    key: 'default',
+                    value:
+                      'OAuth realm="a_realm",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="0",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
+                  },
+                ],
+              },
+            ],
+          });
         });
       });
     });
 
     describe('parameters in query', () => {
       describe('addEmptyParamsToSign is true', () => {
-        it('transforms to query security scheme with required properties', () => {
-          expect(
-            transformSecurityScheme(
-              new RequestAuth({
-                type: 'oauth1',
-                oauth1: params(false, true),
-              } as RequestAuthDefinition),
-              type => `auth-${type}`,
-            ),
-          ).toEqual({
-            type: 'queryParams',
-            queryParams: [
-              { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
-              { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
-              {
-                name: 'oauth_signature_method',
-                style: HttpParamStyles.Form,
-                required: false,
-                examples: [{ key: 'default', value: 'HMAC-SHA1' }],
-              },
-              {
-                name: 'oauth_timestamp',
-                style: HttpParamStyles.Form,
-                required: false,
-                schema: { type: 'string' },
-                examples: [{ key: 'default', value: '123123123123' }],
-              },
-              { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
-              {
-                name: 'oauth_version',
-                style: HttpParamStyles.Form,
-                required: false,
-                examples: [{ key: 'default', value: '1.0' }],
-              },
-              { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
-            ],
+        describe('all parameters are defined', () => {
+          it('transforms to query security scheme with required properties', () => {
+            expect(
+              transformSecurityScheme(
+                new RequestAuth({
+                  type: 'oauth1',
+                  oauth1: params(false, true),
+                } as RequestAuthDefinition),
+                type => `auth-${type}`,
+              ),
+            ).toEqual({
+              type: 'queryParams',
+              queryParams: [
+                { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
+                {
+                  name: 'oauth_signature_method',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  examples: [{ key: 'default', value: 'HMAC-SHA1' }],
+                },
+                {
+                  name: 'oauth_timestamp',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  schema: { type: 'string' },
+                  examples: [{ key: 'default', value: '123123123123' }],
+                },
+                { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
+                {
+                  name: 'oauth_version',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  examples: [{ key: 'default', value: '1.0' }],
+                },
+                { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
+              ],
+            });
+          });
+        });
+
+        describe('some parameters are not defined', () => {
+          it('transforms to header security scheme with some parameters set to defaults', () => {
+            expect(
+              transformSecurityScheme(
+                new RequestAuth({
+                  type: 'oauth1',
+                  oauth1: params(false, true).filter(
+                    ({ key }) => !['version', 'timestamp', 'signatureMethod'].includes(key),
+                  ),
+                } as RequestAuthDefinition),
+                type => `auth-${type}`,
+              ),
+            ).toEqual({
+              type: 'queryParams',
+              queryParams: [
+                { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
+                {
+                  name: 'oauth_signature_method',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  examples: [],
+                },
+                {
+                  name: 'oauth_timestamp',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  schema: { type: 'string' },
+                  examples: [],
+                },
+                { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
+                {
+                  name: 'oauth_version',
+                  style: HttpParamStyles.Form,
+                  required: false,
+                  examples: [],
+                },
+                { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
+              ],
+            });
           });
         });
       });
@@ -518,9 +603,194 @@ describe('transformSecurityScheme()', () => {
     });
   });
 
-  it('omits noauth', () => {
+  it('ignores noauth', () => {
     expect(
       transformSecurityScheme(new RequestAuth({ type: 'noauth' } as RequestAuthDefinition), () => 'a'),
     ).toBeUndefined();
+  });
+
+  it('ignores unknown auth type', () => {
+    expect(
+      transformSecurityScheme(new RequestAuth({ type: 'non-existing-type' } as RequestAuthDefinition), () => 'a'),
+    ).toBeUndefined();
+  });
+});
+
+describe('transformPostmanSecuritySchemes()', () => {
+  describe('has authorization defined on item group level', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+                auth: { type: 'basic' },
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'digest' },
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([
+        {
+          securityScheme: {
+            key: 'http-0',
+            scheme: 'basic',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+        {
+          securityScheme: {
+            key: 'http-1',
+            scheme: 'digest',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+      ]);
+    });
+  });
+
+  describe('authorization is not defined', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('authorization is defined as noauth', () => {
+    it('returns no security schemes', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                item: [
+                  {
+                    request: {
+                      method: 'get',
+                      url: '/path/a',
+                    },
+                  },
+                ],
+                auth: { type: 'noauth' },
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'noauth' },
+                },
+              },
+            ],
+          }),
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe('has two similar request authorizations', () => {
+    it('reduces to single one', () => {
+      expect(
+        transformSecuritySchemes(
+          new Collection({
+            item: [
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/a',
+                  auth: { type: 'basic' },
+                },
+                description: 'desc',
+              },
+              {
+                request: {
+                  method: 'get',
+                  url: '/path/b',
+                  auth: { type: 'basic' },
+                },
+                description: 'desc',
+              },
+            ],
+          }),
+        ),
+      ).toEqual([
+        {
+          securityScheme: {
+            key: 'http-0',
+            scheme: 'basic',
+            type: 'http',
+          },
+          type: 'securityScheme',
+        },
+      ]);
+    });
+  });
+});
+
+describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
+  [
+    'two equal security schemes',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'basic' } },
+    true,
+  ],
+  [
+    'different types',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'headerParams', headerParams: [] },
+    false,
+  ],
+  [
+    'two different',
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'digest' } },
+    false,
+  ],
+  [
+    'two equal query params',
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
+    true,
+  ],
+])('given %s security schemes', (desc, scheme1, scheme2, result) => {
+  it(`returns ${result ? 'true' : 'false'}`, () => {
+    expect(isPostmanSecuritySchemeEqual(scheme1, scheme2)).toEqual(result);
   });
 });

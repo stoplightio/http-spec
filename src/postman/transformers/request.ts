@@ -11,6 +11,7 @@ import { JSONSchema4 } from 'json-schema';
 import { FormParam, Header, PropertyList, QueryParam, Request, RequestBody } from 'postman-collection';
 import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
+import { Required } from 'utility-types';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
@@ -131,7 +132,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   };
 }
 
-export function transformRequest(request: Request): IHttpOperationRequest {
+export function transformRequest(request: Request): Required<IHttpOperationRequest, 'headers' | 'query'> {
   return {
     query: request.url.query.map(transformQueryParam),
     headers: request.headers.map(transformHeader),

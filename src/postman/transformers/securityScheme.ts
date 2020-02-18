@@ -1,6 +1,7 @@
 import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
 import { isEqual, omit } from 'lodash';
-import { RequestAuth } from 'postman-collection';
+import { Collection, Item, ItemGroup, RequestAuth } from 'postman-collection';
+import { traverseItemsAndGroups } from '../util';
 
 export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
 
@@ -21,14 +22,6 @@ export type HeaderSecurityScheme = {
 
 export function isStandardSecurityScheme(pss: PostmanSecurityScheme): pss is StandardSecurityScheme {
   return pss.type === 'securityScheme';
-}
-
-export function isQuerySecurityScheme(pss: PostmanSecurityScheme): pss is QuerySecurityScheme {
-  return pss.type === 'queryParams';
-}
-
-export function isHeaderSecurityScheme(pss: PostmanSecurityScheme): pss is HeaderSecurityScheme {
-  return pss.type === 'headerParams';
 }
 
 export function transformSecurityScheme(
@@ -239,4 +232,34 @@ export function isPostmanSecuritySchemeEqual(pss1: PostmanSecurityScheme, pss2: 
   }
 
   return isEqual(pss1, pss2);
+}
+
+export function transformSecuritySchemes(collection: Collection) {
+  const postmanSecuritySchemes: PostmanSecurityScheme[] = [];
+  let securitySchemeIdx = 0;
+
+  function addSecurityScheme(pss: PostmanSecurityScheme) {
+    if (!postmanSecuritySchemes.find(p => isPostmanSecuritySchemeEqual(p, pss))) {
+      postmanSecuritySchemes.push(pss);
+    }
+  }
+
+  traverseItemsAndGroups(
+    (collection as unknown) as ItemGroup<Item>,
+    item => {
+      const auth = item.getAuth();
+      if (auth) {
+        const transformed = transformSecurityScheme(auth, type => `${type}-${securitySchemeIdx++}`);
+        if (transformed) addSecurityScheme(transformed);
+      }
+    },
+    itemGroup => {
+      if (itemGroup.auth) {
+        const transformed = transformSecurityScheme(itemGroup.auth, type => `${type}-${securitySchemeIdx++}`);
+        if (transformed) addSecurityScheme(transformed);
+      }
+    },
+  );
+
+  return postmanSecuritySchemes;
 }
