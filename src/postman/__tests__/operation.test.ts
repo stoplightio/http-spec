@@ -302,74 +302,18 @@ describe('transformPostmanCollectionOperations()', () => {
 
     expect(operations).toEqual(
       expect.arrayContaining([
-        {
-          description: undefined,
-          id: '?http-operation-id?',
-          iid: expect.any(String),
-          method: 'get',
+        expect.objectContaining({
           path: '/a/a',
-          request: {
-            body: undefined,
-            headers: [],
-            path: [],
-            query: [],
-          },
-          responses: [],
-          security: [],
-          servers: undefined,
-          summary: undefined,
-        },
-        {
-          description: undefined,
-          id: '?http-operation-id?',
-          iid: expect.any(String),
-          method: 'get',
+        }),
+        expect.objectContaining({
           path: '/a/a/a',
-          request: {
-            body: undefined,
-            headers: [],
-            path: [],
-            query: [],
-          },
-          responses: [],
-          security: [],
-          servers: undefined,
-          summary: undefined,
-        },
-        {
-          description: undefined,
-          id: '?http-operation-id?',
-          iid: expect.any(String),
-          method: 'get',
+        }),
+        expect.objectContaining({
           path: '/a/a/b',
-          request: {
-            body: undefined,
-            headers: [],
-            path: [],
-            query: [],
-          },
-          responses: [],
-          security: [],
-          servers: undefined,
-          summary: undefined,
-        },
-        {
-          description: undefined,
-          id: '?http-operation-id?',
-          iid: expect.any(String),
-          method: 'get',
+        }),
+        expect.objectContaining({
           path: '/a',
-          request: {
-            body: undefined,
-            headers: [],
-            path: [],
-            query: [],
-          },
-          responses: [],
-          security: [],
-          servers: undefined,
-          summary: undefined,
-        },
+        }),
       ]),
     );
 
