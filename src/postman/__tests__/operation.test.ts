@@ -1,4 +1,4 @@
-import { Collection, HeaderDefinition, RequestAuth, RequestAuthDefinition, RequestBody } from 'postman-collection';
+import { HeaderDefinition, RequestAuthDefinition, RequestBody, VariableDefinition } from 'postman-collection';
 import { transformPostmanCollectionOperation } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {
@@ -77,7 +77,7 @@ describe('transformPostmanCollectionOperation()', () => {
 
     describe('auth is set', () => {
       describe('auth transforms to security scheme', () => {
-        it('', () => {
+        it('produces operation with security scheme', () => {
           expect(
             transformPostmanCollectionOperation({
               document: {
@@ -203,6 +203,70 @@ describe('transformPostmanCollectionOperation()', () => {
             }),
           );
         });
+      });
+    });
+
+    describe('url contains host', () => {
+      it('produces operation with single server', () => {
+        expect(
+          transformPostmanCollectionOperation({
+            document: {
+              item: [
+                {
+                  request: {
+                    method: 'get',
+                    url: 'https://example.com:666/path',
+                  },
+                },
+              ],
+            },
+            method: 'get',
+            path: '/path',
+          }),
+        ).toEqual(
+          expect.objectContaining({
+            servers: [{ url: 'https://example.com:666' }],
+          }),
+        );
+      });
+    });
+
+    describe('variables are defined', () => {
+      it('it resolves variables correctly', () => {
+        expect(
+          transformPostmanCollectionOperation({
+            document: {
+              item: [
+                {
+                  request: {
+                    method: 'get',
+                    url: 'https://{{hostvar}}/path',
+                    body: { mode: 'raw', raw: 'test{{bodyvar}}test' } as RequestBody,
+                  },
+                },
+              ],
+              variable: [
+                {
+                  key: 'bodyvar',
+                  value: 'TEST',
+                },
+                {
+                  key: 'hostvar',
+                  value: 'example.com',
+                },
+              ] as VariableDefinition,
+            },
+            method: 'get',
+            path: '/path',
+          }),
+        ).toEqual(
+          expect.objectContaining({
+            request: expect.objectContaining({
+              body: { contents: [{ examples: [{ key: 'default', value: 'testTESTtest' }], mediaType: 'text/plain' }] },
+            }),
+            servers: [{ url: 'https://example.com' }],
+          }),
+        );
       });
     });
   });

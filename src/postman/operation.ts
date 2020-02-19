@@ -16,6 +16,7 @@ import {
   transformSecurityScheme,
   transformSecuritySchemes,
 } from './transformers/securityScheme';
+import { transformServer } from './transformers/server';
 import { PostmanCollectionHttpOperationTransformer } from './types';
 import { transformDescriptionDefinition, traverseItemsAndGroups } from './util';
 
@@ -51,6 +52,8 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     }
   }
 
+  const server = transformServer(item.request.url);
+
   return {
     id: '?http-operation-id?',
     iid: item.id,
@@ -61,9 +64,7 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
     request,
     responses: item.responses.map(transformResponse),
     security,
-    /*
-    servers: ...,
-    */
+    servers: server ? [server] : undefined,
   };
 };
 
