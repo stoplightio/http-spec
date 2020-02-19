@@ -1,5 +1,4 @@
 import { HeaderDefinition, RequestAuthDefinition, RequestBody, VariableDefinition } from 'postman-collection';
-import { operation } from 'retry';
 import { transformPostmanCollectionOperation, transformPostmanCollectionOperations } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {

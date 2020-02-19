@@ -1,9 +1,9 @@
 import { ItemGroup } from 'postman-collection';
-import { transformDescriptionDefinition, transformValueToSchema, traverseItemsAndGroups } from '../util';
+import { transformDescriptionDefinition, transformStringValueToSchema, traverseItemsAndGroups } from '../util';
 
-describe('transformValueToSchema()', () => {
+describe('transformStringValueToSchema()', () => {
   it('returns param with schema and example', () => {
-    expect(transformValueToSchema('test')).toEqual({
+    expect(transformStringValueToSchema('test')).toEqual({
       schema: { type: 'string' },
       examples: [{ key: 'default', value: 'test' }],
     });

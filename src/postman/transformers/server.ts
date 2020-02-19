@@ -1,10 +1,8 @@
-import { IServer } from '@stoplight/types/dist';
+import { IServer } from '@stoplight/types';
 import { Url } from 'postman-collection';
+import * as urijs from 'urijs';
 
 export function transformServer(url: Url): IServer | undefined {
-  if (!url.host) return;
-
-  return {
-    url: `${url.protocol}://${url.host.join('.')}${url.port ? `:${url.port}` : ''}`,
-  };
+  const origin = urijs(url.toString()).origin();
+  return origin ? { url: origin } : undefined;
 }
