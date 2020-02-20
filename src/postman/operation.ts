@@ -20,16 +20,14 @@ import {
 } from './transformers/securityScheme';
 import { transformServer } from './transformers/server';
 import { PostmanCollectionHttpOperationTransformer } from './types';
-import { transformDescriptionDefinition, traverseItemsAndGroups } from './util';
+import { resolveCollection, transformDescriptionDefinition } from './util';
 
 export const transformPostmanCollectionOperations = (document: CollectionDefinition): IHttpOperation[] => {
-  const collection = new Collection(document);
-  const resolvedCollection = new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
-
+  const collection = resolveCollection(document);
   const securitySchemes = transformSecuritySchemes(collection);
   const operations: IHttpOperation[] = [];
 
-  traverseItemsAndGroups((resolvedCollection as unknown) as ItemGroup<Item>, item =>
+  ((collection as unknown) as ItemGroup<Item>).forEachItem(item =>
     operations.push(transformItem(item, securitySchemes)),
   );
 
@@ -41,10 +39,9 @@ export const transformPostmanCollectionOperation: PostmanCollectionHttpOperation
   path,
   method,
 }) => {
-  const collection = new Collection(document);
-  const resolvedCollection = new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
+  const collection = resolveCollection(document);
 
-  const item = findItem(resolvedCollection, method, path);
+  const item = findItem(collection, method, path);
   if (!item) {
     throw new Error(`Unable to find "${method} ${path}"`);
   }
@@ -91,7 +88,7 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
 function findItem(collection: Collection, method: string, path: string): Item | undefined {
   let found;
 
-  traverseItemsAndGroups((collection as unknown) as ItemGroup<Item>, item => {
+  ((collection as unknown) as ItemGroup<Item>).forEachItem(item => {
     if (
       item.request.method.toLowerCase() === method.toLowerCase() &&
       getPath(item.request.url).toLowerCase() === path.toLowerCase()

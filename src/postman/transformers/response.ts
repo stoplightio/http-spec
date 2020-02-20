@@ -1,7 +1,7 @@
 import { HttpParamStyles, IHttpHeaderParam, IHttpOperationResponse } from '@stoplight/types/dist';
 import { Cookie, Response } from 'postman-collection';
 import { transformDescriptionDefinition } from '../util';
-import { transformHeader, transformRawBody } from './request'; // @todo move me to common!
+import { transformHeader, transformRawBody } from './params';
 
 export function transformResponse(response: Response): IHttpOperationResponse {
   const headers = response.headers.map(transformHeader);
