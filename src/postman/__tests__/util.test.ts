@@ -1,9 +1,9 @@
 import { Version } from 'postman-collection';
-import { resolveVersion, transformDescriptionDefinition, transformValueToSchema } from '../util';
+import { resolveVersion, transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
-describe('transformValueToSchema()', () => {
+describe('transformStringValueToSchema()', () => {
   it('returns param with schema and example', () => {
-    expect(transformValueToSchema('test')).toEqual({
+    expect(transformStringValueToSchema('test')).toEqual({
       schema: { type: 'string' },
       examples: [{ key: 'default', value: 'test' }],
     });

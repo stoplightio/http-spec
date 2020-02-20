@@ -28,7 +28,7 @@ function translateRequestBody(requestBodyObject: RequestBodyObject): IHttpOperat
   };
 }
 
-function translateParameterObject(parameterObject: ParameterObject): IHttpParam | any {
+export function translateParameterObject(parameterObject: ParameterObject): IHttpParam | any {
   return pickBy({
     ...omit(parameterObject, 'in', 'schema'),
     name: parameterObject.name,

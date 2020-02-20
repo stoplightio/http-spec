@@ -1,7 +1,7 @@
 import { IHttpParam } from '@stoplight/types';
-import { Collection, CollectionDefinition, DescriptionDefinition, Item, ItemGroup, Version } from 'postman-collection';
+import { Collection, CollectionDefinition, DescriptionDefinition, Version } from 'postman-collection';
 
-export function transformValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
+export function transformStringValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
     examples: [
       {

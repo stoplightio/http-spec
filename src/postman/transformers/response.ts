@@ -11,7 +11,7 @@ export function transformResponse(response: Response): IHttpOperationResponse {
     code: String(response.code),
     description: response.description && transformDescriptionDefinition(response.description),
     headers: headers.concat(response.cookies.map(transformCookie).filter((c: Cookie) => c)),
-    contents: mediaType && [transformRawBody(response.body, mediaType)],
+    contents: mediaType && response.body ? [transformRawBody(response.body, mediaType)] : undefined,
   };
 }
 

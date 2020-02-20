@@ -17,8 +17,14 @@ describe('transformServer()', () => {
   });
 
   describe('host is not defined', () => {
-    it('return nothing', () => {
+    it('returns nothing', () => {
       expect(transformServer(new Url('/path'))).toBeUndefined();
+    });
+  });
+
+  describe('protocol is not defined', () => {
+    it('returns nothing', () => {
+      expect(transformServer(new Url({ host: ['example', 'com'], path: '/' }))).toBeUndefined();
     });
   });
 });
