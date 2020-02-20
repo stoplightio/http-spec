@@ -32,7 +32,7 @@ describe('traverseItemsAndGroups()', () => {
 
       traverseItemsAndGroups(new ItemGroup({ item: [{ item: [{}] }] }), mockItemCallback, mockGroupItemCallback);
 
-      expect(mockItemCallback).toHaveBeenCalledTimes(2);
+      expect(mockItemCallback).toHaveBeenCalledTimes(1);
       expect(mockGroupItemCallback).toHaveBeenCalledTimes(1);
     });
   });
@@ -43,7 +43,7 @@ describe('traverseItemsAndGroups()', () => {
 
       traverseItemsAndGroups(new ItemGroup({ item: [{ item: [{}] }] }), mockItemCallback);
 
-      expect(mockItemCallback).toHaveBeenCalledTimes(2);
+      expect(mockItemCallback).toHaveBeenCalledTimes(1);
     });
   });
 });

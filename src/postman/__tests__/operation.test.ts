@@ -1,5 +1,5 @@
 import { HeaderDefinition, RequestAuthDefinition, RequestBody, VariableDefinition } from 'postman-collection';
-import { transformPostmanCollectionOperation } from '../operation';
+import { transformPostmanCollectionOperation, transformPostmanCollectionOperations } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {
   describe('operation can be found', () => {
@@ -281,5 +281,42 @@ describe('transformPostmanCollectionOperation()', () => {
         }),
       ).toThrowError('Unable to find "get /non-existing"');
     });
+  });
+});
+
+describe('transformPostmanCollectionOperations()', () => {
+  it('transforms operations nested in folders', () => {
+    const operations = transformPostmanCollectionOperations({
+      item: [
+        {
+          item: [
+            { request: { method: 'get', url: '/a/a' } },
+            {
+              item: [{ request: { method: 'get', url: '/a/a/a' } }, { request: { method: 'get', url: '/a/a/b' } }],
+            },
+          ],
+        },
+        { request: { method: 'get', url: '/a' } },
+      ],
+    });
+
+    expect(operations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: '/a/a',
+        }),
+        expect.objectContaining({
+          path: '/a/a/a',
+        }),
+        expect.objectContaining({
+          path: '/a/a/b',
+        }),
+        expect.objectContaining({
+          path: '/a',
+        }),
+      ]),
+    );
+
+    expect(operations).toHaveLength(4);
   });
 });

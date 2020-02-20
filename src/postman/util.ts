@@ -24,5 +24,4 @@ export function traverseItemsAndGroups(
 ) {
   itemGroup.forEachItem(itemCallback);
   if (itemGroupCallback) itemGroup.forEachItemGroup(itemGroupCallback);
-  itemGroup.forEachItemGroup(ig => traverseItemsAndGroups(ig, itemCallback, itemGroupCallback));
 }
