@@ -267,10 +267,6 @@ describe('transformBody()', () => {
           ],
         });
       });
-
-      it('returns no body', () => {
-        expect(transformBody(new RequestBody({ mode: 'formdata' }))).toBeUndefined();
-      });
     });
   });
 
@@ -345,10 +341,6 @@ describe('transformBody()', () => {
             },
           ],
         });
-      });
-
-      it('returns no body', () => {
-        expect(transformBody(new RequestBody({ mode: 'urlencoded' }))).toBeUndefined();
       });
     });
   });
