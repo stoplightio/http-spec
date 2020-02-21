@@ -1,4 +1,3 @@
-import { HeaderDefinition, RequestAuthDefinition, RequestBody, VariableDefinition } from 'postman-collection';
 import { transformPostmanCollectionOperation, transformPostmanCollectionOperations } from '../operation';
 
 describe('transformPostmanCollectionOperation()', () => {
@@ -13,8 +12,8 @@ describe('transformPostmanCollectionOperation()', () => {
                   request: {
                     method: 'get',
                     url: '/path/:param?a=b',
-                    body: { mode: 'raw', raw: 'test' } as RequestBody,
-                    header: [{ key: 'header', value: 'a header' }] as HeaderDefinition,
+                    body: { mode: 'raw', raw: 'test' },
+                    header: [{ key: 'header', value: 'a header' }],
                   },
                   description: 'desc',
                 },
@@ -59,11 +58,11 @@ describe('transformPostmanCollectionOperation()', () => {
                   request: {
                     method: 'get',
                     url: '/path',
-                    header: [{ key: 'content-type', value: 'application/json' }] as HeaderDefinition,
+                    header: [{ key: 'content-type', value: 'application/json' }],
                     body: {
                       mode: 'raw',
                       raw: '{}',
-                    } as RequestBody,
+                    },
                   },
                 },
               ],
@@ -157,7 +156,7 @@ describe('transformPostmanCollectionOperation()', () => {
                             type: 'string',
                           },
                         ],
-                      } as RequestAuthDefinition,
+                      },
                     },
                   },
                 ],
@@ -185,7 +184,7 @@ describe('transformPostmanCollectionOperation()', () => {
                     request: {
                       method: 'get',
                       url: '/path',
-                      auth: { type: 'nooauth' },
+                      auth: { type: 'noauth' },
                     },
                   },
                 ],
@@ -241,7 +240,7 @@ describe('transformPostmanCollectionOperation()', () => {
                   request: {
                     method: 'get',
                     url: 'https://{{hostvar}}/path',
-                    body: { mode: 'raw', raw: 'test{{bodyvar}}test' } as RequestBody,
+                    body: { mode: 'raw', raw: 'test{{bodyvar}}test' },
                   },
                 },
               ],
@@ -254,7 +253,7 @@ describe('transformPostmanCollectionOperation()', () => {
                   key: 'hostvar',
                   value: 'example.com',
                 },
-              ] as VariableDefinition,
+              ],
             },
             method: 'get',
             path: '/path',

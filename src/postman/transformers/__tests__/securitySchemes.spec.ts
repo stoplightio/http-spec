@@ -1,5 +1,5 @@
-import { HttpParamStyles } from '@stoplight/types/dist';
-import { Collection, HeaderDefinition, RequestAuth, RequestAuthDefinition, RequestBody } from 'postman-collection';
+import { HttpParamStyles } from '@stoplight/types';
+import { Collection, RequestAuth, RequestAuthDefinition } from 'postman-collection';
 import {
   isPostmanSecuritySchemeEqual,
   PostmanSecurityScheme,
@@ -26,7 +26,7 @@ describe('transformSecurityScheme()', () => {
                 type: 'string',
               },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -63,7 +63,7 @@ describe('transformSecurityScheme()', () => {
                 type: 'string',
               },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -128,7 +128,7 @@ describe('transformSecurityScheme()', () => {
                   type: 'string',
                 },
               ],
-            } as RequestAuthDefinition),
+            }),
             type => `auth-${type}`,
           ),
         ).toEqual({
@@ -161,7 +161,7 @@ describe('transformSecurityScheme()', () => {
                   type: 'string',
                 },
               ],
-            } as RequestAuthDefinition),
+            }),
             type => `auth-${type}`,
           ),
         ).toEqual({
@@ -200,7 +200,7 @@ describe('transformSecurityScheme()', () => {
               new RequestAuth({
                 type: 'oauth1',
                 oauth1: params(true, true),
-              } as RequestAuthDefinition),
+              }),
               type => `auth-${type}`,
             ),
           ).toEqual({
@@ -233,7 +233,7 @@ describe('transformSecurityScheme()', () => {
                 oauth1: params(true, true).filter(
                   ({ key }) => !['realm', 'timestamp', 'signatureMethod'].includes(key),
                 ),
-              } as RequestAuthDefinition),
+              }),
               type => `auth-${type}`,
             ),
           ).toEqual({
@@ -267,7 +267,7 @@ describe('transformSecurityScheme()', () => {
                 new RequestAuth({
                   type: 'oauth1',
                   oauth1: params(false, true),
-                } as RequestAuthDefinition),
+                }),
                 type => `auth-${type}`,
               ),
             ).toEqual({
@@ -310,7 +310,7 @@ describe('transformSecurityScheme()', () => {
                   oauth1: params(false, true).filter(
                     ({ key }) => !['version', 'timestamp', 'signatureMethod'].includes(key),
                   ),
-                } as RequestAuthDefinition),
+                }),
                 type => `auth-${type}`,
               ),
             ).toEqual({
@@ -352,7 +352,7 @@ describe('transformSecurityScheme()', () => {
               new RequestAuth({
                 type: 'oauth1',
                 oauth1: params(false, false),
-              } as RequestAuthDefinition),
+              }),
               type => `auth-${type}`,
             ),
           ).toEqual({
@@ -407,7 +407,7 @@ describe('transformSecurityScheme()', () => {
                   type: 'string',
                 },
               ],
-            } as RequestAuthDefinition),
+            }),
             type => `auth-${type}`,
           ),
         ).toEqual({
@@ -440,7 +440,7 @@ describe('transformSecurityScheme()', () => {
                   type: 'string',
                 },
               ],
-            } as RequestAuthDefinition),
+            }),
             type => `auth-${type}`,
           ),
         ).toEqual({
@@ -475,7 +475,7 @@ describe('transformSecurityScheme()', () => {
               { key: 'authId', value: 'HawkAuthId', type: 'string' },
               { key: 'algorithm', value: 'sha256', type: 'string' },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -509,7 +509,7 @@ describe('transformSecurityScheme()', () => {
               { key: 'secretKey', value: 'TestSecretKey', type: 'string' },
               { key: 'accessKey', value: 'TestAccessKey', type: 'string' },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -551,7 +551,7 @@ describe('transformSecurityScheme()', () => {
               { key: 'clientToken', value: 'TestClientToken', type: 'string' },
               { key: 'accessToken', value: 'TestAccessToken', type: 'string' },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -575,14 +575,12 @@ describe('transformSecurityScheme()', () => {
           new RequestAuth({
             type: 'ntlm',
             ntlm: [
-              [
-                { key: 'workstation', value: 'Karol-MacBook', type: 'string' },
-                { key: 'domain', value: 'example.com', type: 'string' },
-                { key: 'password', value: '1235', type: 'string' },
-                { key: 'username', value: 'Karol', type: 'string' },
-              ],
+              { key: 'workstation', value: 'Karol-MacBook', type: 'string' },
+              { key: 'domain', value: 'example.com', type: 'string' },
+              { key: 'password', value: '1235', type: 'string' },
+              { key: 'username', value: 'Karol', type: 'string' },
             ],
-          } as RequestAuthDefinition),
+          }),
           type => `auth-${type}`,
         ),
       ).toEqual({
@@ -604,14 +602,15 @@ describe('transformSecurityScheme()', () => {
   });
 
   it('ignores noauth', () => {
-    expect(
-      transformSecurityScheme(new RequestAuth({ type: 'noauth' } as RequestAuthDefinition), () => 'a'),
-    ).toBeUndefined();
+    expect(transformSecurityScheme(new RequestAuth({ type: 'noauth' }), () => 'a')).toBeUndefined();
   });
 
   it('ignores unknown auth type', () => {
     expect(
-      transformSecurityScheme(new RequestAuth({ type: 'non-existing-type' } as RequestAuthDefinition), () => 'a'),
+      transformSecurityScheme(
+        new RequestAuth(({ type: 'non-existing-type' } as unknown) as RequestAuthDefinition),
+        () => 'a',
+      ),
     ).toBeUndefined();
   });
 });

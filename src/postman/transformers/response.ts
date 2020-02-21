@@ -1,4 +1,4 @@
-import { HttpParamStyles, IHttpHeaderParam, IHttpOperationResponse } from '@stoplight/types/dist';
+import { HttpParamStyles, IHttpHeaderParam, IHttpOperationResponse } from '@stoplight/types';
 import { Cookie, Response } from 'postman-collection';
 import { transformDescriptionDefinition } from '../util';
 import { transformHeader, transformRawBody } from './params';
@@ -16,10 +16,7 @@ export function transformResponse(response: Response): IHttpOperationResponse {
 }
 
 function transformCookie(cookie: Cookie): IHttpHeaderParam | undefined {
-  // @ts-ignore @todo fix typing bug in postman-collection
-  const name = cookie.name;
-
-  const params = [`${name || ''}=${cookie.value || ''}`];
+  const params = [`${cookie.name || ''}=${cookie.value || ''}`];
 
   if (cookie.expires) params.push(`Expires=${cookie.expires.toUTCString()}`);
   if (cookie.maxAge !== undefined) params.push(`Max-Age=${cookie.maxAge}`);
