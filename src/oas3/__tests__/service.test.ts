@@ -157,4 +157,70 @@ describe('oas3 service', () => {
       version: '',
     });
   });
+
+  test('should handle server variables', () => {
+    const document: Partial<OpenAPIObject> = {
+      id: '?http-service-id?',
+      name: '',
+      version: '1.0',
+      servers: [
+        {
+          url: 'https://petstore.swagger.io/v2',
+          description: 'Sample Petstore Server Https',
+          variables: {
+            username: {
+              default: 'demo',
+              description: 'value is assigned by the service provider',
+            },
+            port: {
+              enum: [8443, 443],
+              default: 8443,
+            },
+            basePath: {
+              default: 'v2',
+            },
+          },
+        },
+        {
+          url: 'http://petstore.swagger.io/v2',
+          description: 'Sample Petstore Server Http',
+        },
+      ],
+    };
+
+    expect(transformOas3Service({ document })).toStrictEqual({
+      id: '?http-service-id?',
+      name: 'no-title',
+      version: '',
+      servers: [
+        {
+          description: 'Sample Petstore Server Https',
+          name: '',
+          url: 'https://petstore.swagger.io/v2',
+          variables: {
+            basePath: {
+              default: 'v2',
+              description: void 0,
+              enum: void 0,
+            },
+            port: {
+              default: '8443',
+              description: void 0,
+              enum: ['8443', '443'],
+            },
+            username: {
+              default: 'demo',
+              description: 'value is assigned by the service provider',
+              enum: void 0,
+            },
+          },
+        },
+        {
+          description: 'Sample Petstore Server Http',
+          name: '',
+          url: 'http://petstore.swagger.io/v2',
+        },
+      ],
+    });
+  });
 });
