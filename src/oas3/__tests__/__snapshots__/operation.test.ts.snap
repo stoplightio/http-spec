@@ -109,7 +109,7 @@ Object {
     Object {
       "description": undefined,
       "url": "operation/server",
-      "variables": Object {},
+      "variables": undefined,
     },
   ],
   "summary": "summary",
@@ -140,7 +140,7 @@ Object {
     Object {
       "description": undefined,
       "url": "path/server",
-      "variables": Object {},
+      "variables": undefined,
     },
   ],
   "summary": "summary",
@@ -200,7 +200,7 @@ Object {
     Object {
       "description": undefined,
       "url": "spec/server",
-      "variables": Object {},
+      "variables": undefined,
     },
   ],
   "summary": "summary",

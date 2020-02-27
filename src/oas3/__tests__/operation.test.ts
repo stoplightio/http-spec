@@ -257,7 +257,7 @@ describe('transformOas3Operation', () => {
       {
         description: void 0,
         url: 'operation/server',
-        variables: {},
+        variables: void 0,
       },
     ]);
   });
@@ -356,7 +356,7 @@ describe('transformOas3Operation', () => {
       {
         description: void 0,
         url: 'path/server',
-        variables: {},
+        variables: void 0,
       },
     ]);
   });
@@ -455,7 +455,7 @@ describe('transformOas3Operation', () => {
       {
         description: void 0,
         url: 'spec/server',
-        variables: {},
+        variables: void 0,
       },
     ]);
   });
@@ -567,6 +567,101 @@ describe('transformOas3Operation', () => {
       responses: [],
       security: [],
       servers: [],
+      tags: [],
+    });
+  });
+
+  test('should handle server variables', () => {
+    const document: Partial<OpenAPIObject> = {
+      id: '?http-service-id?',
+      paths: {
+        '/pets': {
+          get: {
+            responses: {
+              '200': {
+                description: 'OK',
+              },
+            },
+            summary: 'List pets',
+          },
+        },
+      },
+      servers: [
+        {
+          url: 'https://petstore.swagger.io/v2',
+          description: 'Sample Petstore Server Https',
+          variables: {
+            username: {
+              default: 'demo',
+              description: 'value is assigned by the service provider',
+            },
+            port: {
+              enum: [8443, 443],
+              default: 8443,
+            },
+            basePath: {
+              default: 'v2',
+            },
+          },
+        },
+        {
+          url: 'http://petstore.swagger.io/v2',
+          description: 'Sample Petstore Server Http',
+        },
+      ],
+    };
+
+    expect(transformOas3Operation({ document, path: '/pets', method: 'get' })).toStrictEqual({
+      id: '?http-operation-id?',
+      path: '/pets',
+      method: 'get',
+      request: {
+        body: {
+          contents: [],
+        },
+        cookie: [],
+        headers: [],
+        path: [],
+        query: [],
+      },
+      responses: [
+        {
+          code: '200',
+          contents: [],
+          description: 'OK',
+          headers: [],
+        },
+      ],
+      security: [],
+      servers: [
+        {
+          description: 'Sample Petstore Server Https',
+          url: 'https://petstore.swagger.io/v2',
+          variables: {
+            basePath: {
+              default: 'v2',
+              description: void 0,
+              enum: void 0,
+            },
+            port: {
+              default: '8443',
+              description: void 0,
+              enum: ['8443', '443'],
+            },
+            username: {
+              default: 'demo',
+              description: 'value is assigned by the service provider',
+              enum: void 0,
+            },
+          },
+        },
+        {
+          description: 'Sample Petstore Server Http',
+          url: 'http://petstore.swagger.io/v2',
+          variables: void 0,
+        },
+      ],
+      summary: 'List pets',
       tags: [],
     });
   });

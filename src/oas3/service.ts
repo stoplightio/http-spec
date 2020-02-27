@@ -42,8 +42,8 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
         url: server.url ?? '',
       };
 
-      const variables = translateServerVariables(server.variables);
-      if (Object.keys(variables).length) serv.variables = variables;
+      const variables = server.variables && translateServerVariables(server.variables);
+      if (variables && Object.keys(variables).length) serv.variables = variables;
 
       return serv;
     }),

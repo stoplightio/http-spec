@@ -7,14 +7,12 @@ export function translateToServers(servers: ServerObject[]): IServer[] {
   return servers.map(server => ({
     description: server.description,
     url: server.url,
-    variables: translateServerVariables(server.variables),
+    variables: server.variables && translateServerVariables(server.variables),
   }));
 }
 
-export function translateServerVariables(variables: DeepPartial<{ [v: string]: ServerVariableObject }> | undefined) {
-  if (!variables) return {};
-
-  const values = mapValues<Dictionary<ServerVariableObject>, INodeVariable>(
+export function translateServerVariables(variables: DeepPartial<{ [v: string]: ServerVariableObject }>) {
+  return mapValues<Dictionary<ServerVariableObject>, INodeVariable>(
     pickBy(variables, isServerVariableObject),
     value => ({
       default: String(value.default),
@@ -22,6 +20,4 @@ export function translateServerVariables(variables: DeepPartial<{ [v: string]: S
       enum: value.enum && map(value.enum, String),
     }),
   );
-
-  return values;
 }
