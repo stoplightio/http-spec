@@ -967,10 +967,10 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/postman-collection@^3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@types/postman-collection/-/postman-collection-3.0.3.tgz#192df46cdf7038b2834c1b915f3a28d7e9aeff09"
-  integrity sha512-sfEcie4g6LCixXnZ2qV1UE2+VrrmIJc8rXKFB2QmeGUm/DJwRiNK/YHduLEt5VkyQyprrhtXJR4dQNjPHC6dDg==
+"@types/postman-collection@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@types/postman-collection/-/postman-collection-3.5.0.tgz#474b1217563b2fcae918616e82c1796f27873845"
+  integrity sha512-sSHSaMHBBj7odnDhJn/XL+pcUU9t985ANDLtPBAlEjWE25SmRS3pN8k1UJzIxc+nhZ/kqG44pysmvAFjlIOLhg==
   dependencies:
     "@types/node" "*"
 
