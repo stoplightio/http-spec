@@ -107,7 +107,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
       },
       value: item.value,
     };
-  }, undefined);
+  });
 
   return {
     mediaType,

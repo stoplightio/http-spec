@@ -156,7 +156,7 @@ describe('transformBody()', () => {
           expect(
             transformBody(
               new RequestBody({
-                mode: 'formdata',
+                mode: RequestBody.MODES.formdata,
                 formdata: [
                   { key: 'k1', value: 'v1' },
                   { key: 'k2', value: 'v2', description: 'd2' },
@@ -213,7 +213,7 @@ describe('transformBody()', () => {
       it('returns body containing schema and example with generated keys', () => {
         const result = transformBody(
           new RequestBody({
-            mode: 'formdata',
+            mode: RequestBody.MODES.formdata,
             formdata: [{ value: 'v1' }, { value: 'v2', description: 'd2' }],
           }),
           'multipart/test+form-data',
@@ -266,10 +266,6 @@ describe('transformBody()', () => {
             },
           ],
         });
-      });
-
-      it('returns no body', () => {
-        expect(transformBody({ mode: 'formdata' } as RequestBody)).toBeUndefined();
       });
     });
   });
@@ -346,16 +342,12 @@ describe('transformBody()', () => {
           ],
         });
       });
-
-      it('returns no body', () => {
-        expect(transformBody({ mode: 'urlencoded' } as RequestBody)).toBeUndefined();
-      });
     });
   });
 
   describe('body is passed in unknown mode', () => {
     it('returns no body', () => {
-      expect(transformBody({ mode: 'unknown' } as RequestBody)).toBeUndefined();
+      expect(transformBody(new RequestBody({ mode: 'unknown' }))).toBeUndefined();
     });
   });
 });

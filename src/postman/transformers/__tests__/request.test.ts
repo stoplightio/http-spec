@@ -1,5 +1,5 @@
 import { INodeExample } from '@stoplight/types';
-import { HeaderDefinition, Request, RequestBody } from 'postman-collection';
+import { Request } from 'postman-collection';
 import { transformRequest } from '../request';
 
 describe('transformRequest()', () => {
@@ -9,8 +9,8 @@ describe('transformRequest()', () => {
         new Request({
           method: 'get',
           url: '/path/:param?a=b',
-          body: { mode: 'raw', raw: 'test' } as RequestBody,
-          header: [{ key: 'header', value: 'a header' }] as HeaderDefinition,
+          body: { mode: 'raw', raw: 'test' },
+          header: [{ key: 'header', value: 'a header' }],
         }),
       ),
     ).toEqual({

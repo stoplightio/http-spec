@@ -9,7 +9,7 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { Collection, CollectionDefinition, Item, ItemGroup, RequestAuth, Url } from 'postman-collection';
+import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 import { transformRequest } from './transformers/request';
 import { transformResponse } from './transformers/response';
 import {
@@ -27,9 +27,7 @@ export const transformPostmanCollectionOperations = (document: CollectionDefinit
   const securitySchemes = transformSecuritySchemes(collection);
   const operations: IHttpOperation[] = [];
 
-  ((collection as unknown) as ItemGroup<Item>).forEachItem(item =>
-    operations.push(transformItem(item, securitySchemes)),
-  );
+  collection.forEachItem(item => operations.push(transformItem(item, securitySchemes)));
 
   return operations;
 };
@@ -88,7 +86,7 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
 function findItem(collection: Collection, method: string, path: string): Item | undefined {
   let found;
 
-  ((collection as unknown) as ItemGroup<Item>).forEachItem(item => {
+  collection.forEachItem(item => {
     if (
       item.request.method.toLowerCase() === method.toLowerCase() &&
       getPath(item.request.url).toLowerCase() === path.toLowerCase()

@@ -1,6 +1,6 @@
 import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
 import { isEqual, omit } from 'lodash';
-import { Collection, Item, ItemGroup, RequestAuth } from 'postman-collection';
+import { Collection, RequestAuth } from 'postman-collection';
 
 export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
 
@@ -243,7 +243,7 @@ export function transformSecuritySchemes(collection: Collection) {
     }
   }
 
-  ((collection as unknown) as ItemGroup<Item>).forEachItem(item => {
+  collection.forEachItem(item => {
     const auth = item.getAuth();
     if (auth) {
       const transformed = transformSecurityScheme(auth, type => `${type}-${securitySchemeIdx++}`);
@@ -251,7 +251,7 @@ export function transformSecuritySchemes(collection: Collection) {
     }
   });
 
-  ((collection as unknown) as ItemGroup<Item>).forEachItemGroup(itemGroup => {
+  collection.forEachItemGroup(itemGroup => {
     if (itemGroup.auth) {
       const transformed = transformSecurityScheme(itemGroup.auth, type => `${type}-${securitySchemeIdx++}`);
       if (transformed) addSecurityScheme(transformed);
