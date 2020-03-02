@@ -305,6 +305,6 @@ describe('transformResponse()', () => {
           ],
         });
       });
-    })
+    });
   });
 });
