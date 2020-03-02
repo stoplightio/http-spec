@@ -268,5 +268,43 @@ describe('transformResponse()', () => {
         });
       });
     });
+
+    describe('expires is defined as timestamp', () => {
+      it('creates correct Set-Cookie header', () => {
+        expect(
+          transformResponse(
+            new Response({
+              code: 200,
+              cookie: [
+                {
+                  key: 'eat',
+                  value: 'functions',
+                  domain: 'example.com',
+                  path: '/',
+                  expires: (1502442248 as unknown) as string, // @todo remove after postman-collection types fix
+                },
+              ],
+              responseTime: 100,
+            }),
+          ),
+        ).toEqual({
+          code: '200',
+          contents: undefined,
+          description: undefined,
+          headers: [
+            {
+              examples: [
+                {
+                  key: 'default',
+                  value: 'eat=functions; Expires=Fri, 11 Aug 2017 09:04:08 GMT; Domain=example.com; Path=/',
+                },
+              ],
+              name: 'set-cookie',
+              style: 'simple',
+            },
+          ],
+        });
+      });
+    })
   });
 });
