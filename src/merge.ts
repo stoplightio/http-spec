@@ -28,6 +28,10 @@ export const mergeOperations = mergeLists<IHttpOperation>(
   (o1, o2) => o1.path === o2.path && o1.method === o2.method,
   (o1, o2) => ({
     ...o1,
+    request: {
+      ...o1.request,
+      headers: mergeHeaders(o1.request?.headers || [], o2.request?.headers || []),
+    },
     responses: mergeResponses(o1.responses, o2.responses) as IHttpOperation['responses'],
     servers: mergeServers(o1.servers || [], o2.servers || []),
   }),

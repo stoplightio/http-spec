@@ -127,6 +127,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', contents: [], headers: [] }, { code: '400' }, { code: '500' }],
         servers: [],
+        request: { headers: [] },
       },
       { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
       { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
@@ -142,7 +143,7 @@ describe('mergeOperations()', () => {
             method: 'get',
             path: '/a',
             responses: [{ code: '200' }],
-            servers: [{ url: 'http://exmaple.com' }],
+            servers: [{ url: 'http://example.com' }],
           },
         ],
         [
@@ -151,7 +152,7 @@ describe('mergeOperations()', () => {
             method: 'get',
             path: '/a',
             responses: [{ code: '200' }],
-            servers: [{ url: 'https://exmaple.com' }],
+            servers: [{ url: 'https://example.com' }],
           },
         ],
       ),
@@ -161,7 +162,48 @@ describe('mergeOperations()', () => {
         method: 'get',
         path: '/a',
         responses: [{ code: '200', headers: [], contents: [] }],
-        servers: [{ url: 'http://exmaple.com' }, { url: 'https://exmaple.com' }],
+        servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
+        request: { headers: [] },
+      },
+    ]);
+  });
+
+  it('merges request correctly', () => {
+    expect(
+      mergeOperations(
+        [
+          {
+            id: '1',
+            method: 'get',
+            path: '/a',
+            responses: [{ code: '200' }],
+            request: {
+              headers: [{ name: '200a', style: HttpParamStyles.Simple }, { name: '200b', style: HttpParamStyles.Simple }],
+            },
+          },
+        ],
+        [
+          {
+            id: '2',
+            method: 'get',
+            path: '/a',
+            responses: [{ code: '200' }],
+            request: {
+              headers: [{ name: '200b', style: HttpParamStyles.Simple }, { name: '200c', style: HttpParamStyles.Simple }],
+            },
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        id: '1',
+        method: 'get',
+        path: '/a',
+        responses: [{ code: '200', headers: [], contents: [] }],
+        request: {
+          headers: [{ name: '200a', style: HttpParamStyles.Simple }, { name: '200b', style: HttpParamStyles.Simple }, { name: '200c', style: HttpParamStyles.Simple }],
+        },
+        servers: [],
       },
     ]);
   });
