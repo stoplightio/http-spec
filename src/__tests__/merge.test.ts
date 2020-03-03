@@ -1,4 +1,4 @@
-import { HttpParamStyles, IHttpOperation } from '@stoplight/types/dist';
+import { HttpParamStyles } from '@stoplight/types';
 import { mergeOperations, mergeResponses } from '../merge';
 
 describe('mergeResponses()', () => {
