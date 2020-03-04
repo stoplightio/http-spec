@@ -318,4 +318,100 @@ describe('transformPostmanCollectionOperations()', () => {
 
     expect(operations).toHaveLength(4);
   });
+
+  it('combines request headers from related items into single operation', () => {
+    const operations = transformPostmanCollectionOperations({
+      item: [
+        { request: { method: 'get', url: '/a', header: [{ key: 'a-header', value: 'a header' }] } },
+        { request: { method: 'get', url: '/a', header: [{ key: 'b-header', value: 'b header' }] } },
+      ],
+    });
+
+    expect(operations).toEqual([
+      expect.objectContaining({
+        request: expect.objectContaining({
+          headers: [
+            {
+              examples: [
+                {
+                  key: 'default',
+                  value: 'a header',
+                },
+              ],
+              name: 'a-header',
+              schema: {
+                type: 'string',
+              },
+              style: 'simple',
+            },
+            {
+              examples: [
+                {
+                  key: 'default',
+                  value: 'b header',
+                },
+              ],
+              name: 'b-header',
+              schema: {
+                type: 'string',
+              },
+              style: 'simple',
+            },
+          ],
+        }),
+      }),
+    ]);
+  });
+
+  it('combines response contents from related items into single operation', () => {
+    const operations = transformPostmanCollectionOperations({
+      item: [
+        {
+          request: { url: '/a', method: 'get' },
+          // @ts-ignore @todo yet another fix in typing needed
+          response: [
+            {
+              code: 200,
+              responseTime: 666,
+              header: [{ key: 'Content-type', value: 'application/json' }],
+              body: '{"a":1}',
+            },
+            { code: 200, responseTime: 666, header: [{ key: 'Content-type', value: 'text/plain' }], body: 'a=1' },
+          ],
+        },
+        {
+          request: { url: '/a', method: 'get' },
+          response: [
+            {
+              code: 200,
+              responseTime: 666,
+              header: [{ key: 'Content-type', value: 'application/json' }],
+              body: '{"a":1}',
+            },
+            {
+              code: 200,
+              responseTime: 666,
+              header: [{ key: 'Content-type', value: 'application/xml' }],
+              body: '<a>1</a>',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(operations).toEqual([
+      expect.objectContaining({
+        responses: [
+          expect.objectContaining({
+            code: '200',
+            contents: [
+              expect.objectContaining({ mediaType: 'application/json' }),
+              expect.objectContaining({ mediaType: 'text/plain' }),
+              expect.objectContaining({ mediaType: 'application/xml' }),
+            ],
+          }),
+        ],
+      }),
+    ]);
+  });
 });

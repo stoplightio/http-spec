@@ -9,7 +9,9 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
+import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
+import { mergeOperations, mergeResponses } from '../merge';
 import { transformRequest } from './transformers/request';
 import { transformResponse } from './transformers/response';
 import {
@@ -25,9 +27,11 @@ import { resolveCollection, transformDescriptionDefinition } from './util';
 export const transformPostmanCollectionOperations = (document: CollectionDefinition): IHttpOperation[] => {
   const collection = resolveCollection(document);
   const securitySchemes = transformSecuritySchemes(collection);
-  const operations: IHttpOperation[] = [];
+  let operations: IHttpOperation[] = [];
 
-  collection.forEachItem(item => operations.push(transformItem(item, securitySchemes)));
+  collection.forEachItem(item => {
+    operations = mergeOperations(operations, [transformItem(item, securitySchemes)]);
+  });
 
   return operations;
 };
@@ -77,7 +81,12 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
     path: getPath(item.request.url),
     summary: item.name,
     request,
-    responses: item.responses.map(transformResponse),
+    responses: item.responses
+      .all()
+      .reduce<IHttpOperationResponse[]>(
+        (merged, response) => mergeResponses(merged, [transformResponse(response)]),
+        [],
+      ) as IHttpOperation['responses'],
     security,
     servers: server ? [server] : undefined,
   };
