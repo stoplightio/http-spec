@@ -9,7 +9,6 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 import { mergeOperations, mergeResponses } from '../merge';
 import { transformRequest } from './transformers/request';
@@ -81,12 +80,10 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
     path: getPath(item.request.url),
     summary: item.name,
     request,
-    responses: item.responses
-      .all()
-      .reduce<IHttpOperationResponse[]>(
-        (merged, response) => mergeResponses(merged, [transformResponse(response)]),
-        [],
-      ) as IHttpOperation['responses'],
+    responses: item.responses.all().reduce<IHttpOperation['responses']>(
+      (merged, response) => mergeResponses(merged, [transformResponse(response)]),
+      [] as any, // @todo do we want to load operations without responses?
+    ),
     security,
     servers: server ? [server] : undefined,
   };

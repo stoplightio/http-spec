@@ -1,16 +1,16 @@
 import { IHttpHeaderParam, IHttpOperation, IHttpOperationResponse, IMediaTypeContent, IServer } from '@stoplight/types';
 
-const mergeHeaders = mergeLists<IHttpHeaderParam>(
+const mergeHeaders = mergeLists<IHttpHeaderParam[]>(
   (h1, h2) => h1.name === h2.name,
   h1 => h1, // ignore header #2 if mediaTypes is equal
 );
 
-const mergeContents = mergeLists<IMediaTypeContent>(
+const mergeContents = mergeLists<IMediaTypeContent[]>(
   (c1, c2) => c1.mediaType === c2.mediaType,
   c1 => c1, // ignore content #2 if mediaTypes is equal
 );
 
-export const mergeResponses = mergeLists<IHttpOperationResponse>(
+export const mergeResponses = mergeLists<IHttpOperation['responses']>(
   (r1, r2) => r1.code === r2.code,
   (r1, r2) => ({
     ...r1,
@@ -19,12 +19,12 @@ export const mergeResponses = mergeLists<IHttpOperationResponse>(
   }),
 );
 
-const mergeServers = mergeLists<IServer>(
+const mergeServers = mergeLists<IServer[]>(
   (s1, s2) => s1.url === s2.url,
   s1 => s1, // ignore server #2 is url is equal
 );
 
-export const mergeOperations = mergeLists<IHttpOperation>(
+export const mergeOperations = mergeLists<IHttpOperation[]>(
   (o1, o2) => o1.path === o2.path && o1.method === o2.method,
   (o1, o2) => ({
     ...o1,
@@ -37,10 +37,10 @@ export const mergeOperations = mergeLists<IHttpOperation>(
   }),
 );
 
-function mergeLists<T>(compare: (o1: T, o2: T) => boolean, merge: (o1: T, o2: T) => T) {
-  return (items1: T[], items2: T[]) => {
+function mergeLists<T extends any[]>(compare: (o1: T[0], o2: T[0]) => boolean, merge: (o1: T[0], o2: T[0]) => T[0]) {
+  return (items1: T, items2: T) => {
     return items2.reduce((items, item2) => {
-      const mergeTargetIdx = items.findIndex(item => compare(item, item2));
+      const mergeTargetIdx = items.findIndex((item: T[0]) => compare(item, item2));
       if (mergeTargetIdx > -1) {
         items[mergeTargetIdx] = merge(items[mergeTargetIdx], item2);
       } else {
