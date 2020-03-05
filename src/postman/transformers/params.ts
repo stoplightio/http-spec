@@ -16,6 +16,7 @@ export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
     name: queryParam.key || '',
     style: HttpParamStyles.Form,
+    required: true,
     ...(queryParam.value ? transformStringValueToSchema(queryParam.value) : undefined),
   };
 }
@@ -24,6 +25,7 @@ export function transformHeader(header: Header): IHttpHeaderParam {
   return {
     name: header.key.toLowerCase(),
     style: HttpParamStyles.Simple,
+    required: true,
     ...(header.value ? transformStringValueToSchema(header.value) : undefined),
   };
 }
@@ -34,6 +36,7 @@ export function transformPathParams(segments: string[]): IHttpPathParam[] {
       params.push({
         name: segment.substring(1),
         style: HttpParamStyles.Simple,
+        required: true,
       });
     }
 

@@ -54,6 +54,7 @@ describe('transformResponse()', () => {
               },
             ],
             name: 'content-type',
+            required: true,
             schema: {
               type: 'string',
             },

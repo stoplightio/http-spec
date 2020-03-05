@@ -17,6 +17,7 @@ describe('transformQueryParam()', () => {
         },
         name: 'testKey',
         style: 'form',
+        required: true,
       });
     });
   });
@@ -26,6 +27,7 @@ describe('transformQueryParam()', () => {
       expect(transformQueryParam(new QueryParam({ key: 'testKey', value: null }))).toEqual({
         name: 'testKey',
         style: 'form',
+        required: true,
       });
     });
   });
@@ -35,6 +37,7 @@ describe('transformQueryParam()', () => {
       expect(transformQueryParam(new QueryParam({ key: null, value: null }))).toEqual({
         name: '',
         style: 'form',
+        required: true,
       });
     });
   });
@@ -49,6 +52,7 @@ describe('transformHeader()', () => {
           type: 'string',
         },
         style: 'simple',
+        required: true,
         examples: [
           {
             key: 'default',
@@ -64,6 +68,7 @@ describe('transformHeader()', () => {
       expect(transformHeader(new Header({ key: 'testKey' }))).toEqual({
         name: 'testkey',
         style: 'simple',
+        required: true,
       });
     });
   });
@@ -72,8 +77,8 @@ describe('transformHeader()', () => {
 describe('transformPathParams()', () => {
   it('transforms correctly', () => {
     expect(transformPathParams(['elem1', ':param1', ':param2', 'elem2'])).toEqual([
-      { name: 'param1', style: 'simple' },
-      { name: 'param2', style: 'simple' },
+      { name: 'param1', style: 'simple', required: true },
+      { name: 'param2', style: 'simple', required: true },
     ]);
   });
 });
