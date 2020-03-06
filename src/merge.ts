@@ -1,12 +1,12 @@
 import { IHttpHeaderParam, IHttpOperation, IHttpOperationResponse, IMediaTypeContent, IServer } from '@stoplight/types';
 
 const mergeHeaders = mergeLists<IHttpHeaderParam>(
-  (h1, h2) => h1.name === h2.name,
+  (h1, h2) => h1.name.toLowerCase() === h2.name.toLowerCase(),
   h1 => h1, // ignore header #2 if mediaTypes is equal
 );
 
 const mergeContents = mergeLists<IMediaTypeContent>(
-  (c1, c2) => c1.mediaType === c2.mediaType,
+  (c1, c2) => c1.mediaType.toLowerCase() === c2.mediaType.toLowerCase(),
   c1 => c1, // ignore content #2 if mediaTypes is equal
 );
 
@@ -20,12 +20,12 @@ export const mergeResponses = mergeLists<IHttpOperationResponse>(
 );
 
 const mergeServers = mergeLists<IServer>(
-  (s1, s2) => s1.url === s2.url,
+  (s1, s2) => s1.url.toLowerCase() === s2.url.toLowerCase(),
   s1 => s1, // ignore server #2 is url is equal
 );
 
 export const mergeOperations = mergeLists<IHttpOperation>(
-  (o1, o2) => o1.path === o2.path && o1.method === o2.method,
+  (o1, o2) => o1.path === o2.path && o1.method.toLowerCase() === o2.method.toLowerCase(),
   (o1, o2) => ({
     ...o1,
     request: {
