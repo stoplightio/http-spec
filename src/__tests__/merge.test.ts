@@ -218,40 +218,6 @@ describe('mergeOperations()', () => {
     ]);
   });
 
-  it('merges servers where urls are expressed with different letter case', () => {
-    expect(
-      mergeOperations(
-        [
-          {
-            id: '1',
-            method: 'get',
-            path: '/a',
-            responses: [{ code: '200' }],
-            servers: [{ url: 'http://example.com' }],
-          },
-        ],
-        [
-          {
-            id: '2',
-            method: 'get',
-            path: '/a',
-            responses: [{ code: '200' }],
-            servers: [{ url: 'http://example.COM' }],
-          },
-        ],
-      ),
-    ).toEqual([
-      {
-        id: '1',
-        method: 'get',
-        path: '/a',
-        responses: [{ code: '200', headers: [], contents: [] }],
-        servers: [{ url: 'http://example.com' }],
-        request: { headers: [] },
-      },
-    ]);
-  });
-
   it('merges request correctly', () => {
     expect(
       mergeOperations(

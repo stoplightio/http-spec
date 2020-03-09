@@ -20,7 +20,7 @@ export const mergeResponses = mergeLists<IHttpOperationResponse>(
 );
 
 const mergeServers = mergeLists<IServer>(
-  (s1, s2) => s1.url.toLowerCase() === s2.url.toLowerCase(),
+  (s1, s2) => s1.url === s2.url,
   s1 => s1, // ignore server #2 is url is equal
 );
 
