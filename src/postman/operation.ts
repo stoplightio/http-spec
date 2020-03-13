@@ -1,14 +1,4 @@
-import {
-  HttpParamStyles,
-  HttpSecurityScheme,
-  IHttpHeaderParam,
-  IHttpOperation,
-  IHttpOperationRequestBody,
-  IHttpParam,
-  IHttpPathParam,
-  IHttpQueryParam,
-  IMediaTypeContent,
-} from '@stoplight/types';
+import { HttpSecurityScheme, IHttpOperation } from '@stoplight/types';
 import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 import { mergeOperations, mergeResponses } from '../merge';
 import { transformRequest } from './transformers/request';
@@ -82,7 +72,7 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
     request,
     responses: item.responses.all().reduce<IHttpOperation['responses']>(
       (merged, response) => mergeResponses(merged, [transformResponse(response)]),
-      [] as any, // @todo do we want to load operations without responses?
+      [] as any, // this overrides the NonEmptyArray type on IHttpOperation.responses
     ),
     security,
     servers: server ? [server] : undefined,
