@@ -62,7 +62,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "yarn lint.fix"
+      "yarn tslint -c tslint.json"
     ]
   },
   "husky": {
