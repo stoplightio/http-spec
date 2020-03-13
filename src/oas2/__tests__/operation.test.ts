@@ -34,10 +34,11 @@ describe('transformOas2Operation', () => {
             },
             security: [
               {
-                // @ts-ignore:
+                // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43105
                 petstore_auth: ['write:pets'],
               },
               {
+                // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43105
                 api_key: [],
               },
             ],
