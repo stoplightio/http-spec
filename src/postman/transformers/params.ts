@@ -98,7 +98,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   params: PropertyList<T>,
   mediaType: string,
 ): IMediaTypeContent {
-  const paramsList: Array<{ name: string; schema: JSONSchema4; value: any }> = params.map(item => {
+  const paramsList: { name: string; schema: JSONSchema4; value: any }[] = params.map(item => {
     return {
       name: item.key || generateId(),
       schema: {

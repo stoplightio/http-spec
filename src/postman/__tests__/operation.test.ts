@@ -368,7 +368,8 @@ describe('transformPostmanCollectionOperations()', () => {
       item: [
         {
           request: { url: '/a', method: 'get' },
-          responses: [
+          // @ts-ignore
+          response: [
             {
               code: 200,
               responseTime: 666,
@@ -380,7 +381,8 @@ describe('transformPostmanCollectionOperations()', () => {
         },
         {
           request: { url: '/a', method: 'get' },
-          responses: [
+          // @ts-ignore
+          response: [
             {
               code: 200,
               responseTime: 666,

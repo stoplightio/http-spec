@@ -20,7 +20,7 @@ function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
   property: string,
 ): IHttpEncoding {
-  const acceptableStyles: Array<string | undefined> = [
+  const acceptableStyles: (string | undefined)[] = [
     HttpParamStyles.Form,
     HttpParamStyles.SpaceDelimited,
     HttpParamStyles.PipeDelimited,

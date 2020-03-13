@@ -20,7 +20,7 @@ const securityDefinitionsFixture: Dictionary<Security> = {
 };
 
 describe('accessors', () => {
-  const securityFixture: Array<Dictionary<string[], string>> = [
+  const securityFixture: Dictionary<string[], string>[] = [
     {
       api_key: [],
       petstore_auth: ['write:pets', 'read:pets'],
@@ -65,7 +65,7 @@ describe('accessors', () => {
 
     describe('when one of the given schemes is expected to be validated against', () => {
       it('returns arrays containing one element each', () => {
-        const securityFixtureWithOrRelation: Array<Dictionary<string[], string>> = [
+        const securityFixtureWithOrRelation: Dictionary<string[], string>[] = [
           {
             petstore_auth: ['write:pets', 'read:pets'],
           },
