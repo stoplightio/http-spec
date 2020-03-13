@@ -65,6 +65,31 @@ describe('mergeResponses()', () => {
     ]);
   });
 
+  it('merges headers having differently cased letters in name', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+          },
+        ],
+        [
+          {
+            code: '200',
+            headers: [{ name: 'oO', style: HttpParamStyles.Simple }],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+        contents: [],
+      },
+    ]);
+  });
+
   it('merges contents correctly', () => {
     expect(
       mergeResponses(
@@ -102,6 +127,31 @@ describe('mergeResponses()', () => {
       {
         code: '500',
         contents: [{ mediaType: '500-tion/a-son' }, { mediaType: '500-tion/b-son' }],
+      },
+    ]);
+  });
+
+  it('merges contents having differently cased letters in name', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            contents: [{ mediaType: 'Aa/Oo' }],
+          },
+        ],
+        [
+          {
+            code: '200',
+            contents: [{ mediaType: 'aA/oO' }],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        contents: [{ mediaType: 'Aa/Oo' }],
+        headers: [],
       },
     ]);
   });
