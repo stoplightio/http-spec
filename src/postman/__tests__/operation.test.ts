@@ -368,7 +368,7 @@ describe('transformPostmanCollectionOperations()', () => {
       item: [
         {
           request: { url: '/a', method: 'get' },
-          // @ts-ignore @todo yet another fix in typing needed
+          // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43106
           response: [
             {
               code: 200,
@@ -381,6 +381,7 @@ describe('transformPostmanCollectionOperations()', () => {
         },
         {
           request: { url: '/a', method: 'get' },
+          // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43106
           response: [
             {
               code: 200,

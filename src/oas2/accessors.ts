@@ -1,14 +1,14 @@
 import { DeepPartial, Dictionary } from '@stoplight/types';
 import { compact, get, isArray, isEmpty, isString, keys, map, merge, pickBy } from 'lodash';
 import { negate } from 'lodash/fp';
-import { BaseOAuthSecurity, OAuthScope, Operation, Security, Spec } from 'swagger-schema-official';
+import { Operation, Security, Spec } from 'swagger-schema-official';
 import { isSecurityScheme } from './guards';
 
 export type SecurityWithKey = Security & { key: string };
 
 export function getSecurities(
   spec: DeepPartial<Spec>,
-  operationSecurity: Array<Dictionary<string[], string>> | undefined,
+  operationSecurity: Dictionary<string[], string>[] | undefined,
 ): SecurityWithKey[][] {
   const globalSecurities = getSecurity(spec.security, spec.securityDefinitions || {});
   const operationSecurities = getSecurity(operationSecurity, spec.securityDefinitions || {});
