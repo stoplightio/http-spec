@@ -39,8 +39,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     method,
     path,
     summary: operation.summary,
-    // fixme: this doesn't make sense, since the array could be empty
-    responses: translateToResponses(operation.responses) as IHttpOperationResponse[] & { 0: IHttpOperationResponse },
+    responses: translateToResponses(operation.responses),
     servers: Array.isArray(servers) ? translateToServers(servers.filter(isServerObject)) : [],
     request: translateToRequest(
       getValidOasParameters(operation.parameters as ParameterObject[], pathObj.parameters),
