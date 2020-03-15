@@ -35,11 +35,11 @@
     "postman-collection": "^3.5.5",
     "to-json-schema": "^0.2.3",
     "type-is": "^1.6.18",
-    "urijs": "~1.19.2"
+    "urijs": "~1.19.2",
+    "@stoplight/types": "^11.4.0"
   },
   "devDependencies": {
     "@stoplight/scripts": "^5",
-    "@stoplight/types": "^11.4.0",
     "@stoplight/test-utils": "^0.0.1",
     "@types/swagger-schema-official": "~2.0.20",
     "@types/to-json-schema": "^0.2.0",
