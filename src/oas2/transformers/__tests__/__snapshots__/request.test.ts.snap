@@ -4,6 +4,7 @@ exports[`request given single body param should translate to request with body 1
 Object {
   "body": Object {
     "in": "body",
+    "name": "param",
   },
 }
 `;
@@ -11,8 +12,9 @@ Object {
 exports[`request given single form param should translate to request with form 1`] = `
 Object {
   "body": Object {
-    "in": "body",
-    "type": "form",
+    "in": "formData",
+    "name": "param",
+    "type": "number",
   },
 }
 `;
@@ -22,6 +24,7 @@ Object {
   "headers": Array [
     Object {
       "in": "header",
+      "name": "param",
     },
   ],
 }
@@ -32,6 +35,8 @@ Object {
   "path": Array [
     Object {
       "in": "path",
+      "name": "param",
+      "required": true,
     },
   ],
 }
@@ -42,6 +47,7 @@ Object {
   "query": Array [
     Object {
       "in": "query",
+      "name": "param",
     },
   ],
 }
@@ -52,9 +58,11 @@ Object {
   "headers": Array [
     Object {
       "in": "header",
+      "name": "param",
     },
     Object {
       "in": "header",
+      "name": "param",
     },
   ],
 }
@@ -65,9 +73,13 @@ Object {
   "path": Array [
     Object {
       "in": "path",
+      "name": "param",
+      "required": true,
     },
     Object {
       "in": "path",
+      "name": "param",
+      "required": true,
     },
   ],
 }
@@ -78,9 +90,11 @@ Object {
   "query": Array [
     Object {
       "in": "query",
+      "name": "param",
     },
     Object {
       "in": "query",
+      "name": "param",
     },
   ],
 }
@@ -89,22 +103,9 @@ Object {
 exports[`request should translate mixed request 1`] = `
 Object {
   "body": Object {
-    "in": "body",
+    "in": "formData",
+    "name": "param",
+    "type": "number",
   },
-  "headers": Array [
-    Object {
-      "in": "header",
-    },
-  ],
-  "path": Array [
-    Object {
-      "in": "path",
-    },
-  ],
-  "query": Array [
-    Object {
-      "in": "query",
-    },
-  ],
 }
 `;

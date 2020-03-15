@@ -30,9 +30,6 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
   const produces = getProduces(document, operation);
   const consumes = getConsumes(document, operation);
 
-  // This cast to 'any' is required because of a bug in the 'swagger-schema-official' types
-  // security claims to be of type Security[] but is of type Dictionary<string[], string>
-  const operationSecurity: any = operation.security;
   const httpOperation: IHttpOperation = {
     // TODO(SL-248): what shall we do with id?
     id: '?http-operation-id?',
@@ -49,7 +46,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
       consumes,
     ),
     tags: translateToTags(getOasTags(operation.tags)),
-    security: translateToSecurities(document, operationSecurity),
+    security: translateToSecurities(document, operation.security),
   };
 
   return omitBy(httpOperation, isNil) as IHttpOperation;

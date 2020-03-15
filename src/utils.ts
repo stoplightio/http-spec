@@ -10,8 +10,8 @@ export function mapToKeys<T>(collection: Optional<T[]>) {
 // wraps urijs to handle edge cases that would normally error out or cause unexpected behavior
 // in all funcs set a default empty string, since URI.func() !== URI.func(undefined) [<- undefined throw error in most cases]
 // in all funcs set a default empty string, since URI.func('') will reset fields back to null while URI.func() will not
-export function URI(url: string | uri.URI = '') {
-  const uri: uri.URI = !url || typeof url === 'string' ? new URIJS(url) : url;
+export function URI(url: string | URI = '') {
+  const uri: URI = !url || typeof url === 'string' ? new URIJS(url) : url;
 
   return {
     scheme: (type: string = '') => URI(uri.scheme(type)),

@@ -1,4 +1,5 @@
 import { HttpSecurityScheme, IHttpOperation } from '@stoplight/types';
+import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 import { mergeOperations, mergeResponses } from '../merge';
 import { transformRequest } from './transformers/request';

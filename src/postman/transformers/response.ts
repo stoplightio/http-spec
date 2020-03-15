@@ -17,7 +17,7 @@ export function transformResponse(response: Response): IHttpOperationResponse {
 
 function transformCookie(cookie: Cookie): IHttpHeaderParam | undefined {
   const params = [`${cookie.name || ''}=${cookie.value || ''}`];
-  const expires = cookie.expires as Date | number | undefined; // @todo temporary until postman-collection types fixed
+  const expires = cookie.expires;
 
   if (expires) params.push(`Expires=${(isDate(expires) ? expires : new Date(expires * 1000)).toUTCString()}`);
   if (cookie.maxAge !== undefined) params.push(`Max-Age=${cookie.maxAge}`);

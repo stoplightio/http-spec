@@ -1,6 +1,5 @@
 import { IHttpOperationRequest } from '@stoplight/types';
-import { Parameter } from 'swagger-schema-official';
-import { isBodyParameter, isFormDataParameter, isHeaderParameter, isPathParameter, isQueryParameter } from '../guards';
+import { Parameter, BodyParameter, FormDataParameter } from 'swagger-schema-official';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -10,8 +9,8 @@ import {
 } from './params';
 
 export function translateToRequest(parameters: Parameter[], consumes: string[]): IHttpOperationRequest {
-  const bodyParameters = parameters.filter(isBodyParameter);
-  const formDataParameters = parameters.filter(isFormDataParameter);
+  const bodyParameters = parameters.filter((p): p is BodyParameter => p.in === 'body');
+  const formDataParameters = parameters.filter((p): p is FormDataParameter => p.in === 'formData');
   const request: IHttpOperationRequest = {};
 
   // if 'body' and 'form data' defined prefer 'body'
@@ -26,13 +25,13 @@ export function translateToRequest(parameters: Parameter[], consumes: string[]):
 }
 
 function reduceRemainingParameters(request: IHttpOperationRequest, parameter: Parameter) {
-  if (isQueryParameter(parameter)) {
+  if (parameter.in === 'query') {
     const queryParameter = translateToQueryParameter(parameter);
     request.query = (request.query || []).concat(queryParameter);
-  } else if (isPathParameter(parameter)) {
+  } else if (parameter.in === 'path') {
     const pathParameter = translateToPathParameter(parameter);
     request.path = (request.path || []).concat(pathParameter);
-  } else if (isHeaderParameter(parameter)) {
+  } else if (parameter.in === 'header') {
     const headerParameter = translateToHeaderParam(parameter);
     request.headers = (request.headers || []).concat(headerParameter);
   }

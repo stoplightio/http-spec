@@ -5,7 +5,7 @@ import { OpenAPIObject } from 'openapi3-ts';
 import { mapToKeys } from '../utils';
 import { isSecuritySchemeWithKey } from './guards';
 
-export type OperationSecurities = Array<Dictionary<string[], string>> | undefined;
+export type OperationSecurities = Dictionary<string[], string>[] | undefined;
 export type SecurityWithKey = HttpSecurityScheme & { key: string };
 
 export function getSecurities(

@@ -73,7 +73,7 @@ function translateToApiKeySecurityScheme(
   security: DeepPartial<ApiKeySecurity>,
   key: string,
 ): IApiKeySecurityScheme | undefined {
-  const acceptableSecurityOrigins: Array<ApiKeySecurity['in']> = ['query', 'header'];
+  const acceptableSecurityOrigins: ApiKeySecurity['in'][] = ['query', 'header'];
 
   if ('in' in security && security.in && acceptableSecurityOrigins.includes(security.in)) {
     return {
@@ -121,7 +121,7 @@ export function translateToSingleSecurity(security: DeepPartial<Security>, key: 
 
 export function translateToSecurities(
   document: DeepPartial<Spec>,
-  operationSecurity: Array<Dictionary<string[], string>> | undefined,
+  operationSecurity: Dictionary<string[], string>[] | undefined,
 ): HttpSecurityScheme[][] {
   const securities = getSecurities(document, operationSecurity);
   return securities.map(security => compact(security.map(sec => translateToSingleSecurity(sec, sec.key))));

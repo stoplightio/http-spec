@@ -72,7 +72,7 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
         });
       });
     }),
-  ) as HttpSecurityScheme[];
+  );
   if (security.length) {
     httpService.security = security;
   }
