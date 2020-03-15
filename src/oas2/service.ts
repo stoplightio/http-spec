@@ -63,7 +63,7 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
         });
       });
     }),
-  ) as HttpSecurityScheme[];
+  );
   if (security.length) {
     httpService.security = security;
   }
