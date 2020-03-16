@@ -1,10 +1,9 @@
-import { Dictionary, HttpSecurityScheme } from '@stoplight/types';
+import { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 
 import { mapToKeys } from '../utils';
 import { isSecuritySchemeWithKey } from './guards';
-import { DeepPartial } from 'utility-types';
 
 export type OperationSecurities = Dictionary<string[], string>[] | undefined;
 export type SecurityWithKey = HttpSecurityScheme & { key: string };

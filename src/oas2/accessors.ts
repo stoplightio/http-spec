@@ -1,9 +1,8 @@
-import { Dictionary } from '@stoplight/types';
+import { DeepPartial, Dictionary } from '@stoplight/types';
 import { compact, get, isEmpty, isString, keys, map, merge, pickBy } from 'lodash';
 import { negate } from 'lodash/fp';
 import { Operation, Security, Spec } from 'swagger-schema-official';
 import { isSecurityScheme } from './guards';
-import { DeepPartial } from 'utility-types';
 
 export type SecurityWithKey = Security & { key: string };
 

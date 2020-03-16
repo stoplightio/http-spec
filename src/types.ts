@@ -1,5 +1,4 @@
-import { IHttpOperation, IHttpService } from '@stoplight/types';
-import { DeepPartial } from 'utility-types';
+import { IHttpOperation, IHttpService, DeepPartial } from '@stoplight/types';
 
 export interface ITransformServiceOpts<T> {
   document: DeepPartial<T>;
