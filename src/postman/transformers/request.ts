@@ -1,12 +1,4 @@
-import {
-  HttpParamStyles,
-  IHttpHeaderParam,
-  IHttpOperationRequest,
-  IHttpOperationRequestBody,
-  IHttpPathParam,
-  IHttpQueryParam,
-  IMediaTypeContent,
-} from '@stoplight/types';
+import { IHttpOperationRequest } from '@stoplight/types';
 import { Request } from 'postman-collection';
 import { Required } from 'utility-types';
 import { transformBody, transformHeader, transformPathParams, transformQueryParam } from './params';
