@@ -94,12 +94,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'openIdConnect-security': {
@@ -128,12 +122,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'apiKey-security': {
@@ -164,10 +152,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            paths: {
-              '/path': {},
-            },
             components: {
               securitySchemes: {
                 'basic-security': {
