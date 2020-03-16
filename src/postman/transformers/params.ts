@@ -7,8 +7,9 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
+// @ts-ignore
+import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
-import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
@@ -79,7 +80,7 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
             value: parsed,
           },
         ],
-        schema: toJsonSchema(parsed) as JSONSchema4,
+        schema: jsonSchemaGenerator(parsed),
       };
     } catch (e) {
       /* noop, move on.. */
