@@ -1,5 +1,4 @@
 import {
-  DeepPartial,
   Dictionary,
   HttpSecurityScheme,
   IApiKeySecurityScheme,
@@ -7,6 +6,7 @@ import {
   IOauth2SecurityScheme,
   IOauthFlowObjects,
 } from '@stoplight/types';
+import { DeepPartial } from 'utility-types';
 import { compact } from 'lodash';
 import {
   ApiKeySecurity,

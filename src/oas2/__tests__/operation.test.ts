@@ -1,7 +1,7 @@
-import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 import { transformOas2Operation } from '../operation';
+import { DeepPartial } from 'utility-types';
 
 describe('transformOas2Operation', () => {
   test('should translate operation', () => {

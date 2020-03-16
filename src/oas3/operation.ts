@@ -1,5 +1,4 @@
 import { IHttpOperation } from '@stoplight/types';
-import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { get, isNil, omitBy } from 'lodash';
 import { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 

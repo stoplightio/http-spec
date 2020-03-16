@@ -1,6 +1,7 @@
-import { DeepPartial, IServer } from '@stoplight/types';
+import { IServer } from '@stoplight/types';
 import { isString } from 'lodash';
 import { Operation, Spec } from 'swagger-schema-official';
+import { DeepPartial } from 'utility-types';
 
 import { URI } from '../../utils';
 
