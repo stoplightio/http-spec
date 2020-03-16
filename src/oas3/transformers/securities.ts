@@ -31,11 +31,11 @@ export function transformToSingleSecurity(
   }
 
   if (securityScheme.type === 'http') {
-    if (securityScheme.scheme === 'bearer') {
+    if (securityScheme.scheme?.toLowerCase() === 'bearer') {
       return {
         ...baseObject,
         type: 'http',
-        scheme: securityScheme.scheme,
+        scheme: 'bearer',
         bearerFormat: securityScheme.bearerFormat,
       };
     }
@@ -43,7 +43,7 @@ export function transformToSingleSecurity(
     return {
       ...baseObject,
       type: 'http',
-      scheme: securityScheme.scheme as 'basic' | 'digest',
+      scheme: securityScheme.scheme?.toLowerCase() as 'basic' | 'digest',
     };
   }
 
