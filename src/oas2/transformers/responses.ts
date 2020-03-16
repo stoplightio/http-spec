@@ -43,8 +43,6 @@ function translateToResponse(produces: string[], response: Response, statusCode:
 export function translateToResponses(
   responses: { [name: string]: Response },
   produces: string[],
-): IHttpOperationResponse[] & { 0: IHttpOperationResponse } {
-  return map(responses, partial(translateToResponse, produces)) as IHttpOperationResponse[] & {
-    0: IHttpOperationResponse;
-  };
+): IHttpOperationResponse[] {
+  return map(responses, partial(translateToResponse, produces));
 }

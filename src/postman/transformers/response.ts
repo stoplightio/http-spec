@@ -17,8 +17,9 @@ export function transformResponse(response: Response): IHttpOperationResponse {
 
 function transformCookie(cookie: Cookie): IHttpHeaderParam | undefined {
   const params = [`${cookie.name || ''}=${cookie.value || ''}`];
+  const expires = cookie.expires;
 
-  if (cookie.expires) params.push(`Expires=${cookie.expires.toUTCString()}`);
+  if (expires) params.push(`Expires=${(isDate(expires) ? expires : new Date(expires * 1000)).toUTCString()}`);
   if (cookie.maxAge !== undefined) params.push(`Max-Age=${cookie.maxAge}`);
   if (cookie.domain) params.push(`Domain=${cookie.domain}`);
   if (cookie.path) params.push(`Path=${cookie.path}`);
@@ -36,4 +37,8 @@ function transformCookie(cookie: Cookie): IHttpHeaderParam | undefined {
     ],
     style: HttpParamStyles.Simple,
   };
+}
+
+function isDate(date: Date | number): date is Date {
+  return date instanceof Date;
 }

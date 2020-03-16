@@ -34,7 +34,6 @@ describe('transformOas2Operation', () => {
             },
             security: [
               {
-                // @ts-ignore:
                 petstore_auth: ['write:pets'],
               },
               {

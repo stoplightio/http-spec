@@ -1,14 +1,4 @@
-import {
-  HttpParamStyles,
-  HttpSecurityScheme,
-  IHttpHeaderParam,
-  IHttpOperation,
-  IHttpOperationRequestBody,
-  IHttpParam,
-  IHttpPathParam,
-  IHttpQueryParam,
-  IMediaTypeContent,
-} from '@stoplight/types';
+import { HttpSecurityScheme, IHttpOperation } from '@stoplight/types';
 import { IHttpOperationResponse } from '@stoplight/types/dist';
 import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 import { mergeOperations, mergeResponses } from '../merge';
@@ -81,12 +71,10 @@ function transformItem(item: Item, securitySchemes: PostmanSecurityScheme[]): IH
     path: getPath(item.request.url),
     summary: item.name,
     request,
-    responses: item.responses
-      .all()
-      .reduce<IHttpOperationResponse[]>(
-        (merged, response) => mergeResponses(merged, [transformResponse(response)]),
-        [],
-      ) as IHttpOperation['responses'],
+    responses: item.responses.all().reduce<IHttpOperation['responses']>(
+      (merged, response) => mergeResponses(merged, [transformResponse(response)]),
+      [] as any, // this overrides the NonEmptyArray type on IHttpOperation.responses
+    ),
     security,
     servers: server ? [server] : undefined,
   };
