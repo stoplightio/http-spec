@@ -225,6 +225,42 @@ describe('securities', () => {
       ]);
     });
 
+    it('should lowercase the http security scheme', () => {
+      expect(
+        translateToSecurities(
+          {
+            openapi: '3.0.0',
+            info: {
+              title: 'OAS3',
+              version: '1.0',
+            },
+            paths: {
+              '/path': {},
+            },
+            components: {
+              securitySchemes: {
+                'basic-security': {
+                  type: 'http',
+                  description: 'a description',
+                  scheme: 'BASIC',
+                },
+              },
+            },
+          } as OpenAPIObject,
+          [{ 'basic-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            key: 'basic-security',
+            type: 'http',
+            description: 'a description',
+            scheme: 'basic',
+          },
+        ],
+      ]);
+    });
+
     describe('oauth2 security', () => {
       it('with implicit flow', () => {
         expect(
