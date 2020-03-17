@@ -4,47 +4,10 @@ import { translateToSecurities } from '../securities';
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
-    it('should return empty if type is invalid', () => {
-      expect(
-        translateToSecurities(
-          {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
-            components: {
-              securitySchemes: {
-                'invalid-security': {
-                  type: 'invalid' as any,
-                },
-              },
-            },
-          } as OpenAPIObject,
-          [{ 'invalid-security': [] }],
-        ),
-      ).toEqual([[]]);
-    });
-
     it('should return correct scheme for http basic security', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'basic-security': {
@@ -54,7 +17,7 @@ describe('securities', () => {
                 },
               },
             },
-          } as OpenAPIObject,
+          },
           [{ 'basic-security': [] }],
         ),
       ).toEqual([
@@ -73,16 +36,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'digest-security': {
@@ -92,7 +45,7 @@ describe('securities', () => {
                 },
               },
             },
-          } as OpenAPIObject,
+          },
           [{ 'digest-security': [] }],
         ),
       ).toEqual([
@@ -111,16 +64,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'bearer-security': {
@@ -131,7 +74,7 @@ describe('securities', () => {
                 },
               },
             },
-          } as OpenAPIObject,
+          },
           [{ 'bearer-security': [] }],
         ),
       ).toEqual([
@@ -151,16 +94,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'openIdConnect-security': {
@@ -170,7 +103,7 @@ describe('securities', () => {
                 },
               },
             },
-          } as OpenAPIObject,
+          },
           [{ 'openIdConnect-security': [] }],
         ),
       ).toEqual([
@@ -189,16 +122,6 @@ describe('securities', () => {
       expect(
         translateToSecurities(
           {
-            openapi: '3.0.0',
-            info: {
-              title: 'OAS3',
-              version: '1.0',
-            },
-            paths: {
-              '/path': {
-                $ref: '../test-api/openapi.yaml#/paths/~1path',
-              },
-            },
             components: {
               securitySchemes: {
                 'apiKey-security': {
@@ -209,7 +132,7 @@ describe('securities', () => {
                 },
               },
             },
-          } as OpenAPIObject,
+          },
           [{ 'apiKey-security': [] }],
         ),
       ).toEqual([
@@ -225,21 +148,39 @@ describe('securities', () => {
       ]);
     });
 
+    it('should lowercase the http security scheme', () => {
+      expect(
+        translateToSecurities(
+          {
+            components: {
+              securitySchemes: {
+                'basic-security': {
+                  type: 'http',
+                  description: 'a description',
+                  scheme: 'BASIC',
+                },
+              },
+            },
+          },
+          [{ 'basic-security': [] }],
+        ),
+      ).toEqual([
+        [
+          {
+            key: 'basic-security',
+            type: 'http',
+            description: 'a description',
+            scheme: 'basic',
+          },
+        ],
+      ]);
+    });
+
     describe('oauth2 security', () => {
       it('with implicit flow', () => {
         expect(
           translateToSecurities(
             {
-              openapi: '3.0.0',
-              info: {
-                title: 'OAS3',
-                version: '1.0',
-              },
-              paths: {
-                '/path': {
-                  $ref: '../test-api/openapi.yaml#/paths/~1path',
-                },
-              },
               components: {
                 securitySchemes: {
                   'implicit-flow-security': {
@@ -254,7 +195,7 @@ describe('securities', () => {
                   },
                 },
               },
-            } as OpenAPIObject,
+            },
             [{ 'implicit-flow-security': [] }],
           ),
         ).toEqual([
@@ -273,16 +214,6 @@ describe('securities', () => {
         expect(
           translateToSecurities(
             {
-              openapi: '3.0.0',
-              info: {
-                title: 'OAS3',
-                version: '1.0',
-              },
-              paths: {
-                '/path': {
-                  $ref: '../test-api/openapi.yaml#/paths/~1path',
-                },
-              },
               components: {
                 securitySchemes: {
                   'password-flow-security': {
@@ -297,7 +228,7 @@ describe('securities', () => {
                   },
                 },
               },
-            } as OpenAPIObject,
+            },
             [{ 'password-flow-security': [] }],
           ),
         ).toEqual([
@@ -316,16 +247,6 @@ describe('securities', () => {
         expect(
           translateToSecurities(
             {
-              openapi: '3.0.0',
-              info: {
-                title: 'OAS3',
-                version: '1.0',
-              },
-              paths: {
-                '/path': {
-                  $ref: '../test-api/openapi.yaml#/paths/~1path',
-                },
-              },
               components: {
                 securitySchemes: {
                   'clientCredentials-flow-security': {
@@ -340,7 +261,7 @@ describe('securities', () => {
                   },
                 },
               },
-            } as OpenAPIObject,
+            },
             [{ 'clientCredentials-flow-security': [] }],
           ),
         ).toEqual([
@@ -359,16 +280,6 @@ describe('securities', () => {
         expect(
           translateToSecurities(
             {
-              openapi: '3.0.0',
-              info: {
-                title: 'OAS3',
-                version: '1.0',
-              },
-              paths: {
-                '/path': {
-                  $ref: '../test-api/openapi.yaml#/paths/~1path',
-                },
-              },
               components: {
                 securitySchemes: {
                   'authorizationCode-flow-security': {
@@ -384,7 +295,7 @@ describe('securities', () => {
                   },
                 },
               },
-            } as OpenAPIObject,
+            },
             [{ 'authorizationCode-flow-security': [] }],
           ),
         ).toEqual([

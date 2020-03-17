@@ -1099,12 +1099,13 @@
   dependencies:
     "@types/json-schema" "^7.0.3"
 
-"@stoplight/types@^11.4.1":
-  version "11.4.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.4.1.tgz#a085024b856876acc9e91dad227f75d3a52e1f0c"
-  integrity sha512-NvzokIoSbHk8UUv0PT7Y8RB4eC74Vj92NwYLoUwOqAeA64IXqsMxuS+Yf5AP3PY1MQoIbPSGx13Yi5KiqkioFQ==
+"@stoplight/types@^11.5.0":
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.5.0.tgz#d7f766878a1012b4ba663de0c6704d37047e66dd"
+  integrity sha512-Pnfto5aCBvO1fcTMRSQA9xObrCAAbRz0Nnqd8XZX9mgVV4GIIMI38uCL+zzCp0vsrB79Gxt1Fs0pEJZQeTMMjQ==
   dependencies:
     "@types/json-schema" "^7.0.4"
+    utility-types "^3.10.0"
 
 "@tootallnate/once@1":
   version "1.0.0"
