@@ -7,8 +7,9 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
+// @ts-ignore
+import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
-import * as toJsonSchema from 'to-json-schema';
 import * as typeIs from 'type-is';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
@@ -16,6 +17,7 @@ export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
     name: queryParam.key || '',
     style: HttpParamStyles.Form,
+    required: true,
     ...(queryParam.value ? transformStringValueToSchema(queryParam.value) : undefined),
   };
 }
@@ -24,6 +26,7 @@ export function transformHeader(header: Header): IHttpHeaderParam {
   return {
     name: header.key.toLowerCase(),
     style: HttpParamStyles.Simple,
+    required: true,
     ...(header.value ? transformStringValueToSchema(header.value) : undefined),
   };
 }
@@ -34,6 +37,7 @@ export function transformPathParams(segments: string[]): IHttpPathParam[] {
       params.push({
         name: segment.substring(1),
         style: HttpParamStyles.Simple,
+        required: true,
       });
     }
 
@@ -76,7 +80,7 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
             value: parsed,
           },
         ],
-        schema: toJsonSchema(parsed) as JSONSchema4,
+        schema: jsonSchemaGenerator(parsed),
       };
     } catch (e) {
       /* noop, move on.. */

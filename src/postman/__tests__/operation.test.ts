@@ -343,6 +343,7 @@ describe('transformPostmanCollectionOperations()', () => {
                 type: 'string',
               },
               style: 'simple',
+              required: true,
             },
             {
               examples: [
@@ -356,6 +357,7 @@ describe('transformPostmanCollectionOperations()', () => {
                 type: 'string',
               },
               style: 'simple',
+              required: true,
             },
           ],
         }),

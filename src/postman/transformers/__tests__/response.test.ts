@@ -35,11 +35,15 @@ describe('transformResponse()', () => {
             ],
             mediaType: 'application/json',
             schema: {
+              $schema: 'http://json-schema.org/draft-04/schema#',
+              description: '',
               properties: {
                 "I'm a JSON": {
+                  minLength: 1,
                   type: 'string',
                 },
               },
+              required: ["I'm a JSON"],
               type: 'object',
             },
           },
@@ -54,6 +58,7 @@ describe('transformResponse()', () => {
               },
             ],
             name: 'content-type',
+            required: true,
             schema: {
               type: 'string',
             },

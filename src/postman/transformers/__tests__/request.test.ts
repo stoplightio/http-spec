@@ -28,15 +28,17 @@ describe('transformRequest()', () => {
           schema: { type: 'string' },
           examples: [{ key: 'default', value: 'a header' }],
           style: 'simple',
+          required: true,
         },
       ],
-      path: [{ name: 'param', style: 'simple' }],
+      path: [{ name: 'param', style: 'simple', required: true }],
       query: [
         {
           examples: [{ key: 'default', value: 'b' }],
           schema: { type: 'string' },
           name: 'a',
           style: 'form',
+          required: true,
         },
       ],
     });
