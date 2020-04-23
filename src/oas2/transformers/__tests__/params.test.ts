@@ -221,13 +221,14 @@ describe('params.translator', () => {
   });
 
   describe('translateToQueryParameter', () => {
-    const parameter: QueryParameter = {
+    const parameter: QueryParameter & { 'x-deprecated'?: boolean } = {
       required: true,
       description: 'descr',
       name: 'name',
       in: 'query',
       type: 'number',
       allowEmptyValue: true,
+      ['x-deprecated']: true,
     };
 
     test.each([
@@ -241,6 +242,10 @@ describe('params.translator', () => {
         'style',
         expectedStyle,
       );
+    });
+
+    test('translate x-deprecated', () => {
+      expect(translateToQueryParameter(parameter)).toHaveProperty('deprecated', true);
     });
   });
 
