@@ -210,5 +210,9 @@ function buildSchemaForParameter(
     schema.minLength = 1;
   }
 
-  return { schema, description: param.description };
+  return {
+    schema,
+    description: param.description,
+    ...('x-deprecated' in param && { deprecated: param['x-deprecated'] }),
+  };
 }
