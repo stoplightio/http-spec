@@ -17,6 +17,7 @@ import {
   QueryParameter,
   Schema,
 } from 'swagger-schema-official';
+import { getExamplesFromSchema } from '../schema';
 
 function chooseQueryParameterStyle(
   parameter: QueryParameter,
@@ -74,7 +75,7 @@ export function translateToHeaderParams(headers: { [headerName: string]: Header 
 }
 
 export function translateToBodyParameter(body: BodyParameter, consumes: string[]): IHttpOperationRequestBody {
-  const examples = map(get(body, 'x-examples'), (value, key) => ({ key, value }));
+  const examples = map(get(body, 'x-examples') || getExamplesFromSchema(body.schema), (value, key) => ({ key, value }));
 
   return pickBy({
     description: body.description,

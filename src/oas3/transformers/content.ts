@@ -8,7 +8,7 @@ import {
   Optional,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
+import { compact, get, isObject, keys, map, mapValues, omit, pickBy, union, values } from 'lodash';
 
 // @ts-ignore
 import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
@@ -108,17 +108,22 @@ export function translateHeaderObject(headerObject: unknown, name: string): Opti
 export function translateMediaTypeObject(mediaObject: unknown, mediaType: string): Optional<IMediaTypeContent> {
   if (!isDictionary(mediaObject)) return;
 
-  const { schema, example, examples, encoding } = mediaObject;
+  const { schema, encoding } = mediaObject;
+
+  const jsonSchema = schema
+    ? (toJsonSchema(schema, {
+        cloneSchema: true,
+        strictMode: false,
+        keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
+      }) as JSONSchema4)
+    : undefined;
+
+  const example = mediaObject.example || jsonSchema?.example || jsonSchema?.['x-example'];
+  const examples = mediaObject.examples || transformSchemaExamples(jsonSchema?.examples || jsonSchema?.['x-examples']);
 
   return {
     mediaType,
-    schema: schema
-      ? (toJsonSchema(schema, {
-          cloneSchema: true,
-          strictMode: false,
-          keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
-        }) as JSONSchema4)
-      : undefined,
+    schema: jsonSchema,
     // Note that I'm assuming all references are resolved
     examples: compact(
       union<INodeExample>(
@@ -136,6 +141,9 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     encodings: map<any, IHttpEncoding>(encoding, translateEncodingPropertyObject),
   };
 }
+
+const transformSchemaExamples = (examples: { [exampleName: string]: {} }) =>
+  mapValues(examples, (value, key) => ({ key, value }));
 
 const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
   return {
