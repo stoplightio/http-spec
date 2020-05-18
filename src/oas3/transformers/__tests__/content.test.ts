@@ -228,6 +228,60 @@ describe('translateMediaTypeObject', () => {
       });
     });
   });
+
+  describe('schema examples', () => {
+    const defaultExample = {
+      name: 'defaultExample',
+    };
+    const examples = {
+      example1: {
+        name: 'value',
+      },
+      example2: {
+        name: 'value2',
+      },
+    };
+    test('given schema examples should translate to IHttpContent', () => {
+      expect(
+        translateMediaTypeObject(
+          {
+            schema: {
+              example: defaultExample,
+              examples,
+            },
+            encoding: {},
+          },
+          'mediaType',
+        ),
+      ).toHaveProperty('examples', [
+        { key: 'default', value: defaultExample },
+        { key: 'example1', value: examples.example1 },
+        { key: 'example2', value: examples.example2 },
+      ]);
+    });
+
+    test('root examples should take precedence over schema examples', () => {
+      expect(
+        translateMediaTypeObject(
+          {
+            schema: {
+              example: defaultExample,
+              examples,
+            },
+            examples: { example: { value: { name: 'root example value' } } },
+            example: {
+              name: 'root default value',
+            },
+            encoding: {},
+          },
+          'mediaType',
+        ),
+      ).toHaveProperty('examples', [
+        { key: 'default', value: { name: 'root default value' } },
+        { key: 'example', value: { name: 'root example value' } },
+      ]);
+    });
+  });
 });
 
 describe('schema invalid', () => {

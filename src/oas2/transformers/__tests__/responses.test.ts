@@ -2,6 +2,7 @@ import { HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
 
 import { translateToHeaderParams } from '../params';
 import { translateToResponses } from '../responses';
+import { Schema } from 'swagger-schema-official';
 
 jest.mock('../params');
 
@@ -92,6 +93,77 @@ describe('responses', () => {
 
       expect(responses[0].contents![0].examples).toBeDefined();
       expect(responses[0].contents![0].examples).toHaveLength(2);
+    });
+  });
+
+  describe('schema examples', () => {
+    it('given schema examples should translate to responses', () => {
+      const responses = translateToResponses(
+        {
+          r1: {
+            description: 'd1',
+            headers: {},
+            schema: {
+              example: {
+                name: 'value',
+              },
+            },
+          },
+        },
+        produces,
+      );
+      expect(responses[0].contents![0]).toHaveProperty('examples', [{ key: 'default', value: { name: 'value' } }]);
+    });
+
+    it('given multiple schema example properties should pick one', () => {
+      const responses = translateToResponses(
+        {
+          r1: {
+            description: 'd1',
+            headers: {},
+            schema: {
+              example: {
+                name: ' example value',
+              },
+              ['x-examples']: {
+                'application/json': {
+                  name: 'examples value',
+                },
+              },
+            } as Schema,
+          },
+        },
+        produces,
+      );
+      expect(responses[0].contents![0]).toHaveProperty('examples', [
+        { key: 'application/json', value: { name: 'examples value' } },
+      ]);
+    });
+
+    it('root examples should take precedence over schema examples', () => {
+      const responses = translateToResponses(
+        {
+          r1: {
+            description: 'd1',
+            headers: {},
+            examples: {
+              'application/i-have-no-clue': {},
+              'application/json': {},
+            },
+            schema: {
+              example: {
+                name: 'value',
+              },
+            },
+          },
+        },
+        produces,
+      );
+      expect(responses[0].contents![0].examples).toHaveLength(2);
+      expect(responses[0].contents![0].examples).toEqual([
+        { key: 'application/json', value: {} },
+        { key: 'application/i-have-no-clue', value: {} },
+      ]);
     });
   });
 });
