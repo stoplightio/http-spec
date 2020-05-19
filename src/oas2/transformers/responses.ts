@@ -4,7 +4,7 @@ import { chain, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from './params';
-import { getExamplesFromSchema } from '../schema';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});

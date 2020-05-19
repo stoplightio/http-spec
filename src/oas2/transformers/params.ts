@@ -17,7 +17,7 @@ import {
   QueryParameter,
   Schema,
 } from 'swagger-schema-official';
-import { getExamplesFromSchema } from '../schema';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function chooseQueryParameterStyle(
   parameter: QueryParameter,
