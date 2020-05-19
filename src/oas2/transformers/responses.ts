@@ -8,7 +8,9 @@ import { getExamplesFromSchema } from '../schema';
 
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});
-  const objectifiedExamples = chain(response.examples || getExamplesFromSchema(response.schema))
+  const objectifiedExamples = chain(
+    response.examples || (response.schema ? getExamplesFromSchema(response.schema) : void 0),
+  )
     .mapValues((value, key) => ({ key, value }))
     .values()
     .value();

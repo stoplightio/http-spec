@@ -142,8 +142,7 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
   };
 }
 
-const transformSchemaExamples = (examples: { [exampleName: string]: {} }) =>
-  mapValues(examples, (value, key) => ({ key, value }));
+const transformSchemaExamples = (examples: Dictionary<string>) => mapValues(examples, (value, key) => ({ key, value }));
 
 const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
   return {
