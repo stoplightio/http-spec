@@ -231,55 +231,46 @@ describe('translateMediaTypeObject', () => {
 
   describe('schema examples', () => {
     const defaultExample = {
-      name: 'defaultExample',
+      name: 'default value',
     };
-    const examples = {
-      example1: {
-        name: 'value',
-      },
-      example2: {
-        name: 'value2',
-      },
-    };
-    test('given schema examples should translate to IHttpContent', () => {
-      expect(
-        translateMediaTypeObject(
-          {
-            schema: {
-              example: defaultExample,
-              examples,
+
+    describe('given response with schema with examples', () => {
+      test('should translate to IHttpContent', () => {
+        expect(
+          translateMediaTypeObject(
+            {
+              schema: {
+                example: defaultExample,
+              },
+              encoding: {},
             },
-            encoding: {},
-          },
-          'mediaType',
-        ),
-      ).toHaveProperty('examples', [
-        { key: 'default', value: defaultExample },
-        { key: 'example1', value: examples.example1 },
-        { key: 'example2', value: examples.example2 },
-      ]);
+            'mediaType',
+          ),
+        ).toHaveProperty('examples', [{ key: 'default', value: defaultExample }]);
+      });
     });
 
-    test('root examples should take precedence over schema examples', () => {
-      expect(
-        translateMediaTypeObject(
-          {
-            schema: {
-              example: defaultExample,
-              examples,
+    describe('given response with examples in media and schema objects', () => {
+      test('root example should take precedence over schema example', () => {
+        expect(
+          translateMediaTypeObject(
+            {
+              schema: {
+                example: defaultExample,
+              },
+              examples: { example: { value: { name: 'root example value' } } },
+              example: {
+                name: 'root default value',
+              },
+              encoding: {},
             },
-            examples: { example: { value: { name: 'root example value' } } },
-            example: {
-              name: 'root default value',
-            },
-            encoding: {},
-          },
-          'mediaType',
-        ),
-      ).toHaveProperty('examples', [
-        { key: 'default', value: { name: 'root default value' } },
-        { key: 'example', value: { name: 'root example value' } },
-      ]);
+            'mediaType',
+          ),
+        ).toHaveProperty('examples', [
+          { key: 'default', value: { name: 'root default value' } },
+          { key: 'example', value: { name: 'root example value' } },
+        ]);
+      });
     });
   });
 });
