@@ -119,7 +119,7 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     : undefined;
 
   const example = mediaObject.example || jsonSchema?.example;
-  const examples = mediaObject.examples || transformSchemaExamples(jsonSchema?.examples || jsonSchema?.['x-examples']);
+  const examples = mediaObject.examples;
 
   return {
     mediaType,
@@ -141,8 +141,6 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     encodings: map<any, IHttpEncoding>(encoding, translateEncodingPropertyObject),
   };
 }
-
-const transformSchemaExamples = (examples: Dictionary<string>) => mapValues(examples, (value, key) => ({ key, value }));
 
 const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
   return {
