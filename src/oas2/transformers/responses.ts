@@ -4,10 +4,13 @@ import { chain, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from './params';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});
-  const objectifiedExamples = chain(response.examples)
+  const objectifiedExamples = chain(
+    response.examples || (response.schema ? getExamplesFromSchema(response.schema) : void 0),
+  )
     .mapValues((value, key) => ({ key, value }))
     .values()
     .value();

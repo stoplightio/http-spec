@@ -228,6 +228,51 @@ describe('translateMediaTypeObject', () => {
       });
     });
   });
+
+  describe('schema examples', () => {
+    const defaultExample = {
+      name: 'default value',
+    };
+
+    describe('given response with schema with examples', () => {
+      test('should translate to IHttpContent', () => {
+        expect(
+          translateMediaTypeObject(
+            {
+              schema: {
+                example: defaultExample,
+              },
+              encoding: {},
+            },
+            'mediaType',
+          ),
+        ).toHaveProperty('examples', [{ key: 'default', value: defaultExample }]);
+      });
+    });
+
+    describe('given response with examples in media and schema objects', () => {
+      test('root example should take precedence over schema example', () => {
+        expect(
+          translateMediaTypeObject(
+            {
+              schema: {
+                example: defaultExample,
+              },
+              examples: { example: { value: { name: 'root example value' } } },
+              example: {
+                name: 'root default value',
+              },
+              encoding: {},
+            },
+            'mediaType',
+          ),
+        ).toHaveProperty('examples', [
+          { key: 'default', value: { name: 'root default value' } },
+          { key: 'example', value: { name: 'root example value' } },
+        ]);
+      });
+    });
+  });
 });
 
 describe('schema invalid', () => {

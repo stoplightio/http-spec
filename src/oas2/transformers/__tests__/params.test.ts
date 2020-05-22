@@ -124,6 +124,79 @@ describe('params.translator', () => {
         ),
       ).toMatchSnapshot();
     });
+
+    describe('schema examples', () => {
+      describe('given response with schema with x-examples', () => {
+        it('should translate to body parameter with examples', () => {
+          const body = translateToBodyParameter(
+            {
+              in: 'body',
+              name: 'name',
+              schema: {
+                // @ts-ignore: "x-examples" as schema extension
+                'x-examples': {
+                  'example-1': {
+                    hello: 'world',
+                  },
+                  'example-2': {
+                    foo: 'bar',
+                  },
+                },
+              },
+            },
+            consumes,
+          );
+
+          expect(body).toEqual(
+            expect.objectContaining({
+              contents: expect.arrayContaining([
+                expect.objectContaining({
+                  examples: [
+                    { key: 'example-1', value: { hello: 'world' } },
+                    { key: 'example-2', value: { foo: 'bar' } },
+                  ],
+                }),
+              ]),
+            }),
+          );
+        });
+      });
+
+      describe('given response with body param and schema examples', () => {
+        it('root x-examples should take precedence over schema examples', () => {
+          const body = translateToBodyParameter(
+            {
+              in: 'body',
+              name: 'name',
+              schema: {
+                // @ts-ignore: "x-examples" as schema and oas extension
+                'x-examples': {
+                  'example-1': {
+                    hello: 'world',
+                  },
+                },
+              },
+              'x-examples': {
+                'example-2': {
+                  foo: 'bar',
+                },
+              },
+            },
+            consumes,
+          );
+
+          expect(body).toEqual(
+            expect.objectContaining({
+              contents: expect.arrayContaining([
+                expect.objectContaining({
+                  examples: [{ key: 'example-2', value: { foo: 'bar' } }],
+                }),
+              ]),
+            }),
+          );
+        });
+      });
+    });
   });
 
   describe('translateToFormDataParameter', () => {
