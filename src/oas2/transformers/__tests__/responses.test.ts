@@ -118,7 +118,7 @@ describe('responses', () => {
     });
 
     describe('given multiple schema example properties', () => {
-      it('should pick one', () => {
+      it('should translate all examples', () => {
         const responses = translateToResponses(
           {
             r1: {
@@ -126,7 +126,7 @@ describe('responses', () => {
               headers: {},
               schema: {
                 example: {
-                  name: ' example value',
+                  name: 'example value',
                 },
                 ['x-examples']: {
                   'application/json': {
@@ -140,6 +140,7 @@ describe('responses', () => {
         );
         expect(responses[0].contents![0]).toHaveProperty('examples', [
           { key: 'application/json', value: { name: 'examples value' } },
+          { key: 'default', value: { name: 'example value' } },
         ]);
       });
     });
