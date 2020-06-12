@@ -17,9 +17,7 @@ export function translateToServers(spec: DeepPartial<Spec>, operation: DeepParti
   const hasBasePath = typeof spec.basePath === 'string' && spec.basePath.length > 0;
 
   return schemes.filter(isString).map(scheme => {
-    let uri = URI()
-      .scheme(scheme)
-      .host(spec.host);
+    let uri = URI().scheme(scheme).host(spec.host);
 
     if (hasBasePath) {
       uri = uri.path(spec.basePath);

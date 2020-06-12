@@ -11,6 +11,7 @@ import { JSONSchema4 } from 'json-schema';
 import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
+
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {

@@ -1,4 +1,3 @@
-import { Parameter } from 'swagger-schema-official';
 import { isSecurityScheme, isTagObject } from '../guards';
 
 describe('guards', () => {

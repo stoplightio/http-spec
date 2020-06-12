@@ -1,6 +1,7 @@
 import { IHttpOperationRequest } from '@stoplight/types';
 import { Request } from 'postman-collection';
 import { Required } from 'utility-types';
+
 import { transformBody, transformHeader, transformPathParams, transformQueryParam } from './params';
 
 export function transformRequest(request: Request): Required<IHttpOperationRequest, 'headers' | 'query'> {

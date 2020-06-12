@@ -1,4 +1,5 @@
 import { Version } from 'postman-collection';
+
 import { resolveVersion, transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 describe('transformStringValueToSchema()', () => {
@@ -31,7 +32,7 @@ describe('resolveVersion()', () => {
     });
   });
 
-  describe('version is defined as string', () => {
+  describe('version is defined as object', () => {
     it('transforms correctly', () => {
       expect(resolveVersion(new Version({ major: '1', minor: '2', patch: '3', prerelease: '4' }))).toEqual('1.2.3-4');
     });

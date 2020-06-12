@@ -1,8 +1,8 @@
 import { HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
+import { Schema } from 'swagger-schema-official';
 
 import { translateToHeaderParams } from '../params';
 import { translateToResponses } from '../responses';
-import { Schema } from 'swagger-schema-official';
 
 jest.mock('../params');
 
@@ -14,7 +14,7 @@ describe('responses', () => {
     (translateToHeaderParams as jest.Mock).mockReturnValue(fakeHeaderParams);
   });
 
-  test('should translate to multiple responses', () => {
+  it('should translate to multiple responses', () => {
     const responses = translateToResponses(
       {
         r1: {
@@ -40,7 +40,7 @@ describe('responses', () => {
     expect(responses).toMatchSnapshot();
   });
 
-  test('should translate to response w/o headers', () => {
+  it('should translate to response w/o headers', () => {
     expect(
       translateToResponses(
         {
@@ -57,7 +57,7 @@ describe('responses', () => {
     ).toMatchSnapshot();
   });
 
-  test('should translate to response w/o examples', () => {
+  it('should translate to response w/o examples', () => {
     expect(
       translateToResponses(
         {

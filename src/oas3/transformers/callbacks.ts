@@ -1,6 +1,7 @@
 import { IHttpCallbackOperation } from '@stoplight/types';
 import { entries } from 'lodash';
 import { CallbacksObject, OpenAPIObject } from 'openapi3-ts';
+
 import { transformOas3Operation } from '../operation';
 
 export function translateToCallbacks(callbacks: CallbacksObject): IHttpCallbackOperation[] | undefined {

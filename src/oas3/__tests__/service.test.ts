@@ -1,8 +1,9 @@
 import { OpenAPIObject } from 'openapi3-ts';
+
 import { transformOas3Service } from '../service';
 
 describe('oas3 service', () => {
-  test('should handle non object security objects', () => {
+  it('should handle non object security objects', () => {
     const document: Partial<OpenAPIObject> = {
       components: {
         securitySchemes: {
@@ -33,7 +34,7 @@ describe('oas3 service', () => {
     });
   });
 
-  test.each<Partial<OpenAPIObject>>([
+  it.each<Partial<OpenAPIObject>>([
     {
       components: {
         securitySchemes: {
@@ -88,7 +89,7 @@ describe('oas3 service', () => {
     });
   });
 
-  test('should handle non array servers', () => {
+  it('should handle non array servers', () => {
     const document: Partial<OpenAPIObject> = {
       servers: 2 as any,
     };
@@ -104,7 +105,7 @@ describe('oas3 service', () => {
     });
   });
 
-  test('should accept empty title', () => {
+  it('should accept empty title', () => {
     const document: Partial<OpenAPIObject> = {
       info: {
         title: '',
@@ -143,7 +144,7 @@ describe('oas3 service', () => {
     });
   });
 
-  test('should handle invalid document securities gracefully', () => {
+  it('should handle invalid document securities gracefully', () => {
     const document: Partial<OpenAPIObject> = {
       components: {
         securitySchemes: {},
@@ -158,7 +159,7 @@ describe('oas3 service', () => {
     });
   });
 
-  test('should handle server variables', () => {
+  it('should handle server variables', () => {
     const document: Partial<OpenAPIObject> = {
       id: '?http-service-id?',
       name: '',

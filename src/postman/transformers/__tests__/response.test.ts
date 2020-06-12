@@ -1,4 +1,5 @@
 import { Response } from 'postman-collection';
+
 import { transformResponse } from '../response';
 
 describe('transformResponse()', () => {

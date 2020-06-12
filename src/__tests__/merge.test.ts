@@ -1,4 +1,5 @@
 import { HttpParamStyles } from '@stoplight/types';
+
 import { mergeOperations, mergeResponses } from '../merge';
 
 describe('mergeResponses()', () => {
