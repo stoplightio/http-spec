@@ -81,11 +81,6 @@
       "@commitlint/config-conventional"
     ]
   },
-  "prettier": {
-    "printWidth": 120,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "release": {
     "extends": "@stoplight/scripts/release"
   }
