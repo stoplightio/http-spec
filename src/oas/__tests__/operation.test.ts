@@ -9,10 +9,16 @@ const oas3KitchenSinkJson: OpenAPIObject = require('./fixtures//oas3-kitchen-sin
 
 describe('oas operation', () => {
   it('openapi v2', () => {
-    expect(transformOas2Operations(oas2KitchenSinkJson)).toHaveLength(5);
+    const result = transformOas2Operations(oas2KitchenSinkJson);
+
+    expect(result).toHaveLength(5);
+    expect(result).toMatchSnapshot();
   });
 
   it('openapi v3', () => {
-    expect(transformOas3Operations(oas3KitchenSinkJson)).toHaveLength(3);
+    const result = transformOas3Operations(oas3KitchenSinkJson);
+
+    expect(result).toHaveLength(3);
+    expect(result).toMatchSnapshot();
   });
 });
