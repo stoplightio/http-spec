@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "sl-scripts build",
-    "lint": "eslint --fix 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
     "release.dryRun": "sl-scripts release --dry-run --debug",
