@@ -1,4 +1,5 @@
 import { Url } from 'postman-collection';
+
 import { transformServer } from '../server';
 
 describe('transformServer()', () => {

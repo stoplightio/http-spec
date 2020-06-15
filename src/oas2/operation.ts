@@ -6,7 +6,7 @@ import { getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
-import { getConsumes, getProduces, getSecurities } from './accessors';
+import { getConsumes, getProduces } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';

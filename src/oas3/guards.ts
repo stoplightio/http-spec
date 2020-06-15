@@ -3,13 +3,13 @@ import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
-  MediaTypeObject,
   ResponseObject,
   SecuritySchemeObject,
   ServerObject,
   ServerVariableObject,
   TagObject,
 } from 'openapi3-ts';
+
 import { SecurityWithKey } from './accessors';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>

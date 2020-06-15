@@ -1,10 +1,11 @@
 import {
-  FormDataParameter,
   BodyParameter,
-  QueryParameter,
-  PathParameter,
+  FormDataParameter,
   HeaderParameter,
+  PathParameter,
+  QueryParameter,
 } from 'swagger-schema-official';
+
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -42,43 +43,43 @@ describe('request', () => {
     jest.resetAllMocks();
   });
 
-  test('given empty params collection should return empty object', () => {
+  it('given empty params collection should return empty object', () => {
     expect(translateToRequest([], consumes)).toEqual({});
   });
 
-  test('given single body param should translate to request with body', () => {
+  it('given single body param should translate to request with body', () => {
     expect(translateToRequest([fakeBodyParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given single form param should translate to request with form', () => {
+  it('given single form param should translate to request with form', () => {
     expect(translateToRequest([fakeFormParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given single path param should translate to request with path', () => {
+  it('given single path param should translate to request with path', () => {
     expect(translateToRequest([fakePathParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given single query param should translate to request with query', () => {
+  it('given single query param should translate to request with query', () => {
     expect(translateToRequest([fakeQueryParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given single header param should translate to request with header', () => {
+  it('given single header param should translate to request with header', () => {
     expect(translateToRequest([fakeHeaderParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given two query params should translate', () => {
+  it('given two query params should translate', () => {
     expect(translateToRequest([fakeQueryParameter, fakeQueryParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given two header params should translate', () => {
+  it('given two header params should translate', () => {
     expect(translateToRequest([fakeHeaderParameter, fakeHeaderParameter], consumes)).toMatchSnapshot();
   });
 
-  test('given two path params should translate', () => {
+  it('given two path params should translate', () => {
     expect(translateToRequest([fakePathParameter, fakePathParameter], consumes)).toMatchSnapshot();
   });
 
-  test('should translate mixed request', () => {
+  it('should translate mixed request', () => {
     expect(
       translateToRequest([fakeParameter, fakeParameter, fakeParameter, fakeParameter, fakeParameter], consumes),
     ).toMatchSnapshot();

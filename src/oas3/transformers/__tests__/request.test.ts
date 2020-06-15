@@ -10,7 +10,7 @@ describe('translateOas3ToRequest', () => {
     mockPassthroughImplementation(translateMediaTypeObject);
   });
 
-  test('given no request body should translate parameters', () => {
+  it('given no request body should translate parameters', () => {
     expect(
       translateToRequest([
         {
@@ -48,7 +48,7 @@ describe('translateOas3ToRequest', () => {
     ).toMatchSnapshot();
   });
 
-  test('give a request body should translate it', () => {
+  it('give a request body should translate it', () => {
     expect(
       translateToRequest([], {
         description: 'descr',

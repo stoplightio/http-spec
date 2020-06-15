@@ -1,6 +1,6 @@
+import { HttpParamStyles } from '@stoplight/types';
 import { FormDataParameter, QueryParameter } from 'swagger-schema-official';
 
-import { HttpParamStyles } from '@stoplight/types';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -14,7 +14,7 @@ describe('params.translator', () => {
   let consumes = ['*'];
 
   describe('translateToHeaderParam', () => {
-    test('should translate header param', () => {
+    it('should translate header param', () => {
       expect(
         translateToHeaderParam({
           required: true,
@@ -29,11 +29,11 @@ describe('params.translator', () => {
   });
 
   describe('translateToHeaderParams', () => {
-    test('should translate empty dictionary to empty array', () => {
+    it('should translate empty dictionary to empty array', () => {
       expect(translateToHeaderParams({})).toMatchSnapshot();
     });
 
-    test('should translate to simple header param', () => {
+    it('should translate to simple header param', () => {
       expect(
         translateToHeaderParams({
           'header-name': {
@@ -44,7 +44,7 @@ describe('params.translator', () => {
       ).toMatchSnapshot();
     });
 
-    test('should translate to multiple header params', () => {
+    it('should translate to multiple header params', () => {
       expect(
         translateToHeaderParams({
           'header-name': {
@@ -61,7 +61,7 @@ describe('params.translator', () => {
   });
 
   describe('translateToBodyParameter', () => {
-    test('should translate to body parameter', () => {
+    it('should translate to body parameter', () => {
       expect(
         translateToBodyParameter(
           {
@@ -78,7 +78,7 @@ describe('params.translator', () => {
       ).toMatchSnapshot();
     });
 
-    test('should preserve readOnly flag in schema', () => {
+    it('should preserve readOnly flag in schema', () => {
       expect(
         translateToBodyParameter(
           {
@@ -99,7 +99,7 @@ describe('params.translator', () => {
       );
     });
 
-    test('given x-examples should translate to body parameter with multiple examples', () => {
+    it('given x-examples should translate to body parameter with multiple examples', () => {
       expect(
         translateToBodyParameter(
           {
@@ -239,7 +239,7 @@ describe('params.translator', () => {
       minimum: 0,
     };
 
-    test('converts parameters into schema', () => {
+    it('converts parameters into schema', () => {
       const expectedContent = {
         encodings: [
           {
@@ -304,7 +304,7 @@ describe('params.translator', () => {
       ['x-deprecated']: true,
     };
 
-    test.each([
+    it.each([
       { oasStyle: 'pipes', expectedStyle: HttpParamStyles.PipeDelimited },
       { oasStyle: 'ssv', expectedStyle: HttpParamStyles.SpaceDelimited },
       { oasStyle: 'csv', expectedStyle: HttpParamStyles.CommaDelimited },
@@ -317,13 +317,13 @@ describe('params.translator', () => {
       );
     });
 
-    test('translate x-deprecated', () => {
+    it('translate x-deprecated', () => {
       expect(translateToQueryParameter(parameter)).toHaveProperty('deprecated', true);
     });
   });
 
   describe('translateToPathParameter', () => {
-    test('should translate', () => {
+    it('should translate', () => {
       expect(
         translateToPathParameter({
           required: true,

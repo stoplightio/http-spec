@@ -1,8 +1,9 @@
 import { Spec } from 'swagger-schema-official';
+
 import { transformOas2Service } from '../service';
 
 describe('oas2 service', () => {
-  test('should handle non array schemes', () => {
+  it('should handle non array schemes', () => {
     const document: Partial<Spec> = {
       schemes: 2 as any,
     };
@@ -18,7 +19,7 @@ describe('oas2 service', () => {
     });
   });
 
-  test('should accept empty title', () => {
+  it('should accept empty title', () => {
     const document: Partial<Spec> = {
       host: 'petstore.swagger.io',
       basePath: '/v2',
@@ -52,7 +53,7 @@ describe('oas2 service', () => {
     });
   });
 
-  test('should handle invalid document securities gracefully', () => {
+  it('should handle invalid document securities gracefully', () => {
     const document: Partial<Spec> = {
       securityDefinitions: {},
       security: ['API-Key'] as any,

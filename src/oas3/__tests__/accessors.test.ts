@@ -1,12 +1,13 @@
 import { SecuritySchemeObject } from 'openapi3-ts';
+
 import { getSecurities } from '../accessors';
 
 describe('getOas3Securities', () => {
-  test('given no global securities should return empty array', () => {
+  it('given no global securities should return empty array', () => {
     expect(getSecurities({})).toEqual([]);
   });
 
-  test('give global securities but no schemes should return empty array', () => {
+  it('give global securities but no schemes should return empty array', () => {
     expect(
       getSecurities({
         components: {
@@ -20,7 +21,7 @@ describe('getOas3Securities', () => {
     ).toEqual([]);
   });
 
-  test('given global securities and matching operation scheme should take from operation', () => {
+  it('given global securities and matching operation scheme should take from operation', () => {
     expect(
       getSecurities({
         security: [{ operationScheme: [] }],
@@ -42,7 +43,7 @@ describe('getOas3Securities', () => {
     ]);
   });
 
-  test('given global securities and matching spec scheme should take from spec', () => {
+  it('given global securities and matching spec scheme should take from spec', () => {
     expect(
       getSecurities(
         {
@@ -66,7 +67,7 @@ describe('getOas3Securities', () => {
     ]);
   });
 
-  test('given global securities and matching spec and operation scheme should take from operation', () => {
+  it('given global securities and matching spec and operation scheme should take from operation', () => {
     expect(
       getSecurities(
         {
@@ -94,7 +95,7 @@ describe('getOas3Securities', () => {
     ]);
   });
 
-  test('given global securities and matching spec and invalid operation scheme should return empty array', () => {
+  it('given global securities and matching spec and invalid operation scheme should return empty array', () => {
     expect(
       getSecurities(
         {

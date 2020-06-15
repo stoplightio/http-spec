@@ -1,3 +1,5 @@
+// @ts-ignore
+import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import {
   Dictionary,
   HttpParamStyles,
@@ -8,11 +10,9 @@ import {
   Optional,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { compact, get, isObject, keys, map, mapValues, omit, pickBy, union, values } from 'lodash';
-
-// @ts-ignore
-import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
+import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+
 import { isDictionary } from '../../utils';
 import { isHeaderObject } from '../guards';
 

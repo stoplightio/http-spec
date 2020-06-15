@@ -1,5 +1,5 @@
-import { INodeExample } from '@stoplight/types';
 import { Request } from 'postman-collection';
+
 import { transformRequest } from '../request';
 
 describe('transformRequest()', () => {

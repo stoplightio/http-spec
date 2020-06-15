@@ -1,5 +1,6 @@
 import { Dictionary } from '@stoplight/types';
 import { Security } from 'swagger-schema-official';
+
 import { getConsumes, getProduces, getSecurities } from '../accessors';
 
 const securityDefinitionsFixture: Dictionary<Security> = {
@@ -109,7 +110,7 @@ describe('accessors', () => {
   });
 
   describe('getSecurities', () => {
-    test('given no security definitions should return empty array', () => {
+    it('given no security definitions should return empty array', () => {
       expect(
         getSecurities(
           {
@@ -131,7 +132,7 @@ describe('accessors', () => {
       ).toEqual([]);
     });
 
-    test('given no operation nor global security should return empty array', () => {
+    it('given no operation nor global security should return empty array', () => {
       expect(
         getSecurities(
           {
@@ -143,7 +144,7 @@ describe('accessors', () => {
       ).toEqual([]);
     });
 
-    test('given an empty array in operation security should return empty array', () => {
+    it('given an empty array in operation security should return empty array', () => {
       expect(
         getSecurities(
           {
@@ -155,7 +156,7 @@ describe('accessors', () => {
       ).toEqual([]);
     });
 
-    test('given an operation security should return it', () => {
+    it('given an operation security should return it', () => {
       expect(
         getSecurities(
           {
@@ -171,7 +172,7 @@ describe('accessors', () => {
       ).toEqual([[{ in: 'header', name: 'api_key', type: 'apiKey', key: 'api_key' }]]);
     });
 
-    test('given security with custom scopes should override global definition', () => {
+    it('given security with custom scopes should override global definition', () => {
       expect(
         getSecurities(
           {
@@ -197,7 +198,7 @@ describe('accessors', () => {
       ]);
     });
 
-    test('given an operation security and no global security should return operation security', () => {
+    it('given an operation security and no global security should return operation security', () => {
       expect(
         getSecurities(
           {
@@ -225,20 +226,20 @@ describe('accessors', () => {
   });
 
   describe('getProduces', () => {
-    test('given all empty arrays should return an empty array', () => {
+    it('given all empty arrays should return an empty array', () => {
       expect(getProduces({}, {})).toEqual([]);
       expect(getProduces({ produces: [] }, { produces: [] })).toEqual([]);
     });
 
-    test('should fallback to spec produces', () => {
+    it('should fallback to spec produces', () => {
       expect(getProduces({ produces: ['text/plain'] }, {})).toEqual(['text/plain']);
     });
 
-    test('should prefer operation produces', () => {
+    it('should prefer operation produces', () => {
       expect(getProduces({ produces: ['text/plain'] }, { produces: ['text/poem'] })).toEqual(['text/poem']);
     });
 
-    test('should handle malformed produces gracefully', () => {
+    it('should handle malformed produces gracefully', () => {
       expect(getProduces({ produces: ['text/plain'] } as any, { produces: 2 as any })).toEqual([]);
       expect(getProduces({ produces: 2 } as any, {})).toEqual([]);
       expect(getProduces({}, { produces: ['text/plain', null] } as any)).toEqual(['text/plain']);
@@ -247,20 +248,20 @@ describe('accessors', () => {
   });
 
   describe('getConsumes', () => {
-    test('given all empty arrays should return an empty array', () => {
+    it('given all empty arrays should return an empty array', () => {
       expect(getConsumes({}, {})).toEqual([]);
       expect(getConsumes({ consumes: [] }, { consumes: [] })).toEqual([]);
     });
 
-    test('should fallback to spec consumes', () => {
+    it('should fallback to spec consumes', () => {
       expect(getConsumes({ consumes: ['text/plain'] }, {})).toEqual(['text/plain']);
     });
 
-    test('should prefer operation consumes', () => {
+    it('should prefer operation consumes', () => {
       expect(getConsumes({ consumes: ['text/plain'] }, { consumes: ['text/poem'] })).toEqual(['text/poem']);
     });
 
-    test('should handle malformed consumes gracefully', () => {
+    it('should handle malformed consumes gracefully', () => {
       expect(getConsumes({ consumes: ['text/plain'] } as any, { consumes: 2 as any })).toEqual([]);
       expect(getConsumes({ consumes: 2 } as any, {})).toEqual([]);
       expect(getConsumes({}, { consumes: ['text/plain', null] } as any)).toEqual(['text/plain']);

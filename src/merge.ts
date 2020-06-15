@@ -1,4 +1,4 @@
-import { IHttpHeaderParam, IHttpOperation, IHttpOperationResponse, IMediaTypeContent, IServer } from '@stoplight/types';
+import { IHttpHeaderParam, IHttpOperation, IMediaTypeContent, IServer } from '@stoplight/types';
 
 const mergeHeaders = mergeLists<IHttpHeaderParam[]>(
   (h1, h2) => h1.name.toLowerCase() === h2.name.toLowerCase(),
