@@ -86,7 +86,33 @@ Array [
     "id": "?http-operation-id?",
     "method": "get",
     "path": "/pets",
-    "request": Object {},
+    "request": Object {
+      "headers": Array [
+        Object {
+          "name": "Rate-Limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
+      "query": Array [
+        Object {
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+        Object {
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+      ],
+    },
     "responses": Array [
       Object {
         "code": "200",
@@ -111,7 +137,33 @@ Array [
     "id": "?http-operation-id?",
     "method": "options",
     "path": "/pets",
-    "request": Object {},
+    "request": Object {
+      "headers": Array [
+        Object {
+          "name": "Rate-Limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
+      "query": Array [
+        Object {
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+        Object {
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+      ],
+    },
     "responses": Array [
       Object {
         "code": "200",
@@ -209,6 +261,16 @@ Array [
         "description": "Pet object that needs to be added to the store",
         "required": true,
       },
+      "path": Array [
+        Object {
+          "name": "petId",
+          "required": true,
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
     },
     "responses": Array [
       Object {
@@ -234,15 +296,19 @@ Array [
           Object {
             "examples": Array [],
             "mediaType": "application/xml",
-            "schema": undefined,
+            "schema": Object {
+              "$ref": "#/definitions/Error",
+            },
           },
           Object {
             "examples": Array [],
             "mediaType": "application/json",
-            "schema": undefined,
+            "schema": Object {
+              "$ref": "#/definitions/Error",
+            },
           },
         ],
-        "description": undefined,
+        "description": "Our shared 404 response.",
         "headers": Array [],
       },
       Object {
@@ -373,7 +439,22 @@ Array [
       "cookie": Array [],
       "headers": Array [],
       "path": Array [],
-      "query": Array [],
+      "query": Array [
+        Object {
+          "examples": Array [],
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+        },
+        Object {
+          "examples": Array [],
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+        },
+      ],
     },
     "responses": Array [
       Object {
@@ -423,7 +504,16 @@ Array [
       },
       "cookie": Array [],
       "headers": Array [],
-      "path": Array [],
+      "path": Array [
+        Object {
+          "examples": Array [],
+          "name": "petId",
+          "required": true,
+          "schema": Object {
+            "type": "string",
+          },
+        },
+      ],
       "query": Array [],
     },
     "responses": Array [
@@ -431,6 +521,22 @@ Array [
         "code": "400",
         "contents": Array [],
         "description": "Invalid ID supplied",
+        "headers": Array [],
+      },
+      Object {
+        "code": "404",
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "*/*",
+            "schema": Object {
+              "$ref": "#/components/schemas/Error",
+              "$schema": "http://json-schema.org/draft-04/schema#",
+            },
+          },
+        ],
+        "description": "Our shared 404 response.",
         "headers": Array [],
       },
       Object {

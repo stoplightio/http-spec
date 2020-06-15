@@ -2,12 +2,13 @@ import { getOasTags, getValidOasParameters } from '../accessors';
 
 describe('getOasParameters', () => {
   it('should return empty array', () => {
-    expect(getValidOasParameters(undefined, undefined)).toEqual([]);
+    expect(getValidOasParameters({}, undefined, undefined)).toEqual([]);
   });
 
   it('should fallback to operation parameters', () => {
     expect(
       getValidOasParameters(
+        {},
         [
           { name: 'n1', in: 'i1' },
           { name: 'n2', in: 'i2' },
@@ -28,7 +29,7 @@ describe('getOasParameters', () => {
 
   it('should fallback to path parameters', () => {
     expect(
-      getValidOasParameters(undefined, [
+      getValidOasParameters({}, undefined, [
         { name: 'n1', in: 'i1' },
         { name: 'n2', in: 'i2' },
       ]),
@@ -47,6 +48,7 @@ describe('getOasParameters', () => {
   it('should prefer operation parameters', () => {
     expect(
       getValidOasParameters(
+        {},
         [
           { name: 'n1', in: 'n1', type: 'array' },
           { name: 'no2', in: 'io2' },
