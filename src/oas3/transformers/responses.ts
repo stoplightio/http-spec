@@ -1,31 +1,45 @@
-import { Dictionary, IHttpHeaderParam, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
+import {
+  DeepPartial,
+  Dictionary,
+  IHttpHeaderParam,
+  IHttpOperationResponse,
+  IMediaTypeContent,
+  Optional,
+} from '@stoplight/types';
 import { compact, map } from 'lodash';
+import { OpenAPIObject } from 'openapi3-ts';
 
-import { isDictionary } from '../../utils';
+import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-function translateToResponse(response: unknown, statusCode: string): Optional<IHttpOperationResponse> {
-  if (!isResponseObject(response)) return;
+function responseTransformer(document: DeepPartial<OpenAPIObject>) {
+  return function translateToResponse(response: unknown, statusCode: string): Optional<IHttpOperationResponse> {
+    response = maybeResolveLocalRef(document, response);
+    if (!isResponseObject(response)) return;
 
-  return {
-    code: statusCode,
-    description: response.description,
-    headers: compact<IHttpHeaderParam>(
-      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(response.headers, translateHeaderObject),
-    ),
-    contents: compact<IMediaTypeContent>(
-      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(response.content, translateMediaTypeObject),
-    ),
+    return {
+      code: statusCode,
+      description: response.description,
+      headers: compact<IHttpHeaderParam>(
+        map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(response.headers, translateHeaderObject),
+      ),
+      contents: compact<IMediaTypeContent>(
+        map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(response.content, translateMediaTypeObject),
+      ),
+    };
   };
 }
 
-export function translateToResponses(responses: unknown): IHttpOperationResponse[] {
+export function translateToResponses(
+  document: DeepPartial<OpenAPIObject>,
+  responses: unknown,
+): IHttpOperationResponse[] {
   if (!isDictionary(responses)) {
     return [];
   }
 
   return compact<IHttpOperationResponse>(
-    map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(responses, translateToResponse),
+    map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(responses, responseTransformer(document)),
   );
 }

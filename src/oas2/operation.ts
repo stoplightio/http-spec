@@ -6,6 +6,7 @@ import { getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
+import { maybeResolveLocalRef } from '../utils';
 import { getConsumes, getProduces } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
@@ -17,12 +18,12 @@ export function transformOas2Operations(document: Spec): IHttpOperation[] {
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
-  const pathObj = get(document, ['paths', path]) as Path;
+  const pathObj = maybeResolveLocalRef(document, get(document, ['paths', path])) as Path;
   if (!pathObj) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = get(document, ['paths', path, method]) as Operation;
+  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as Operation;
   if (!operation) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
@@ -39,10 +40,10 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     method,
     path,
     summary: operation.summary,
-    responses: translateToResponses(operation.responses as { [name: string]: Response }, produces),
+    responses: translateToResponses(document, operation.responses as { [name: string]: Response }, produces),
     servers: translateToServers(document, operation),
     request: translateToRequest(
-      getValidOasParameters(operation.parameters as Parameter[], pathObj.parameters as Parameter[]),
+      getValidOasParameters(document, operation.parameters as Parameter[], pathObj.parameters as Parameter[]),
       consumes,
     ),
     tags: translateToTags(getOasTags(operation.tags)),

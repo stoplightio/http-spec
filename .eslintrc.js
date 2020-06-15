@@ -1,3 +1,6 @@
 module.exports = {
-  extends: ["@stoplight"],
+  extends: ['@stoplight'],
+  rules: {
+    'no-param-reassign': 'off',
+  },
 };
