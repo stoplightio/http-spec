@@ -1,10 +1,11 @@
 import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
+
 import { transformOas2Operation } from '../operation';
 
 describe('transformOas2Operation', () => {
-  test('should translate operation', () => {
+  it('should translate operation', () => {
     const document: Partial<Spec> = {
       swagger: '2.0',
       info: {
@@ -70,7 +71,7 @@ describe('transformOas2Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test('should return deprecated property in http operation root', () => {
+  it('should return deprecated property in http operation root', () => {
     const document: DeepPartial<Spec> = {
       swagger: '2.0',
       paths: {
@@ -91,7 +92,7 @@ describe('transformOas2Operation', () => {
     ).toHaveProperty('deprecated', true);
   });
 
-  test('given malformed parameters should translate operation with those parameters', () => {
+  it('given malformed parameters should translate operation with those parameters', () => {
     const document: Partial<OpenAPIObject> = {
       swagger: '2.0',
       paths: {

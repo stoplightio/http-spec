@@ -1,5 +1,6 @@
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
+
 import {
   HttpOperationTransformer,
   HttpServiceTransformer,

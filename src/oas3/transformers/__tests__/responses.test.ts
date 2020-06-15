@@ -1,11 +1,11 @@
 import { translateToResponses } from '../responses';
 
 describe('translateToOas3Responses', () => {
-  test('given empty dictionary should return empty array', () => {
+  it('given empty dictionary should return empty array', () => {
     expect(translateToResponses({})).toEqual([]);
   });
 
-  test('given a response in dictionary should translate', () => {
+  it('given a response in dictionary should translate', () => {
     expect(
       translateToResponses({
         default: {
@@ -48,7 +48,7 @@ describe('translateToOas3Responses', () => {
     ).toMatchSnapshot();
   });
 
-  test('given a response with nullish headers in dictionary should translate', () => {
+  it('given a response with nullish headers in dictionary should translate', () => {
     expect(
       translateToResponses({
         200: {
@@ -67,7 +67,7 @@ describe('translateToOas3Responses', () => {
     ]);
   });
 
-  test('should skip nullish responses', () => {
+  it('should skip nullish responses', () => {
     expect(
       translateToResponses({
         200: null,

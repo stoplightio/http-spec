@@ -1,6 +1,7 @@
-import { IApiKeySecurityScheme, IOauthFlowObjects, Optional, DeepPartial } from '@stoplight/types';
+import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
 import { compact, isObject, pickBy } from 'lodash';
 import { OAuthFlowsObject, OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
+
 import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
 
 export function translateToSecurities(document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) {

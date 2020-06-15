@@ -17,6 +17,7 @@ import {
   Security,
   Spec,
 } from 'swagger-schema-official';
+
 import { getSecurities } from '../accessors';
 
 /**

@@ -1,4 +1,5 @@
 import { SchemaObject } from 'openapi3-ts';
+
 import { translateHeaderObject, translateMediaTypeObject } from '../content';
 
 describe('translateMediaTypeObject', () => {
@@ -6,11 +7,11 @@ describe('translateMediaTypeObject', () => {
     jest.restoreAllMocks();
   });
 
-  test('should gracefully handle invalid data', () => {
+  it('should gracefully handle invalid data', () => {
     expect(translateMediaTypeObject(null, 'mediaType')).toBeUndefined();
   });
 
-  test('given empty object, should return nothing', () => {
+  it('given empty object, should return nothing', () => {
     expect(translateMediaTypeObject({}, 'mediaType')).toStrictEqual({
       encodings: [],
       examples: [],
@@ -19,7 +20,7 @@ describe('translateMediaTypeObject', () => {
     });
   });
 
-  test('given single example should translate to IHttpContent', () => {
+  it('given single example should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
         {
@@ -32,7 +33,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('given multiple examples should translate to IHttpContent', () => {
+  it('given multiple examples should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
         {
@@ -45,7 +46,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('given encodings should translate each encoding to array item', () => {
+  it('given encodings should translate each encoding to array item', () => {
     expect(
       translateMediaTypeObject(
         {
@@ -83,7 +84,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('given complex nested media type object should translate correctly', () => {
+  it('given complex nested media type object should translate correctly', () => {
     expect(
       translateMediaTypeObject(
         {
@@ -116,7 +117,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('given complex nested media type object with nullish headers should translate correctly', () => {
+  it('given complex nested media type object with nullish headers should translate correctly', () => {
     expect(
       translateMediaTypeObject(
         {
@@ -137,7 +138,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('given encoding with incorrect style should throw an error', () => {
+  it('given encoding with incorrect style should throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
         {
@@ -156,7 +157,7 @@ describe('translateMediaTypeObject', () => {
     expect(testedFunction).toThrowErrorMatchingSnapshot();
   });
 
-  test('given encoding with no style it should not throw an error', () => {
+  it('given encoding with no style it should not throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
         {
@@ -197,31 +198,31 @@ describe('translateMediaTypeObject', () => {
       'mediaType',
     )!;
 
-    test('will not modify the original schema so it can be reused in references ', () => {
+    it('will not modify the original schema so it can be reused in references ', () => {
       expect(schema).toStrictEqual(originalSchema);
     });
 
-    test('will keep the example property', () => {
+    it('will keep the example property', () => {
       expect(translatedObject.schema).toHaveProperty('example', 'hello');
     });
 
-    test('will keep the deprecated property', () => {
+    it('will keep the deprecated property', () => {
       expect(translatedObject.schema).toHaveProperty('deprecated', true);
     });
 
-    test('will keep the writeOnly property', () => {
+    it('will keep the writeOnly property', () => {
       expect(translatedObject.schema).toHaveProperty('writeOnly', true);
     });
 
-    test('will keep the readOnly property', () => {
+    it('will keep the readOnly property', () => {
       expect(translatedObject.schema).toHaveProperty('readOnly', true);
     });
 
-    test('will keep the xml property', () => {
+    it('will keep the xml property', () => {
       expect(translatedObject.schema).toHaveProperty('xml', {});
     });
 
-    test('will keep the externalDocs property', () => {
+    it('will keep the externalDocs property', () => {
       expect(translatedObject.schema).toHaveProperty('externalDocs', {
         url: 'http://example.com/docs',
         description: 'Shiny docs',
@@ -235,7 +236,7 @@ describe('translateMediaTypeObject', () => {
     };
 
     describe('given response with schema with examples', () => {
-      test('should translate to IHttpContent', () => {
+      it('should translate to IHttpContent', () => {
         expect(
           translateMediaTypeObject(
             {
@@ -251,7 +252,7 @@ describe('translateMediaTypeObject', () => {
     });
 
     describe('given response with examples in media and schema objects', () => {
-      test('root example should take precedence over schema example', () => {
+      it('root example should take precedence over schema example', () => {
         expect(
           translateMediaTypeObject(
             {
@@ -276,7 +277,7 @@ describe('translateMediaTypeObject', () => {
 });
 
 describe('schema invalid', () => {
-  test('type as array does not throw error', () => {
+  it('type as array does not throw error', () => {
     const schema = ({
       type: ['string', 'object'],
       description: 'A simple string',
@@ -293,7 +294,7 @@ describe('schema invalid', () => {
     ).not.toThrow();
   });
 
-  test('nullish values in arrays', () => {
+  it('nullish values in arrays', () => {
     /*
       # Equivalent in YAML
       type: array
@@ -316,7 +317,7 @@ describe('schema invalid', () => {
     ).not.toThrow();
   });
 
-  test('nullish mapping value', () => {
+  it('nullish mapping value', () => {
     /*
      # Equivalent in YAML
      type: array
@@ -339,7 +340,7 @@ describe('schema invalid', () => {
 });
 
 describe('translateHeaderObject', () => {
-  test('should translate to IHttpHeaderParam', () => {
+  it('should translate to IHttpHeaderParam', () => {
     expect(
       translateHeaderObject(
         {
@@ -365,7 +366,7 @@ describe('translateHeaderObject', () => {
     ).toMatchSnapshot();
   });
 
-  test('should handle nullish value gracefully', () => {
+  it('should handle nullish value gracefully', () => {
     expect(translateHeaderObject(null, 'header')).toBeUndefined();
   });
 });

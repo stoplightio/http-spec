@@ -1,4 +1,4 @@
-import { HttpSecurityScheme, IHttpService, INodeTag, IServer } from '@stoplight/types';
+import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
 import { compact, filter, flatMap, keys, map } from 'lodash';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';

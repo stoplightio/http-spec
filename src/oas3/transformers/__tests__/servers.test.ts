@@ -1,7 +1,7 @@
 import { translateToServers } from '../servers';
 
 describe('translateToServers', () => {
-  test('translate single ServerObject to IServer', () => {
+  it('translate single ServerObject to IServer', () => {
     expect(
       translateToServers([
         {
@@ -24,7 +24,7 @@ describe('translateToServers', () => {
     ).toMatchSnapshot();
   });
 
-  test('filters out invalid variables', () => {
+  it('filters out invalid variables', () => {
     expect(
       translateToServers([
         {

@@ -1,5 +1,6 @@
 import { IHttpOperationRequest } from '@stoplight/types';
-import { Parameter, BodyParameter, FormDataParameter } from 'swagger-schema-official';
+import { BodyParameter, FormDataParameter, Parameter } from 'swagger-schema-official';
+
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,

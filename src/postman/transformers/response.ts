@@ -1,5 +1,6 @@
 import { HttpParamStyles, IHttpHeaderParam, IHttpOperationResponse } from '@stoplight/types';
 import { Cookie, Response } from 'postman-collection';
+
 import { transformDescriptionDefinition } from '../util';
 import { transformHeader, transformRawBody } from './params';
 

@@ -1,8 +1,9 @@
 import { OpenAPIObject } from 'openapi3-ts';
+
 import { transformOas3Operation } from '../operation';
 
 describe('transformOas3Operation', () => {
-  test('should return deprecated property in http operation root', () => {
+  it('should return deprecated property in http operation root', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3.0.0',
       servers: [
@@ -28,7 +29,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('deprecated', true);
   });
 
-  test('given no tags should translate operation with empty tags array', () => {
+  it('given no tags should translate operation with empty tags array', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -57,7 +58,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test('given some tags should translate operation with those tags', () => {
+  it('given some tags should translate operation with those tags', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -93,7 +94,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test('given invalid tags should translate operation as there were no tags specified', () => {
+  it('given invalid tags should translate operation as there were no tags specified', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -123,7 +124,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('tags', []);
   });
 
-  test('given tags with invalid values should translate operation as all tags were strings', () => {
+  it('given tags with invalid values should translate operation as all tags were strings', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -163,7 +164,7 @@ describe('transformOas3Operation', () => {
     ]);
   });
 
-  test('given operation servers should translate operation with those servers', () => {
+  it('given operation servers should translate operation with those servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -193,7 +194,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test.each([2, '', null, [null]])(
+  it.each([2, '', null, [null]])(
     'given invalid operation servers should translate operation with those servers',
     servers => {
       const document: Partial<OpenAPIObject> = {
@@ -226,7 +227,7 @@ describe('transformOas3Operation', () => {
     },
   );
 
-  test('given partially invalid operation servers should translate operation with valid only servers', () => {
+  it('given partially invalid operation servers should translate operation with valid only servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -261,7 +262,7 @@ describe('transformOas3Operation', () => {
     ]);
   });
 
-  test('given path servers should translate operation with those servers', () => {
+  it('given path servers should translate operation with those servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -291,7 +292,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test.each([2, '', null, [null]])(
+  it.each([2, '', null, [null]])(
     'given invalid path servers should translate operation with those servers',
     servers => {
       const document: Partial<OpenAPIObject> = {
@@ -324,7 +325,7 @@ describe('transformOas3Operation', () => {
     },
   );
 
-  test('given partially invalid path servers should translate operation with valid only servers', () => {
+  it('given partially invalid path servers should translate operation with valid only servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -359,7 +360,7 @@ describe('transformOas3Operation', () => {
     ]);
   });
 
-  test('given spec servers should translate operation with those servers', () => {
+  it('given spec servers should translate operation with those servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -389,7 +390,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test.each([2, '', null, [null]])(
+  it.each([2, '', null, [null]])(
     'given invalid spec servers should translate operation with those servers',
     (servers: any) => {
       const document: Partial<OpenAPIObject> = {
@@ -422,7 +423,7 @@ describe('transformOas3Operation', () => {
     },
   );
 
-  test('given partially spec servers should translate operation with valid only servers', () => {
+  it('given partially spec servers should translate operation with valid only servers', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -457,7 +458,7 @@ describe('transformOas3Operation', () => {
     ]);
   });
 
-  test('callback', () => {
+  it('callback', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -507,7 +508,7 @@ describe('transformOas3Operation', () => {
     ).toMatchSnapshot();
   });
 
-  test('given malformed parameters should translate operation with those parameters', () => {
+  it('given malformed parameters should translate operation with those parameters', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3',
       info: {
@@ -568,7 +569,7 @@ describe('transformOas3Operation', () => {
     });
   });
 
-  test('should keep the server variables', () => {
+  it('should keep the server variables', () => {
     const document: Partial<OpenAPIObject> = {
       id: '?http-service-id?',
       paths: {

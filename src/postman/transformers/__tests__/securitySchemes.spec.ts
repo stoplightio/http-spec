@@ -1,5 +1,6 @@
 import { HttpParamStyles } from '@stoplight/types';
 import { Collection, RequestAuth, RequestAuthDefinition } from 'postman-collection';
+
 import {
   isPostmanSecuritySchemeEqual,
   PostmanSecurityScheme,
@@ -789,7 +790,7 @@ describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
     true,
   ],
 ])('given %s security schemes', (desc, scheme1, scheme2, result) => {
-  it(`returns ${result ? 'true' : 'false'}`, () => {
+  test(`returns ${result ? 'true' : 'false'}`, () => {
     expect(isPostmanSecuritySchemeEqual(scheme1, scheme2)).toEqual(result);
   });
 });

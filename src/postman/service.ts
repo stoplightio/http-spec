@@ -1,4 +1,5 @@
 import { CollectionDefinition } from 'postman-collection';
+
 import { HttpServiceTransformer } from '../types';
 import { isStandardSecurityScheme, transformSecuritySchemes } from './transformers/securityScheme';
 import { resolveCollection, resolveVersion, transformDescriptionDefinition } from './util';

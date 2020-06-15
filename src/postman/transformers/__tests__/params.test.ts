@@ -1,5 +1,6 @@
 import { INodeExample } from '@stoplight/types';
 import { Header, QueryParam, RequestBody } from 'postman-collection';
+
 import { transformBody, transformHeader, transformPathParams, transformQueryParam } from '../params';
 
 describe('transformQueryParam()', () => {

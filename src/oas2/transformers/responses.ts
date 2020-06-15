@@ -3,8 +3,8 @@ import { JSONSchema4 } from 'json-schema';
 import { chain, map, partial } from 'lodash';
 import { Response } from 'swagger-schema-official';
 
-import { translateToHeaderParams } from './params';
 import { getExamplesFromSchema } from './getExamplesFromSchema';
+import { translateToHeaderParams } from './params';
 
 function translateToResponse(produces: string[], response: Response, statusCode: string): IHttpOperationResponse {
   const headers = translateToHeaderParams(response.headers || {});
