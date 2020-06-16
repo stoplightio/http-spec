@@ -1,4 +1,4 @@
-import { hasRef, pathToPointer, pointerToPath } from '@stoplight/json';
+import { hasRef, isLocalRef, pathToPointer, pointerToPath } from '@stoplight/json';
 import { Dictionary, Optional } from '@stoplight/types';
 import { get, isObjectLike, map } from 'lodash';
 import * as URIJS from 'urijs';
@@ -60,7 +60,7 @@ export const getLocalRefValue = (document: unknown, $ref: string): unknown => {
 };
 
 export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
-  if (hasRef(target)) {
+  if (hasRef(target) && isLocalRef(target.$ref)) {
     return getLocalRefValue(document, target.$ref);
   }
 
