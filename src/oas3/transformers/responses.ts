@@ -18,17 +18,20 @@ function translateToResponse(
   response: unknown,
   statusCode: string,
 ): Optional<IHttpOperationResponse> {
-  response = maybeResolveLocalRef(document, response);
-  if (!isResponseObject(response)) return;
+  const resolvedResponse = maybeResolveLocalRef(document, response);
+  if (!isResponseObject(resolvedResponse)) return;
 
   return {
     code: statusCode,
-    description: response.description,
+    description: resolvedResponse.description,
     headers: compact<IHttpHeaderParam>(
-      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(response.headers, translateHeaderObject),
+      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(resolvedResponse.headers, translateHeaderObject),
     ),
     contents: compact<IMediaTypeContent>(
-      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(response.content, translateMediaTypeObject),
+      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
+        resolvedResponse.content,
+        translateMediaTypeObject,
+      ),
     ),
   };
 }
