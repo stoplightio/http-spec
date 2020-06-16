@@ -8,50 +8,49 @@ import { isResponseObject } from '../guards';
 import { getExamplesFromSchema } from './getExamplesFromSchema';
 import { translateToHeaderParams } from './params';
 
-function responseTransformer(document: DeepPartial<Spec>) {
-  return function translateToResponse(
-    produces: string[],
-    response: unknown,
-    statusCode: string,
-  ): Optional<IHttpOperationResponse> {
-    const resolvedResponse = maybeResolveLocalRef(document, response);
-    if (!isResponseObject(resolvedResponse)) return;
+function translateToResponse(
+  document: DeepPartial<Spec>,
+  produces: string[],
+  response: unknown,
+  statusCode: string,
+): Optional<IHttpOperationResponse> {
+  const resolvedResponse = maybeResolveLocalRef(document, response);
+  if (!isResponseObject(resolvedResponse)) return;
 
-    const headers = translateToHeaderParams(resolvedResponse.headers || {});
-    const objectifiedExamples = chain(
-      resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
-    )
-      .mapValues((value, key) => ({ key, value }))
-      .values()
-      .value();
+  const headers = translateToHeaderParams(resolvedResponse.headers || {});
+  const objectifiedExamples = chain(
+    resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
+  )
+    .mapValues((value, key) => ({ key, value }))
+    .values()
+    .value();
 
-    const contents = produces.map(produceElement => ({
-      mediaType: produceElement,
-      schema: resolvedResponse.schema as JSONSchema4,
-      examples: objectifiedExamples.filter(example => example.key === produceElement),
-    }));
+  const contents = produces.map(produceElement => ({
+    mediaType: produceElement,
+    schema: resolvedResponse.schema as JSONSchema4,
+    examples: objectifiedExamples.filter(example => example.key === produceElement),
+  }));
 
-    const translatedResponses = {
-      code: statusCode,
-      description: resolvedResponse.description,
-      headers,
-      contents,
-    };
-
-    const foreignExamples = objectifiedExamples.filter(example => !produces.includes(example.key));
-    if (foreignExamples.length > 0) {
-      if (translatedResponses.contents.length === 0)
-        translatedResponses.contents[0] = {
-          mediaType: '',
-          schema: {},
-          examples: [],
-        };
-
-      translatedResponses.contents[0].examples!.push(...foreignExamples);
-    }
-
-    return translatedResponses;
+  const translatedResponses = {
+    code: statusCode,
+    description: resolvedResponse.description,
+    headers,
+    contents,
   };
+
+  const foreignExamples = objectifiedExamples.filter(example => !produces.includes(example.key));
+  if (foreignExamples.length > 0) {
+    if (translatedResponses.contents.length === 0)
+      translatedResponses.contents[0] = {
+        mediaType: '',
+        schema: {},
+        examples: [],
+      };
+
+    translatedResponses.contents[0].examples!.push(...foreignExamples);
+  }
+
+  return translatedResponses;
 }
 
 export function translateToResponses(
@@ -66,7 +65,7 @@ export function translateToResponses(
   return compact<IHttpOperationResponse>(
     map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(
       responses,
-      partial(responseTransformer(document), produces),
+      partial(translateToResponse, document, produces),
     ),
   );
 }
