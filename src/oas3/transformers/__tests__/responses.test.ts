@@ -2,61 +2,67 @@ import { translateToResponses } from '../responses';
 
 describe('translateToOas3Responses', () => {
   it('given empty dictionary should return empty array', () => {
-    expect(translateToResponses({})).toEqual([]);
+    expect(translateToResponses({}, {})).toEqual([]);
   });
 
   it('given a response in dictionary should translate', () => {
     expect(
-      translateToResponses({
-        default: {
-          content: {
-            'fake-content-type': {},
-          },
-          description: 'descr',
-          headers: {
-            'fake-header-name-1': {
-              description: 'calls per hour allowed by the user',
-              schema: {
-                type: 'integer',
-                format: 'int32',
-              },
-              example: 1000,
+      translateToResponses(
+        {},
+        {
+          default: {
+            content: {
+              'fake-content-type': {},
             },
-            'fake-header-name-2': {
-              description: 'calls per hour allowed by the user',
-              schema: {
-                type: 'integer',
-                format: 'int32',
+            description: 'descr',
+            headers: {
+              'fake-header-name-1': {
+                description: 'calls per hour allowed by the user',
+                schema: {
+                  type: 'integer',
+                  format: 'int32',
+                },
+                example: 1000,
               },
-              required: true,
-              example: 1000,
+              'fake-header-name-2': {
+                description: 'calls per hour allowed by the user',
+                schema: {
+                  type: 'integer',
+                  format: 'int32',
+                },
+                required: true,
+                example: 1000,
+              },
+            },
+          },
+          200: {
+            content: {
+              'fake-content-type-200': {
+                example: 'dumb',
+              },
+            },
+            description: 'descr 200',
+            headers: {
+              'fake-header-name-200': {},
             },
           },
         },
-        200: {
-          content: {
-            'fake-content-type-200': {
-              example: 'dumb',
-            },
-          },
-          description: 'descr 200',
-          headers: {
-            'fake-header-name-200': {},
-          },
-        },
-      }),
+      ),
     ).toMatchSnapshot();
   });
 
   it('given a response with nullish headers in dictionary should translate', () => {
     expect(
-      translateToResponses({
-        200: {
-          headers: {
-            '0': null,
+      translateToResponses(
+        {},
+        {
+          200: {
+            headers: {
+              '0': null,
+            },
           },
         },
-      }),
+      ),
     ).toStrictEqual([
       {
         code: '200',
@@ -69,12 +75,15 @@ describe('translateToOas3Responses', () => {
 
   it('should skip nullish responses', () => {
     expect(
-      translateToResponses({
-        200: null,
-        201: {
-          description: 'description 201',
+      translateToResponses(
+        {},
+        {
+          200: null,
+          201: {
+            description: 'description 201',
+          },
         },
-      }),
+      ),
     ).toStrictEqual([
       {
         code: '201',

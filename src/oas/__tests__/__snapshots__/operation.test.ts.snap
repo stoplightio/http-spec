@@ -1,0 +1,586 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oas operation openapi v2 1`] = `
+Array [
+  Object {
+    "description": "",
+    "id": "?http-operation-id?",
+    "iid": "addPet",
+    "method": "post",
+    "path": "/pets",
+    "request": Object {
+      "body": Object {
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": Object {
+              "$ref": "#/definitions/Pet",
+            },
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$ref": "#/definitions/Pet",
+            },
+          },
+        ],
+        "description": "Pet object that needs to be added to the store",
+        "required": true,
+      },
+    },
+    "responses": Array [
+      Object {
+        "code": "405",
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": undefined,
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": undefined,
+          },
+        ],
+        "description": "Invalid input",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [
+      Array [
+        Object {
+          "description": undefined,
+          "flows": Object {
+            "implicit": Object {
+              "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
+            },
+          },
+          "key": "petstore_auth",
+          "type": "oauth2",
+        },
+      ],
+    ],
+    "servers": Array [
+      Object {
+        "url": "https://petstore.swagger.io/v2",
+      },
+      Object {
+        "url": "http://petstore.swagger.io/v2",
+      },
+    ],
+    "summary": "Add a new pet to the store",
+    "tags": Array [
+      Object {
+        "name": "pet",
+      },
+    ],
+  },
+  Object {
+    "id": "?http-operation-id?",
+    "method": "get",
+    "path": "/pets",
+    "request": Object {
+      "headers": Array [
+        Object {
+          "name": "Rate-Limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
+      "query": Array [
+        Object {
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+        Object {
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+      ],
+    },
+    "responses": Array [
+      Object {
+        "code": "200",
+        "contents": Array [],
+        "description": "",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [],
+    "servers": Array [
+      Object {
+        "url": "https://petstore.swagger.io/v2",
+      },
+      Object {
+        "url": "http://petstore.swagger.io/v2",
+      },
+    ],
+    "summary": "List pets",
+    "tags": Array [],
+  },
+  Object {
+    "id": "?http-operation-id?",
+    "method": "options",
+    "path": "/pets",
+    "request": Object {
+      "headers": Array [
+        Object {
+          "name": "Rate-Limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
+      "query": Array [
+        Object {
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+        Object {
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "form",
+        },
+      ],
+    },
+    "responses": Array [
+      Object {
+        "code": "200",
+        "contents": Array [],
+        "description": "",
+        "headers": Array [
+          Object {
+            "description": "Allowed clients",
+            "name": "Allow",
+            "schema": Object {
+              "type": "string",
+            },
+            "style": "simple",
+          },
+          Object {
+            "description": "Remaining requests",
+            "name": "X-Rate-Limit",
+            "schema": Object {
+              "format": "int64",
+              "type": "number",
+            },
+            "style": "simple",
+          },
+        ],
+      },
+    ],
+    "security": Array [],
+    "servers": Array [
+      Object {
+        "url": "https://petstore.swagger.io/v2",
+      },
+      Object {
+        "url": "http://petstore.swagger.io/v2",
+      },
+    ],
+    "summary": "List pets",
+    "tags": Array [],
+  },
+  Object {
+    "description": "",
+    "id": "?http-operation-id?",
+    "method": "delete",
+    "path": "/pets",
+    "request": Object {},
+    "responses": Array [
+      Object {
+        "code": "400",
+        "contents": Array [],
+        "description": "Invalid ID supplied",
+        "headers": Array [],
+      },
+      Object {
+        "code": "404",
+        "contents": Array [],
+        "description": "Pet not found",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [],
+    "servers": Array [
+      Object {
+        "url": "https://petstore.swagger.io/v2",
+      },
+      Object {
+        "url": "http://petstore.swagger.io/v2",
+      },
+    ],
+    "summary": "Deletes a pet",
+    "tags": Array [],
+  },
+  Object {
+    "description": "",
+    "id": "?http-operation-id?",
+    "iid": "updatePet",
+    "method": "put",
+    "path": "/pet/{petId}",
+    "request": Object {
+      "body": Object {
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": Object {
+              "$ref": "#/definitions/Pet",
+            },
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$ref": "#/definitions/Pet",
+            },
+          },
+        ],
+        "description": "Pet object that needs to be added to the store",
+        "required": true,
+      },
+      "path": Array [
+        Object {
+          "name": "petId",
+          "required": true,
+          "schema": Object {
+            "type": "string",
+          },
+          "style": "simple",
+        },
+      ],
+    },
+    "responses": Array [
+      Object {
+        "code": "400",
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": undefined,
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": undefined,
+          },
+        ],
+        "description": "Invalid ID supplied",
+        "headers": Array [],
+      },
+      Object {
+        "code": "404",
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$ref": "#/definitions/Error",
+            },
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": Object {
+              "$ref": "#/definitions/Error",
+            },
+          },
+        ],
+        "description": "Our shared 404 response.",
+        "headers": Array [],
+      },
+      Object {
+        "code": "405",
+        "contents": Array [
+          Object {
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": undefined,
+          },
+          Object {
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": undefined,
+          },
+        ],
+        "description": "Validation exception",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [
+      Array [
+        Object {
+          "description": undefined,
+          "flows": Object {
+            "implicit": Object {
+              "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
+            },
+          },
+          "key": "petstore_auth",
+          "type": "oauth2",
+        },
+      ],
+    ],
+    "servers": Array [
+      Object {
+        "url": "https://petstore.swagger.io/v2",
+      },
+      Object {
+        "url": "http://petstore.swagger.io/v2",
+      },
+    ],
+    "summary": "Update an existing pet",
+    "tags": Array [
+      Object {
+        "name": "pet",
+      },
+    ],
+  },
+]
+`;
+
+exports[`oas operation openapi v3 1`] = `
+Array [
+  Object {
+    "description": "",
+    "id": "?http-operation-id?",
+    "iid": "addPet",
+    "method": "post",
+    "path": "/pets",
+    "request": Object {
+      "body": Object {
+        "contents": Array [],
+        "description": undefined,
+        "required": undefined,
+      },
+      "cookie": Array [],
+      "headers": Array [],
+      "path": Array [],
+      "query": Array [],
+    },
+    "responses": Array [
+      Object {
+        "code": "405",
+        "contents": Array [],
+        "description": "Invalid input",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [
+      Array [
+        Object {
+          "flows": Object {
+            "implicit": Object {
+              "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
+            },
+          },
+          "key": "petstore_auth",
+          "type": "oauth2",
+        },
+      ],
+    ],
+    "servers": Array [
+      Object {
+        "description": undefined,
+        "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+      Object {
+        "description": undefined,
+        "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+    ],
+    "summary": "Add a new pet to the store",
+    "tags": Array [
+      Object {
+        "name": "pet",
+      },
+    ],
+  },
+  Object {
+    "id": "?http-operation-id?",
+    "method": "get",
+    "path": "/pets",
+    "request": Object {
+      "body": Object {
+        "contents": Array [],
+      },
+      "cookie": Array [],
+      "headers": Array [],
+      "path": Array [],
+      "query": Array [
+        Object {
+          "examples": Array [],
+          "name": "skip",
+          "schema": Object {
+            "type": "string",
+          },
+        },
+        Object {
+          "examples": Array [],
+          "name": "limit",
+          "schema": Object {
+            "type": "string",
+          },
+        },
+      ],
+    },
+    "responses": Array [
+      Object {
+        "code": "200",
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "*/*",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+            },
+          },
+        ],
+        "description": "OK",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [],
+    "servers": Array [
+      Object {
+        "description": undefined,
+        "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+      Object {
+        "description": undefined,
+        "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+    ],
+    "summary": "List pets",
+    "tags": Array [],
+  },
+  Object {
+    "description": "",
+    "id": "?http-operation-id?",
+    "iid": "updatePet",
+    "method": "put",
+    "path": "/pet/{petId}",
+    "request": Object {
+      "body": Object {
+        "contents": Array [],
+        "description": undefined,
+        "required": undefined,
+      },
+      "cookie": Array [],
+      "headers": Array [],
+      "path": Array [
+        Object {
+          "examples": Array [],
+          "name": "petId",
+          "required": true,
+          "schema": Object {
+            "type": "string",
+          },
+        },
+      ],
+      "query": Array [],
+    },
+    "responses": Array [
+      Object {
+        "code": "400",
+        "contents": Array [],
+        "description": "Invalid ID supplied",
+        "headers": Array [],
+      },
+      Object {
+        "code": "404",
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "*/*",
+            "schema": Object {
+              "$ref": "#/components/schemas/Error",
+              "$schema": "http://json-schema.org/draft-04/schema#",
+            },
+          },
+        ],
+        "description": "Our shared 404 response.",
+        "headers": Array [],
+      },
+      Object {
+        "code": "405",
+        "contents": Array [],
+        "description": "Validation exception",
+        "headers": Array [],
+      },
+    ],
+    "security": Array [
+      Array [
+        Object {
+          "flows": Object {
+            "implicit": Object {
+              "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
+            },
+          },
+          "key": "petstore_auth",
+          "type": "oauth2",
+        },
+      ],
+    ],
+    "servers": Array [
+      Object {
+        "description": undefined,
+        "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+      Object {
+        "description": undefined,
+        "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
+      },
+    ],
+    "summary": "Update an existing pet",
+    "tags": Array [
+      Object {
+        "name": "pet",
+      },
+    ],
+  },
+]
+`;

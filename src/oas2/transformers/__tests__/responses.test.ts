@@ -16,6 +16,7 @@ describe('responses', () => {
 
   it('should translate to multiple responses', () => {
     const responses = translateToResponses(
+      {},
       {
         r1: {
           description: 'd1',
@@ -43,6 +44,7 @@ describe('responses', () => {
   it('should translate to response w/o headers', () => {
     expect(
       translateToResponses(
+        {},
         {
           r1: {
             description: 'd1',
@@ -60,6 +62,7 @@ describe('responses', () => {
   it('should translate to response w/o examples', () => {
     expect(
       translateToResponses(
+        {},
         {
           r1: {
             description: 'd1',
@@ -74,6 +77,7 @@ describe('responses', () => {
   describe('should keep foreign examples', () => {
     it('aggregating them to the first example', () => {
       const responses = translateToResponses(
+        {},
         {
           r1: {
             description: 'd1',
@@ -100,6 +104,7 @@ describe('responses', () => {
     describe('given a response with a schema with an example', () => {
       it('should translate to response with examples', () => {
         const responses = translateToResponses(
+          {},
           {
             r1: {
               description: 'd1',
@@ -120,6 +125,7 @@ describe('responses', () => {
     describe('given multiple schema example properties', () => {
       it('should translate all examples', () => {
         const responses = translateToResponses(
+          {},
           {
             r1: {
               description: 'd1',
@@ -148,6 +154,7 @@ describe('responses', () => {
     describe('given response with examples in root and schema objects', () => {
       it('root examples should take precedence over schema examples', () => {
         const responses = translateToResponses(
+          {},
           {
             r1: {
               description: 'd1',

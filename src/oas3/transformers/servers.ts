@@ -1,4 +1,4 @@
-import { DeepPartial, Dictionary, INodeVariable, IServer } from '@stoplight/types';
+import type { DeepPartial, Dictionary, INodeVariable, IServer } from '@stoplight/types';
 import { map, mapValues, pickBy } from 'lodash';
 import { ServerObject, ServerVariableObject } from 'openapi3-ts';
 
