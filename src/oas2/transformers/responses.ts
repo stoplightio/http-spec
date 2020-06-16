@@ -1,4 +1,4 @@
-import { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
+import type { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { chain, compact, map, partial } from 'lodash';
 import type { Response, Spec } from 'swagger-schema-official';

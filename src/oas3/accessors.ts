@@ -1,4 +1,4 @@
-import { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
+import type { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 

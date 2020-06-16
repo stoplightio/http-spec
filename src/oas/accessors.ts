@@ -7,10 +7,10 @@ export function getValidOasParameters<ParamType extends { name: string; in: stri
   operationParameters: ParamType[] | undefined,
   pathParameters: ParamType[] | undefined,
 ) {
-  const op = map(operationParameters, x => maybeResolveLocalRef(document, x) as ParamType);
-  const pp = map(pathParameters, x => maybeResolveLocalRef(document, x) as ParamType);
+  const resolvedOperationParams = map(operationParameters, x => maybeResolveLocalRef(document, x) as ParamType);
+  const resolvedPathParams = map(pathParameters, x => maybeResolveLocalRef(document, x) as ParamType);
 
-  return unionBy(op, pp, (parameter?: ParamType) => {
+  return unionBy(resolvedOperationParams, resolvedPathParams, (parameter?: ParamType) => {
     return isObject(parameter) ? `${parameter.name}-${parameter.in}` : 'invalid';
   }).filter(isObject);
 }
