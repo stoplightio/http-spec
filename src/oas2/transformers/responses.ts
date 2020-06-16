@@ -1,7 +1,7 @@
 import type { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
 import { chain, compact, map, partial } from 'lodash';
-import type { Response, Spec } from 'swagger-schema-official';
+import type { Spec } from 'swagger-schema-official';
 
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
@@ -14,12 +14,12 @@ function responseTransformer(document: DeepPartial<Spec>) {
     response: unknown,
     statusCode: string,
   ): Optional<IHttpOperationResponse> {
-    response = maybeResolveLocalRef(document, response);
-    if (!isResponseObject(response)) return;
+    const resolvedResponse = maybeResolveLocalRef(document, response);
+    if (!isResponseObject(resolvedResponse)) return;
 
-    const headers = translateToHeaderParams(response.headers || {});
+    const headers = translateToHeaderParams(resolvedResponse.headers || {});
     const objectifiedExamples = chain(
-      response.examples || (response.schema ? getExamplesFromSchema(response.schema) : void 0),
+      resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
     )
       .mapValues((value, key) => ({ key, value }))
       .values()
@@ -27,13 +27,13 @@ function responseTransformer(document: DeepPartial<Spec>) {
 
     const contents = produces.map(produceElement => ({
       mediaType: produceElement,
-      schema: (response as Response).schema as JSONSchema4,
+      schema: resolvedResponse.schema as JSONSchema4,
       examples: objectifiedExamples.filter(example => example.key === produceElement),
     }));
 
     const translatedResponses = {
       code: statusCode,
-      description: response.description,
+      description: resolvedResponse.description,
       headers,
       contents,
     };
