@@ -110,13 +110,19 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
 
   const { schema, encoding } = mediaObject;
 
-  const jsonSchema = schema
-    ? (toJsonSchema(schema, {
+  let jsonSchema: Optional<JSONSchema4>;
+
+  if (isObject(schema)) {
+    try {
+      jsonSchema = toJsonSchema(schema, {
         cloneSchema: true,
         strictMode: false,
         keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
-      }) as JSONSchema4)
-    : undefined;
+      }) as JSONSchema4;
+    } catch (ex) {
+      // happens
+    }
+  }
 
   const example = mediaObject.example || jsonSchema?.example;
   const examples = mediaObject.examples;
