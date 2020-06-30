@@ -20,6 +20,42 @@ describe('translateMediaTypeObject', () => {
     });
   });
 
+  it('given invalid schema, should return nothing', () => {
+    expect(
+      translateMediaTypeObject(
+        {
+          schema: {
+            get properties() {
+              throw new Error('I am invalid');
+            },
+          },
+        },
+        'mediaType',
+      ),
+    ).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
+    });
+  });
+
+  it('given non-object schema, should return nothing', () => {
+    expect(
+      translateMediaTypeObject(
+        {
+          schema: 'foo',
+        },
+        'mediaType',
+      ),
+    ).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
+    });
+  });
+
   it('given single example should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
