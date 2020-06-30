@@ -40,6 +40,22 @@ describe('translateMediaTypeObject', () => {
     });
   });
 
+  it('given non-object schema, should return nothing', () => {
+    expect(
+      translateMediaTypeObject(
+        {
+          schema: 'foo',
+        },
+        'mediaType',
+      ),
+    ).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
+    });
+  });
+
   it('given single example should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(

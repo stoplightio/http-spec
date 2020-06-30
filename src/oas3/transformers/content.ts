@@ -119,7 +119,7 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
         strictMode: false,
         keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
       }) as JSONSchema4;
-    } catch (ex) {
+    } catch {
       // happens
     }
   }
