@@ -1,4 +1,4 @@
-import { getExamplesFromSchema } from "../getExamplesFromSchema";
+import { getExamplesFromSchema } from '../getExamplesFromSchema';
 
 describe('getExamplesFromSchema', () => {
   it('should ignore invalid data', () => {
@@ -7,20 +7,24 @@ describe('getExamplesFromSchema', () => {
   });
 
   it('should work with x-examples', () => {
-    expect(getExamplesFromSchema({
-      'x-examples': {
-        'my-example': {}
-      }
-    })).toEqual({
-      'my-example': {}
+    expect(
+      getExamplesFromSchema({
+        'x-examples': {
+          'my-example': {},
+        },
+      }),
+    ).toEqual({
+      'my-example': {},
     });
   });
 
   it('should work with example', () => {
-    expect(getExamplesFromSchema({
-      'example': 'my-example'
-    })).toEqual({
-      default: 'my-example'
+    expect(
+      getExamplesFromSchema({
+        example: 'my-example',
+      }),
+    ).toEqual({
+      default: 'my-example',
     });
   });
 });
