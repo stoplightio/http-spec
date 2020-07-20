@@ -55,13 +55,21 @@ export function URI(url: string | URI = '') {
 export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
   isObjectLike(maybeDictionary);
 
-export const getLocalRefValue = (document: unknown, $ref: string): unknown => {
+const getLocalRefValue = (document: unknown, $ref: string): unknown => {
   return get(document, pointerToPath($ref));
 };
 
 export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
   if (hasRef(target) && isLocalRef(target.$ref)) {
-    return getLocalRefValue(document, target.$ref);
+    try {
+      return getLocalRefValue(document, target.$ref);
+    } catch (ex) {
+      if (ex instanceof URIError) {
+        return target;
+      }
+
+      return null;
+    }
   }
 
   return target;
