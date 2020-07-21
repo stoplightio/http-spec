@@ -1,6 +1,6 @@
 import * as urijs from 'urijs';
 
-import { URI } from '../utils';
+import { maybeResolveLocalRef, URI } from '../utils';
 
 describe('URI()', () => {
   it('instantiates from string', () => {
@@ -115,5 +115,25 @@ describe('URI()', () => {
         expect(URI('file:///path/to').append('api.yaml').toString()).toEqual('file:///path/to/api.yaml');
       });
     });
+  });
+});
+
+describe('maybeResolveLocalRef()', () => {
+  it('handles invalid $refs', () => {
+    expect(maybeResolveLocalRef({ a: true }, { $ref: '#a' })).toBeNull();
+  });
+
+  it('handles circular references', () => {
+    const document = {
+      get a(): unknown {
+        return this.a;
+      },
+    };
+
+    expect(
+      maybeResolveLocalRef(document, {
+        $ref: '#/a',
+      }),
+    ).toBeNull();
   });
 });
