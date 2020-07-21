@@ -63,11 +63,7 @@ export const maybeResolveLocalRef = (document: unknown, target: unknown): unknow
   if (hasRef(target) && isLocalRef(target.$ref)) {
     try {
       return getLocalRefValue(document, target.$ref);
-    } catch (ex) {
-      if (ex instanceof URIError) {
-        return target;
-      }
-
+    } catch {
       return null;
     }
   }

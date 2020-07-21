@@ -120,9 +120,7 @@ describe('URI()', () => {
 
 describe('maybeResolveLocalRef()', () => {
   it('handles invalid $refs', () => {
-    expect(maybeResolveLocalRef({ a: true }, { $ref: '#a' })).toStrictEqual({
-      $ref: '#a',
-    });
+    expect(maybeResolveLocalRef({ a: true }, { $ref: '#a' })).toBeNull();
   });
 
   it('handles circular references', () => {
