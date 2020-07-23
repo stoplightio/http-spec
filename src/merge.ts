@@ -1,14 +1,68 @@
-import { IHttpHeaderParam, IHttpOperation, IMediaTypeContent, IServer } from '@stoplight/types';
+import {
+  IHttpHeaderParam,
+  IHttpOperation,
+  IMediaTypeContent,
+  INodeExample,
+  INodeExternalExample,
+  IServer,
+} from '@stoplight/types';
+import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import * as mergeJsonSchema from 'json-schema-merge-allof';
+import { isEqual } from 'lodash';
 
-const mergeHeaders = mergeLists<IHttpHeaderParam[]>(
-  (h1, h2) => h1.name.toLowerCase() === h2.name.toLowerCase(),
-  h1 => h1, // ignore header #2 if mediaTypes is equal
-);
+function mergeHeaders(headers1: IHttpHeaderParam[], headers2: IHttpHeaderParam[]) {
+  const headers1OnlyAndCommon = headers1.map(h1 => {
+    const h2 = headers2.find(h2 => h2.name.toLowerCase() === h1.name.toLowerCase());
+
+    return {
+      ...h1,
+      required: !!(h1.required && h2 && h2.required),
+    };
+  });
+
+  const headers2Only = headers2
+    .filter(h2 => !headers1.find(h1 => h1.name.toLowerCase() === h2.name.toLowerCase()))
+    .map(h2 => ({ ...h2, required: false }));
+
+  return [...headers1OnlyAndCommon, ...headers2Only];
+}
 
 const mergeContents = mergeLists<IMediaTypeContent[]>(
   (c1, c2) => c1.mediaType.toLowerCase() === c2.mediaType.toLowerCase(),
-  c1 => c1, // ignore content #2 if mediaTypes is equal
+  (c1, c2) => ({
+    mediaType: c1.mediaType,
+    schema:
+      c1.schema &&
+      c2.schema &&
+      mergeJsonSchema({
+        allOf: [c1, c2].map(c => c.schema).filter(s => !!s),
+      } as JSONSchema4 | JSONSchema6 | JSONSchema7),
+    examples: mergeContentExamples([c1.examples, c2.examples]),
+    encodings: mergeContentEncodings([c1.encodings, c2.encodings]),
+  }),
 );
+
+function mergeContentExamples(exampleLists: Array<IMediaTypeContent['examples']>) {
+  return exampleLists.reduce<Array<INodeExample | INodeExternalExample> | undefined>((merged, examples) => {
+    if (!examples) return merged;
+
+    const arr = (Array.isArray(examples) ? examples : [examples]).filter(
+      ex => !(merged || []).find(me => isEqual(me, ex)),
+    );
+
+    return merged ? merged.concat(arr) : arr;
+  }, undefined);
+}
+
+function mergeContentEncodings(encodingLists: Array<IMediaTypeContent['encodings']>) {
+  return encodingLists.reduce<IMediaTypeContent['encodings']>((merged, encodings) => {
+    if (!encodings) return merged;
+
+    const arr = encodings.filter(enc => !(merged || []).find(me => isEqual(me, enc)));
+
+    return merged ? merged.concat(arr) : arr;
+  }, undefined);
+}
 
 export const mergeResponses = mergeLists<IHttpOperation['responses']>(
   (r1, r2) => r1.code === r2.code,
