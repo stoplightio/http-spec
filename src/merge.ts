@@ -7,17 +7,43 @@ import {
   IServer,
 } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
-import * as mergeJsonSchema from 'json-schema-merge-allof';
 import { isEqual } from 'lodash';
 
-function mergeHeaders(headers1: IHttpHeaderParam[], headers2: IHttpHeaderParam[]) {
+type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
+
+function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
+  const schemas = (schema2.anyOf && Object.keys(schema2).length === 1 ? (schema2.anyOf as JSONSchema[]) : [schema2]).reduce<
+    Array<JSONSchema>
+  >(
+    (schemas, schema) => {
+      if (!schemas.find(s => isEqual(s, schema))) {
+        schemas.push(schema);
+      }
+      return schemas;
+    },
+    schema1.anyOf && Object.keys(schema1).length === 1 ? schema1.anyOf as JSONSchema[] : [schema1],
+  );
+
+  return schemas.length === 1 ? schemas[0] : { anyOf: schemas as any };
+}
+
+function mergeHeaders(headers1: IHttpHeaderParam[], headers2: IHttpHeaderParam[]): IHttpHeaderParam[] {
   const headers1OnlyAndCommon = headers1.map(h1 => {
     const h2 = headers2.find(h2 => h2.name.toLowerCase() === h1.name.toLowerCase());
 
-    return {
-      ...h1,
-      required: !!(h1.required && h2 && h2.required),
-    };
+    if (h2) {
+      return {
+        ...h2,
+        ...h1,
+        required: true,
+        schema: h1.schema && h2.schema ? mergeSchemas(h1.schema, h2.schema) : h1.schema ? h1.schema : h2.schema,
+      };
+    } else {
+      return {
+        ...h1,
+        required: false,
+      };
+    }
   });
 
   const headers2Only = headers2
@@ -29,17 +55,14 @@ function mergeHeaders(headers1: IHttpHeaderParam[], headers2: IHttpHeaderParam[]
 
 const mergeContents = mergeLists<IMediaTypeContent[]>(
   (c1, c2) => c1.mediaType.toLowerCase() === c2.mediaType.toLowerCase(),
-  (c1, c2) => ({
-    mediaType: c1.mediaType,
-    schema:
-      c1.schema &&
-      c2.schema &&
-      mergeJsonSchema({
-        allOf: [c1, c2].map(c => c.schema).filter(s => !!s),
-      } as JSONSchema4 | JSONSchema6 | JSONSchema7),
-    examples: mergeContentExamples([c1.examples, c2.examples]),
-    encodings: mergeContentEncodings([c1.encodings, c2.encodings]),
-  }),
+  (c1, c2) => {
+    return {
+      mediaType: c1.mediaType,
+      schema: c1.schema && c2.schema ? mergeSchemas(c1.schema, c2.schema) : c1.schema ? c1.schema : c2.schema,
+      examples: mergeContentExamples([c1.examples, c2.examples]),
+      encodings: mergeContentEncodings([c1.encodings, c2.encodings]),
+    };
+  },
 );
 
 function mergeContentExamples(exampleLists: Array<IMediaTypeContent['examples']>) {

@@ -66,6 +66,56 @@ describe('mergeResponses()', () => {
     ]);
   });
 
+  it('merges schemas of headers correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+        ],
+        [
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'string' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'boolean' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        headers: [
+          { name: 'h1', style: HttpParamStyles.Simple, required: true, schema: undefined },
+          {
+            name: 'h2',
+            style: HttpParamStyles.Simple,
+            required: true,
+            schema: { anyOf: [{ type: 'number' }, { type: 'string' }, { type: 'boolean' }] },
+          },
+          { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+        ],
+        contents: [],
+      },
+    ]);
+  });
+
   it('merges headers having differently cased letters in name', () => {
     expect(
       mergeResponses(
