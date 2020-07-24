@@ -10,15 +10,15 @@ describe('mergeResponses()', () => {
           {
             code: '200',
             headers: [
-              { name: '200h1', style: HttpParamStyles.Simple },
-              { name: '200h2', style: HttpParamStyles.Simple },
+              { name: '200h1', style: HttpParamStyles.Simple, required: true },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
             code: '400',
             headers: [
-              { name: '400h1', style: HttpParamStyles.Simple },
-              { name: '400h2', style: HttpParamStyles.Simple },
+              { name: '400h1', style: HttpParamStyles.Simple, required: true },
+              { name: '400h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
@@ -26,15 +26,15 @@ describe('mergeResponses()', () => {
           {
             code: '200',
             headers: [
-              { name: '200h2', style: HttpParamStyles.Simple },
-              { name: '200h3', style: HttpParamStyles.Simple },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
+              { name: '200h3', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
             code: '500',
             headers: [
-              { name: '500h1', style: HttpParamStyles.Simple },
-              { name: '500h2', style: HttpParamStyles.Simple },
+              { name: '500h1', style: HttpParamStyles.Simple, required: true },
+              { name: '500h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
@@ -43,24 +43,24 @@ describe('mergeResponses()', () => {
       {
         code: '200',
         headers: [
-          { name: '200h1', style: HttpParamStyles.Simple },
-          { name: '200h2', style: HttpParamStyles.Simple },
-          { name: '200h3', style: HttpParamStyles.Simple },
+          { name: '200h1', style: HttpParamStyles.Simple, required: false },
+          { name: '200h2', style: HttpParamStyles.Simple, required: true },
+          { name: '200h3', style: HttpParamStyles.Simple, required: false },
         ],
         contents: [],
       },
       {
         code: '400',
         headers: [
-          { name: '400h1', style: HttpParamStyles.Simple },
-          { name: '400h2', style: HttpParamStyles.Simple },
+          { name: '400h1', style: HttpParamStyles.Simple, required: true },
+          { name: '400h2', style: HttpParamStyles.Simple, required: true },
         ],
       },
       {
         code: '500',
         headers: [
-          { name: '500h1', style: HttpParamStyles.Simple },
-          { name: '500h2', style: HttpParamStyles.Simple },
+          { name: '500h1', style: HttpParamStyles.Simple, required: true },
+          { name: '500h2', style: HttpParamStyles.Simple, required: true },
         ],
       },
     ]);
@@ -72,20 +72,20 @@ describe('mergeResponses()', () => {
         [
           {
             code: '200',
-            headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+            headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
           },
         ],
         [
           {
             code: '200',
-            headers: [{ name: 'oO', style: HttpParamStyles.Simple }],
+            headers: [{ name: 'oO', style: HttpParamStyles.Simple, required: true }],
           },
         ],
       ),
     ).toEqual([
       {
         code: '200',
-        headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+        headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
         contents: [],
       },
     ]);
@@ -230,8 +230,8 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200a', style: HttpParamStyles.Simple },
-                { name: '200b', style: HttpParamStyles.Simple },
+                { name: '200a', style: HttpParamStyles.Simple, required: true },
+                { name: '200b', style: HttpParamStyles.Simple, required: true },
               ],
             },
           },
@@ -244,8 +244,8 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200b', style: HttpParamStyles.Simple },
-                { name: '200c', style: HttpParamStyles.Simple },
+                { name: '200b', style: HttpParamStyles.Simple, required: true },
+                { name: '200c', style: HttpParamStyles.Simple, required: true },
               ],
             },
           },
@@ -259,9 +259,9 @@ describe('mergeOperations()', () => {
         responses: [{ code: '200', headers: [], contents: [] }],
         request: {
           headers: [
-            { name: '200a', style: HttpParamStyles.Simple },
-            { name: '200b', style: HttpParamStyles.Simple },
-            { name: '200c', style: HttpParamStyles.Simple },
+            { name: '200a', style: HttpParamStyles.Simple, required: false },
+            { name: '200b', style: HttpParamStyles.Simple, required: true },
+            { name: '200c', style: HttpParamStyles.Simple, required: false },
           ],
         },
         servers: [],
