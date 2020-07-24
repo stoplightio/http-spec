@@ -182,6 +182,48 @@ describe('mergeResponses()', () => {
     ]);
   });
 
+  it('merges content schemas correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            contents: [
+              { mediaType: 'application/json', schema: { type: 'object', properties: { a: { type: 'string' } } } },
+            ],
+          },
+        ],
+        [
+          {
+            code: '200',
+            contents: [
+              {
+                mediaType: 'application/json',
+                schema: { type: 'object', properties: { a: { type: 'string' }, b: { type: 'string' } } },
+              },
+            ],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        contents: [
+          {
+            mediaType: 'application/json',
+            schema: {
+              anyOf: [
+                { type: 'object', properties: { a: { type: 'string' } } },
+                { type: 'object', properties: { a: { type: 'string' }, b: { type: 'string' } } },
+              ],
+            },
+          },
+        ],
+        headers: [],
+      },
+    ]);
+  });
+
   it('merges contents having differently cased letters in name', () => {
     expect(
       mergeResponses(

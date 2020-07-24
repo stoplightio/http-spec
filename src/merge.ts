@@ -12,16 +12,17 @@ import { isEqual } from 'lodash';
 type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 
 function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
-  const schemas = (schema2.anyOf && Object.keys(schema2).length === 1 ? (schema2.anyOf as JSONSchema[]) : [schema2]).reduce<
-    Array<JSONSchema>
-  >(
+  const schemas = (schema2.anyOf && Object.keys(schema2).length === 1
+    ? (schema2.anyOf as JSONSchema[])
+    : [schema2]
+  ).reduce<Array<JSONSchema>>(
     (schemas, schema) => {
       if (!schemas.find(s => isEqual(s, schema))) {
         schemas.push(schema);
       }
       return schemas;
     },
-    schema1.anyOf && Object.keys(schema1).length === 1 ? schema1.anyOf as JSONSchema[] : [schema1],
+    schema1.anyOf && Object.keys(schema1).length === 1 ? (schema1.anyOf as JSONSchema[]) : [schema1],
   );
 
   return schemas.length === 1 ? schemas[0] : { anyOf: schemas as any };
