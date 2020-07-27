@@ -270,7 +270,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', contents: [], headers: [] }, { code: '400' }, { code: '500' }],
         servers: [],
-        request: { headers: [] },
+        request: { headers: undefined, path: undefined, query: undefined, body: undefined },
       },
       { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
       { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
@@ -306,7 +306,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', headers: [], contents: [] }],
         servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
-        request: { headers: [] },
+        request: { headers: undefined, path: undefined, query: undefined, body: undefined },
       },
     ]);
   });
@@ -322,9 +322,23 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200a', style: HttpParamStyles.Simple, required: true },
-                { name: '200b', style: HttpParamStyles.Simple, required: true },
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
               ],
+              query: [
+                { name: 'a', style: HttpParamStyles.Form, required: true },
+                { name: 'b', style: HttpParamStyles.Form, required: true },
+              ],
+              path: [{ name: 'a', style: HttpParamStyles.Simple, required: true }],
+              body: {
+                required: true,
+                contents: [
+                  {
+                    mediaType: 'application/json',
+                    schema: { type: 'string' },
+                  },
+                ],
+              },
             },
           },
         ],
@@ -336,9 +350,26 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200b', style: HttpParamStyles.Simple, required: true },
-                { name: '200c', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
+                { name: 'c', style: HttpParamStyles.Simple, required: true },
               ],
+              query: [
+                { name: 'b', style: HttpParamStyles.Form, required: true },
+                { name: 'c', style: HttpParamStyles.Form, required: true },
+              ],
+              path: [
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
+              ],
+              body: {
+                required: true,
+                contents: [
+                  {
+                    mediaType: 'application/json',
+                    schema: { type: 'number' },
+                  },
+                ],
+              },
             },
           },
         ],
@@ -351,10 +382,28 @@ describe('mergeOperations()', () => {
         responses: [{ code: '200', headers: [], contents: [] }],
         request: {
           headers: [
-            { name: '200a', style: HttpParamStyles.Simple, required: false },
-            { name: '200b', style: HttpParamStyles.Simple, required: true },
-            { name: '200c', style: HttpParamStyles.Simple, required: false },
+            { name: 'a', style: HttpParamStyles.Simple, required: false },
+            { name: 'b', style: HttpParamStyles.Simple, required: true },
+            { name: 'c', style: HttpParamStyles.Simple, required: false },
           ],
+          query: [
+            { name: 'a', style: HttpParamStyles.Form, required: false },
+            { name: 'b', style: HttpParamStyles.Form, required: true },
+            { name: 'c', style: HttpParamStyles.Form, required: false },
+          ],
+          path: [
+            { name: 'a', style: HttpParamStyles.Simple, required: true },
+            { name: 'b', style: HttpParamStyles.Simple, required: false },
+          ],
+          body: {
+            required: true,
+            contents: [
+              {
+                mediaType: 'application/json',
+                schema: { anyOf: [{ type: 'string' }, { type: 'number' }] },
+              },
+            ],
+          },
         },
         servers: [],
       },

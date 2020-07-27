@@ -1,6 +1,7 @@
 import {
-  IHttpHeaderParam,
   IHttpOperation,
+  IHttpOperationRequestBody,
+  IHttpParam,
   IMediaTypeContent,
   INodeExample,
   INodeExternalExample,
@@ -31,30 +32,30 @@ function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
   return schemas.length === 1 ? schemas[0] : { anyOf: schemas as any };
 }
 
-function mergeHeaders(headers1: IHttpHeaderParam[], headers2: IHttpHeaderParam[]): IHttpHeaderParam[] {
-  const headers1OnlyAndCommon = headers1.map(h1 => {
-    const h2 = headers2.find(h2 => h2.name.toLowerCase() === h1.name.toLowerCase());
+function mergeParams<T extends IHttpParam>(params1: T[], params2: T[]): T[] {
+  const params1OnlyAndCommon = params1.map(p1 => {
+    const p2 = params2.find(p2 => p2.name.toLowerCase() === p1.name.toLowerCase());
 
-    if (h2) {
+    if (p2) {
       return {
-        ...h2,
-        ...h1,
+        ...p2,
+        ...p1,
         required: true,
-        schema: h1.schema && h2.schema ? mergeSchemas(h1.schema, h2.schema) : h1.schema ? h1.schema : h2.schema,
+        schema: p1.schema && p2.schema ? mergeSchemas(p1.schema, p2.schema) : p1.schema ? p1.schema : p2.schema,
       };
     } else {
       return {
-        ...h1,
+        ...p1,
         required: false,
       };
     }
   });
 
-  const headers2Only = headers2
-    .filter(h2 => !headers1.find(h1 => h1.name.toLowerCase() === h2.name.toLowerCase()))
+  const params2Only = params2
+    .filter(p2 => !params1.find(p1 => p1.name.toLowerCase() === p2.name.toLowerCase()))
     .map(h2 => ({ ...h2, required: false }));
 
-  return [...headers1OnlyAndCommon, ...headers2Only];
+  return [...params1OnlyAndCommon, ...params2Only];
 }
 
 const mergeContents = mergeLists<IMediaTypeContent[]>(
@@ -95,10 +96,18 @@ export const mergeResponses = mergeLists<IHttpOperation['responses']>(
   (r1, r2) => r1.code === r2.code,
   (r1, r2) => ({
     ...r1,
-    headers: mergeHeaders(r1.headers || [], r2.headers || []),
+    headers: mergeParams(r1.headers || [], r2.headers || []),
     contents: mergeContents(r1.contents || [], r2.contents || []),
   }),
 );
+
+function mergeRequestBodies(b1: IHttpOperationRequestBody, b2: IHttpOperationRequestBody): IHttpOperationRequestBody {
+  return {
+    description: b1.description || b2.description,
+    required: b1.required && b2.required,
+    contents: mergeContents(b1.contents || [], b2.contents || []),
+  };
+}
 
 const mergeServers = mergeLists<IServer[]>(
   (s1, s2) => s1.url === s2.url,
@@ -111,7 +120,30 @@ export const mergeOperations = mergeLists<IHttpOperation[]>(
     ...o1,
     request: {
       ...o1.request,
-      headers: mergeHeaders(o1.request?.headers || [], o2.request?.headers || []),
+      path:
+        o1.request?.path && o2.request?.path
+          ? mergeParams(o1.request?.path, o2.request?.path)
+          : o1.request?.path
+          ? o1.request?.path
+          : o2.request?.path,
+      query:
+        o1.request?.query && o2.request?.query
+          ? mergeParams(o1.request?.query, o2.request?.query)
+          : o1.request?.query
+          ? o1.request?.query
+          : o2.request?.query,
+      body:
+        o1.request?.body && o2.request?.body
+          ? mergeRequestBodies(o1.request?.body, o2.request?.body)
+          : o1.request?.body
+          ? o1.request?.body
+          : o2.request?.body,
+      headers:
+        o1.request?.headers && o2.request?.headers
+          ? mergeParams(o1.request?.headers, o2.request?.headers)
+          : o1.request?.headers
+          ? o1.request?.headers
+          : o2.request?.headers,
     },
     responses: mergeResponses(o1.responses, o2.responses) as IHttpOperation['responses'],
     servers: mergeServers(o1.servers || [], o2.servers || []),
