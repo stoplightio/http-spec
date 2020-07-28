@@ -7,26 +7,24 @@ import {
   INodeExternalExample,
   IServer,
 } from '@stoplight/types';
-import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { isEqual } from 'lodash';
 
 type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 
-function isSimpleAnyOfSchema(schema: JSONSchema) {
-  return schema.anyOf && Object.keys(schema).length === 1;
+function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema7[] } {
+  return !!(schema.anyOf && Object.keys(schema).length === 1);
 }
 
 function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
-  const schemas = (isSimpleAnyOfSchema(schema2) ? (schema2.anyOf as JSONSchema[]) : [schema2]).reduce<
-    Array<JSONSchema>
-  >(
+  const schemas = (isExclusivelyAnyOfSchema(schema2) ? schema2.anyOf : [schema2]).reduce<Array<JSONSchema>>(
     (schemas, schema) => {
       if (!schemas.find(s => isEqual(s, schema))) {
-        schemas.push(schema);
+        return schemas.concat(schema);
       }
       return schemas;
     },
-    isSimpleAnyOfSchema(schema1) ? (schema1.anyOf as JSONSchema[]) : [schema1],
+    isExclusivelyAnyOfSchema(schema1) ? (schema1.anyOf as JSONSchema[]) : [schema1],
   );
 
   return schemas.length === 1 ? schemas[0] : { anyOf: schemas as any };
@@ -40,7 +38,7 @@ function mergeParams<T extends IHttpParam>(params1: T[], params2: T[]): T[] {
       return {
         ...p2,
         ...p1,
-        required: true,
+        required: p1.required && p2.required,
         schema: p1.schema && p2.schema ? mergeSchemas(p1.schema, p2.schema) : p1.schema ? p1.schema : p2.schema,
       };
     } else {
@@ -103,7 +101,7 @@ export const mergeResponses = mergeLists<IHttpOperation['responses']>(
 
 function mergeRequestBodies(b1: IHttpOperationRequestBody, b2: IHttpOperationRequestBody): IHttpOperationRequestBody {
   return {
-    description: b1.description || b2.description,
+    description: [b1.description, b2.description].filter(_ => _).join('; ') || undefined,
     required: b1.required && b2.required,
     contents: mergeContents(b1.contents || [], b2.contents || []),
   };

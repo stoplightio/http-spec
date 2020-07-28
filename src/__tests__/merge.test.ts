@@ -102,7 +102,7 @@ describe('mergeResponses()', () => {
       {
         code: '200',
         headers: [
-          { name: 'h1', style: HttpParamStyles.Simple, required: true, schema: undefined },
+          { name: 'h1', style: HttpParamStyles.Simple, required: true },
           {
             name: 'h2',
             style: HttpParamStyles.Simple,
@@ -111,6 +111,31 @@ describe('mergeResponses()', () => {
           },
           { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
         ],
+        contents: [],
+      },
+    ]);
+  });
+
+  it('merges same headers with difference in required flag correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: true }],
+          },
+        ],
+        [
+          {
+            code: '200',
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
         contents: [],
       },
     ]);
@@ -270,7 +295,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', contents: [], headers: [] }, { code: '400' }, { code: '500' }],
         servers: [],
-        request: { headers: undefined, path: undefined, query: undefined, body: undefined },
+        request: {},
       },
       { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
       { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
@@ -306,7 +331,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', headers: [], contents: [] }],
         servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
-        request: { headers: undefined, path: undefined, query: undefined, body: undefined },
+        request: {},
       },
     ]);
   });
@@ -331,6 +356,7 @@ describe('mergeOperations()', () => {
               ],
               path: [{ name: 'a', style: HttpParamStyles.Simple, required: true }],
               body: {
+                description: 'The cadillac stood by the house',
                 required: true,
                 contents: [
                   {
@@ -362,6 +388,7 @@ describe('mergeOperations()', () => {
                 { name: 'b', style: HttpParamStyles.Simple, required: true },
               ],
               body: {
+                description: 'And the yanks they were within',
                 required: true,
                 contents: [
                   {
@@ -397,6 +424,7 @@ describe('mergeOperations()', () => {
           ],
           body: {
             required: true,
+            description: 'The cadillac stood by the house; And the yanks they were within',
             contents: [
               {
                 mediaType: 'application/json',

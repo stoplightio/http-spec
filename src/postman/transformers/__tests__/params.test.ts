@@ -186,7 +186,7 @@ describe('transformBody()', () => {
                 schema: {
                   type: 'object',
                   properties: {
-                    k1: { type: 'string', description: undefined },
+                    k1: { type: 'string' },
                     k2: { type: 'string', description: 'd2' },
                   },
                 },
@@ -213,7 +213,7 @@ describe('transformBody()', () => {
                 schema: {
                   type: 'object',
                   properties: {
-                    k1: { type: 'string', description: undefined },
+                    k1: { type: 'string' },
                   },
                 },
               },
@@ -249,7 +249,7 @@ describe('transformBody()', () => {
         // verify shape of schema object
         expect(Object.entries(result!.contents![0].schema!.properties!)).toEqual(
           expect.arrayContaining([
-            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: undefined }],
+            [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string' }],
             [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), { type: 'string', description: 'd2' }],
           ]),
         );
@@ -307,7 +307,7 @@ describe('transformBody()', () => {
                 schema: {
                   type: 'object',
                   properties: {
-                    k1: { type: 'string', description: undefined },
+                    k1: { type: 'string' },
                     k2: { type: 'string', description: 'd2' },
                   },
                 },
@@ -334,7 +334,7 @@ describe('transformBody()', () => {
                 schema: {
                   type: 'object',
                   properties: {
-                    k1: { type: 'string', description: undefined },
+                    k1: { type: 'string' },
                   },
                 },
               },
