@@ -24,7 +24,7 @@ function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
       }
       return schemas;
     },
-    isExclusivelyAnyOfSchema(schema1) ? (schema1.anyOf as JSONSchema[]) : [schema1],
+    isExclusivelyAnyOfSchema(schema1) ? schema1.anyOf : [schema1],
   );
 
   return schemas.length === 1 ? schemas[0] : { anyOf: schemas as any };
