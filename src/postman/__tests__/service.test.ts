@@ -5,9 +5,7 @@ describe('transformPostmanCollectionService()', () => {
     it('transforms version correctly', () => {
       expect(transformPostmanCollectionService({ info: { version: '1.2.3-4' } })).toEqual({
         version: '1.2.3-4',
-        description: undefined,
         id: expect.any(String),
-        name: undefined,
         securitySchemes: [],
       });
     });
@@ -19,7 +17,6 @@ describe('transformPostmanCollectionService()', () => {
         description: 'a desc',
         version: '1.0.0',
         id: expect.any(String),
-        name: undefined,
         securitySchemes: [],
       });
     });
@@ -29,10 +26,8 @@ describe('transformPostmanCollectionService()', () => {
     it('lists them', () => {
       expect(transformPostmanCollectionService({ item: [{ request: { url: '/', auth: { type: 'basic' } } }] })).toEqual(
         {
-          description: undefined,
           version: '1.0.0',
           id: expect.any(String),
-          name: undefined,
           securitySchemes: [
             {
               key: 'http-0',

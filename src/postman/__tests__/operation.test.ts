@@ -31,7 +31,6 @@ describe('transformPostmanCollectionOperation()', () => {
           request: expect.any(Object),
           responses: [],
           security: [],
-          summary: undefined,
         });
       });
     });
@@ -44,7 +43,7 @@ describe('transformPostmanCollectionOperation()', () => {
             method: 'get',
             path: '/path',
           }),
-        ).toEqual(expect.objectContaining({ description: undefined }));
+        ).toEqual(expect.objectContaining({}));
       });
     });
 
@@ -70,7 +69,7 @@ describe('transformPostmanCollectionOperation()', () => {
             method: 'get',
             path: '/path',
           }),
-        ).toEqual(expect.objectContaining({ description: undefined }));
+        ).toEqual(expect.objectContaining({}));
       });
     });
 
@@ -343,7 +342,7 @@ describe('transformPostmanCollectionOperations()', () => {
                 type: 'string',
               },
               style: 'simple',
-              required: true,
+              required: false,
             },
             {
               examples: [
@@ -357,7 +356,7 @@ describe('transformPostmanCollectionOperations()', () => {
                 type: 'string',
               },
               style: 'simple',
-              required: true,
+              required: false,
             },
           ],
         }),

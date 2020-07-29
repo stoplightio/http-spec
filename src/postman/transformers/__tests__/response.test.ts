@@ -49,7 +49,6 @@ describe('transformResponse()', () => {
             },
           },
         ],
-        description: undefined,
         headers: [
           {
             examples: [
@@ -92,8 +91,6 @@ describe('transformResponse()', () => {
         ),
       ).toEqual({
         code: '200',
-        contents: undefined,
-        description: undefined,
         headers: [],
       });
     });
@@ -112,7 +109,6 @@ describe('transformResponse()', () => {
         ),
       ).toEqual({
         code: '200',
-        contents: undefined,
         description: 'Test',
         headers: [],
       });
@@ -143,8 +139,6 @@ describe('transformResponse()', () => {
           ),
         ).toEqual({
           code: '200',
-          contents: undefined,
-          description: undefined,
           headers: [
             {
               examples: [
@@ -181,8 +175,6 @@ describe('transformResponse()', () => {
           ),
         ).toEqual({
           code: '200',
-          contents: undefined,
-          description: undefined,
           headers: [
             {
               examples: [
@@ -216,8 +208,6 @@ describe('transformResponse()', () => {
           ),
         ).toEqual({
           code: '200',
-          contents: undefined,
-          description: undefined,
           headers: [
             {
               examples: [
@@ -257,8 +247,6 @@ describe('transformResponse()', () => {
           ),
         ).toEqual({
           code: '200',
-          contents: undefined,
-          description: undefined,
           headers: [
             {
               examples: [
@@ -295,8 +283,6 @@ describe('transformResponse()', () => {
           ),
         ).toEqual({
           code: '200',
-          contents: undefined,
-          description: undefined,
           headers: [
             {
               examples: [

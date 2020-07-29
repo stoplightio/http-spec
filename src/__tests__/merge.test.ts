@@ -10,15 +10,15 @@ describe('mergeResponses()', () => {
           {
             code: '200',
             headers: [
-              { name: '200h1', style: HttpParamStyles.Simple },
-              { name: '200h2', style: HttpParamStyles.Simple },
+              { name: '200h1', style: HttpParamStyles.Simple, required: true },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
             code: '400',
             headers: [
-              { name: '400h1', style: HttpParamStyles.Simple },
-              { name: '400h2', style: HttpParamStyles.Simple },
+              { name: '400h1', style: HttpParamStyles.Simple, required: true },
+              { name: '400h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
@@ -26,15 +26,15 @@ describe('mergeResponses()', () => {
           {
             code: '200',
             headers: [
-              { name: '200h2', style: HttpParamStyles.Simple },
-              { name: '200h3', style: HttpParamStyles.Simple },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
+              { name: '200h3', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
             code: '500',
             headers: [
-              { name: '500h1', style: HttpParamStyles.Simple },
-              { name: '500h2', style: HttpParamStyles.Simple },
+              { name: '500h1', style: HttpParamStyles.Simple, required: true },
+              { name: '500h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
@@ -43,25 +43,100 @@ describe('mergeResponses()', () => {
       {
         code: '200',
         headers: [
-          { name: '200h1', style: HttpParamStyles.Simple },
-          { name: '200h2', style: HttpParamStyles.Simple },
-          { name: '200h3', style: HttpParamStyles.Simple },
+          { name: '200h1', style: HttpParamStyles.Simple, required: false },
+          { name: '200h2', style: HttpParamStyles.Simple, required: true },
+          { name: '200h3', style: HttpParamStyles.Simple, required: false },
         ],
         contents: [],
       },
       {
         code: '400',
         headers: [
-          { name: '400h1', style: HttpParamStyles.Simple },
-          { name: '400h2', style: HttpParamStyles.Simple },
+          { name: '400h1', style: HttpParamStyles.Simple, required: true },
+          { name: '400h2', style: HttpParamStyles.Simple, required: true },
         ],
       },
       {
         code: '500',
         headers: [
-          { name: '500h1', style: HttpParamStyles.Simple },
-          { name: '500h2', style: HttpParamStyles.Simple },
+          { name: '500h1', style: HttpParamStyles.Simple, required: true },
+          { name: '500h2', style: HttpParamStyles.Simple, required: true },
         ],
+      },
+    ]);
+  });
+
+  it('merges schemas of headers correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+        ],
+        [
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'string' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+          {
+            code: '200',
+            headers: [
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'boolean' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+            ],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        headers: [
+          { name: 'h1', style: HttpParamStyles.Simple, required: true },
+          {
+            name: 'h2',
+            style: HttpParamStyles.Simple,
+            required: true,
+            schema: { anyOf: [{ type: 'number' }, { type: 'string' }, { type: 'boolean' }] },
+          },
+          { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+        ],
+        contents: [],
+      },
+    ]);
+  });
+
+  it('merges same headers with difference in required flag correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: true }],
+          },
+        ],
+        [
+          {
+            code: '200',
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
+        contents: [],
       },
     ]);
   });
@@ -72,20 +147,20 @@ describe('mergeResponses()', () => {
         [
           {
             code: '200',
-            headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+            headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
           },
         ],
         [
           {
             code: '200',
-            headers: [{ name: 'oO', style: HttpParamStyles.Simple }],
+            headers: [{ name: 'oO', style: HttpParamStyles.Simple, required: true }],
           },
         ],
       ),
     ).toEqual([
       {
         code: '200',
-        headers: [{ name: 'Oo', style: HttpParamStyles.Simple }],
+        headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
         contents: [],
       },
     ]);
@@ -128,6 +203,48 @@ describe('mergeResponses()', () => {
       {
         code: '500',
         contents: [{ mediaType: '500-tion/a-son' }, { mediaType: '500-tion/b-son' }],
+      },
+    ]);
+  });
+
+  it('merges content schemas correctly', () => {
+    expect(
+      mergeResponses(
+        [
+          {
+            code: '200',
+            contents: [
+              { mediaType: 'application/json', schema: { type: 'object', properties: { a: { type: 'string' } } } },
+            ],
+          },
+        ],
+        [
+          {
+            code: '200',
+            contents: [
+              {
+                mediaType: 'application/json',
+                schema: { type: 'object', properties: { a: { type: 'string' }, b: { type: 'string' } } },
+              },
+            ],
+          },
+        ],
+      ),
+    ).toEqual([
+      {
+        code: '200',
+        contents: [
+          {
+            mediaType: 'application/json',
+            schema: {
+              anyOf: [
+                { type: 'object', properties: { a: { type: 'string' } } },
+                { type: 'object', properties: { a: { type: 'string' }, b: { type: 'string' } } },
+              ],
+            },
+          },
+        ],
+        headers: [],
       },
     ]);
   });
@@ -178,7 +295,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', contents: [], headers: [] }, { code: '400' }, { code: '500' }],
         servers: [],
-        request: { headers: [] },
+        request: {},
       },
       { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
       { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
@@ -214,7 +331,7 @@ describe('mergeOperations()', () => {
         path: '/a',
         responses: [{ code: '200', headers: [], contents: [] }],
         servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
-        request: { headers: [] },
+        request: {},
       },
     ]);
   });
@@ -230,9 +347,24 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200a', style: HttpParamStyles.Simple },
-                { name: '200b', style: HttpParamStyles.Simple },
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
               ],
+              query: [
+                { name: 'a', style: HttpParamStyles.Form, required: true },
+                { name: 'b', style: HttpParamStyles.Form, required: true },
+              ],
+              path: [{ name: 'a', style: HttpParamStyles.Simple, required: true }],
+              body: {
+                description: 'The cadillac stood by the house',
+                required: true,
+                contents: [
+                  {
+                    mediaType: 'application/json',
+                    schema: { type: 'string' },
+                  },
+                ],
+              },
             },
           },
         ],
@@ -244,9 +376,27 @@ describe('mergeOperations()', () => {
             responses: [{ code: '200' }],
             request: {
               headers: [
-                { name: '200b', style: HttpParamStyles.Simple },
-                { name: '200c', style: HttpParamStyles.Simple },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
+                { name: 'c', style: HttpParamStyles.Simple, required: true },
               ],
+              query: [
+                { name: 'b', style: HttpParamStyles.Form, required: true },
+                { name: 'c', style: HttpParamStyles.Form, required: true },
+              ],
+              path: [
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
+              ],
+              body: {
+                description: 'And the yanks they were within',
+                required: true,
+                contents: [
+                  {
+                    mediaType: 'application/json',
+                    schema: { type: 'number' },
+                  },
+                ],
+              },
             },
           },
         ],
@@ -259,10 +409,29 @@ describe('mergeOperations()', () => {
         responses: [{ code: '200', headers: [], contents: [] }],
         request: {
           headers: [
-            { name: '200a', style: HttpParamStyles.Simple },
-            { name: '200b', style: HttpParamStyles.Simple },
-            { name: '200c', style: HttpParamStyles.Simple },
+            { name: 'a', style: HttpParamStyles.Simple, required: false },
+            { name: 'b', style: HttpParamStyles.Simple, required: true },
+            { name: 'c', style: HttpParamStyles.Simple, required: false },
           ],
+          query: [
+            { name: 'a', style: HttpParamStyles.Form, required: false },
+            { name: 'b', style: HttpParamStyles.Form, required: true },
+            { name: 'c', style: HttpParamStyles.Form, required: false },
+          ],
+          path: [
+            { name: 'a', style: HttpParamStyles.Simple, required: true },
+            { name: 'b', style: HttpParamStyles.Simple, required: false },
+          ],
+          body: {
+            required: true,
+            description: 'The cadillac stood by the house; And the yanks they were within',
+            contents: [
+              {
+                mediaType: 'application/json',
+                schema: { anyOf: [{ type: 'string' }, { type: 'number' }] },
+              },
+            ],
+          },
         },
         servers: [],
       },
