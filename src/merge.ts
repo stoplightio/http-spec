@@ -12,8 +12,16 @@ import { isEqual } from 'lodash';
 
 type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 
-function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema7[] } {
+function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema4[] } {
   return !!(schema.anyOf && Object.keys(schema).length === 1);
+}
+
+function mergeTwo<T>(
+  mergeFunc: (first: NonNullable<T>, second: NonNullable<T>) => NonNullable<T>,
+  first: T,
+  second: T,
+): T {
+  return first && second ? mergeFunc(first!, second!) : first ? first : second;
 }
 
 function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
@@ -27,7 +35,7 @@ function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
     isExclusivelyAnyOfSchema(schema1) ? schema1.anyOf : [schema1],
   );
 
-  return schemas.length === 1 ? schemas[0] : { anyOf: schemas as JSONSchema7[] };
+  return schemas.length === 1 ? schemas[0] : { anyOf: schemas as JSONSchema4[] };
 }
 
 function mergeParams<T extends IHttpParam>(params1: T[], params2: T[]): T[] {
@@ -39,7 +47,7 @@ function mergeParams<T extends IHttpParam>(params1: T[], params2: T[]): T[] {
         ...p2,
         ...p1,
         required: p1.required && p2.required,
-        schema: p1.schema && p2.schema ? mergeSchemas(p1.schema, p2.schema) : p1.schema ? p1.schema : p2.schema,
+        schema: mergeTwo(mergeSchemas, p1.schema, p2.schema),
       };
     } else {
       return {
@@ -61,7 +69,7 @@ const mergeContents = mergeLists<IMediaTypeContent[]>(
   (c1, c2) => {
     return {
       mediaType: c1.mediaType,
-      schema: c1.schema && c2.schema ? mergeSchemas(c1.schema, c2.schema) : c1.schema ? c1.schema : c2.schema,
+      schema: mergeTwo(mergeSchemas, c1.schema, c2.schema),
       examples: mergeContentExamples([c1.examples, c2.examples]),
       encodings: mergeContentEncodings([c1.encodings, c2.encodings]),
     };
@@ -101,7 +109,7 @@ export const mergeResponses = mergeLists<IHttpOperation['responses']>(
 
 function mergeRequestBodies(b1: IHttpOperationRequestBody, b2: IHttpOperationRequestBody): IHttpOperationRequestBody {
   return {
-    description: [b1.description, b2.description].filter(_ => _).join('; ') || undefined,
+    description: [b1.description, b2.description].filter(Boolean).join('; ') || undefined,
     required: b1.required && b2.required,
     contents: mergeContents(b1.contents || [], b2.contents || []),
   };
@@ -118,30 +126,10 @@ export const mergeOperations = mergeLists<IHttpOperation[]>(
     ...o1,
     request: {
       ...o1.request,
-      path:
-        o1.request?.path && o2.request?.path
-          ? mergeParams(o1.request?.path, o2.request?.path)
-          : o1.request?.path
-          ? o1.request?.path
-          : o2.request?.path,
-      query:
-        o1.request?.query && o2.request?.query
-          ? mergeParams(o1.request?.query, o2.request?.query)
-          : o1.request?.query
-          ? o1.request?.query
-          : o2.request?.query,
-      body:
-        o1.request?.body && o2.request?.body
-          ? mergeRequestBodies(o1.request?.body, o2.request?.body)
-          : o1.request?.body
-          ? o1.request?.body
-          : o2.request?.body,
-      headers:
-        o1.request?.headers && o2.request?.headers
-          ? mergeParams(o1.request?.headers, o2.request?.headers)
-          : o1.request?.headers
-          ? o1.request?.headers
-          : o2.request?.headers,
+      path: mergeTwo(mergeParams, o1.request?.path, o2.request?.path),
+      query: mergeTwo(mergeParams, o1.request?.query, o2.request?.query),
+      body: mergeTwo(mergeRequestBodies, o1.request?.body, o2.request?.body),
+      headers: mergeTwo(mergeParams, o1.request?.headers, o2.request?.headers),
     },
     responses: mergeResponses(o1.responses, o2.responses) as IHttpOperation['responses'],
     servers: mergeServers(o1.servers || [], o2.servers || []),
