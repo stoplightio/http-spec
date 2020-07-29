@@ -25,3 +25,23 @@ If you would like to add support for another API description format, like RAML, 
 3. Let the TypeScript errors guide you while filling out the missing fields (such as Security Schemes, Servers)
 4. Create a function that's able to return an array of `IHttpOperation` from your own input
 5. Profit
+
+## IHttpOperation merger
+
+`src/merge.ts` contains a utility that reduces the list of `IHttpOperation`'s into a minimal set. This tool particularly handy if you have a recorded list of request/response pairs, and you want to infer a specification out of it.
+
+The strategy is the following:
+1. group operations by paths
+2. for each group:
+    1. merge request definitions, headers, query parameters, body schemas
+    2. group responses by the code
+    3. for each response code:
+        1. merge headers, examples, encodings, ...
+        2. group contents by media type
+        3. for each media type: merge body schemas
+
+### Merging strategy highlights
+
+- Conflicting examples will make the merger relax the constraints. That means e.g. if a header is required in one request and not required in another one then the resulting operation will _not_ require that header to be present.
+- Different JSON Schemas are coupled with `anyOf`.
+- By default, additionalProperties are permitted.
