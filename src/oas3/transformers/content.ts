@@ -15,6 +15,7 @@ import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-
 
 import { isDictionary } from '../../utils';
 import { isHeaderObject } from '../guards';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -124,8 +125,8 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     }
   }
 
-  const example = mediaObject.example || jsonSchema?.example;
-  const examples = mediaObject.examples;
+  const example = getExamplesFromSchema(mediaObject) || (jsonSchema && getExamplesFromSchema(jsonSchema));
+  const examples = getExamplesFromSchema(mediaObject);
 
   return {
     mediaType,

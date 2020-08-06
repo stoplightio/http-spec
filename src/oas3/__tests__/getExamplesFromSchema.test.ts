@@ -1,3 +1,5 @@
+import { JSONSchema4 } from 'json-schema';
+
 import { getExamplesFromSchema } from '../transformers/getExamplesFromSchema';
 
 describe('getExamplesFromSchema', () => {
@@ -41,9 +43,26 @@ describe('getExamplesFromSchema', () => {
       ],
     });
   });
+
+  it('should ignore work with example', () => {
+    expect(
+      getExamplesFromSchema({
+        example: {
+          deviceID: '123',
+          deviceName: 'frontDoorLock',
+        },
+        schema: {},
+      }),
+    ).toEqual({
+      default: {
+        deviceID: '123',
+        deviceName: 'frontDoorLock',
+      },
+    });
+  });
 });
 
-const schema = {
+const schema: JSONSchema4 = {
   title: 'Device',
   type: 'object',
   'x-tags': ['devices', 'IOT'],
