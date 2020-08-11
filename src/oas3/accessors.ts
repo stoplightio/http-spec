@@ -33,10 +33,14 @@ export function getSecurities(
 
         if (isSecurityScheme(definition) && definition.type === 'oauth2') {
           // Put back only the flows that are part of the current definition
-          definition.flows = mapValues(definition.flows, (flow: OAuthFlowObject) => ({
-            ...flow,
-            scopes: pickBy(flow.scopes, (key: string) => flattenPairs[opScheme].includes(key)),
-          }));
+          return {
+            ...definition,
+            flows: mapValues(definition.flows, (flow: OAuthFlowObject) => ({
+              ...flow,
+              scopes: pickBy(flow.scopes, (key: string) => flattenPairs[opScheme].includes(key)),
+            })),
+            key: opScheme,
+          };
         }
 
         return { ...definition, key: opScheme };
