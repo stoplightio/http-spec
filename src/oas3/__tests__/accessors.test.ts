@@ -1,5 +1,3 @@
-import { SecuritySchemeObject } from 'openapi3-ts';
-
 import { getSecurities } from '../accessors';
 
 describe('getOas3Securities', () => {
@@ -14,7 +12,7 @@ describe('getOas3Securities', () => {
           securitySchemes: {
             scheme: {
               type: 'apiKey',
-            } as SecuritySchemeObject,
+            },
           },
         },
       }),
@@ -29,7 +27,7 @@ describe('getOas3Securities', () => {
           securitySchemes: {
             operationScheme: {
               type: 'apiKey',
-            } as SecuritySchemeObject,
+            },
           },
         },
       }),
@@ -51,7 +49,7 @@ describe('getOas3Securities', () => {
             securitySchemes: {
               specScheme: {
                 type: 'apiKey',
-              } as SecuritySchemeObject,
+              },
             },
           },
         },
@@ -76,10 +74,10 @@ describe('getOas3Securities', () => {
             securitySchemes: {
               operationScheme: {
                 type: 'http',
-              } as SecuritySchemeObject,
+              },
               specScheme: {
                 type: 'apiKey',
-              } as SecuritySchemeObject,
+              },
             },
           },
         },
@@ -104,10 +102,10 @@ describe('getOas3Securities', () => {
             securitySchemes: {
               operationScheme: {
                 type: 'http',
-              } as SecuritySchemeObject,
+              },
               specScheme: {
                 type: 'apiKey',
-              } as SecuritySchemeObject,
+              },
             },
           },
         },
