@@ -58,6 +58,7 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
       return isSecurityScheme(definition) && transformToSingleSecurity(definition, key);
     }),
   );
+
   if (securitySchemes.length) {
     httpService.securitySchemes = securitySchemes;
   }
