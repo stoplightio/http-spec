@@ -90,7 +90,7 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
   );
 
   if (security.length) {
-    //@ts-ignore
+    //@ts-ignore I hate doing this, but unfortunately Lodash types are (rightfully) very loose and put undefined when it can't happen
     httpService.security = security;
   }
 
