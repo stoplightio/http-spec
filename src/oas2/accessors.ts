@@ -35,9 +35,9 @@ function getSecurity(
     return [];
   }
 
-  return map(security, (sec: any) => {
+  return map(security, sec => {
     return compact(
-      keys(sec).map((key: string) => {
+      keys(sec).map(key => {
         const def = definitions[key];
 
         if (isSecurityScheme(def)) {
