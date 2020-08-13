@@ -208,4 +208,32 @@ describe('oas3 service', () => {
       ],
     });
   });
+
+  it('filters out scopes', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.0',
+      components: {
+        schemas: {},
+        securitySchemes: {
+          'API Key': {
+            type: 'oauth2',
+            flows: {
+              implicit: {
+                authorizationUrl: '',
+                refreshUrl: '',
+                scopes: {
+                  scope_1: '',
+                  scope_2: '',
+                },
+              },
+            },
+          },
+        },
+      },
+      security: [{ 'API Key': ['scope_1'] }],
+    };
+
+    const transformed = transformOas3Service({ document });
+    expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
+  });
 });
