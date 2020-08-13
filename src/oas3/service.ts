@@ -66,13 +66,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     flatMap(document.security, sec => {
       if (!sec) return null;
 
-      return keys(sec).map(key => {
-        return securitySchemes.find(securityScheme => {
-          return securityScheme.key === key;
-        });
-      });
+      return keys(sec).map(key => securitySchemes.find(securityScheme => securityScheme.key === key));
     }),
   );
+
   if (security.length) {
     httpService.security = security;
   }
