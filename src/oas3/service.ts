@@ -1,5 +1,6 @@
 import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, keys, map } from 'lodash';
+import { compact, filter, flatMap, keys, map, mapValues, pickBy } from 'lodash';
+import { OAuthFlowObject } from 'openapi3-ts';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
 import { isSecurityScheme, isTagObject } from './guards';
@@ -67,11 +68,29 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     flatMap(document.security, sec => {
       if (!sec) return null;
 
-      return keys(sec).map(key => securitySchemes.find(securityScheme => securityScheme.key === key));
+      return keys(sec).map(key => {
+        const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
+        if (ss && ss.type === 'oauth2') {
+          return {
+            ...ss,
+            flows: mapValues(ss.flows, (flow: OAuthFlowObject) => ({
+              ...flow,
+              scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
+                const secKey = sec[key];
+                if (secKey) return secKey.includes(scopeKey);
+                return false;
+              }),
+            })),
+          };
+        }
+
+        return ss;
+      });
     }),
   );
 
   if (security.length) {
+    //@ts-ignore
     httpService.security = security;
   }
 
