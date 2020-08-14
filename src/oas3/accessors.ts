@@ -37,7 +37,7 @@ export function getSecurities(
             ...definition,
             flows: mapValues(definition.flows, (flow: OAuthFlowObject) => ({
               ...flow,
-              scopes: pickBy(flow.scopes, (key: string) => flattenPairs[opScheme].includes(key)),
+              scopes: pickBy(flow.scopes, (_val: string, key: string) => flattenPairs[opScheme].includes(key)),
             })),
             key: opScheme,
           };

@@ -196,7 +196,7 @@ describe('securities', () => {
                 },
               },
             },
-            [{ 'implicit-flow-security': ['value'] }],
+            [{ 'implicit-flow-security': ['scope'] }],
           ),
         ).toEqual([
           [
@@ -229,7 +229,7 @@ describe('securities', () => {
                 },
               },
             },
-            [{ 'password-flow-security': ['value'] }],
+            [{ 'password-flow-security': ['scope'] }],
           ),
         ).toEqual([
           [
@@ -262,7 +262,7 @@ describe('securities', () => {
                 },
               },
             },
-            [{ 'clientCredentials-flow-security': ['value'] }],
+            [{ 'clientCredentials-flow-security': ['scope'] }],
           ),
         ).toEqual([
           [
@@ -296,7 +296,7 @@ describe('securities', () => {
                 },
               },
             },
-            [{ 'authorizationCode-flow-security': ['value'] }],
+            [{ 'authorizationCode-flow-security': ['scope'] }],
           ),
         ).toEqual([
           [
@@ -359,7 +359,7 @@ describe('securities', () => {
         expect(
           translateToSecurities(document, [
             { 'http-security': [] },
-            { 'implicit-security': ['value'] },
+            { 'implicit-security': ['scope'] },
             { 'api-security': [] },
           ]),
         ).toEqual([
@@ -393,7 +393,7 @@ describe('securities', () => {
       it('AND relation between security schemes', () => {
         expect(
           translateToSecurities(document, [
-            { 'http-security': [], 'implicit-security': ['value'], 'api-security': [] },
+            { 'http-security': [], 'implicit-security': ['scope'], 'api-security': [] },
           ]),
         ).toEqual([
           [
