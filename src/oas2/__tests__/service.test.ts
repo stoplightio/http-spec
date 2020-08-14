@@ -65,4 +65,25 @@ describe('oas2 service', () => {
       version: '',
     });
   });
+
+  it('filters out scopes', () => {
+    const document: Partial<Spec> = {
+      swagger: '2.0',
+      securityDefinitions: {
+        'API Key': {
+          type: 'oauth2',
+          flow: 'implicit',
+          authorizationUrl: '',
+          scopes: {
+            scope_1: '',
+            scope_2: '',
+          },
+        },
+      },
+      security: [{ 'API Key': ['scope_1'] }],
+    };
+
+    const transformed = transformOas2Service({ document });
+    expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
+  });
 });

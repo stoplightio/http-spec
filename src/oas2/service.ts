@@ -1,5 +1,5 @@
 import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, isString, keys } from 'lodash';
+import { compact, filter, flatMap, isString, keys, pickBy } from 'lodash';
 
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { isTagObject } from './guards';
@@ -58,12 +58,32 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
       if (!sec) return null;
 
       return keys(sec).map(key => {
-        return securitySchemes.find(securityScheme => {
-          return securityScheme.key === key;
-        });
+        const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
+        if (ss && ss.type === 'oauth2') {
+          const flows = {};
+          for (const flowKey in ss.flows) {
+            const flow = ss.flows[flowKey];
+            flows[flowKey] = {
+              ...flow,
+              scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
+                const secKey = sec[key];
+                if (secKey) return secKey.includes(scopeKey);
+                return undefined;
+              }),
+            };
+          }
+
+          return {
+            ...ss,
+            flows,
+          };
+        }
+
+        return ss;
       });
     }),
   );
+
   if (security.length) {
     httpService.security = security;
   }
