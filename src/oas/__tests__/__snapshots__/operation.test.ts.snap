@@ -398,7 +398,10 @@ Array [
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
-              "scopes": Object {},
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
             },
           },
           "key": "petstore_auth",
@@ -549,7 +552,10 @@ Array [
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
-              "scopes": Object {},
+              "scopes": Object {
+                "read:pets": "read your pets",
+                "write:pets": "modify pets in your account",
+              },
             },
           },
           "key": "petstore_auth",
