@@ -1,5 +1,5 @@
-import { HttpSecurityScheme, IHttpService, IOauth2Flow, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, isString, keys, mapValues, pickBy } from 'lodash';
+import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
+import { compact, filter, flatMap, isString, keys, pickBy } from 'lodash';
 
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { isTagObject } from './guards';
@@ -60,16 +60,22 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
       return keys(sec).map(key => {
         const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
         if (ss && ss.type === 'oauth2') {
-          return {
-            ...ss,
-            flows: mapValues(ss.flows, (flow: IOauth2Flow) => ({
+          const flows = {};
+          for (const flowKey in ss.flows) {
+            const flow = ss.flows[flowKey];
+            flows[flowKey] = {
               ...flow,
               scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
                 const secKey = sec[key];
                 if (secKey) return secKey.includes(scopeKey);
-                return false;
+                return undefined;
               }),
-            })),
+            };
+          }
+
+          return {
+            ...ss,
+            flows,
           };
         }
 
@@ -79,7 +85,6 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
   );
 
   if (security.length) {
-    //@ts-ignore I hate doing this, but unfortunately Lodash types are (rightfully) very loose and put undefined when it can't happen
     httpService.security = security;
   }
 
