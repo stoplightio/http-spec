@@ -10,53 +10,58 @@ describe('getExamplesFromSchema', () => {
 
   it('should work with x-examples', () => {
     expect(getExamplesFromSchema(schema)).toEqual({
-      devices: [
-        {
-          deviceID: '123',
-          deviceName: 'frontDoorLock',
-          deviceClass: 'safety',
-          spaceID: 'home',
-          alexaCompatible: true,
-          storageUsed: 0.003,
-          storageFree: 1,
-        },
-        {
-          deviceID: '789',
-          deviceName: 'sprinkler',
-          deviceClass: 'convenience',
-          spaceID: 'yard',
-          alexaCompatible: false,
-          storageUsed: 0.0018,
-          storageFree: 1,
-        },
-      ],
-      device: [
-        {
-          deviceID: 'abc',
-          deviceName: 'welcomeDroid',
-          deviceClass: 'commercial',
-          spaceID: 'office',
-          alexaCompatible: true,
-          storageUsed: 137,
-          storageFree: 300,
-        },
-      ],
+      devices: {
+        value: [
+          {
+            deviceID: '123',
+            deviceName: 'frontDoorLock',
+            deviceClass: 'safety',
+            spaceID: 'home',
+            alexaCompatible: true,
+            storageUsed: 0.003,
+            storageFree: 1,
+          },
+          {
+            deviceID: '789',
+            deviceName: 'sprinkler',
+            deviceClass: 'convenience',
+            spaceID: 'yard',
+            alexaCompatible: false,
+            storageUsed: 0.0018,
+            storageFree: 1,
+          },
+        ],
+      },
+      device: {
+        value: [
+          {
+            deviceID: 'abc',
+            deviceName: 'welcomeDroid',
+            deviceClass: 'commercial',
+            spaceID: 'office',
+            alexaCompatible: true,
+            storageUsed: 137,
+            storageFree: 300,
+          },
+        ],
+      },
     });
   });
 
-  it('should ignore work with example', () => {
+  it('should work with example', () => {
     expect(
       getExamplesFromSchema({
         example: {
           deviceID: '123',
           deviceName: 'frontDoorLock',
         },
-        schema: {},
       }),
     ).toEqual({
       default: {
-        deviceID: '123',
-        deviceName: 'frontDoorLock',
+        value: {
+          deviceID: '123',
+          deviceName: 'frontDoorLock',
+        },
       },
     });
   });

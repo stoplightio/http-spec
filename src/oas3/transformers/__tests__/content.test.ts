@@ -285,6 +285,22 @@ describe('translateMediaTypeObject', () => {
           ),
         ).toHaveProperty('examples', [{ key: 'default', value: defaultExample }]);
       });
+
+      it('should translate to IHttpContent with x-examples', () => {
+        expect(
+          translateMediaTypeObject(
+            {
+              schema: {
+                'x-examples': {
+                  foo: defaultExample,
+                },
+              },
+              encoding: {},
+            },
+            'mediaType',
+          ),
+        ).toHaveProperty('examples', [{ key: 'foo', value: defaultExample }]);
+      });
     });
 
     describe('given response with examples in media and schema objects', () => {

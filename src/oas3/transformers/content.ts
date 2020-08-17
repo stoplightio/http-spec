@@ -125,8 +125,8 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     }
   }
 
-  const example = getExamplesFromSchema(mediaObject) || (jsonSchema && getExamplesFromSchema(jsonSchema));
-  const examples = getExamplesFromSchema(mediaObject);
+  const example = mediaObject.example;
+  const examples = mediaObject.examples || (jsonSchema ? getExamplesFromSchema(jsonSchema) : void 0);
 
   return {
     mediaType,
