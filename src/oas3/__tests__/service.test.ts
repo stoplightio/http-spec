@@ -15,11 +15,7 @@ describe('oas3 service', () => {
       },
     };
 
-    expect(
-      transformOas3Service({
-        document,
-      }),
-    ).toStrictEqual({
+    expect(transformOas3Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
@@ -71,11 +67,7 @@ describe('oas3 service', () => {
       },
     },
   ])('should handle lacking flows for oauth2 security object', document => {
-    expect(
-      transformOas3Service({
-        document,
-      }),
-    ).toStrictEqual({
+    expect(transformOas3Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
@@ -94,11 +86,7 @@ describe('oas3 service', () => {
       servers: 2 as any,
     };
 
-    expect(
-      transformOas3Service({
-        document,
-      }),
-    ).toStrictEqual({
+    expect(transformOas3Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
@@ -121,11 +109,7 @@ describe('oas3 service', () => {
       ],
     };
 
-    expect(
-      transformOas3Service({
-        document,
-      }),
-    ).toStrictEqual({
+    expect(transformOas3Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: '',
       version: '1.0',
@@ -223,5 +207,33 @@ describe('oas3 service', () => {
         },
       ],
     });
+  });
+
+  it('filters out scopes', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.0',
+      components: {
+        schemas: {},
+        securitySchemes: {
+          'API Key': {
+            type: 'oauth2',
+            flows: {
+              implicit: {
+                authorizationUrl: '',
+                refreshUrl: '',
+                scopes: {
+                  scope_1: '',
+                  scope_2: '',
+                },
+              },
+            },
+          },
+        },
+      },
+      security: [{ 'API Key': ['scope_1'] }],
+    };
+
+    const transformed = transformOas3Service({ document });
+    expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
   });
 });

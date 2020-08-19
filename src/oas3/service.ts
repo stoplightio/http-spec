@@ -1,5 +1,5 @@
 import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, keys, map } from 'lodash';
+import { compact, filter, flatMap, keys, map, pickBy } from 'lodash';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
 import { isSecurityScheme, isTagObject } from './guards';
@@ -58,6 +58,7 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
       return isSecurityScheme(definition) && transformToSingleSecurity(definition, key);
     }),
   );
+
   if (securitySchemes.length) {
     httpService.securitySchemes = securitySchemes;
   }
@@ -67,13 +68,34 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
       if (!sec) return null;
 
       return keys(sec).map(key => {
-        return securitySchemes.find(securityScheme => {
-          return securityScheme.key === key;
-        });
+        const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
+        if (ss && ss.type === 'oauth2') {
+          const flows = {};
+          for (const flowKey in ss.flows) {
+            const flow = ss.flows[flowKey];
+            flows[flowKey] = {
+              ...flow,
+              scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
+                const secKey = sec[key];
+                if (secKey) return secKey.includes(scopeKey);
+                return false;
+              }),
+            };
+          }
+
+          return {
+            ...ss,
+            flows,
+          };
+        }
+
+        return ss;
       });
     }),
   );
+
   if (security.length) {
+    //@ts-ignore I hate doing this, but unfortunately Lodash types are (rightfully) very loose and put undefined when it can't happen
     httpService.security = security;
   }
 
