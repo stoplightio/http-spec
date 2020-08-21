@@ -3,11 +3,6 @@ import { JSONSchema4 } from 'json-schema';
 import { getExamplesFromSchema } from '../transformers/getExamplesFromSchema';
 
 describe('getExamplesFromSchema', () => {
-  it('should ignore invalid data', () => {
-    // @ts-ignore
-    expect(getExamplesFromSchema(null)).toEqual({});
-  });
-
   it('should work with x-examples', () => {
     expect(getExamplesFromSchema(schema)).toEqual({
       devices: {
