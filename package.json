@@ -30,7 +30,7 @@
   "dependencies": {
     "@openapi-contrib/openapi-schema-to-json-schema": "^3.0.4",
     "@stoplight/json": "^3.8.1",
-    "@stoplight/types": "^11.9.0",
+    "@stoplight/types": "file:.yalc/@stoplight/types",
     "@types/swagger-schema-official": "~2.0.21",
     "@types/to-json-schema": "^0.2.0",
     "@types/type-is": "^1.6.3",

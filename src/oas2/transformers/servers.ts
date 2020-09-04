@@ -1,10 +1,10 @@
 import { DeepPartial, IServer } from '@stoplight/types';
-import { isString } from 'lodash';
+import { isString, uniq } from 'lodash';
 import { Operation, Spec } from 'swagger-schema-official';
 
 import { URI } from '../../utils';
 
-export function translateToServers(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>): IServer[] {
+export function translateToServers(spec: DeepPartial<Spec>, operation: DeepPartial<Operation> = {}): IServer[] {
   if (typeof spec.host !== 'string' || spec.host.length === 0) {
     return [];
   }
@@ -16,15 +16,22 @@ export function translateToServers(spec: DeepPartial<Spec>, operation: DeepParti
 
   const hasBasePath = typeof spec.basePath === 'string' && spec.basePath.length > 0;
 
-  return schemes.filter(isString).map(scheme => {
-    let uri = URI().scheme(scheme).host(spec.host);
+  const urls = uniq(
+    schemes.filter(isString).map(scheme => {
+      let uri = URI().scheme(scheme).host(spec.host);
 
-    if (hasBasePath) {
-      uri = uri.path(spec.basePath);
-    }
+      if (hasBasePath) {
+        uri = uri.path(spec.basePath);
+      }
 
+      return uri.toString().replace(/\/$/, ''); // Remove trailing slash
+    }),
+  );
+
+  return urls.map((url, i) => {
     return {
-      url: uri.toString().replace(/\/$/, ''), // Remove trailing slash
+      id: `server-${i}`,
+      url,
     };
   });
 }

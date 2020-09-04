@@ -69,9 +69,11 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -124,9 +126,11 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -193,9 +197,11 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -225,9 +231,11 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -349,9 +357,11 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -412,11 +422,13 @@ Array [
     "servers": Array [
       Object {
         "description": undefined,
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
         "variables": undefined,
       },
       Object {
         "description": undefined,
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
         "variables": undefined,
       },
@@ -478,11 +490,13 @@ Array [
     "servers": Array [
       Object {
         "description": undefined,
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
         "variables": undefined,
       },
       Object {
         "description": undefined,
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
         "variables": undefined,
       },
@@ -566,11 +580,13 @@ Array [
     "servers": Array [
       Object {
         "description": undefined,
+        "id": "server-0",
         "url": "https://petstore.swagger.io/v2",
         "variables": undefined,
       },
       Object {
         "description": undefined,
+        "id": "server-1",
         "url": "http://petstore.swagger.io/v2",
         "variables": undefined,
       },

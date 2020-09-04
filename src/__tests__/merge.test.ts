@@ -311,7 +311,7 @@ describe('mergeOperations()', () => {
             method: 'get',
             path: '/a',
             responses: [{ code: '200' }],
-            servers: [{ url: 'http://example.com' }],
+            servers: [{ id: 'server-0', url: 'http://example.com' }],
           },
         ],
         [
@@ -320,7 +320,7 @@ describe('mergeOperations()', () => {
             method: 'get',
             path: '/a',
             responses: [{ code: '200' }],
-            servers: [{ url: 'https://example.com' }],
+            servers: [{ id: 'server-1', url: 'https://example.com' }],
           },
         ],
       ),
@@ -330,7 +330,10 @@ describe('mergeOperations()', () => {
         method: 'get',
         path: '/a',
         responses: [{ code: '200', headers: [], contents: [] }],
-        servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
+        servers: [
+          { id: 'server-0', url: 'http://example.com' },
+          { id: 'server-1', url: 'https://example.com' },
+        ],
         request: {},
       },
     ]);

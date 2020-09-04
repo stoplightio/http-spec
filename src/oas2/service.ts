@@ -1,9 +1,10 @@
-import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, isString, keys, pickBy } from 'lodash';
+import { HttpSecurityScheme, IHttpService } from '@stoplight/types';
+import { compact, filter, flatMap, keys, pickBy } from 'lodash';
 
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { isTagObject } from './guards';
 import { translateToSingleSecurity } from './transformers/securities';
+import { translateToServers } from './transformers/servers';
 
 export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
   const httpService: IHttpService = {
@@ -31,15 +32,7 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
     httpService.termsOfService = document.info.termsOfService;
   }
 
-  const schemes = filter(document.schemes, scheme => scheme && isString(scheme));
-  const servers = schemes.map<IServer>(scheme => ({
-    name: document.info?.title ?? '',
-    description: undefined,
-    url: scheme + '://' + (document.host || '') + (document.basePath || ''),
-  }));
-  if (servers.length) {
-    httpService.servers = servers;
-  }
+  httpService.servers = translateToServers(document);
 
   const securitySchemes = compact<HttpSecurityScheme>(
     keys(document.securityDefinitions).map(key => {

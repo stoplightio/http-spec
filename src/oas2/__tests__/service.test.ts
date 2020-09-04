@@ -16,6 +16,7 @@ describe('oas2 service', () => {
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
+      servers: [],
     });
   });
 
@@ -40,13 +41,11 @@ describe('oas2 service', () => {
       version: '1.0',
       servers: [
         {
-          description: void 0,
-          name: '',
+          id: 'server-0',
           url: 'https://petstore.swagger.io/v2',
         },
         {
-          description: void 0,
-          name: '',
+          id: 'server-1',
           url: 'http://petstore.swagger.io/v2',
         },
       ],
@@ -62,6 +61,7 @@ describe('oas2 service', () => {
     expect(transformOas2Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
+      servers: [],
       version: '',
     });
   });

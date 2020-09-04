@@ -1,0 +1,59 @@
+{
+  "name": "@stoplight/types",
+  "version": "0.0.0-979fa213",
+  "description": "Common typings for the Stoplight ecosystem.",
+  "keywords": [],
+  "sideEffects": false,
+  "homepage": "https://github.com/stoplightio/types",
+  "bugs": "https://github.com/stoplightio/types/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/types.git"
+  },
+  "main": "dist/index.js",
+  "license": "Apache-2.0",
+  "files": [
+    "dist/*"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json -d",
+    "commit": "git-cz",
+    "lint": "tslint -c tslint.json 'src/**/*.ts?'",
+    "lint.fix": "yarn lint --fix",
+    "release": "semantic-release",
+    "test": "jest",
+    "test.prod": "yarn lint && yarn test --coverage --no-cache",
+    "test.update": "yarn test --updateSnapshot",
+    "test.watch": "yarn test --watch"
+  },
+  "dependencies": {
+    "@types/json-schema": "^7.0.4",
+    "utility-types": "^3.10.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "tslint -c tslint.json --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

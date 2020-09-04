@@ -223,7 +223,7 @@ describe('transformPostmanCollectionOperation()', () => {
           }),
         ).toEqual(
           expect.objectContaining({
-            servers: [{ url: 'https://example.com:666' }],
+            servers: [{ id: 'server-0', url: 'https://example.com:666' }],
           }),
         );
       });
@@ -262,7 +262,7 @@ describe('transformPostmanCollectionOperation()', () => {
             request: expect.objectContaining({
               body: { contents: [{ examples: [{ key: 'default', value: 'testTESTtest' }], mediaType: 'text/plain' }] },
             }),
-            servers: [{ url: 'https://example.com' }],
+            servers: [{ id: 'server-0', url: 'https://example.com' }],
           }),
         );
       });

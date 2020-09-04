@@ -108,6 +108,7 @@ Object {
   "servers": Array [
     Object {
       "description": undefined,
+      "id": "server-0",
       "url": "operation/server",
       "variables": undefined,
     },
@@ -139,6 +140,7 @@ Object {
   "servers": Array [
     Object {
       "description": undefined,
+      "id": "server-0",
       "url": "path/server",
       "variables": undefined,
     },
@@ -199,6 +201,7 @@ Object {
   "servers": Array [
     Object {
       "description": undefined,
+      "id": "server-0",
       "url": "spec/server",
       "variables": undefined,
     },

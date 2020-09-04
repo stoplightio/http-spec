@@ -4,10 +4,12 @@ import { ServerObject, ServerVariableObject } from 'openapi3-ts';
 
 import { isServerVariableObject } from '../guards';
 
-export function translateToServers(servers: ServerObject[]): IServer[] {
-  return servers.map(server => ({
+export function translateToServers(servers: DeepPartial<ServerObject>[]): IServer[] {
+  if (!Array.isArray(servers)) return [];
+  return servers.map((server, i) => ({
+    id: server['x-id'] || `server-${i}`,
     description: server.description,
-    url: server.url,
+    url: server.url || '',
     variables: server.variables && translateServerVariables(server.variables),
   }));
 }

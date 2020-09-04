@@ -19,6 +19,7 @@ describe('oas3 service', () => {
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
+      servers: [],
       securitySchemes: [
         {
           key: 't1',
@@ -71,6 +72,7 @@ describe('oas3 service', () => {
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
+      servers: [],
       securitySchemes: [
         {
           flows: {},
@@ -89,6 +91,7 @@ describe('oas3 service', () => {
     expect(transformOas3Service({ document })).toStrictEqual({
       id: '?http-service-id?',
       name: 'no-title',
+      servers: [],
       version: '',
     });
   });
@@ -116,13 +119,15 @@ describe('oas3 service', () => {
       servers: [
         {
           description: void 0,
-          name: '',
+          id: 'server-0',
           url: 'https://petstore.swagger.io/v2',
+          variables: void 0,
         },
         {
           description: void 0,
-          name: '',
+          id: 'server-1',
           url: 'http://petstore.swagger.io/v2',
+          variables: void 0,
         },
       ],
     });
@@ -140,6 +145,7 @@ describe('oas3 service', () => {
       id: '?http-service-id?',
       name: 'no-title',
       version: '',
+      servers: [],
     });
   });
 
@@ -180,7 +186,7 @@ describe('oas3 service', () => {
       servers: [
         {
           description: 'Sample Petstore Server Https',
-          name: '',
+          id: 'server-0',
           url: 'https://petstore.swagger.io/v2',
           variables: {
             basePath: {
@@ -202,8 +208,9 @@ describe('oas3 service', () => {
         },
         {
           description: 'Sample Petstore Server Http',
-          name: '',
+          id: 'server-1',
           url: 'http://petstore.swagger.io/v2',
+          variables: void 0,
         },
       ],
     });

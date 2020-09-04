@@ -257,6 +257,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('servers', [
       {
         description: void 0,
+        id: 'server-0',
         url: 'operation/server',
       },
     ]);
@@ -355,6 +356,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('servers', [
       {
         description: void 0,
+        id: 'server-0',
         url: 'path/server',
       },
     ]);
@@ -453,6 +455,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('servers', [
       {
         description: void 0,
+        id: 'server-0',
         url: 'spec/server',
       },
     ]);
@@ -612,6 +615,7 @@ describe('transformOas3Operation', () => {
     expect(transformOas3Operation({ document, path: '/pets', method: 'get' }).servers).toEqual([
       {
         description: 'Sample Petstore Server Https',
+        id: 'server-0',
         url: 'https://petstore.swagger.io/v2',
         variables: {
           basePath: {
@@ -632,6 +636,7 @@ describe('transformOas3Operation', () => {
         },
       },
       {
+        id: 'server-1',
         description: 'Sample Petstore Server Http',
         url: 'http://petstore.swagger.io/v2',
       },

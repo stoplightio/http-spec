@@ -37,13 +37,11 @@ Object {
   ],
   "servers": Array [
     Object {
-      "description": undefined,
-      "name": "Swagger Petstore",
+      "id": "server-0",
       "url": "https://petstore.swagger.io/v2",
     },
     Object {
-      "description": undefined,
-      "name": "Swagger Petstore",
+      "id": "server-1",
       "url": "http://petstore.swagger.io/v2",
     },
   ],
@@ -110,13 +108,15 @@ Object {
   "servers": Array [
     Object {
       "description": undefined,
-      "name": "Swagger Petstore",
+      "id": "server-0",
       "url": "https://petstore.swagger.io/v2",
+      "variables": undefined,
     },
     Object {
       "description": undefined,
-      "name": "Swagger Petstore",
+      "id": "server-1",
       "url": "http://petstore.swagger.io/v2",
+      "variables": undefined,
     },
   ],
   "tags": Array [

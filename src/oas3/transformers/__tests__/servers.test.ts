@@ -47,6 +47,7 @@ describe('translateToServers', () => {
     ).toStrictEqual([
       {
         description: 'description',
+        id: 'server-0',
         url: 'http://stoplight.io/path',
         variables: {
           b: {

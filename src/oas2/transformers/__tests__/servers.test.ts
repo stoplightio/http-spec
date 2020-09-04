@@ -13,7 +13,10 @@ describe('translateToServers', () => {
       href: 'https://www.someotherdomain.com?query=123',
     };
     expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['http'] })).toEqual([
-      { url: 'http://stoplight.io' },
+      {
+        id: 'server-0',
+        url: 'http://stoplight.io',
+      },
     ]);
   });
 
@@ -22,9 +25,11 @@ describe('translateToServers', () => {
       translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http', 'https'] }),
     ).toEqual([
       {
+        id: 'server-0',
         url: 'http://stoplight.io/base-path',
       },
       {
+        id: 'server-1',
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -42,9 +47,11 @@ describe('translateToServers', () => {
       ),
     ).toEqual([
       {
+        id: 'server-0',
         url: 'http://stoplight.io/base-path',
       },
       {
+        id: 'server-1',
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -55,6 +62,7 @@ describe('translateToServers', () => {
       translateToServers({ schemes: ['https'], host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http'] }),
     ).toEqual([
       {
+        id: 'server-0',
         url: 'http://stoplight.io/base-path',
       },
     ]);
@@ -67,6 +75,7 @@ describe('translateToServers', () => {
   it('given no basePath should return servers', () => {
     expect(translateToServers({ schemes: ['http'], host: 'stoplight.io' }, {})).toEqual([
       {
+        id: 'server-0',
         url: 'http://stoplight.io',
       },
     ]);
@@ -83,6 +92,7 @@ describe('translateToServers', () => {
       translateToServers({ host: 'stoplight.io', basePath: '/base-path', schemes: [null, 'test'] as any }, {}),
     ).toEqual([
       {
+        id: 'server-0',
         url: 'test://stoplight.io/base-path',
       },
     ]);
@@ -95,6 +105,7 @@ describe('translateToServers', () => {
       translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: [null, 'test'] as any }),
     ).toEqual([
       {
+        id: 'server-0',
         url: 'test://stoplight.io/base-path',
       },
     ]);
@@ -109,9 +120,11 @@ describe('translateToServers', () => {
   it('should handle invalid server basePath gracefully', () => {
     expect(translateToServers({ host: 'stoplight.io', basePath: 123 as any }, { schemes: ['http', 'https'] })).toEqual([
       {
+        id: 'server-0',
         url: 'http://stoplight.io',
       },
       {
+        id: 'server-1',
         url: 'https://stoplight.io',
       },
     ]);
