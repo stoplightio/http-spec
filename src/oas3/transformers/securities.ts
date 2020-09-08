@@ -1,13 +1,23 @@
 import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
-import { compact, isObject, pickBy } from 'lodash';
-import { OAuthFlowsObject, OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
+import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
 
+import { isDictionary } from '../../utils';
 import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
+import { isOAuthFlowObject } from '../guards';
 
 export function translateToSecurities(document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) {
   const securities = getSecurities(document, operationSecurities);
 
-  return securities.map(security => compact(security.map(sec => transformToSingleSecurity(sec, sec.key))));
+  return securities.map(security =>
+    security.reduce<SecurityWithKey[]>((transformedSecurities, sec) => {
+      const transformed = transformToSingleSecurity(sec, sec.key);
+      if (transformed) {
+        transformedSecurities.push(transformed);
+      }
+
+      return transformedSecurities;
+    }, []),
+  );
 }
 
 export function transformToSingleSecurity(
@@ -67,52 +77,48 @@ export function transformToSingleSecurity(
   return undefined;
 }
 
-function transformFlows(flows: Optional<DeepPartial<OAuthFlowsObject>>): IOauthFlowObjects {
+function transformFlows(flows: Optional<unknown>): IOauthFlowObjects {
   const transformedFlows: IOauthFlowObjects = {};
 
-  if (!isObject(flows)) {
+  if (!isDictionary(flows)) {
     return transformedFlows;
   }
 
-  if (flows.password) {
-    Object.assign(transformedFlows, {
-      password: pickBy({
-        refreshUrl: flows.password.refreshUrl,
-        scopes: flows.password.scopes,
-        tokenUrl: flows.password.tokenUrl,
-      }),
-    });
+  if (isOAuthFlowObject(flows.password) && typeof flows.password.tokenUrl === 'string') {
+    transformedFlows.password = {
+      ...(typeof flows.password.refreshUrl === 'string' && { refreshUrl: flows.password.refreshUrl }),
+      tokenUrl: flows.password.tokenUrl,
+      scopes: flows.password.scopes,
+    };
   }
 
-  if (flows.implicit) {
-    Object.assign(transformedFlows, {
-      implicit: pickBy({
-        authorizationUrl: flows.implicit.authorizationUrl,
-        refreshUrl: flows.implicit.refreshUrl,
-        scopes: flows.implicit.scopes,
-      }),
-    });
+  if (isOAuthFlowObject(flows.implicit) && typeof flows.implicit.authorizationUrl === 'string') {
+    transformedFlows.implicit = {
+      ...(typeof flows.implicit.refreshUrl === 'string' && { refreshUrl: flows.implicit.refreshUrl }),
+      authorizationUrl: flows.implicit.authorizationUrl,
+      scopes: flows.implicit.scopes,
+    };
   }
 
-  if (flows.authorizationCode) {
-    Object.assign(transformedFlows, {
-      authorizationCode: pickBy({
-        authorizationUrl: flows.authorizationCode.authorizationUrl,
-        refreshUrl: flows.authorizationCode.refreshUrl,
-        scopes: flows.authorizationCode.scopes,
-        tokenUrl: flows.authorizationCode.tokenUrl,
-      }),
-    });
+  if (
+    isOAuthFlowObject(flows.authorizationCode) &&
+    typeof flows.authorizationCode.authorizationUrl === 'string' &&
+    typeof flows.authorizationCode.tokenUrl === 'string'
+  ) {
+    transformedFlows.authorizationCode = {
+      ...(typeof flows.authorizationCode.refreshUrl === 'string' && { refreshUrl: flows.authorizationCode.refreshUrl }),
+      authorizationUrl: flows.authorizationCode.authorizationUrl,
+      scopes: flows.authorizationCode.scopes,
+      tokenUrl: flows.authorizationCode.tokenUrl,
+    };
   }
 
-  if (flows.clientCredentials) {
-    Object.assign(transformedFlows, {
-      clientCredentials: pickBy({
-        tokenUrl: flows.clientCredentials.tokenUrl,
-        refreshUrl: flows.clientCredentials.refreshUrl,
-        scopes: flows.clientCredentials.scopes,
-      }),
-    });
+  if (isOAuthFlowObject(flows.clientCredentials) && typeof flows.clientCredentials.tokenUrl === 'string') {
+    transformedFlows.clientCredentials = {
+      ...(typeof flows.clientCredentials.refreshUrl === 'string' && { refreshUrl: flows.clientCredentials.refreshUrl }),
+      scopes: flows.clientCredentials.scopes,
+      tokenUrl: flows.clientCredentials.tokenUrl,
+    };
   }
 
   return transformedFlows;

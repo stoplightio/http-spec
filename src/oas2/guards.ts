@@ -1,9 +1,10 @@
-import { Dictionary } from '@stoplight/types';
 import { isObject } from 'lodash';
 import type { Response, Security, Tag } from 'swagger-schema-official';
 
+import { isDictionary } from '../utils';
+
 export function isSecurityScheme(maybeSecurityScheme: unknown): maybeSecurityScheme is Security {
-  return isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+  return isDictionary(maybeSecurityScheme) && typeof maybeSecurityScheme.type === 'string';
 }
 
 export const isTagObject = (maybeTagObject: unknown): maybeTagObject is Tag => {

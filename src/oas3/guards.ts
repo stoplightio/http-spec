@@ -3,6 +3,7 @@ import { isObject } from 'lodash';
 import {
   BaseParameterObject,
   HeaderObject,
+  OAuthFlowObject,
   ResponseObject,
   SecuritySchemeObject,
   ServerObject,
@@ -10,6 +11,7 @@ import {
   TagObject,
 } from 'openapi3-ts';
 
+import { isDictionary } from '../utils';
 import { SecurityWithKey } from './accessors';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
@@ -59,3 +61,6 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'headers' in maybeResponseObject ||
     'content' in maybeResponseObject ||
     'links' in maybeResponseObject);
+
+export const isOAuthFlowObject = (maybeOAuthFlowObject: unknown): maybeOAuthFlowObject is OAuthFlowObject =>
+  isDictionary(maybeOAuthFlowObject) && isDictionary(maybeOAuthFlowObject.scopes);
