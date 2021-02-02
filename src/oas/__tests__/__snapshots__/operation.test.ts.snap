@@ -531,8 +531,19 @@ Array [
             "examples": Array [],
             "mediaType": "*/*",
             "schema": Object {
-              "$ref": "#/components/schemas/Error",
               "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {
+                "code": Object {
+                  "type": "string",
+                },
+                "message": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "code",
+              ],
+              "type": "object",
             },
           },
         ],
