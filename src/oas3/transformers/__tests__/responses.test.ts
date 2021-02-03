@@ -93,4 +93,83 @@ describe('translateToOas3Responses', () => {
       },
     ]);
   });
+
+  it('should resolve $refs nullish responses', () => {
+    const document = {
+      openapi: '3.0.0',
+      paths: {
+        '/user': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/User',
+                    },
+                    examples: {
+                      'my-example': {
+                        $ref: '#/components/examples/Joe',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          User: {
+            title: 'User',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+            },
+          },
+        },
+        examples: {
+          Joe: {
+            value: {
+              id: 1,
+            },
+          },
+        },
+      },
+    };
+
+    expect(translateToResponses(document, document.paths['/user'].get.responses)).toEqual([
+      {
+        code: '200',
+        contents: [
+          {
+            encodings: [],
+            examples: [
+              {
+                key: 'my-example',
+                value: {
+                  id: 1,
+                },
+              },
+            ],
+            mediaType: 'application/json',
+            schema: {
+              $schema: 'http://json-schema.org/draft-04/schema#',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+              },
+              title: 'User',
+              type: 'object',
+            },
+          },
+        ],
+        headers: [],
+      },
+    ]);
+  });
 });
