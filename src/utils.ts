@@ -60,11 +60,11 @@ const getLocalRefValue = (document: unknown, $ref: string): unknown => {
 };
 
 export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
-  if (hasRef(target) && isLocalRef(target.$ref)) {
+  if (isDictionary(document) && hasRef(target) && isLocalRef(target.$ref)) {
     try {
       return getLocalRefValue(document, target.$ref);
     } catch {
-      return null;
+      return target;
     }
   }
 
