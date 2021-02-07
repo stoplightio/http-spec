@@ -1,6 +1,6 @@
-import { hasRef, isLocalRef, pathToPointer, pointerToPath } from '@stoplight/json';
+import { hasRef, isLocalRef, pathToPointer, pointerToPath, resolveInlineRef } from '@stoplight/json';
 import { Dictionary, Optional } from '@stoplight/types';
-import { get, isObjectLike, map } from 'lodash';
+import { isObjectLike, map } from 'lodash';
 import * as URIJS from 'urijs';
 
 export function mapToKeys<T>(collection: Optional<T[]>) {
@@ -55,14 +55,10 @@ export function URI(url: string | URI = '') {
 export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
   isObjectLike(maybeDictionary);
 
-const getLocalRefValue = (document: unknown, $ref: string): unknown => {
-  return get(document, pointerToPath($ref));
-};
-
 export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
   if (isDictionary(document) && hasRef(target) && isLocalRef(target.$ref)) {
     try {
-      return getLocalRefValue(document, target.$ref);
+      return resolveInlineRef(document, target.$ref);
     } catch {
       return target;
     }

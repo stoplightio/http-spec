@@ -974,10 +974,10 @@
   dependencies:
     eslint-config-prettier "^6.7.0"
 
-"@stoplight/json@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.8.1.tgz#7ece9a165c0dd49d8d01552304b065ff0eb6b45e"
-  integrity sha512-1OQH4VxQnwvANaK2NZHAbtfZrF4Y9WKv6aRvg25Ow52C3aP6FD/Cz3NWRiKJNybB3wnvgWC7PNJvAUwx1+WIBA==
+"@stoplight/json@^3.10.2":
+  version "3.10.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.10.2.tgz#a17463c7576602971edbf6f11d3eaed80db262bb"
+  integrity sha512-mUf4t2bOBZjVa8KdEI4+EqX/8zXJLfGKv/cj++giLbCkYNGjBgJnmPSDNOOBgJHpocdVml0hK8ZuLADqWVVB2Q==
   dependencies:
     "@stoplight/ordered-object-literal" "^1.0.1"
     "@stoplight/types" "^11.9.0"
