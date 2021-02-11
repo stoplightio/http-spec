@@ -1,3 +1,4 @@
+import { lazyInlineResolver } from '@stoplight/json';
 import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
@@ -6,7 +7,6 @@ import { getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
-import { maybeResolveLocalRef } from '../utils';
 import { getConsumes, getProduces } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
@@ -14,16 +14,16 @@ import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
 
 export function transformOas2Operations(document: Spec): IHttpOperation[] {
-  return transformOasOperations(document, transformOas2Operation);
+  return transformOasOperations(lazyInlineResolver(document as any) as any, transformOas2Operation);
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
-  const pathObj = maybeResolveLocalRef(document, get(document, ['paths', path])) as Path;
+  const pathObj = get(document, ['paths', path]) as Path;
   if (!pathObj) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as Operation;
+  const operation = get(document, ['paths', path, method]) as Operation;
   if (!operation) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
