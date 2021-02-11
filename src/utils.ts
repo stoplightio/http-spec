@@ -1,4 +1,4 @@
-import { hasRef, isLocalRef, pathToPointer, pointerToPath, resolveInlineRef } from '@stoplight/json';
+import { pathToPointer, pointerToPath } from '@stoplight/json';
 import { Dictionary, Optional } from '@stoplight/types';
 import { isObjectLike, map } from 'lodash';
 import * as URIJS from 'urijs';
@@ -54,15 +54,3 @@ export function URI(url: string | URI = '') {
 
 export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
   isObjectLike(maybeDictionary);
-
-export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
-  if (isDictionary(document) && hasRef(target) && isLocalRef(target.$ref)) {
-    try {
-      return resolveInlineRef(document, target.$ref);
-    } catch {
-      return target;
-    }
-  }
-
-  return target;
-};

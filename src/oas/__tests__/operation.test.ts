@@ -4,8 +4,8 @@ import { Spec } from 'swagger-schema-official';
 import { transformOas2Operations } from '../../oas2/operation';
 import { transformOas3Operations } from '../../oas3/operation';
 
-const oas2KitchenSinkJson: Spec = require('./fixtures//oas2-kitchen-sink.json');
-const oas3KitchenSinkJson: OpenAPIObject = require('./fixtures//oas3-kitchen-sink.json');
+const oas2KitchenSinkJson: Spec = require('./fixtures/oas2-kitchen-sink.json');
+const oas3KitchenSinkJson: OpenAPIObject = require('./fixtures/oas3-kitchen-sink.json');
 
 describe('oas operation', () => {
   it('openapi v2', () => {

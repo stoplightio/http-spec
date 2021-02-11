@@ -1,3 +1,5 @@
+import { lazyInlineResolver } from '@stoplight/json';
+
 import { translateToResponses } from '../responses';
 
 describe('translateToOas3Responses', () => {
@@ -95,7 +97,7 @@ describe('translateToOas3Responses', () => {
   });
 
   it('should resolve $refs nullish responses', () => {
-    const document = {
+    const document = lazyInlineResolver({
       openapi: '3.0.0',
       paths: {
         '/user': {
@@ -139,7 +141,7 @@ describe('translateToOas3Responses', () => {
           },
         },
       },
-    };
+    }) as any;
 
     expect(translateToResponses(document, document.paths['/user'].get.responses)).toEqual([
       {

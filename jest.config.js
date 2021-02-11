@@ -1,4 +1,4 @@
 module.exports = {
-  preset: 'ts-jest',
+  preset: '@stoplight/scripts',
   testEnvironment: 'node',
 };
