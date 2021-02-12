@@ -28,7 +28,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@openapi-contrib/openapi-schema-to-json-schema": "^3.0.4",
     "@stoplight/json": "^3.10.2",
     "@stoplight/types": "^11.9.0",
     "@types/swagger-schema-official": "~2.0.21",

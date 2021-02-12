@@ -1,5 +1,3 @@
-// @ts-ignore
-import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import {
   Dictionary,
   HttpParamStyles,
@@ -15,6 +13,7 @@ import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-
 
 import { isDictionary } from '../../utils';
 import { isHeaderObject } from '../guards';
+import { convertFromSchema } from './schema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -114,11 +113,9 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
 
   if (isObject(schema)) {
     try {
-      jsonSchema = toJsonSchema(schema, {
-        cloneSchema: true,
-        strictMode: false,
-        keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
-      }) as JSONSchema4;
+      jsonSchema = convertFromSchema(schema, {
+        pruneNotSupported: ['nullable', 'discriminator'],
+      });
     } catch {
       // happens
     }
