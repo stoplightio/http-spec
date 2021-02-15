@@ -2,6 +2,7 @@ import type { JSONSchema4, JSONSchema4TypeName } from 'json-schema';
 import { isObject } from 'lodash';
 import type { SchemaObject } from 'openapi3-ts/src/model/OpenApi';
 
+// based on https://github.com/openapi-contrib/openapi-schema-to-json-schema
 const settings = {
   MIN_INT_32: 0 - Math.pow(2, 31),
   MAX_INT_32: Math.pow(2, 31) - 1,
