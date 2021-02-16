@@ -1,5 +1,3 @@
-// @ts-ignore
-import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import {
   DeepPartial,
   Dictionary,
@@ -16,6 +14,7 @@ import { EncodingPropertyObject, HeaderObject, MediaTypeObject, OpenAPIObject } 
 
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isHeaderObject } from '../guards';
+import { translateSchemaObject } from './schema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -120,11 +119,9 @@ export function translateMediaTypeObject(
 
   if (isObject(schema)) {
     try {
-      jsonSchema = toJsonSchema(schema, {
-        cloneSchema: true,
-        strictMode: false,
-        keepNotSupported: ['example', 'deprecated', 'readOnly', 'writeOnly', 'xml', 'externalDocs'],
-      }) as JSONSchema4;
+      jsonSchema = translateSchemaObject(schema, {
+        pruneNotSupported: ['nullable', 'discriminator'],
+      });
     } catch {
       // happens
     }

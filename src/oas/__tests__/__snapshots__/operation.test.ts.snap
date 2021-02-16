@@ -466,6 +466,7 @@ Array [
             "mediaType": "*/*",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {},
               "type": "object",
             },
           },
