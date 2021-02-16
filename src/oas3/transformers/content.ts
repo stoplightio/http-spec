@@ -13,7 +13,7 @@ import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-
 
 import { isDictionary } from '../../utils';
 import { isHeaderObject } from '../guards';
-import { convertFromSchema } from './schema';
+import { translateSchemaObject } from './schema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -113,7 +113,7 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
 
   if (isObject(schema)) {
     try {
-      jsonSchema = convertFromSchema(schema, {
+      jsonSchema = translateSchemaObject(schema, {
         pruneNotSupported: ['nullable', 'discriminator'],
       });
     } catch {

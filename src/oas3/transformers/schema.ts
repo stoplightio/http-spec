@@ -51,7 +51,7 @@ function isJsonSchema4TypeName(maybeJSONSchema4TypeName: string): maybeJSONSchem
 }
 
 // Convert from OpenAPI 3.0 `SchemaObject` to JSON schema v4
-export function convertFromSchema(schema: SchemaObject, options: { pruneNotSupported: string[] }): JSONSchema4 {
+export function translateSchemaObject(schema: SchemaObject, options: { pruneNotSupported: string[] }): JSONSchema4 {
   const clonedSchema = convertSchema(schema, {
     _notSupported: options.pruneNotSupported,
     _structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
