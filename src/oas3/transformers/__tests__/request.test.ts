@@ -12,7 +12,7 @@ describe('translateOas3ToRequest', () => {
 
   it('given no request body should translate parameters', () => {
     expect(
-      translateToRequest([
+      translateToRequest({}, [
         {
           name: 'param-name-1',
           in: 'query',
@@ -50,7 +50,7 @@ describe('translateOas3ToRequest', () => {
 
   it('give a request body should translate it', () => {
     expect(
-      translateToRequest([], {
+      translateToRequest({}, [], {
         description: 'descr',
         required: true,
         content: {

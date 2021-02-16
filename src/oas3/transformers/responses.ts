@@ -6,33 +6,12 @@ import {
   IMediaTypeContent,
   Optional,
 } from '@stoplight/types';
-import { compact, each, map, partial } from 'lodash';
+import { compact, map, partial } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
-
-function resolveMediaObject(document: DeepPartial<OpenAPIObject>, maybeMediaObject: unknown) {
-  if (!isDictionary(maybeMediaObject)) {
-    return null;
-  }
-
-  const mediaObject = { ...maybeMediaObject };
-  if (isDictionary(mediaObject.schema)) {
-    mediaObject.schema = maybeResolveLocalRef(document, mediaObject.schema);
-  }
-
-  if (isDictionary(mediaObject.examples)) {
-    const examples = { ...mediaObject.examples };
-    mediaObject.examples = examples;
-    each(examples, (exampleValue, exampleName) => {
-      examples[exampleName] = maybeResolveLocalRef(document, exampleValue);
-    });
-  }
-
-  return mediaObject;
-}
 
 function translateToResponse(
   document: DeepPartial<OpenAPIObject>,
@@ -51,7 +30,7 @@ function translateToResponse(
     contents: compact<IMediaTypeContent>(
       map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
         resolvedResponse.content,
-        (mediaObject, mediaType) => translateMediaTypeObject(resolveMediaObject(document, mediaObject), mediaType),
+        partial(translateMediaTypeObject, document),
       ),
     ),
   };

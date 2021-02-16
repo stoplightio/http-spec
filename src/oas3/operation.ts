@@ -42,6 +42,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     responses: translateToResponses(document, operation.responses),
     servers: Array.isArray(servers) ? translateToServers(servers.filter(isServerObject)) : [],
     request: translateToRequest(
+      document,
       getValidOasParameters(document, operation.parameters as ParameterObject[], pathObj.parameters),
       operation.requestBody as RequestBodyObject,
     ),

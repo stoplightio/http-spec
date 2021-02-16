@@ -1,4 +1,5 @@
-import {
+import type {
+  DeepPartial,
   Dictionary,
   IHttpCookieParam,
   IHttpHeaderParam,
@@ -10,19 +11,22 @@ import {
   IMediaTypeContent,
   Optional,
 } from '@stoplight/types';
-import { compact, map, omit, pickBy } from 'lodash';
-import { ParameterObject, RequestBodyObject } from 'openapi3-ts';
+import { compact, map, omit, partial, pickBy } from 'lodash';
+import type { OpenAPIObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
 import { translateMediaTypeObject } from './content';
 
-function translateRequestBody(requestBodyObject: RequestBodyObject): IHttpOperationRequestBody {
+function translateRequestBody(
+  document: DeepPartial<OpenAPIObject>,
+  requestBodyObject: RequestBodyObject,
+): IHttpOperationRequestBody {
   return {
     required: requestBodyObject.required,
     description: requestBodyObject.description,
     contents: compact<IMediaTypeContent>(
       map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
         requestBodyObject.content,
-        translateMediaTypeObject,
+        partial(translateMediaTypeObject, document),
       ),
     ),
   };
@@ -42,6 +46,7 @@ export function translateParameterObject(parameterObject: ParameterObject): IHtt
 }
 
 export function translateToRequest(
+  document: DeepPartial<OpenAPIObject>,
   parameters: ParameterObject[],
   requestBodyObject?: RequestBodyObject,
 ): IHttpOperationRequest {
@@ -64,7 +69,7 @@ export function translateToRequest(
     params[key].push(translateParameterObject(parameter));
   }
 
-  const body = requestBodyObject ? translateRequestBody(requestBodyObject) : { contents: [] };
+  const body = requestBodyObject ? translateRequestBody(document, requestBodyObject) : { contents: [] };
 
   return {
     body,

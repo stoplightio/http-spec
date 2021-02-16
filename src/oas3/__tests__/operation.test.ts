@@ -637,4 +637,178 @@ describe('transformOas3Operation', () => {
       },
     ]);
   });
+
+  it('given shared examples in requestBody and response, should resolve them', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pet': {
+          get: {
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {},
+                    },
+                    examples: {
+                      'pet-shared': {
+                        $ref: '#/components/examples/Pet',
+                      },
+                      'pet-not-shared': {
+                        value: {
+                          'not-shared': true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {},
+                  },
+                  examples: {
+                    'pet-shared': {
+                      $ref: '#/components/examples/Pet',
+                    },
+                    'pet-not-shared': {
+                      value: {
+                        'not-shared': true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          parameters: [],
+        },
+      },
+      components: {
+        examples: {
+          Pet: {
+            value: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'string',
+                },
+              },
+              required: ['id'],
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pet',
+        method: 'get',
+        document,
+      }),
+    ).toStrictEqual({
+      id: '?http-operation-id?',
+      method: 'get',
+      path: '/pet',
+      request: {
+        body: {
+          contents: [
+            {
+              encodings: [],
+              examples: [
+                {
+                  description: undefined,
+                  key: 'pet-shared',
+                  summary: undefined,
+                  value: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                      },
+                    },
+                    required: ['id'],
+                  },
+                },
+                {
+                  description: undefined,
+                  key: 'pet-not-shared',
+                  value: {
+                    'not-shared': true,
+                  },
+                  summary: undefined,
+                },
+              ],
+              mediaType: 'application/json',
+              schema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+              },
+            },
+          ],
+          description: undefined,
+          required: undefined,
+        },
+        cookie: [],
+        headers: [],
+        path: [],
+        query: [],
+      },
+      responses: [
+        {
+          code: '200',
+          contents: [
+            {
+              encodings: [],
+              examples: [
+                {
+                  description: undefined,
+                  key: 'pet-shared',
+                  summary: undefined,
+                  value: {
+                    properties: {
+                      id: {
+                        type: 'string',
+                      },
+                    },
+                    required: ['id'],
+                    type: 'object',
+                  },
+                },
+                {
+                  description: undefined,
+                  key: 'pet-not-shared',
+                  summary: undefined,
+                  value: {
+                    'not-shared': true,
+                  },
+                },
+              ],
+              mediaType: 'application/json',
+              schema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+              },
+            },
+          ],
+          description: undefined,
+          headers: [],
+        },
+      ],
+      security: [],
+      servers: [],
+      tags: [],
+    });
+  });
 });

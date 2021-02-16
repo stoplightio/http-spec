@@ -1,6 +1,7 @@
 // @ts-ignore
 import * as toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import {
+  DeepPartial,
   Dictionary,
   HttpParamStyles,
   IHttpEncoding,
@@ -10,10 +11,10 @@ import {
   Optional,
 } from '@stoplight/types';
 import { JSONSchema4 } from 'json-schema';
-import { compact, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
-import { EncodingPropertyObject, HeaderObject, MediaTypeObject } from 'openapi3-ts';
+import { compact, each, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
+import { EncodingPropertyObject, HeaderObject, MediaTypeObject, OpenAPIObject } from 'openapi3-ts';
 
-import { isDictionary } from '../../utils';
+import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isHeaderObject } from '../guards';
 
 function translateEncodingPropertyObject(
@@ -105,10 +106,15 @@ export function translateHeaderObject(headerObject: unknown, name: string): Opti
   }) as unknown) as IHttpHeaderParam;
 }
 
-export function translateMediaTypeObject(mediaObject: unknown, mediaType: string): Optional<IMediaTypeContent> {
+export function translateMediaTypeObject(
+  document: DeepPartial<OpenAPIObject>,
+  mediaObject: unknown,
+  mediaType: string,
+): Optional<IMediaTypeContent> {
   if (!isDictionary(mediaObject)) return;
 
-  const { schema, encoding } = mediaObject;
+  const resolvedMediaObject = resolveMediaObject(document, mediaObject);
+  const { schema, encoding, examples } = resolvedMediaObject;
 
   let jsonSchema: Optional<JSONSchema4>;
 
@@ -124,8 +130,7 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     }
   }
 
-  const example = mediaObject.example || jsonSchema?.example;
-  const examples = mediaObject.examples;
+  const example = resolvedMediaObject.example || jsonSchema?.example;
 
   return {
     mediaType,
@@ -146,6 +151,23 @@ export function translateMediaTypeObject(mediaObject: unknown, mediaType: string
     ),
     encodings: map<any, IHttpEncoding>(encoding, translateEncodingPropertyObject),
   };
+}
+
+function resolveMediaObject(document: DeepPartial<OpenAPIObject>, maybeMediaObject: Dictionary<unknown>) {
+  const mediaObject = { ...maybeMediaObject };
+  if (isDictionary(mediaObject.schema)) {
+    mediaObject.schema = maybeResolveLocalRef(document, mediaObject.schema);
+  }
+
+  if (isDictionary(mediaObject.examples)) {
+    const examples = { ...mediaObject.examples };
+    mediaObject.examples = examples;
+    each(examples, (exampleValue, exampleName) => {
+      examples[exampleName] = maybeResolveLocalRef(document, exampleValue);
+    });
+  }
+
+  return mediaObject;
 }
 
 const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
