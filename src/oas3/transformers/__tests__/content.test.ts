@@ -8,11 +8,11 @@ describe('translateMediaTypeObject', () => {
   });
 
   it('should gracefully handle invalid data', () => {
-    expect(translateMediaTypeObject(null, 'mediaType')).toBeUndefined();
+    expect(translateMediaTypeObject({}, null, 'mediaType')).toBeUndefined();
   });
 
   it('given empty object, should return nothing', () => {
-    expect(translateMediaTypeObject({}, 'mediaType')).toStrictEqual({
+    expect(translateMediaTypeObject({}, {}, 'mediaType')).toStrictEqual({
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
@@ -23,6 +23,7 @@ describe('translateMediaTypeObject', () => {
   it('given invalid schema, should return nothing', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {
             get properties() {
@@ -43,6 +44,7 @@ describe('translateMediaTypeObject', () => {
   it('given non-object schema, should return nothing', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: 'foo',
         },
@@ -59,6 +61,7 @@ describe('translateMediaTypeObject', () => {
   it('given single example should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           example: 'hey',
@@ -72,6 +75,7 @@ describe('translateMediaTypeObject', () => {
   it('given multiple examples should translate to IHttpContent', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: { example: { summary: 'multi example', value: 'hey' } },
@@ -85,6 +89,7 @@ describe('translateMediaTypeObject', () => {
   it('given encodings should translate each encoding to array item', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: {
@@ -123,6 +128,7 @@ describe('translateMediaTypeObject', () => {
   it('given complex nested media type object should translate correctly', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: { example: { summary: 'multi example', value: 'hey' } },
@@ -156,6 +162,7 @@ describe('translateMediaTypeObject', () => {
   it('given complex nested media type object with nullish headers should translate correctly', () => {
     expect(
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: { example: { summary: 'multi example', value: 'hey' } },
@@ -177,6 +184,7 @@ describe('translateMediaTypeObject', () => {
   it('given encoding with incorrect style should throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: { example: { summary: 'multi example' } },
@@ -196,6 +204,7 @@ describe('translateMediaTypeObject', () => {
   it('given encoding with no style it should not throw an error', () => {
     const testedFunction = () => {
       translateMediaTypeObject(
+        {},
         {
           schema: {},
           examples: { example: { summary: 'multi example' } },
@@ -226,6 +235,7 @@ describe('translateMediaTypeObject', () => {
 
     const originalSchema = JSON.parse(JSON.stringify(schema));
     const translatedObject = translateMediaTypeObject(
+      {},
       {
         schema,
         example: 'hey',
@@ -275,6 +285,7 @@ describe('translateMediaTypeObject', () => {
       it('should translate to IHttpContent', () => {
         expect(
           translateMediaTypeObject(
+            {},
             {
               schema: {
                 example: defaultExample,
@@ -291,6 +302,7 @@ describe('translateMediaTypeObject', () => {
       it('root example should take precedence over schema example', () => {
         expect(
           translateMediaTypeObject(
+            {},
             {
               schema: {
                 example: defaultExample,
@@ -322,6 +334,7 @@ describe('schema invalid', () => {
 
     expect(() =>
       translateMediaTypeObject(
+        {},
         {
           schema,
         },
@@ -345,6 +358,7 @@ describe('schema invalid', () => {
 
     expect(() =>
       translateMediaTypeObject(
+        {},
         {
           schema,
         },
@@ -366,6 +380,7 @@ describe('schema invalid', () => {
 
     expect(() =>
       translateMediaTypeObject(
+        {},
         {
           schema,
         },
