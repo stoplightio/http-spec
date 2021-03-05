@@ -23,5 +23,5 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'examples' in maybeResponseObject);
 
 export function isValidScheme(scheme: unknown) {
-  return typeof scheme === 'string' && /^[a-zA-Z]\w+$/.test(scheme);
+  return typeof scheme === 'string' && ['http', 'https', 'ws', 'wss'].includes(scheme);
 }

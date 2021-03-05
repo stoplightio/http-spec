@@ -80,24 +80,22 @@ describe('translateToServers', () => {
     expect(translateToServers({ host: 'stoplight.io', basePath: '/base-path', schemes: 1 } as any, {})).toEqual([]);
     // covers TypeError: {value}.replace is not a function coming from URI.js
     expect(
-      translateToServers({ host: 'stoplight.io', basePath: '/base-path', schemes: [null, 'test'] as any }, {}),
-    ).toEqual([
-      {
-        url: 'test://stoplight.io/base-path',
-      },
-    ]);
+      translateToServers(
+        { host: 'stoplight.io', basePath: '/base-path', schemes: [null, 'test', 'http ', '1https'] as any },
+        {},
+      ),
+    ).toEqual([]);
   });
 
   it('should handle malformed operation scheme gracefully', () => {
     expect(translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: 1 } as any)).toEqual([]);
     // covers TypeError: {value}.replace is not a function coming from URI.js
     expect(
-      translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: [null, 'test'] as any }),
-    ).toEqual([
-      {
-        url: 'test://stoplight.io/base-path',
-      },
-    ]);
+      translateToServers(
+        { host: 'stoplight.io', basePath: '/base-path' },
+        { schemes: [null, 'test', 'http ', '1https'] as any },
+      ),
+    ).toEqual([]);
   });
 
   it('should handle invalid server host gracefully', () => {
@@ -115,9 +113,5 @@ describe('translateToServers', () => {
         url: 'https://stoplight.io',
       },
     ]);
-  });
-
-  it('given incorrect schemes it should not return its server', () => {
-    expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['wrong http', '1https'] })).toEqual([]);
   });
 });
