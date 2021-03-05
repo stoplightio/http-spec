@@ -116,4 +116,8 @@ describe('translateToServers', () => {
       },
     ]);
   });
+
+  it('given incorrect schemes it should not return its server', () => {
+    expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['wrong http', '1https'] })).toEqual([]);
+  });
 });

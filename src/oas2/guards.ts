@@ -21,3 +21,7 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'schema' in maybeResponseObject ||
     'headers' in maybeResponseObject ||
     'examples' in maybeResponseObject);
+
+export function isValidScheme(scheme: unknown) {
+  return typeof scheme === 'string' && /^[a-zA-Z]\w+$/.test(scheme);
+}
