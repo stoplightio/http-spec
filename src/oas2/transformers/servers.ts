@@ -1,8 +1,8 @@
 import { DeepPartial, IServer } from '@stoplight/types';
-import { isString } from 'lodash';
 import { Operation, Spec } from 'swagger-schema-official';
 
 import { URI } from '../../utils';
+import { isValidScheme } from '../guards';
 
 export function translateToServers(spec: DeepPartial<Spec>, operation: DeepPartial<Operation>): IServer[] {
   if (typeof spec.host !== 'string' || spec.host.length === 0) {
@@ -16,7 +16,7 @@ export function translateToServers(spec: DeepPartial<Spec>, operation: DeepParti
 
   const hasBasePath = typeof spec.basePath === 'string' && spec.basePath.length > 0;
 
-  return schemes.filter(isString).map(scheme => {
+  return schemes.filter(isValidScheme).map(scheme => {
     let uri = URI().scheme(scheme).host(spec.host);
 
     if (hasBasePath) {
