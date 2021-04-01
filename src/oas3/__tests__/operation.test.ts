@@ -817,7 +817,7 @@ describe('transformOas3Operation', () => {
   describe('OAS 3.1 support', () => {
     it('should support pathItems', () => {
       const document: Partial<OpenAPIObject> = {
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
           '/users/{userId}': {
             $ref: '#/components/pathItems/userId',
@@ -858,6 +858,59 @@ describe('transformOas3Operation', () => {
           headers: expect.any(Array),
         },
       ]);
+    });
+
+    it('should support requestBodies on any method', () => {
+      const document: Partial<OpenAPIObject> = {
+        openapi: '3.1.0',
+        paths: {
+          '/subscribe': {
+            connect: {
+              operationId: 'opid',
+              responses: {},
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        id: {
+                          type: 'string',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      expect(
+        transformOas3Operation({
+          path: '/subscribe',
+          method: 'connect',
+          document,
+        }),
+      ).toHaveProperty('request.body', {
+        contents: [
+          {
+            encodings: [],
+            examples: [],
+            mediaType: 'application/json',
+            schema: {
+              $schema: 'http://json-schema.org/draft-04/schema#',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        ],
+      });
     });
   });
 });
