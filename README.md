@@ -12,7 +12,7 @@ Stoplight needs a way to interact with these documents in a standardized way, an
 
 ## How's HTTP Spec formed?
 
-This repository contains *exclusively* converters functions that take OpenAPI v2, OpenAPI v3, or Postman Collection documents and transforms them into the [http-spec interface](https://github.com/stoplightio/types/blob/master/src/http-spec.ts).
+This repository contains *exclusively* converters functions that take OpenAPI v2, OpenAPI v3.x, or Postman Collection documents and transforms them into the [http-spec interface](https://github.com/stoplightio/types/blob/master/src/http-spec.ts).
 
 You can explore the whole structure by looking at the [IHttpService](https://github.com/stoplightio/types/blob/master/src/http-spec.ts#L10) definition and checking out its descendands. You'll probably notice that it resembles a lot the current OpenAPI 3.x specification, and that's on purpose. OpenAPI 3.0 has first support and we gracefully upgrade/downgrade the other specification formats to it.
 

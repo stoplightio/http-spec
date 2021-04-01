@@ -13,18 +13,24 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     name: document.info?.title ?? 'no-title',
   };
 
-  if (document.info?.description) {
+  if (typeof document.info?.description === 'string') {
     httpService.description = document.info.description;
+  }
+
+  if (typeof document.info?.summary === 'string') {
+    httpService.summary = document.info.summary;
   }
 
   if (document.info?.contact) {
     httpService.contact = document.info.contact;
   }
 
-  if (document.info?.license) {
+  if (typeof document.info?.license === 'object' && document.info.license !== null) {
+    const { name, identifier, ...license } = document.info.license;
     httpService.license = {
-      ...document.info.license,
-      name: document.info.license.name || '',
+      ...license,
+      name: typeof name === 'string' ? name : '',
+      ...(typeof identifier === 'string' && { identifier }),
     };
   }
 

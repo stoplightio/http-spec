@@ -36,7 +36,7 @@
     "@types/urijs": "~1.19.9",
     "json-schema-generator": "^2.0.6",
     "lodash": "^4.17.15",
-    "openapi3-ts": "~1.4.0",
+    "openapi3-ts": "^2.0.1",
     "postman-collection": "^3.6.2",
     "type-is": "^1.6.18",
     "urijs": "~1.19.2"
