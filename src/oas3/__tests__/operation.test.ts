@@ -813,4 +813,51 @@ describe('transformOas3Operation', () => {
       tags: [],
     });
   });
+
+  describe('OAS 3.1 support', () => {
+    it('should support pathItems', () => {
+      const document: Partial<OpenAPIObject> = {
+        openapi: '3.0.0',
+        paths: {
+          '/users/{userId}': {
+            $ref: '#/components/pathItems/userId',
+          },
+        },
+        components: {
+          pathItems: {
+            userId: {
+              get: {
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          type: 'object',
+                          properties: {},
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document,
+        }),
+      ).toHaveProperty('responses', [
+        {
+          code: '200',
+          contents: expect.any(Array),
+          headers: expect.any(Array),
+        },
+      ]);
+    });
+  });
 });
