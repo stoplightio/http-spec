@@ -209,7 +209,7 @@ describe('oas3 service', () => {
     });
   });
 
-  it('should filter out out scopes', () => {
+  it('should filter out scopes', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3.0.0',
       components: {
