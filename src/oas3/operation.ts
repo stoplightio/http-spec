@@ -20,11 +20,11 @@ export function transformOas3Operations(document: OpenAPIObject): IHttpOperation
 
 export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document, path, method }) => {
   const pathObj = maybeResolveLocalRef(document, get(document, ['paths', path])) as PathsObject;
-  if (!pathObj) {
+  if (typeof pathObj !== 'object' || pathObj === null) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as OperationObject;
+  const operation = maybeResolveLocalRef(document, pathObj[method]) as OperationObject;
   if (!operation) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }

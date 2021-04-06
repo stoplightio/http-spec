@@ -209,7 +209,7 @@ describe('oas3 service', () => {
     });
   });
 
-  it('filters out scopes', () => {
+  it('should filter out scopes', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3.0.0',
       components: {
@@ -235,5 +235,47 @@ describe('oas3 service', () => {
 
     const transformed = transformOas3Service({ document });
     expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
+  });
+
+  describe('OAS 3.1 support', () => {
+    it('should support info.summary', () => {
+      const document: Partial<OpenAPIObject> = {
+        info: {
+          title: '',
+          version: '1.0',
+          summary: 'Very cool API',
+        },
+      };
+
+      expect(transformOas3Service({ document })).toEqual({
+        id: '?http-service-id?',
+        name: '',
+        version: '1.0',
+        summary: 'Very cool API',
+      });
+    });
+
+    it('should support info.license.identifier', () => {
+      const document: Partial<OpenAPIObject> = {
+        info: {
+          title: '',
+          version: '1.0',
+          license: {
+            name: 'MIT License',
+            identifier: 'MIT',
+          },
+        },
+      };
+
+      expect(transformOas3Service({ document })).toEqual({
+        id: '?http-service-id?',
+        name: '',
+        version: '1.0',
+        license: {
+          name: 'MIT License',
+          identifier: 'MIT',
+        },
+      });
+    });
   });
 });

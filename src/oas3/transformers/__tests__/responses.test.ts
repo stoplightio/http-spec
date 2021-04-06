@@ -1,3 +1,6 @@
+import type { DeepPartial } from '@stoplight/types';
+import { OpenAPIObject } from 'openapi3-ts';
+
 import { translateToResponses } from '../responses';
 
 describe('translateToOas3Responses', () => {
@@ -95,7 +98,7 @@ describe('translateToOas3Responses', () => {
   });
 
   it('should resolve $refs nullish responses', () => {
-    const document = {
+    const document: DeepPartial<OpenAPIObject> = {
       openapi: '3.0.0',
       paths: {
         '/user': {
@@ -141,7 +144,7 @@ describe('translateToOas3Responses', () => {
       },
     };
 
-    expect(translateToResponses(document, document.paths['/user'].get.responses)).toEqual([
+    expect(translateToResponses(document, document.paths!['/user'].get.responses)).toEqual([
       {
         code: '200',
         contents: [

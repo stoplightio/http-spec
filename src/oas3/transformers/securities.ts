@@ -21,7 +21,7 @@ export function translateToSecurities(document: DeepPartial<OpenAPIObject>, oper
 }
 
 export function transformToSingleSecurity(
-  securityScheme: SecuritySchemeObject,
+  securityScheme: SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' }),
   key: string,
 ): SecurityWithKey | undefined {
   const baseObject: { key: string; description?: string } = {
@@ -71,6 +71,13 @@ export function transformToSingleSecurity(
       ...baseObject,
       type: 'openIdConnect',
       openIdConnectUrl: securityScheme.openIdConnectUrl as string,
+    };
+  }
+
+  if (securityScheme.type === 'mutualTLS') {
+    return {
+      ...baseObject,
+      type: 'mutualTLS',
     };
   }
 
