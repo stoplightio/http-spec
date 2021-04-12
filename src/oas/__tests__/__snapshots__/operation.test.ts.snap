@@ -375,9 +375,110 @@ Array [
     "path": "/pets",
     "request": Object {
       "body": Object {
-        "contents": Array [],
-        "description": undefined,
-        "required": undefined,
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/components/schemas/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "example": "doggie",
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "xml": Object {
+                "name": "Pet",
+              },
+            },
+          },
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/components/schemas/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "example": "doggie",
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "xml": Object {
+                "name": "Pet",
+              },
+            },
+          },
+        ],
+        "description": "Pet object that needs to be added to the store",
+        "required": true,
       },
       "cookie": Array [],
       "headers": Array [],
@@ -499,9 +600,110 @@ Array [
     "path": "/pet/{petId}",
     "request": Object {
       "body": Object {
-        "contents": Array [],
-        "description": undefined,
-        "required": undefined,
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "application/json",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/components/schemas/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "example": "doggie",
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "xml": Object {
+                "name": "Pet",
+              },
+            },
+          },
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/components/schemas/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "example": "doggie",
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "xml": Object {
+                "name": "Pet",
+              },
+            },
+          },
+        ],
+        "description": "Pet object that needs to be added to the store",
+        "required": true,
       },
       "cookie": Array [],
       "headers": Array [],

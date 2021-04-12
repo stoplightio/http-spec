@@ -814,6 +814,128 @@ describe('transformOas3Operation', () => {
     });
   });
 
+  it('should resolve requestBody reference to path operation requestBody', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/paths/~1pets/put/requestBody',
+            },
+          },
+          put: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [
+        {
+          encodings: [],
+          examples: [],
+          mediaType: 'application/json',
+          schema: {
+            $schema: 'http://json-schema.org/draft-04/schema#',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      ],
+    });
+  });
+
+  it('should resolve requestBody reference to components requestBodies', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Pet',
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Pet: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [
+        {
+          encodings: [],
+          examples: [],
+          mediaType: 'application/json',
+          schema: {
+            $schema: 'http://json-schema.org/draft-04/schema#',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      ],
+    });
+  });
+
   describe('OAS 3.1 support', () => {
     it('should support pathItems', () => {
       const document: Partial<OpenAPIObject> = {
