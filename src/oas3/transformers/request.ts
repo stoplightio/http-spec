@@ -15,6 +15,7 @@ import { compact, map, omit, partial, pickBy } from 'lodash';
 import type { OpenAPIObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
+import { isRequestBodyObject } from '../guards';
 import { translateMediaTypeObject } from './content';
 
 function translateRequestBody(
@@ -73,7 +74,9 @@ export function translateToRequest(
   let body;
   if (isDictionary(requestBodyObject)) {
     const resolvedRequestBodyObject = maybeResolveLocalRef(document, requestBodyObject) as RequestBodyObject;
-    body = translateRequestBody(document, resolvedRequestBodyObject);
+    body = isRequestBodyObject(resolvedRequestBodyObject)
+      ? translateRequestBody(document, resolvedRequestBodyObject)
+      : { contents: [] };
   } else {
     body = { contents: [] };
   }
