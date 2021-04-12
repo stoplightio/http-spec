@@ -936,6 +936,40 @@ describe('transformOas3Operation', () => {
     });
   });
 
+  it('should not fail if requestBody reference points to a falsy value', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Pet',
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Pet: null as any,
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [],
+    });
+  });
+
   describe('OAS 3.1 support', () => {
     it('should support pathItems', () => {
       const document: Partial<OpenAPIObject> = {
