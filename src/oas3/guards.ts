@@ -4,6 +4,7 @@ import {
   BaseParameterObject,
   HeaderObject,
   OAuthFlowObject,
+  RequestBodyObject,
   ResponseObject,
   SecuritySchemeObject,
   ServerObject,
@@ -64,3 +65,6 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
 
 export const isOAuthFlowObject = (maybeOAuthFlowObject: unknown): maybeOAuthFlowObject is OAuthFlowObject =>
   isDictionary(maybeOAuthFlowObject) && isDictionary(maybeOAuthFlowObject.scopes);
+
+export const isRequestBodyObject = (maybeRequestBodyObject: unknown): maybeRequestBodyObject is RequestBodyObject =>
+  isDictionary(maybeRequestBodyObject) && isDictionary(maybeRequestBodyObject.content);
