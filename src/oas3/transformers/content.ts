@@ -8,13 +8,13 @@ import {
   INodeExample,
   Optional,
 } from '@stoplight/types';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { compact, each, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject, OpenAPIObject } from 'openapi3-ts';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isHeaderObject } from '../guards';
-import { translateSchemaObject } from './schema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -115,19 +115,19 @@ export function translateMediaTypeObject(
   const resolvedMediaObject = resolveMediaObject(document, mediaObject);
   const { schema, encoding, examples } = resolvedMediaObject;
 
-  let jsonSchema: Optional<JSONSchema4>;
+  let jsonSchema: Optional<JSONSchema7>;
 
   if (isObject(schema)) {
     try {
       jsonSchema = translateSchemaObject(schema, {
-        pruneNotSupported: ['nullable', 'discriminator'],
+        pruneNotSupported: ['discriminator'],
       });
     } catch {
       // happens
     }
   }
 
-  const example = resolvedMediaObject.example || jsonSchema?.example;
+  const example = resolvedMediaObject.example || jsonSchema?.examples?.[0];
 
   return {
     mediaType,
