@@ -392,7 +392,6 @@ Array [
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
                   "examples": Array [
                     "doggie",
                   ],
@@ -444,7 +443,6 @@ Array [
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
                   "examples": Array [
                     "doggie",
                   ],
@@ -621,7 +619,6 @@ Array [
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
                   "examples": Array [
                     "doggie",
                   ],
@@ -673,7 +670,6 @@ Array [
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
                   "examples": Array [
                     "doggie",
                   ],

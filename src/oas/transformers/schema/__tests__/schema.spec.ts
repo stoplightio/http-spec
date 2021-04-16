@@ -64,7 +64,6 @@ describe('translateSchemaObject', () => {
       ).toStrictEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
-        'x-example': 'Cat', // kept for backwards compatibility, we may remove it in future (or maybe in this PR, let's figure it out!)
         examples: ['Cat'],
       });
     });

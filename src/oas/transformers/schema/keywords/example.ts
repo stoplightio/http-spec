@@ -6,7 +6,7 @@ const createExampleConverter = (keyword: 'x-example' | 'example'): Converter => 
   return schema => {
     if (!(keyword in schema)) return;
     (schema as JSONSchema7).examples = [schema[keyword]];
-    // delete schema[keyword];
+    delete schema[keyword];
   };
 };
 
