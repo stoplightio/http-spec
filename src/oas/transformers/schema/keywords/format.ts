@@ -3,12 +3,12 @@ import { JSONSchema7 } from 'json-schema';
 import { Converter } from '../types';
 
 const ranges = {
-  MIN_INT_32: 0 - Math.pow(2, 31),
-  MAX_INT_32: Math.pow(2, 31) - 1,
-  MIN_INT_64: 0 - Math.pow(2, 63),
-  MAX_INT_64: Math.pow(2, 63) - 1,
-  MIN_FLOAT: 0 - Math.pow(2, 128),
-  MAX_FLOAT: Math.pow(2, 128) - 1,
+  MIN_INT_32: 0 - 2 ** 31,
+  MAX_INT_32: 2 ** 31 - 1,
+  MIN_INT_64: 0 - 2 ** 63,
+  MAX_INT_64: 2 ** 63 - 1,
+  MIN_FLOAT: 0 - 2 ** 128,
+  MAX_FLOAT: 2 ** 128 - 1,
   MIN_DOUBLE: 0 - Number.MAX_VALUE,
   MAX_DOUBLE: Number.MAX_VALUE,
 };
@@ -20,7 +20,7 @@ const createNumberFormatter = (min: number, max: number): Converter => {
   };
 };
 
-const convertFormatInt32 = createNumberFormatter(ranges.MIN_INT_32, ranges.MIN_INT_32);
+const convertFormatInt32 = createNumberFormatter(ranges.MIN_INT_32, ranges.MAX_INT_32);
 const convertFormatInt64 = createNumberFormatter(ranges.MIN_INT_64, ranges.MAX_INT_64);
 const convertFormatFloat = createNumberFormatter(ranges.MIN_FLOAT, ranges.MAX_FLOAT);
 const convertFormatDouble = createNumberFormatter(ranges.MIN_DOUBLE, ranges.MAX_DOUBLE);

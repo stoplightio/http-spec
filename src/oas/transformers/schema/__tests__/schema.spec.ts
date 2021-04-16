@@ -42,6 +42,56 @@ describe('translateSchemaObject', () => {
     });
   });
 
+  it('should translate numeric formats', () => {
+    expect(
+      translate({
+        anyOf: [
+          {
+            type: 'integer',
+            format: 'int64',
+            maximum: 2 ** 40,
+          },
+          {
+            type: 'integer',
+            format: 'int32',
+            minimum: 0,
+          },
+          {
+            type: 'number',
+            format: 'float',
+          },
+          {
+            type: 'string',
+            format: 'byte',
+          },
+        ],
+      }),
+    ).toStrictEqual({
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      anyOf: [
+        {
+          type: 'integer',
+          minimum: 0 - 2 ** 63,
+          maximum: 2 ** 40,
+        },
+        {
+          type: 'integer',
+          minimum: 0,
+          maximum: 2 ** 31 - 1,
+        },
+        {
+          type: 'number',
+          minimum: 0 - 2 ** 128,
+          maximum: 2 ** 128 - 1,
+        },
+        {
+          type: 'string',
+          pattern: '^[\\w\\d+\\/=]*$',
+        },
+      ],
+    });
+  });
+
   describe('OAS2 Schema Object', () => {
     it('should translate x-nullable', () => {
       expect(
@@ -79,6 +129,19 @@ describe('translateSchemaObject', () => {
       ).toStrictEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: ['string', 'null'],
+      });
+    });
+
+    it('should translate example', () => {
+      expect(
+        translate({
+          type: 'string',
+          example: 'Cat',
+        }),
+      ).toStrictEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'string',
+        examples: ['Cat'],
       });
     });
 
