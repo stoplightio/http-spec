@@ -14,6 +14,7 @@ import type {
 import { compact, map, omit, partial, pickBy } from 'lodash';
 import type { OpenAPIObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isRequestBodyObject } from '../guards';
 import { translateMediaTypeObject } from './content';
@@ -39,7 +40,7 @@ export function translateParameterObject(parameterObject: ParameterObject): IHtt
     ...omit(parameterObject, 'in', 'schema'),
     name: parameterObject.name,
     style: parameterObject.style,
-    schema: parameterObject.schema,
+    schema: isDictionary(parameterObject.schema) ? translateSchemaObject(parameterObject.schema) : void 0,
     examples: map(parameterObject.examples, (example, key) => ({
       key,
       ...example,

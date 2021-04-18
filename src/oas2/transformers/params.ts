@@ -6,7 +6,7 @@ import {
   IHttpPathParam,
   IHttpQueryParam,
 } from '@stoplight/types';
-import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { get, map, pick, pickBy, set } from 'lodash';
 import {
   BodyParameter,
@@ -15,9 +15,10 @@ import {
   HeaderParameter,
   PathParameter,
   QueryParameter,
-  Schema,
 } from 'swagger-schema-official';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
+import { isDictionary } from '../../utils';
 import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function chooseQueryParameterStyle(
@@ -67,7 +68,7 @@ export function translateToHeaderParams(headers: { [headerName: string]: Header 
     const param: IHttpHeaderParam = {
       name,
       style: HttpParamStyles.Simple,
-      schema: schema as JSONSchema4 | JSONSchema6 | JSONSchema7,
+      schema,
       description,
     };
 
@@ -87,7 +88,7 @@ export function translateToBodyParameter(body: BodyParameter, consumes: string[]
     contents: consumes.map(mediaType => {
       return {
         mediaType,
-        schema: body.schema,
+        schema: isDictionary(body.schema) ? translateSchemaObject(body.schema) : void 0,
         examples,
       };
     }),
@@ -102,6 +103,7 @@ export function translateFromFormDataParameters(
     contents: consumes.map(mediaType => ({
       mediaType,
       schema: {
+        $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
       },
     })),
@@ -110,10 +112,7 @@ export function translateFromFormDataParameters(
   return parameters.reduce((body, parameter) => {
     const { schema, description } = buildSchemaForParameter(parameter);
     (body.contents || []).forEach(content => {
-      // workaround... JSONSchema4 does not support `allowEmptyValue`
-      if ('allowEmptyValue' in parameter) {
-        Object.assign(schema, { allowEmptyValue: parameter.allowEmptyValue });
-      }
+      delete schema.$schema;
 
       if (description) {
         schema.description = description;
@@ -189,7 +188,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 
 function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): { schema: Schema | JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
+): { schema: JSONSchema7; description?: string } {
   const schema = pick(
     param,
     'type',
@@ -216,7 +215,7 @@ function buildSchemaForParameter(
   }
 
   return {
-    schema,
+    schema: translateSchemaObject(schema),
     description: param.description,
     ...('x-deprecated' in param && { deprecated: param['x-deprecated'] }),
   };

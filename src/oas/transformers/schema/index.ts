@@ -12,9 +12,9 @@ type InternalOptions = {
 };
 
 // Convert from OpenAPI 2.0 & OpenAPI 3.0 `SchemaObject` to JSON Schema Draft 7
-export function translateSchemaObject(schema: OASSchemaObject, options: { pruneNotSupported: string[] }): JSONSchema7 {
+export function translateSchemaObject(schema: OASSchemaObject, options?: { pruneNotSupported: string[] }): JSONSchema7 {
   const clonedSchema = convertSchema(schema, {
-    notSupported: options.pruneNotSupported,
+    notSupported: options?.pruneNotSupported ?? [],
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
   });
 
