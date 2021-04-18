@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.10.2",
-    "@stoplight/types": "^11.10.0",
+    "@stoplight/types": "file:.yalc/@stoplight/types",
     "@types/swagger-schema-official": "~2.0.21",
     "@types/to-json-schema": "^0.2.0",
     "@types/type-is": "^1.6.3",

@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@stoplight/types": {
+      "signature": "61d120131f954de9c167a4a88ea3c8bc",
+      "file": true,
+      "replaced": "^11.10.0"
+    }
+  }
+}
