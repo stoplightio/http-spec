@@ -560,6 +560,7 @@ describe('transformOas3Operation', () => {
               type: 'string',
               maximum: 2147483647,
               minimum: -2147483648,
+              examples: ['test'],
             },
           },
         ],

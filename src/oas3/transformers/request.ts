@@ -40,7 +40,12 @@ export function translateParameterObject(parameterObject: ParameterObject): IHtt
     ...omit(parameterObject, 'in', 'schema'),
     name: parameterObject.name,
     style: parameterObject.style,
-    schema: isDictionary(parameterObject.schema) ? translateSchemaObject(parameterObject.schema) : void 0,
+    schema: isDictionary(parameterObject.schema)
+      ? translateSchemaObject({
+          ...parameterObject.schema,
+          ...('example' in parameterObject ? { example: parameterObject.example } : null),
+        })
+      : void 0,
     examples: map(parameterObject.examples, (example, key) => ({
       key,
       ...example,
