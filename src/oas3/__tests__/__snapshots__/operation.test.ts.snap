@@ -36,7 +36,7 @@ Object {
           "examples": Array [],
           "mediaType": "application/json",
           "schema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "properties": Object {
               "id": Object {
                 "type": "string",

@@ -381,19 +381,20 @@ Array [
             "examples": Array [],
             "mediaType": "application/json",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "category": Object {
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
-                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
+                  "examples": Array [
+                    "doggie",
+                  ],
                   "type": "string",
                 },
                 "photoUrls": Object {
@@ -431,19 +432,20 @@ Array [
             "examples": Array [],
             "mediaType": "application/xml",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "category": Object {
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
-                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
+                  "examples": Array [
+                    "doggie",
+                  ],
                   "type": "string",
                 },
                 "photoUrls": Object {
@@ -566,7 +568,7 @@ Array [
             "examples": Array [],
             "mediaType": "*/*",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {},
               "type": "object",
             },
@@ -606,19 +608,20 @@ Array [
             "examples": Array [],
             "mediaType": "application/json",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "category": Object {
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
-                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
+                  "examples": Array [
+                    "doggie",
+                  ],
                   "type": "string",
                 },
                 "photoUrls": Object {
@@ -656,19 +659,20 @@ Array [
             "examples": Array [],
             "mediaType": "application/xml",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "category": Object {
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
-                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
                 },
                 "name": Object {
-                  "example": "doggie",
+                  "examples": Array [
+                    "doggie",
+                  ],
                   "type": "string",
                 },
                 "photoUrls": Object {
@@ -734,7 +738,7 @@ Array [
             "examples": Array [],
             "mediaType": "*/*",
             "schema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
+              "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "code": Object {
                   "type": "string",
