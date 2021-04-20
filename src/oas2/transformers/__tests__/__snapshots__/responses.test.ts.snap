@@ -13,12 +13,16 @@ Array [
           },
         ],
         "mediaType": "application/json",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
       Object {
         "examples": Array [],
         "mediaType": "application/xml",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
     ],
     "description": "d1",
@@ -35,7 +39,9 @@ Array [
       Object {
         "examples": Array [],
         "mediaType": "application/json",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
       Object {
         "examples": Array [
@@ -45,7 +51,9 @@ Array [
           },
         ],
         "mediaType": "application/xml",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
     ],
     "description": "d2",
@@ -67,12 +75,16 @@ Array [
       Object {
         "examples": Array [],
         "mediaType": "application/json",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
       Object {
         "examples": Array [],
         "mediaType": "application/xml",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
     ],
     "description": "d1",
@@ -94,7 +106,9 @@ Array [
       Object {
         "examples": Array [],
         "mediaType": "application/json",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
       Object {
         "examples": Array [
@@ -104,7 +118,9 @@ Array [
           },
         ],
         "mediaType": "application/xml",
-        "schema": Object {},
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+        },
       },
     ],
     "description": "d1",

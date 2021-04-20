@@ -20,6 +20,7 @@ Object {
       ],
       "mediaType": "*",
       "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
         "format": "e-mail",
       },
     },
@@ -36,6 +37,7 @@ Object {
       "examples": Array [],
       "mediaType": "*",
       "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
         "format": "e-mail",
       },
     },
@@ -51,6 +53,7 @@ Object {
   "name": "name",
   "required": true,
   "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "minimum": 12,
     "type": "integer",
   },
@@ -66,6 +69,7 @@ Array [
     "description": "a description",
     "name": "header-name",
     "schema": Object {
+      "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
     },
     "style": "simple",
@@ -74,6 +78,7 @@ Array [
     "description": "another description",
     "name": "plain-tex",
     "schema": Object {
+      "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
     },
     "style": "simple",
@@ -87,6 +92,7 @@ Array [
     "description": "a description",
     "name": "header-name",
     "schema": Object {
+      "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
     },
     "style": "simple",
@@ -100,6 +106,7 @@ Object {
   "name": "name",
   "required": true,
   "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "string",
   },
   "style": "simple",

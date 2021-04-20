@@ -124,7 +124,9 @@ describe('transformOas2Operation', () => {
         headers: [
           {
             name: 'name',
-            schema: {},
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+            },
             style: 'simple',
           },
         ],

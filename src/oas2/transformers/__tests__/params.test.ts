@@ -94,7 +94,9 @@ describe('params.translator', () => {
         ),
       ).toEqual(
         expect.objectContaining({
-          contents: expect.arrayContaining([expect.objectContaining({ schema: { readOnly: true } })]),
+          contents: expect.arrayContaining([
+            expect.objectContaining({ schema: { $schema: 'http://json-schema.org/draft-07/schema#', readOnly: true } }),
+          ]),
         }),
       );
     });
@@ -249,6 +251,7 @@ describe('params.translator', () => {
           },
         ],
         schema: {
+          $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             arr: {
               description: 'desc',
@@ -266,7 +269,6 @@ describe('params.translator', () => {
               type: 'integer',
             },
             str: {
-              allowEmptyValue: false,
               minLength: 1,
               default: '25-07-2019',
               description: 'desc',
