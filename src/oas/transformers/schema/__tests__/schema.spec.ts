@@ -92,6 +92,28 @@ describe('translateSchemaObject', () => {
     });
   });
 
+  it('should not mutate schema', () => {
+    let before: OASSchemaObject = {
+      type: 'object',
+      properties: {
+        test: {
+          id: 'test',
+        },
+      },
+    };
+
+    translate(before);
+
+    expect(before).toStrictEqual({
+      type: 'object',
+      properties: {
+        test: {
+          id: 'test',
+        },
+      },
+    });
+  });
+
   describe('OAS2 Schema Object', () => {
     it('should translate x-nullable', () => {
       expect(
