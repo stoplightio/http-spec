@@ -7,14 +7,12 @@ import { OASSchemaObject } from './types';
 const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
-  notSupported: string[];
   structs: string[];
 };
 
 // Convert from OpenAPI 2.0 & OpenAPI 3.0 `SchemaObject` to JSON Schema Draft 7
-export function translateSchemaObject(schema: OASSchemaObject, options: { pruneNotSupported: string[] }): JSONSchema7 {
+export function translateSchemaObject(schema: OASSchemaObject): JSONSchema7 {
   const clonedSchema = convertSchema(schema, {
-    notSupported: options.pruneNotSupported,
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
   });
 
@@ -50,10 +48,6 @@ function convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONS
     if (keyword in schema) {
       keywords[keyword](clonedSchema);
     }
-  }
-
-  for (const notSupportedProp of options.notSupported) {
-    delete clonedSchema[notSupportedProp];
   }
 
   return clonedSchema as JSONSchema7;

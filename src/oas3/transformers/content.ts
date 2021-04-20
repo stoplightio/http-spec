@@ -119,9 +119,7 @@ export function translateMediaTypeObject(
 
   if (isObject(schema)) {
     try {
-      jsonSchema = translateSchemaObject(schema, {
-        pruneNotSupported: ['discriminator'],
-      });
+      jsonSchema = translateSchemaObject(schema);
     } catch {
       // happens
     }

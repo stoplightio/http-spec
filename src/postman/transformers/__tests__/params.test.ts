@@ -96,7 +96,7 @@ describe('transformBody()', () => {
                   examples: [{ key: 'default', value: { a: 'b' } }],
                   mediaType: 'application/nice+json',
                   schema: {
-                    $schema: 'http://json-schema.org/draft-04/schema#',
+                    $schema: 'http://json-schema.org/draft-07/schema#',
                     description: '',
                     properties: {
                       a: {

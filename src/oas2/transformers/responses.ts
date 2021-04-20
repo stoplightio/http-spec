@@ -1,8 +1,8 @@
 import type { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
-import { JSONSchema4 } from 'json-schema';
 import { chain, compact, map, partial } from 'lodash';
 import type { Spec } from 'swagger-schema-official';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
 import { getExamplesFromSchema } from './getExamplesFromSchema';
@@ -27,7 +27,7 @@ function translateToResponse(
 
   const contents = produces.map(produceElement => ({
     mediaType: produceElement,
-    schema: resolvedResponse.schema as JSONSchema4,
+    schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(resolvedResponse.schema) : void 0,
     examples: objectifiedExamples.filter(example => example.key === produceElement),
   }));
 
