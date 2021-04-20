@@ -752,7 +752,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
+                $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
               },
@@ -798,7 +798,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
+                $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
               },
@@ -861,7 +861,7 @@ describe('transformOas3Operation', () => {
           examples: [],
           mediaType: 'application/json',
           schema: {
-            $schema: 'http://json-schema.org/draft-04/schema#',
+            $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
               id: {
@@ -923,7 +923,7 @@ describe('transformOas3Operation', () => {
           examples: [],
           mediaType: 'application/json',
           schema: {
-            $schema: 'http://json-schema.org/draft-04/schema#',
+            $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
               id: {
@@ -1056,7 +1056,7 @@ describe('transformOas3Operation', () => {
             examples: [],
             mediaType: 'application/json',
             schema: {
-              $schema: 'http://json-schema.org/draft-04/schema#',
+              $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'object',
               properties: {
                 id: {
