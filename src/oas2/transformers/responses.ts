@@ -17,7 +17,7 @@ function translateToResponse(
   const resolvedResponse = maybeResolveLocalRef(document, response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const headers = translateToHeaderParams(resolvedResponse.headers || {});
+  const headers = translateToHeaderParams(document, resolvedResponse.headers || {});
   const objectifiedExamples = chain(
     resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
   )
@@ -27,7 +27,7 @@ function translateToResponse(
 
   const contents = produces.map(produceElement => ({
     mediaType: produceElement,
-    schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(resolvedResponse.schema) : void 0,
+    schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(document, resolvedResponse.schema) : void 0,
     examples: objectifiedExamples.filter(example => example.key === produceElement),
   }));
 
