@@ -976,6 +976,165 @@ describe('transformOas3Operation', () => {
   });
 
   describe('OAS 3.1 support', () => {
+    it('should respect jsonSchemaDialect', () => {
+      const document: Partial<OpenAPIObject> = {
+        openapi: '3.1.0',
+        jsonSchemaDialect: 'https://json-schema.org/draft/2020-12/schema',
+        paths: {
+          '/pet': {
+            get: {
+              responses: {
+                '200': {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {},
+                      },
+                    },
+                  },
+                },
+              },
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {},
+                    },
+                  },
+                },
+              },
+            },
+            parameters: [
+              {
+                in: 'header',
+                name: 'email',
+                schema: {
+                  type: 'string',
+                  format: 'email',
+                },
+                example: 'test',
+              },
+            ],
+          },
+          '/users/{userId}': {
+            $ref: '#/components/pathItems/userId',
+          },
+        },
+        components: {
+          pathItems: {
+            userId: {
+              get: {
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          type: 'object',
+                          properties: {},
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document,
+        }),
+      ).toEqual(
+        expect.objectContaining({
+          responses: [
+            {
+              code: '200',
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+        }),
+      );
+
+      expect(
+        transformOas3Operation({
+          path: '/pet',
+          method: 'get',
+          document,
+        }),
+      ).toEqual(
+        expect.objectContaining({
+          request: {
+            body: {
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+            },
+            cookie: [],
+            headers: [
+              {
+                example: 'test',
+                examples: [],
+                name: 'email',
+                schema: {
+                  $schema: 'https://json-schema.org/draft/2020-12/schema',
+                  type: 'string',
+                  format: 'email',
+                  example: 'test',
+                },
+              },
+            ],
+            path: [],
+            query: [],
+          },
+          responses: [
+            {
+              code: '200',
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+        }),
+      );
+    });
+
     it('should support pathItems', () => {
       const document: Partial<OpenAPIObject> = {
         openapi: '3.1.0',

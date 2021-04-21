@@ -43,6 +43,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     responses: translateToResponses(document, operation.responses as { [name: string]: Response }, produces),
     servers: translateToServers(document, operation),
     request: translateToRequest(
+      document,
       getValidOasParameters(document, operation.parameters as Parameter[], pathObj.parameters as Parameter[]),
       consumes,
     ),

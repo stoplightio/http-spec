@@ -119,7 +119,7 @@ export function translateMediaTypeObject(
 
   if (isObject(schema)) {
     try {
-      jsonSchema = translateSchemaObject(schema);
+      jsonSchema = translateSchemaObject(document, schema);
     } catch {
       // happens
     }

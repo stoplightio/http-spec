@@ -1,5 +1,8 @@
+import { DeepPartial } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import { isObject } from 'lodash';
+import { OpenAPIObject } from 'openapi3-ts';
+import { Spec } from 'swagger-schema-official';
 
 import keywords from './keywords';
 import { OASSchemaObject } from './types';
@@ -11,7 +14,20 @@ type InternalOptions = {
 };
 
 // Convert from OpenAPI 2.0 & OpenAPI 3.0 `SchemaObject` to JSON Schema Draft 7
-export function translateSchemaObject(schema: OASSchemaObject): JSONSchema7 {
+// This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.
+export function translateSchemaObject(
+  document: DeepPartial<Spec | OpenAPIObject>,
+  schema: OASSchemaObject,
+): JSONSchema7 {
+  if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
+    return {
+      $schema: document.jsonSchemaDialect,
+      // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
+      // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
+      ...(schema as JSONSchema7),
+    };
+  }
+
   const clonedSchema = convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
   });

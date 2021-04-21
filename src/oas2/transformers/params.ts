@@ -1,4 +1,5 @@
 import {
+  DeepPartial,
   HttpParamStyles,
   IHttpEncoding,
   IHttpHeaderParam,
@@ -8,6 +9,7 @@ import {
 } from '@stoplight/types';
 import { JSONSchema7 } from 'json-schema';
 import { get, map, pick, pickBy, set } from 'lodash';
+import { OpenAPIObject } from 'openapi3-ts';
 import {
   BodyParameter,
   FormDataParameter,
@@ -15,6 +17,7 @@ import {
   HeaderParameter,
   PathParameter,
   QueryParameter,
+  Spec,
 } from 'swagger-schema-official';
 
 import { translateSchemaObject } from '../../oas/transformers/schema';
@@ -52,18 +55,21 @@ function chooseQueryParameterStyle(
   }
 }
 
-export function translateToHeaderParam(parameter: HeaderParameter): IHttpHeaderParam {
+export function translateToHeaderParam(document: DeepPartial<Spec>, parameter: HeaderParameter): IHttpHeaderParam {
   return (pickBy({
-    ...buildSchemaForParameter(parameter),
+    ...buildSchemaForParameter(document, parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
   }) as unknown) as IHttpHeaderParam;
 }
 
-export function translateToHeaderParams(headers: { [headerName: string]: Header }): IHttpHeaderParam[] {
+export function translateToHeaderParams(
+  document: DeepPartial<Spec>,
+  headers: { [headerName: string]: Header },
+): IHttpHeaderParam[] {
   return map(headers, (header, name) => {
-    const { schema, description } = buildSchemaForParameter(Object.assign({ name }, header));
+    const { schema, description } = buildSchemaForParameter(document, Object.assign({ name }, header));
 
     const param: IHttpHeaderParam = {
       name,
@@ -76,7 +82,11 @@ export function translateToHeaderParams(headers: { [headerName: string]: Header 
   });
 }
 
-export function translateToBodyParameter(body: BodyParameter, consumes: string[]): IHttpOperationRequestBody {
+export function translateToBodyParameter(
+  document: DeepPartial<OpenAPIObject>,
+  body: BodyParameter,
+  consumes: string[],
+): IHttpOperationRequestBody {
   const examples = map(
     get(body, 'x-examples') || (body.schema ? getExamplesFromSchema(body.schema) : void 0),
     (value, key) => ({ key, value }),
@@ -88,7 +98,7 @@ export function translateToBodyParameter(body: BodyParameter, consumes: string[]
     contents: consumes.map(mediaType => {
       return {
         mediaType,
-        schema: isDictionary(body.schema) ? translateSchemaObject(body.schema) : void 0,
+        schema: isDictionary(body.schema) ? translateSchemaObject(document, body.schema) : void 0,
         examples,
       };
     }),
@@ -96,6 +106,7 @@ export function translateToBodyParameter(body: BodyParameter, consumes: string[]
 }
 
 export function translateFromFormDataParameters(
+  document: DeepPartial<Spec>,
   parameters: FormDataParameter[],
   consumes: string[],
 ): IHttpOperationRequestBody {
@@ -110,7 +121,7 @@ export function translateFromFormDataParameters(
   };
 
   return parameters.reduce((body, parameter) => {
-    const { schema, description } = buildSchemaForParameter(parameter);
+    const { schema, description } = buildSchemaForParameter(document, parameter);
     (body.contents || []).forEach(content => {
       delete schema.$schema;
 
@@ -167,9 +178,9 @@ function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   return null;
 }
 
-export function translateToQueryParameter(query: QueryParameter): IHttpQueryParam {
+export function translateToQueryParameter(document: DeepPartial<Spec>, query: QueryParameter): IHttpQueryParam {
   return (pickBy({
-    ...buildSchemaForParameter(query),
+    ...buildSchemaForParameter(document, query),
     allowEmptyValue: query.allowEmptyValue,
     name: query.name,
     style: chooseQueryParameterStyle(query),
@@ -177,9 +188,9 @@ export function translateToQueryParameter(query: QueryParameter): IHttpQueryPara
   }) as unknown) as IHttpQueryParam;
 }
 
-export function translateToPathParameter(parameter: PathParameter): IHttpPathParam {
+export function translateToPathParameter(document: DeepPartial<Spec>, parameter: PathParameter): IHttpPathParam {
   return (pickBy({
-    ...buildSchemaForParameter(parameter),
+    ...buildSchemaForParameter(document, parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
@@ -187,6 +198,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 }
 
 function buildSchemaForParameter(
+  document: DeepPartial<Spec>,
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
 ): { schema: JSONSchema7; description?: string } {
   const schema = pick(
@@ -215,7 +227,7 @@ function buildSchemaForParameter(
   }
 
   return {
-    schema: translateSchemaObject(schema),
+    schema: translateSchemaObject(document, schema),
     description: param.description,
     ...('x-deprecated' in param && { deprecated: param['x-deprecated'] }),
   };
