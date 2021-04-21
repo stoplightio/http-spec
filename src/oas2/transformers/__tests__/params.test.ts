@@ -16,46 +16,55 @@ describe('params.translator', () => {
   describe('translateToHeaderParam', () => {
     it('should translate header param', () => {
       expect(
-        translateToHeaderParam({
-          required: true,
-          name: 'name',
-          type: 'integer',
-          in: 'header',
-          minimum: 12,
-          description: 'desc',
-        }),
+        translateToHeaderParam(
+          {},
+          {
+            required: true,
+            name: 'name',
+            type: 'integer',
+            in: 'header',
+            minimum: 12,
+            description: 'desc',
+          },
+        ),
       ).toMatchSnapshot();
     });
   });
 
   describe('translateToHeaderParams', () => {
     it('should translate empty dictionary to empty array', () => {
-      expect(translateToHeaderParams({})).toMatchSnapshot();
+      expect(translateToHeaderParams({}, {})).toMatchSnapshot();
     });
 
     it('should translate to simple header param', () => {
       expect(
-        translateToHeaderParams({
-          'header-name': {
-            description: 'a description',
-            type: 'string',
+        translateToHeaderParams(
+          {},
+          {
+            'header-name': {
+              description: 'a description',
+              type: 'string',
+            },
           },
-        }),
+        ),
       ).toMatchSnapshot();
     });
 
     it('should translate to multiple header params', () => {
       expect(
-        translateToHeaderParams({
-          'header-name': {
-            description: 'a description',
-            type: 'string',
+        translateToHeaderParams(
+          {},
+          {
+            'header-name': {
+              description: 'a description',
+              type: 'string',
+            },
+            'plain-tex': {
+              description: 'another description',
+              type: 'string',
+            },
           },
-          'plain-tex': {
-            description: 'another description',
-            type: 'string',
-          },
-        }),
+        ),
       ).toMatchSnapshot();
     });
   });
@@ -64,6 +73,7 @@ describe('params.translator', () => {
     it('should translate to body parameter', () => {
       expect(
         translateToBodyParameter(
+          {},
           {
             in: 'body',
             name: 'name',
@@ -81,6 +91,7 @@ describe('params.translator', () => {
     it('should preserve readOnly flag in schema', () => {
       expect(
         translateToBodyParameter(
+          {},
           {
             in: 'body',
             name: 'name',
@@ -104,6 +115,7 @@ describe('params.translator', () => {
     it('given x-examples should translate to body parameter with multiple examples', () => {
       expect(
         translateToBodyParameter(
+          {},
           {
             in: 'body',
             name: 'name',
@@ -131,6 +143,7 @@ describe('params.translator', () => {
       describe('given response with schema with x-examples', () => {
         it('should translate to body parameter with examples', () => {
           const body = translateToBodyParameter(
+            {},
             {
               in: 'body',
               name: 'name',
@@ -167,6 +180,7 @@ describe('params.translator', () => {
       describe('given response with body param and schema examples', () => {
         it('root x-examples should take precedence over schema examples', () => {
           const body = translateToBodyParameter(
+            {},
             {
               in: 'body',
               name: 'name',
@@ -283,6 +297,7 @@ describe('params.translator', () => {
 
       expect(
         translateFromFormDataParameters(
+          {},
           [formDataParameterString, formDataParameterArray, formDataParameterInteger],
           consumes,
         ),
@@ -313,27 +328,29 @@ describe('params.translator', () => {
       { oasStyle: 'multi', expectedStyle: HttpParamStyles.Form },
       { oasStyle: 'nasino', expectedStyle: HttpParamStyles.Form },
     ])('translate style: %s', ({ oasStyle, expectedStyle }) => {
-      expect(translateToQueryParameter({ ...parameter, collectionFormat: oasStyle } as QueryParameter)).toHaveProperty(
-        'style',
-        expectedStyle,
-      );
+      expect(
+        translateToQueryParameter({}, { ...parameter, collectionFormat: oasStyle } as QueryParameter),
+      ).toHaveProperty('style', expectedStyle);
     });
 
     it('translate x-deprecated', () => {
-      expect(translateToQueryParameter(parameter)).toHaveProperty('deprecated', true);
+      expect(translateToQueryParameter({}, parameter)).toHaveProperty('deprecated', true);
     });
   });
 
   describe('translateToPathParameter', () => {
     it('should translate', () => {
       expect(
-        translateToPathParameter({
-          required: true,
-          description: 'descr',
-          name: 'name',
-          in: 'path',
-          type: 'string',
-        }),
+        translateToPathParameter(
+          {},
+          {
+            required: true,
+            description: 'descr',
+            name: 'name',
+            in: 'path',
+            type: 'string',
+          },
+        ),
       ).toMatchSnapshot();
     });
   });

@@ -1,7 +1,7 @@
 import { translateSchemaObject } from '..';
 import { OASSchemaObject } from '../types';
 
-const translate = (schemaObject: OASSchemaObject) => translateSchemaObject(schemaObject);
+const translate = (schemaObject: OASSchemaObject) => translateSchemaObject({}, schemaObject);
 
 describe('translateSchemaObject', () => {
   it('should translate id', () => {

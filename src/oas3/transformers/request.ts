@@ -35,13 +35,16 @@ function translateRequestBody(
   };
 }
 
-export function translateParameterObject(parameterObject: ParameterObject): IHttpParam | any {
+export function translateParameterObject(
+  document: DeepPartial<OpenAPIObject>,
+  parameterObject: ParameterObject,
+): IHttpParam | any {
   return pickBy({
     ...omit(parameterObject, 'in', 'schema'),
     name: parameterObject.name,
     style: parameterObject.style,
     schema: isDictionary(parameterObject.schema)
-      ? translateSchemaObject({
+      ? translateSchemaObject(document, {
           ...parameterObject.schema,
           ...('example' in parameterObject ? { example: parameterObject.example } : null),
         })
@@ -74,7 +77,7 @@ export function translateToRequest(
     const { in: key } = parameter;
     if (!params.hasOwnProperty(key)) continue;
 
-    params[key].push(translateParameterObject(parameter));
+    params[key].push(translateParameterObject(document, parameter));
   }
 
   let body;
