@@ -1,35 +1,25 @@
-version: 2.1
-
-orbs:
-  node: circleci/node@4.2.1
-
-executors:
-  linux:
-    docker:
-      - image: cimg/base:2021.01
+version: 2
 
 jobs:
-  test-and-build:
-    parameters:
-      os:
-        type: executor
-      node-version:
-        type: string
-    executor: << parameters.os >>
+  test:
+    docker:
+      - image: circleci/node:10
     steps:
       - checkout
-      - node/install:
-          node-version: << parameters.node-version >>.0
-          install-yarn: true
-          install-npm: false
+      - run: yarn
+      - run: yarn lint
+      - run: yarn test --maxWorkers=2
+  build:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
       - run: yarn
       - run: yarn build
-      - run: yarn lint
-      - run: yarn test --maxWorkers=2 --coverage
 
   release:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:10
     steps:
       - checkout
       - run: yarn
@@ -38,22 +28,16 @@ jobs:
 
 workflows:
   version: 2
-  test-and-release:
+  test_and_release:
     jobs:
-      - test-and-build:
-          matrix:
-            parameters:
-              os:
-                - linux
-              node-version:
-                - '12.20'
-                - '14.15'
-                - '15.4'
+      - test
+      - build:
+          requires:
+            - test
       - release:
           filters:
             branches:
-              only:
-                - master
-                - beta
+              only: master
           requires:
-            - test-and-build
+            - test
+            - build
