@@ -1,5 +1,5 @@
 import { DeepPartial } from '@stoplight/types';
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { isObject } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
@@ -13,10 +13,10 @@ type InternalOptions = {
   structs: string[];
 };
 
-// Convert from OpenAPI 2.0 & OpenAPI 3.0 `SchemaObject` to JSON Schema Draft 7
+// Convert from OpenAPI 2.0, OpenAPI 3.0 `SchemaObject` or JSON Schema Draft4/6 to JSON Schema Draft 7
 // This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.
 export function translateSchemaObject(
-  document: DeepPartial<Spec | OpenAPIObject>,
+  document: DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6>,
   schema: OASSchemaObject,
 ): JSONSchema7 {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
@@ -29,7 +29,7 @@ export function translateSchemaObject(
   }
 
   const clonedSchema = convertSchema(schema, {
-    structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
+    structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';

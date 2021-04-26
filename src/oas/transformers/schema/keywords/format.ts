@@ -34,10 +34,12 @@ const convertFormatBase64: Converter = schema => {
   // Matches `standard` base64 not `base64url`. The specification does not
   // exclude it but current ongoing OpenAPI plans will distinguish btoh.
   (schema as JSONSchema7).contentEncoding = 'base64';
+  delete schema.format;
 };
 
 const convertFormatBinary: Converter = schema => {
   (schema as JSONSchema7).contentMediaType = 'application/octet-stream';
+  delete schema.format;
 };
 
 function asActualNumber(maybeNumber: unknown, defaultValue: number): number {
@@ -60,7 +62,6 @@ const formatConverters = {
 const format: Converter = schema => {
   if (typeof schema.format === 'string' && schema.format in formatConverters) {
     formatConverters[schema.format](schema);
-    delete schema.format;
   }
 };
 

@@ -71,24 +71,53 @@ describe('translateSchemaObject', () => {
       anyOf: [
         {
           type: 'integer',
+          format: 'int64',
           minimum: 0 - 2 ** 63,
           maximum: 2 ** 40,
         },
         {
           type: 'integer',
+          format: 'int32',
           minimum: 0,
           maximum: 2 ** 31 - 1,
         },
         {
           type: 'number',
+          format: 'float',
           minimum: 0 - 2 ** 128,
           maximum: 2 ** 128 - 1,
         },
         {
           type: 'string',
+          format: 'byte',
           pattern: '^[\\w\\d+\\/=]*$',
         },
       ],
+    });
+  });
+
+  it('should keep properties using keywords as keys', () => {
+    expect(
+      translate({
+        properties: {
+          exclusiveMinimum: {
+            type: 'integer',
+          },
+          minimum: {
+            type: 'number',
+          },
+        },
+      }),
+    ).toStrictEqual({
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      properties: {
+        exclusiveMinimum: {
+          type: 'integer',
+        },
+        minimum: {
+          type: 'number',
+        },
+      },
     });
   });
 
