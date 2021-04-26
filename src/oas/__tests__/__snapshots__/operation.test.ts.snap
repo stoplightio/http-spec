@@ -192,6 +192,7 @@ Array [
             "name": "X-Rate-Limit",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "format": "int64",
               "maximum": 9223372036854776000,
               "minimum": -9223372036854776000,
               "type": "number",
@@ -403,6 +404,7 @@ Array [
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
+                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
@@ -454,6 +456,7 @@ Array [
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
+                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
@@ -632,6 +635,7 @@ Array [
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
+                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
@@ -683,6 +687,7 @@ Array [
                   "$ref": "#/components/schemas/Category",
                 },
                 "id": Object {
+                  "format": "int64",
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",

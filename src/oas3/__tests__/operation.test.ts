@@ -558,6 +558,7 @@ describe('transformOas3Operation', () => {
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
+              format: 'int32',
               maximum: 2147483647,
               minimum: -2147483648,
               examples: ['test'],
