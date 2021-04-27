@@ -1,6 +1,6 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { transformOas3Operation } from '../operation';
+import { transformOas3Operation, transformOas3Operations } from '../operation';
 
 describe('transformOas3Operation', () => {
   it('should return deprecated property in http operation root', () => {
@@ -27,6 +27,55 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toHaveProperty('deprecated', true);
+  });
+
+  it('should return x-internal property in http operation root', () => {
+    const document: OpenAPIObject = {
+      openapi: '3.0.0',
+      info: {
+        title: '',
+        version: '',
+      },
+      servers: [
+        {
+          url: 'http://localhost:3000',
+        },
+      ],
+      paths: {
+        '/users/{userId}': {
+          get: {
+            'x-internal': true,
+          },
+          post: {
+            'x-internal': false,
+          },
+          put: {},
+        },
+      },
+    };
+
+    expect(transformOas3Operations(document)).toStrictEqual([
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'get',
+        internal: true,
+      }),
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'post',
+        internal: false,
+      }),
+      {
+        id: '?http-operation-id?',
+        path: '/users/{userId}',
+        method: 'put',
+        request: expect.any(Object),
+        responses: [],
+        security: [],
+        servers: expect.any(Array),
+        tags: [],
+      },
+    ]);
   });
 
   it('given no tags should translate operation with empty tags array', () => {
