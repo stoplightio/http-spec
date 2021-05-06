@@ -12,9 +12,9 @@ import { JSONSchema7 } from 'json-schema';
 import { compact, each, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
 import { EncodingPropertyObject, HeaderObject, MediaTypeObject, OpenAPIObject } from 'openapi3-ts';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isHeaderObject } from '../guards';
-import { translateSchemaObject } from './schema';
 
 function translateEncodingPropertyObject(
   encodingPropertyObject: EncodingPropertyObject,
@@ -119,15 +119,13 @@ export function translateMediaTypeObject(
 
   if (isObject(schema)) {
     try {
-      jsonSchema = translateSchemaObject(schema, {
-        pruneNotSupported: ['nullable', 'discriminator'],
-      });
+      jsonSchema = translateSchemaObject(document, schema);
     } catch {
       // happens
     }
   }
 
-  const example = resolvedMediaObject.example || jsonSchema?.examples;
+  const example = resolvedMediaObject.example || jsonSchema?.examples?.[0];
 
   return {
     mediaType,

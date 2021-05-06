@@ -1,6 +1,6 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { transformOas3Operation } from '../operation';
+import { transformOas3Operation, transformOas3Operations } from '../operation';
 
 describe('transformOas3Operation', () => {
   it('should return deprecated property in http operation root', () => {
@@ -27,6 +27,55 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toHaveProperty('deprecated', true);
+  });
+
+  it('should return x-internal property in http operation root', () => {
+    const document: OpenAPIObject = {
+      openapi: '3.0.0',
+      info: {
+        title: '',
+        version: '',
+      },
+      servers: [
+        {
+          url: 'http://localhost:3000',
+        },
+      ],
+      paths: {
+        '/users/{userId}': {
+          get: {
+            'x-internal': true,
+          },
+          post: {
+            'x-internal': false,
+          },
+          put: {},
+        },
+      },
+    };
+
+    expect(transformOas3Operations(document)).toStrictEqual([
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'get',
+        internal: true,
+      }),
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'post',
+        internal: false,
+      }),
+      {
+        id: '?http-operation-id?',
+        path: '/users/{userId}',
+        method: 'put',
+        request: expect.any(Object),
+        responses: [],
+        security: [],
+        servers: expect.any(Array),
+        tags: [],
+      },
+    ]);
   });
 
   it('given no tags should translate operation with empty tags array', () => {
@@ -524,6 +573,7 @@ describe('transformOas3Operation', () => {
                 name: 'name',
                 schema: {
                   type: 'string',
+                  format: 'int32',
                 },
                 example: 'test',
               },
@@ -555,7 +605,12 @@ describe('transformOas3Operation', () => {
             examples: [],
             name: 'name',
             schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
+              format: 'int32',
+              maximum: 2147483647,
+              minimum: -2147483648,
+              examples: ['test'],
             },
           },
         ],
@@ -752,7 +807,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
+                $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
               },
@@ -798,7 +853,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
+                $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
               },
@@ -814,7 +869,322 @@ describe('transformOas3Operation', () => {
     });
   });
 
+  it('should resolve requestBody reference to path operation requestBody', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/paths/~1pets/put/requestBody',
+            },
+          },
+          put: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [
+        {
+          encodings: [],
+          examples: [],
+          mediaType: 'application/json',
+          schema: {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      ],
+    });
+  });
+
+  it('should resolve requestBody reference to components requestBodies', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Pet',
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Pet: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [
+        {
+          encodings: [],
+          examples: [],
+          mediaType: 'application/json',
+          schema: {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      ],
+    });
+  });
+
+  it('should not fail if requestBody reference points to a falsy value', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.1',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/pets': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Pet',
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Pet: null as any,
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/pets',
+        method: 'post',
+        document,
+      }),
+    ).toHaveProperty('request.body', {
+      contents: [],
+    });
+  });
+
   describe('OAS 3.1 support', () => {
+    it('should respect jsonSchemaDialect', () => {
+      const document: Partial<OpenAPIObject> = {
+        openapi: '3.1.0',
+        jsonSchemaDialect: 'https://json-schema.org/draft/2020-12/schema',
+        paths: {
+          '/pet': {
+            get: {
+              responses: {
+                '200': {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {},
+                      },
+                    },
+                  },
+                },
+              },
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {},
+                    },
+                  },
+                },
+              },
+            },
+            parameters: [
+              {
+                in: 'header',
+                name: 'email',
+                schema: {
+                  type: 'string',
+                  format: 'email',
+                },
+                example: 'test',
+              },
+            ],
+          },
+          '/users/{userId}': {
+            $ref: '#/components/pathItems/userId',
+          },
+        },
+        components: {
+          pathItems: {
+            userId: {
+              get: {
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          type: 'object',
+                          properties: {},
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      expect(
+        transformOas3Operation({
+          path: '/users/{userId}',
+          method: 'get',
+          document,
+        }),
+      ).toEqual(
+        expect.objectContaining({
+          responses: [
+            {
+              code: '200',
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+        }),
+      );
+
+      expect(
+        transformOas3Operation({
+          path: '/pet',
+          method: 'get',
+          document,
+        }),
+      ).toEqual(
+        expect.objectContaining({
+          request: {
+            body: {
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+            },
+            cookie: [],
+            headers: [
+              {
+                example: 'test',
+                examples: [],
+                name: 'email',
+                schema: {
+                  $schema: 'https://json-schema.org/draft/2020-12/schema',
+                  type: 'string',
+                  format: 'email',
+                  example: 'test',
+                },
+              },
+            ],
+            path: [],
+            query: [],
+          },
+          responses: [
+            {
+              code: '200',
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'https://json-schema.org/draft/2020-12/schema',
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+        }),
+      );
+    });
+
     it('should support pathItems', () => {
       const document: Partial<OpenAPIObject> = {
         openapi: '3.1.0',
@@ -900,7 +1270,7 @@ describe('transformOas3Operation', () => {
             examples: [],
             mediaType: 'application/json',
             schema: {
-              $schema: 'http://json-schema.org/draft-04/schema#',
+              $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'object',
               properties: {
                 id: {

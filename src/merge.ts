@@ -7,12 +7,10 @@ import {
   INodeExternalExample,
   IServer,
 } from '@stoplight/types';
-import type { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7 as JSONSchema } from 'json-schema';
 import { isEqual } from 'lodash';
 
-type JSONSchema = JSONSchema7;
-
-function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema7[] } {
+function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema[] } {
   return !!(schema.anyOf && Object.keys(schema).length === 1);
 }
 
@@ -35,7 +33,7 @@ function mergeSchemas(schema1: JSONSchema, schema2: JSONSchema): JSONSchema {
     isExclusivelyAnyOfSchema(schema1) ? schema1.anyOf : [schema1],
   );
 
-  return schemas.length === 1 ? schemas[0] : { anyOf: schemas as JSONSchema7[] };
+  return schemas.length === 1 ? schemas[0] : { anyOf: schemas };
 }
 
 function mergeParams<T extends IHttpParam>(params1: T[], params2: T[]): T[] {

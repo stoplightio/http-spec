@@ -248,10 +248,6 @@ describe('translateMediaTypeObject', () => {
       expect(schema).toStrictEqual(originalSchema);
     });
 
-    it('will keep the example property', () => {
-      expect(translatedObject.schema).toHaveProperty('example', 'hello');
-    });
-
     it('will keep the deprecated property', () => {
       expect(translatedObject.schema).toHaveProperty('deprecated', true);
     });

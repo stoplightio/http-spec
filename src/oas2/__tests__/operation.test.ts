@@ -2,7 +2,7 @@ import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
-import { transformOas2Operation } from '../operation';
+import { transformOas2Operation, transformOas2Operations } from '../operation';
 
 describe('transformOas2Operation', () => {
   it('should translate operation', () => {
@@ -92,6 +92,46 @@ describe('transformOas2Operation', () => {
     ).toHaveProperty('deprecated', true);
   });
 
+  it('should return x-internal property in http operation root', () => {
+    const document: DeepPartial<Spec & { paths: any }> = {
+      swagger: '2.0',
+      paths: {
+        '/users/{userId}': {
+          get: {
+            'x-internal': true,
+          },
+          post: {
+            'x-internal': false,
+          },
+          put: {},
+        },
+      },
+    };
+
+    expect(transformOas2Operations(document as any)).toStrictEqual([
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'get',
+        internal: true,
+      }),
+      expect.objectContaining({
+        path: '/users/{userId}',
+        method: 'post',
+        internal: false,
+      }),
+      {
+        id: '?http-operation-id?',
+        path: '/users/{userId}',
+        method: 'put',
+        request: {},
+        responses: [],
+        security: [],
+        servers: [],
+        tags: [],
+      },
+    ]);
+  });
+
   it('given malformed parameters should translate operation with those parameters', () => {
     const document: Partial<OpenAPIObject> = {
       swagger: '2.0',
@@ -124,7 +164,9 @@ describe('transformOas2Operation', () => {
         headers: [
           {
             name: 'name',
-            schema: {},
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+            },
             style: 'simple',
           },
         ],

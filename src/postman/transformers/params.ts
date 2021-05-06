@@ -12,6 +12,7 @@ import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
 
+import { translateSchemaObject } from '../../oas/transformers/schema';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
@@ -81,7 +82,7 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
             value: parsed,
           },
         ],
-        schema: jsonSchemaGenerator(parsed),
+        schema: translateSchemaObject({}, jsonSchemaGenerator(parsed)),
       };
     } catch (e) {
       /* noop, move on.. */
