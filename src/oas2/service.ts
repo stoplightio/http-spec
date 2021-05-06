@@ -31,6 +31,10 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
     httpService.termsOfService = document.info.termsOfService;
   }
 
+  if (document.info?.['x-logo']) {
+    httpService.logo = document.info['x-logo'];
+  }
+
   const schemes = filter(document.schemes, scheme => scheme && isString(scheme));
   const servers = schemes.map<IServer>(scheme => ({
     name: document.info?.title ?? '',

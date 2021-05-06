@@ -38,6 +38,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     httpService.termsOfService = document.info.termsOfService;
   }
 
+  if (document.info?.['x-logo']) {
+    httpService.logo = document.info['x-logo'];
+  }
+
   const servers = compact<IServer>(
     map(document.servers, server => {
       if (!server) return null;
