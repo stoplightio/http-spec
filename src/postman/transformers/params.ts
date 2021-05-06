@@ -6,7 +6,7 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 // @ts-ignore
 import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
@@ -103,7 +103,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   params: PropertyList<T>,
   mediaType: string,
 ): IMediaTypeContent {
-  const paramsList: { name: string; schema: JSONSchema4; value: any }[] = params.map(item => {
+  const paramsList: { name: string; schema: JSONSchema7; value: any }[] = params.map(item => {
     return {
       name: item.key || generateId(),
       schema: {

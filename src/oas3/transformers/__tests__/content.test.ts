@@ -288,7 +288,7 @@ describe('translateMediaTypeObject', () => {
             {},
             {
               schema: {
-                example: defaultExample,
+                examples: defaultExample,
               },
               encoding: {},
             },

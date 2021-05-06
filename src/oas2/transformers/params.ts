@@ -6,7 +6,7 @@ import {
   IHttpPathParam,
   IHttpQueryParam,
 } from '@stoplight/types';
-import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { get, map, pick, pickBy, set } from 'lodash';
 import {
   BodyParameter,
@@ -67,7 +67,7 @@ export function translateToHeaderParams(headers: { [headerName: string]: Header 
     const param: IHttpHeaderParam = {
       name,
       style: HttpParamStyles.Simple,
-      schema: schema as JSONSchema4 | JSONSchema6 | JSONSchema7,
+      schema: schema as JSONSchema7,
       description,
     };
 
@@ -189,7 +189,7 @@ export function translateToPathParameter(parameter: PathParameter): IHttpPathPar
 
 function buildSchemaForParameter(
   param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
-): { schema: Schema | JSONSchema4 | JSONSchema6 | JSONSchema7; description?: string } {
+): { schema: Schema | JSONSchema7; description?: string } {
   const schema = pick(
     param,
     'type',

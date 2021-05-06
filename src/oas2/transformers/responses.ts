@@ -1,5 +1,5 @@
 import type { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { chain, compact, map, partial } from 'lodash';
 import type { Spec } from 'swagger-schema-official';
 
@@ -27,7 +27,7 @@ function translateToResponse(
 
   const contents = produces.map(produceElement => ({
     mediaType: produceElement,
-    schema: resolvedResponse.schema as JSONSchema4,
+    schema: resolvedResponse.schema as JSONSchema7,
     examples: objectifiedExamples.filter(example => example.key === produceElement),
   }));
 

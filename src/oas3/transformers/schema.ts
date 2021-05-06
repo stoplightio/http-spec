@@ -1,4 +1,4 @@
-import type { JSONSchema4, JSONSchema4TypeName } from 'json-schema';
+import type { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import { isObject } from 'lodash';
 import type { SchemaObject } from 'openapi3-ts/src/model/OpenApi';
 
@@ -44,21 +44,21 @@ const formatConverters = {
   byte: convertFormatByte,
 };
 
-const JSONSchema4TypeNames = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null', 'any'];
+const JSONSchema7TypeNames = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null'];
 
-function isJsonSchema4TypeName(maybeJSONSchema4TypeName: string): maybeJSONSchema4TypeName is JSONSchema4TypeName {
-  return JSONSchema4TypeNames.includes(maybeJSONSchema4TypeName);
+function isJsonSchema7TypeName(maybeJSONSchema7TypeName: string): maybeJSONSchema7TypeName is JSONSchema7TypeName {
+  return JSONSchema7TypeNames.includes(maybeJSONSchema7TypeName);
 }
 
-// Convert from OpenAPI 3.0 `SchemaObject` to JSON schema v4
-export function translateSchemaObject(schema: SchemaObject, options: { pruneNotSupported: string[] }): JSONSchema4 {
+// Convert from OpenAPI 3.0 `SchemaObject` to JSON schema v7
+export function translateSchemaObject(schema: SchemaObject, options: { pruneNotSupported: string[] }): JSONSchema7 {
   const clonedSchema = convertSchema(schema, {
     _notSupported: options.pruneNotSupported,
     _structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties'],
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-04/schema#';
-  return clonedSchema as JSONSchema4;
+  return clonedSchema as JSONSchema7;
 }
 
 function convertSchema(schema: SchemaObject, options: any) {
@@ -109,8 +109,8 @@ function convertProperties(schema: SchemaObject, options: any): void {
 }
 
 function convertTypes(schema: SchemaObject): void {
-  if (typeof schema.type === 'string' && isJsonSchema4TypeName(schema.type) && schema.nullable === true) {
-    (schema as JSONSchema4).type = [schema.type, 'null'];
+  if (typeof schema.type === 'string' && isJsonSchema7TypeName(schema.type) && schema.nullable === true) {
+    (schema as JSONSchema7).type = [schema.type, 'null'];
 
     if (Array.isArray(schema.enum)) {
       schema.enum = [...schema.enum, null];
