@@ -32,7 +32,11 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
   }
 
   if (document.info?.['x-logo']) {
-    httpService.logo = document.info['x-logo'];
+    httpService.logo = {
+      ...document.info['x-logo'],
+      altText: document.info['x-logo'].altText ?? 'logo',
+      href: document.info['x-logo'].href ?? document.info.contact?.url,
+    };
   }
 
   const schemes = filter(document.schemes, scheme => scheme && isString(scheme));
