@@ -1,7 +1,10 @@
 import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
 import { compact, filter, flatMap, keys, map, pickBy } from 'lodash';
 
+import { hasXLogo } from '../oas/guards';
+import { translateLogo } from '../oas/transformers/translateLogo';
 import { Oas3HttpServiceTransformer } from '../oas/types';
+import { isDictionary } from '../utils';
 import { isSecurityScheme, isTagObject } from './guards';
 import { transformToSingleSecurity } from './transformers/securities';
 import { translateServerVariables } from './transformers/servers';
@@ -36,6 +39,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
 
   if (document.info?.termsOfService) {
     httpService.termsOfService = document.info.termsOfService;
+  }
+
+  if (isDictionary(document.info) && hasXLogo(document.info)) {
+    httpService.logo = translateLogo(document.info);
   }
 
   const servers = compact<IServer>(
