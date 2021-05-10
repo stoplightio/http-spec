@@ -135,7 +135,9 @@ describe('oas2 service', () => {
         version: '1.0.0',
         logo: {
           altText: 'logo',
+          backgroundColor: undefined,
           href: 'https://stoplight.io',
+          url: undefined,
         },
       });
     });

@@ -2,6 +2,7 @@ import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
 import { compact, filter, flatMap, keys, map, pickBy } from 'lodash';
 
 import { Oas3HttpServiceTransformer } from '../oas/types';
+import { isXLogo } from '../oas2/guards';
 import { isSecurityScheme, isTagObject } from './guards';
 import { transformToSingleSecurity } from './transformers/securities';
 import { translateServerVariables } from './transformers/servers';
@@ -38,11 +39,12 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     httpService.termsOfService = document.info.termsOfService;
   }
 
-  if (document.info?.['x-logo']) {
+  if (document.info?.['x-logo'] && isXLogo(document.info['x-logo'])) {
     httpService.logo = {
-      ...document.info['x-logo'],
-      altText: document.info['x-logo'].altText ?? 'logo',
+      altText: document.info['x-logo'].altText,
       href: document.info['x-logo'].href ?? document.info.contact?.url,
+      url: document.info['x-logo'].url,
+      backgroundColor: document.info['x-logo'].backgroundColor,
     };
   }
 
