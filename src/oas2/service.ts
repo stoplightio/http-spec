@@ -1,8 +1,11 @@
 import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
 import { compact, filter, flatMap, isString, keys, pickBy } from 'lodash';
 
+import { hasXLogo } from '../oas/guards';
+import { translateLogo } from '../oas/transformers/translateLogo';
 import { Oas2HttpServiceTransformer } from '../oas/types';
-import { isTagObject, isXLogo } from './guards';
+import { isDictionary } from '../utils';
+import { isTagObject } from './guards';
 import { translateToSingleSecurity } from './transformers/securities';
 
 export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
@@ -31,13 +34,8 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) =
     httpService.termsOfService = document.info.termsOfService;
   }
 
-  if (document.info?.['x-logo'] && isXLogo(document.info?.['x-logo'])) {
-    httpService.logo = {
-      altText: document.info['x-logo'].altText,
-      href: document.info['x-logo'].href ?? document.info.contact?.url,
-      url: document.info['x-logo'].url,
-      backgroundColor: document.info['x-logo'].backgroundColor,
-    };
+  if (isDictionary(document.info) && hasXLogo(document.info)) {
+    httpService.logo = translateLogo(document.info);
   }
 
   const schemes = filter(document.schemes, scheme => scheme && isString(scheme));
