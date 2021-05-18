@@ -28,7 +28,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@stoplight/json": "^3.10.2",
+    "@stoplight/json": "^3.13.6",
     "@stoplight/types": "^12.3.0",
     "@types/swagger-schema-official": "~2.0.21",
     "@types/to-json-schema": "^0.2.0",
