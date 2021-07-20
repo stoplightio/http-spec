@@ -39,8 +39,13 @@ export function translateParameterObject(
   document: DeepPartial<OpenAPIObject>,
   parameterObject: ParameterObject,
 ): IHttpParam | any {
+  const examples = map(parameterObject.examples, (example, key) => ({
+    key,
+    ...example,
+  }));
+
   return pickBy({
-    ...omit(parameterObject, 'in', 'schema'),
+    ...omit(parameterObject, 'in', 'schema', 'example'),
     name: parameterObject.name,
     style: parameterObject.style,
     schema: isDictionary(parameterObject.schema)
@@ -49,10 +54,7 @@ export function translateParameterObject(
           ...('example' in parameterObject ? { example: parameterObject.example } : null),
         })
       : void 0,
-    examples: map(parameterObject.examples, (example, key) => ({
-      key,
-      ...example,
-    })),
+    examples: 'example' in parameterObject ? [{ key: '', value: parameterObject.example }, ...examples] : examples,
   });
 }
 
