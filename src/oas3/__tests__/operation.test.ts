@@ -601,8 +601,12 @@ describe('transformOas3Operation', () => {
         cookie: [],
         headers: [
           {
-            example: 'test',
-            examples: [],
+            examples: [
+              {
+                key: '',
+                value: 'test',
+              },
+            ],
             name: 'name',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -1149,8 +1153,7 @@ describe('transformOas3Operation', () => {
             cookie: [],
             headers: [
               {
-                example: 'test',
-                examples: [],
+                examples: [{ key: '', value: 'test' }],
                 name: 'email',
                 schema: {
                   $schema: 'https://json-schema.org/draft/2020-12/schema',
