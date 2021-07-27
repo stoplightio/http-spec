@@ -44,6 +44,8 @@ export function translateParameterObject(
     ...example,
   }));
 
+  const hasDefaultExample = examples.map(({ key }) => key).includes('default');
+
   return pickBy({
     ...omit(parameterObject, 'in', 'schema', 'example'),
     name: parameterObject.name,
@@ -54,7 +56,10 @@ export function translateParameterObject(
           ...('example' in parameterObject ? { example: parameterObject.example } : null),
         })
       : void 0,
-    examples: 'example' in parameterObject ? [{ key: '', value: parameterObject.example }, ...examples] : examples,
+    examples:
+      'example' in parameterObject && !hasDefaultExample
+        ? [{ key: 'default', value: parameterObject.example }, ...examples]
+        : examples,
   });
 }
 
