@@ -2,7 +2,9 @@ import { isObject, map, unionBy } from 'lodash';
 
 import { maybeResolveLocalRef } from '../utils';
 
-export function getValidOasParameters<ParamType extends { name: string; in: string }>(
+type ParamTypeBase = { name: string; in: string };
+
+export function getValidOasParameters<ParamType extends ParamTypeBase>(
   document: unknown,
   operationParameters: ParamType[] | undefined,
   pathParameters: ParamType[] | undefined,
@@ -12,8 +14,13 @@ export function getValidOasParameters<ParamType extends { name: string; in: stri
 
   return unionBy(resolvedOperationParams, resolvedPathParams, (parameter?: ParamType) => {
     return isObject(parameter) ? `${parameter.name}-${parameter.in}` : 'invalid';
-  }).filter(isObject);
+  })
+    .filter(isObject)
+    .filter(isValidOasParameter);
 }
+
+const isValidOasParameter = (parameter: Partial<ParamTypeBase>): parameter is ParamTypeBase =>
+  'name' in parameter && typeof parameter.name === 'string' && 'in' in parameter && typeof parameter.in === 'string';
 
 export function getOasTags(tags: unknown): string[] {
   return Array.isArray(tags) ? tags.filter(tag => typeof tag !== 'object').map(String) : [];
