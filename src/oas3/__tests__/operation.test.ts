@@ -601,8 +601,88 @@ describe('transformOas3Operation', () => {
         cookie: [],
         headers: [
           {
-            example: 'test',
-            examples: [],
+            examples: [
+              {
+                key: 'default',
+                value: 'test',
+              },
+            ],
+            name: 'name',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              type: 'string',
+              format: 'int32',
+              maximum: 2147483647,
+              minimum: -2147483648,
+              examples: ['test'],
+            },
+          },
+        ],
+        path: [],
+        query: [],
+      },
+      responses: [],
+      security: [],
+      servers: [],
+      tags: [],
+    });
+  });
+
+  it('does not add default example if there is already one in examples', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3',
+      info: {
+        title: 'title',
+        version: '',
+      },
+      paths: {
+        '/users/{userId}': {
+          get: {
+            parameters: [
+              {
+                in: 'header',
+                name: 'name',
+                schema: {
+                  type: 'string',
+                  format: 'int32',
+                },
+                example: 'test',
+                examples: {
+                  default: {
+                    value: 'some example',
+                  },
+                },
+              },
+              null,
+            ],
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas3Operation({
+        path: '/users/{userId}',
+        method: 'get',
+        document,
+      }),
+    ).toStrictEqual({
+      id: '?http-operation-id?',
+      method: 'get',
+      path: '/users/{userId}',
+      request: {
+        body: {
+          contents: [],
+        },
+        cookie: [],
+        headers: [
+          {
+            examples: [
+              {
+                key: 'default',
+                value: 'some example',
+              },
+            ],
             name: 'name',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -1149,8 +1229,7 @@ describe('transformOas3Operation', () => {
             cookie: [],
             headers: [
               {
-                example: 'test',
-                examples: [],
+                examples: [{ key: 'default', value: 'test' }],
                 name: 'email',
                 schema: {
                   $schema: 'https://json-schema.org/draft/2020-12/schema',
