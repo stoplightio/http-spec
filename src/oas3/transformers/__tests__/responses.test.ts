@@ -175,4 +175,58 @@ describe('translateToOas3Responses', () => {
       },
     ]);
   });
+
+  it('dereference headers', () => {
+    const translated = translateToResponses(
+      {
+        components: {
+          headers: {
+            xPage: {
+              schema: {
+                type: 'integer',
+              },
+              description: 'Current page (if pagination parameters were provided in the request)',
+              example: 3,
+            },
+          },
+        },
+      },
+      {
+        200: {
+          description: 'OK',
+          headers: {
+            'X-Page': {
+              $ref: '#/components/headers/xPage',
+            },
+          },
+        },
+      },
+    );
+
+    const expected = [
+      {
+        code: '200',
+        contents: [],
+        description: 'OK',
+        headers: [
+          {
+            name: 'X-Page',
+            schema: {
+              type: 'integer',
+            },
+            style: 'simple',
+            description: 'Current page (if pagination parameters were provided in the request)',
+            encodings: [],
+            examples: [
+              {
+                key: '__default',
+                value: 3,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    expect(translated).toEqual(expected);
+  });
 });
