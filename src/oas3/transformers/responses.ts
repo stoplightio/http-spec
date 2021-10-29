@@ -21,7 +21,7 @@ function translateToResponse(
   const resolvedResponse = maybeResolveLocalRef(document, response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const dereferenceddHeaders = reduce(
+  const dereferencedHeaders = reduce(
     resolvedResponse.headers,
     (result, header, name) => {
       return { ...result, [name]: maybeResolveLocalRef(document, header) };
@@ -32,7 +32,7 @@ function translateToResponse(
   return {
     code: statusCode,
     description: resolvedResponse.description,
-    headers: compact<IHttpHeaderParam>(map(dereferenceddHeaders, translateHeaderObject)),
+    headers: compact<IHttpHeaderParam>(map(dereferencedHeaders, translateHeaderObject)),
     contents: compact<IMediaTypeContent>(
       map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
         resolvedResponse.content,
