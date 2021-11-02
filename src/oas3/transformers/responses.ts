@@ -6,7 +6,7 @@ import {
   IMediaTypeContent,
   Optional,
 } from '@stoplight/types';
-import { compact, map, partial } from 'lodash';
+import { compact, map, partial, reduce } from 'lodash';
 import { OpenAPIObject } from 'openapi3-ts';
 
 import { isDictionary, maybeResolveLocalRef } from '../../utils';
@@ -21,12 +21,18 @@ function translateToResponse(
   const resolvedResponse = maybeResolveLocalRef(document, response);
   if (!isResponseObject(resolvedResponse)) return;
 
+  const dereferencedHeaders = reduce(
+    resolvedResponse.headers,
+    (result, header, name) => {
+      return { ...result, [name]: maybeResolveLocalRef(document, header) };
+    },
+    {},
+  );
+
   return {
     code: statusCode,
     description: resolvedResponse.description,
-    headers: compact<IHttpHeaderParam>(
-      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(resolvedResponse.headers, translateHeaderObject),
-    ),
+    headers: compact<IHttpHeaderParam>(map(dereferencedHeaders, translateHeaderObject)),
     contents: compact<IMediaTypeContent>(
       map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
         resolvedResponse.content,
