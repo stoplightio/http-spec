@@ -207,3 +207,38 @@ Object {
   "tags": Array [],
 }
 `;
+
+exports[`transformOas3Operation should translate operation with no response body 1`] = `
+Object {
+  "description": "Some description",
+  "id": "?http-operation-id?",
+  "method": "delete",
+  "path": "/users/{userId}",
+  "request": Object {
+    "body": Object {
+      "contents": Array [],
+    },
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
+  "responses": Array [
+    Object {
+      "code": "204",
+      "contents": Array [],
+      "description": "Succesfully deleted stuff",
+      "headers": Array [],
+    },
+  ],
+  "security": Array [],
+  "servers": Array [
+    Object {
+      "description": undefined,
+      "url": "http://localhost:3000",
+      "variables": undefined,
+    },
+  ],
+  "tags": Array [],
+}
+`;

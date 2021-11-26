@@ -25,11 +25,13 @@ function translateToResponse(
     .values()
     .value();
 
-  const contents = produces.map(produceElement => ({
-    mediaType: produceElement,
-    schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(document, resolvedResponse.schema) : void 0,
-    examples: objectifiedExamples.filter(example => example.key === produceElement),
-  }));
+  const contents = produces
+    .map(produceElement => ({
+      mediaType: produceElement,
+      schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(document, resolvedResponse.schema) : void 0,
+      examples: objectifiedExamples.filter(example => example.key === produceElement),
+    }))
+    .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
     code: statusCode,

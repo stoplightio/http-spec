@@ -71,6 +71,39 @@ describe('transformOas2Operation', () => {
     ).toMatchSnapshot();
   });
 
+  it('should translate operation with no response body', () => {
+    const document: Partial<Spec> = {
+      swagger: '2.0',
+      info: {
+        title: 'title',
+        version: '1.0',
+      },
+      produces: ['application/json'],
+      paths: {
+        '/users/{userId}': {
+          delete: {
+            operationId: 'oid',
+            description: 'odesc',
+            summary: 'osum',
+            responses: {
+              '204': {
+                description: 'Some description',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      transformOas2Operation({
+        path: '/users/{userId}',
+        method: 'delete',
+        document,
+      }),
+    ).toMatchSnapshot();
+  });
+
   it('should return deprecated property in http operation root', () => {
     const document: DeepPartial<Spec> = {
       swagger: '2.0',

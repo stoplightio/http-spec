@@ -32,3 +32,6 @@
 *.log*
 *-debug.log*
 *-error.log*
+
+# Vim buffer files
+*.swp
