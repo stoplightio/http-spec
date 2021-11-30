@@ -71,7 +71,7 @@ describe('transformOas2Operation', () => {
     ).toMatchSnapshot();
   });
 
-  it('should translate operation with no response body', () => {
+  it('should properly translate operation with no response body', () => {
     const document: Partial<Spec> = {
       swagger: '2.0',
       info: {
@@ -95,13 +95,13 @@ describe('transformOas2Operation', () => {
       },
     };
 
-    expect(
-      transformOas2Operation({
-        path: '/users/{userId}',
-        method: 'delete',
-        document,
-      }),
-    ).toMatchSnapshot();
+    const result = transformOas2Operation({
+      path: '/users/{userId}',
+      method: 'delete',
+      document,
+    });
+
+    expect(result.responses[0].contents).toHaveLength(0);
   });
 
   it('should return deprecated property in http operation root', () => {

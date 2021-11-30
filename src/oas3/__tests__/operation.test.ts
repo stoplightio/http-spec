@@ -29,7 +29,7 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('deprecated', true);
   });
 
-  it('should translate operation with no response body', () => {
+  it('should properly translate operation with no response body', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3.0.0',
       servers: [
@@ -51,13 +51,13 @@ describe('transformOas3Operation', () => {
       },
     };
 
-    expect(
-      transformOas3Operation({
-        path: '/users/{userId}',
-        method: 'delete',
-        document,
-      }),
-    ).toMatchSnapshot();
+    const result = transformOas3Operation({
+      path: '/users/{userId}',
+      method: 'delete',
+      document,
+    });
+
+    expect(result.responses[0].contents).toHaveLength(0);
   });
 
   it('should return x-internal property in http operation root', () => {

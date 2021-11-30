@@ -69,26 +69,3 @@ Object {
   "tags": Array [],
 }
 `;
-
-exports[`transformOas2Operation should translate operation with no response body 1`] = `
-Object {
-  "description": "odesc",
-  "id": "?http-operation-id?",
-  "iid": "oid",
-  "method": "delete",
-  "path": "/users/{userId}",
-  "request": Object {},
-  "responses": Array [
-    Object {
-      "code": "204",
-      "contents": Array [],
-      "description": "Some description",
-      "headers": Array [],
-    },
-  ],
-  "security": Array [],
-  "servers": Array [],
-  "summary": "osum",
-  "tags": Array [],
-}
-`;
