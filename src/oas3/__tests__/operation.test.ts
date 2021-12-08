@@ -29,6 +29,37 @@ describe('transformOas3Operation', () => {
     ).toHaveProperty('deprecated', true);
   });
 
+  it('should properly translate operation with no response body', () => {
+    const document: Partial<OpenAPIObject> = {
+      openapi: '3.0.0',
+      servers: [
+        {
+          url: 'http://localhost:3000',
+        },
+      ],
+      paths: {
+        '/users/{userId}': {
+          delete: {
+            description: 'Some description',
+            responses: {
+              '204': {
+                description: 'Succesfully deleted stuff',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const result = transformOas3Operation({
+      path: '/users/{userId}',
+      method: 'delete',
+      document,
+    });
+
+    expect(result.responses[0].contents).toHaveLength(0);
+  });
+
   it('should return x-internal property in http operation root', () => {
     const document: OpenAPIObject = {
       openapi: '3.0.0',

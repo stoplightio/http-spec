@@ -35,18 +35,7 @@ Array [
     "responses": Array [
       Object {
         "code": "405",
-        "contents": Array [
-          Object {
-            "examples": Array [],
-            "mediaType": "application/xml",
-            "schema": undefined,
-          },
-          Object {
-            "examples": Array [],
-            "mediaType": "application/json",
-            "schema": undefined,
-          },
-        ],
+        "contents": Array [],
         "description": "Invalid input",
         "headers": Array [],
       },
@@ -290,18 +279,7 @@ Array [
     "responses": Array [
       Object {
         "code": "400",
-        "contents": Array [
-          Object {
-            "examples": Array [],
-            "mediaType": "application/xml",
-            "schema": undefined,
-          },
-          Object {
-            "examples": Array [],
-            "mediaType": "application/json",
-            "schema": undefined,
-          },
-        ],
+        "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
       },
@@ -330,18 +308,7 @@ Array [
       },
       Object {
         "code": "405",
-        "contents": Array [
-          Object {
-            "examples": Array [],
-            "mediaType": "application/xml",
-            "schema": undefined,
-          },
-          Object {
-            "examples": Array [],
-            "mediaType": "application/json",
-            "schema": undefined,
-          },
-        ],
+        "contents": Array [],
         "description": "Validation exception",
         "headers": Array [],
       },
