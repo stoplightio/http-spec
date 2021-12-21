@@ -1,3 +1,4 @@
+import { Extensions } from '@stoplight/types';
 import { isObject, map, unionBy } from 'lodash';
 
 import { maybeResolveLocalRef } from '../utils';
@@ -24,4 +25,16 @@ const isValidOasParameter = (parameter: Partial<ParamTypeBase>): parameter is Pa
 
 export function getOasTags(tags: unknown): string[] {
   return Array.isArray(tags) ? tags.filter(tag => typeof tag !== 'object').map(String) : [];
+}
+
+export function getExtensions(target: object): Extensions {
+  return Object.keys(target)
+    .filter(key => key.startsWith('x-'))
+    .reduce(
+      (obj, key) => ({
+        ...obj,
+        [key]: target[key],
+      }),
+      {},
+    );
 }

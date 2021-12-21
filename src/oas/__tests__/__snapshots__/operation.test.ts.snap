@@ -4,6 +4,12 @@ exports[`oas operation openapi v2 1`] = `
 Array [
   Object {
     "description": "",
+    "extensions": Object {
+      "x-another": Object {
+        "property": "value",
+      },
+      "x-test": true,
+    },
     "id": "?http-operation-id?",
     "iid": "addPet",
     "method": "post",
@@ -74,6 +80,7 @@ Array [
     ],
   },
   Object {
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "method": "get",
     "path": "/pets",
@@ -128,6 +135,7 @@ Array [
     "tags": Array [],
   },
   Object {
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "method": "options",
     "path": "/pets",
@@ -205,6 +213,7 @@ Array [
   },
   Object {
     "description": "",
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "method": "delete",
     "path": "/pets",
@@ -237,6 +246,7 @@ Array [
   },
   Object {
     "description": "",
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "iid": "updatePet",
     "method": "put",
@@ -353,6 +363,12 @@ exports[`oas operation openapi v3 1`] = `
 Array [
   Object {
     "description": "",
+    "extensions": Object {
+      "x-another": Object {
+        "property": "value",
+      },
+      "x-test": true,
+    },
     "id": "?http-operation-id?",
     "iid": "addPet",
     "method": "post",
@@ -518,6 +534,7 @@ Array [
     ],
   },
   Object {
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "method": "get",
     "path": "/pets",
@@ -584,6 +601,7 @@ Array [
   },
   Object {
     "description": "",
+    "extensions": Object {},
     "id": "?http-operation-id?",
     "iid": "updatePet",
     "method": "put",

@@ -5,6 +5,7 @@ Object {
   "callbacks": Array [
     Object {
       "callbackName": "myCallback",
+      "extensions": Object {},
       "id": "?http-operation-id?",
       "iid": "cbId",
       "method": "post",
@@ -24,6 +25,7 @@ Object {
       "tags": Array [],
     },
   ],
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "post",
@@ -65,6 +67,7 @@ exports[`transformOas3Operation given no tags should translate operation with em
 Object {
   "deprecated": true,
   "description": "descr",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "get",
@@ -90,6 +93,7 @@ exports[`transformOas3Operation given operation servers should translate operati
 Object {
   "deprecated": true,
   "description": "descr",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "get",
@@ -121,6 +125,7 @@ exports[`transformOas3Operation given path servers should translate operation wi
 Object {
   "deprecated": true,
   "description": "descr",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "get",
@@ -152,6 +157,7 @@ exports[`transformOas3Operation given some tags should translate operation with 
 Object {
   "deprecated": true,
   "description": "descr",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "get",
@@ -181,6 +187,7 @@ exports[`transformOas3Operation given spec servers should translate operation wi
 Object {
   "deprecated": true,
   "description": "descr",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "opid",
   "method": "get",

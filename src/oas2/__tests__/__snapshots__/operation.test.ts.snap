@@ -4,6 +4,7 @@ exports[`transformOas2Operation should translate operation 1`] = `
 Object {
   "deprecated": true,
   "description": "odesc",
+  "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "oid",
   "method": "get",

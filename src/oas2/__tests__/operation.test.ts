@@ -146,11 +146,17 @@ describe('transformOas2Operation', () => {
         path: '/users/{userId}',
         method: 'get',
         internal: true,
+        extensions: {
+          'x-internal': true,
+        },
       }),
       expect.objectContaining({
         path: '/users/{userId}',
         method: 'post',
         internal: false,
+        extensions: {
+          'x-internal': false,
+        },
       }),
       {
         id: '?http-operation-id?',
@@ -161,6 +167,7 @@ describe('transformOas2Operation', () => {
         security: [],
         servers: [],
         tags: [],
+        extensions: {},
       },
     ]);
   });
@@ -208,6 +215,7 @@ describe('transformOas2Operation', () => {
       security: [],
       servers: [],
       tags: [],
+      extensions: {},
     });
   });
 });
