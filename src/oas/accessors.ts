@@ -1,5 +1,5 @@
 import { Extensions } from '@stoplight/types';
-import { isObject, map, unionBy } from 'lodash';
+import { fromPairs, isObject, map, unionBy } from 'lodash';
 
 import { maybeResolveLocalRef } from '../utils';
 
@@ -30,7 +30,5 @@ export function getOasTags(tags: unknown): string[] {
 }
 
 export function getExtensions(target: Record<string, unknown>): Extensions {
-  return Object.fromEntries(
-    Object.entries(target).filter(([key]) => key.startsWith('x-') && !ROOT_EXTENSIONS.includes(key)),
-  );
+  return fromPairs(Object.entries(target).filter(([key]) => key.startsWith('x-') && !ROOT_EXTENSIONS.includes(key)));
 }
