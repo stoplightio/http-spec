@@ -5,6 +5,8 @@ import { maybeResolveLocalRef } from '../utils';
 
 type ParamTypeBase = { name: string; in: string };
 
+const ROOT_EXTENSIONS = ['x-internal'];
+
 export function getValidOasParameters<ParamType extends ParamTypeBase>(
   document: unknown,
   operationParameters: ParamType[] | undefined,
@@ -27,14 +29,8 @@ export function getOasTags(tags: unknown): string[] {
   return Array.isArray(tags) ? tags.filter(tag => typeof tag !== 'object').map(String) : [];
 }
 
-export function getExtensions(target: object): Extensions {
-  return Object.keys(target)
-    .filter(key => key.startsWith('x-'))
-    .reduce(
-      (obj, key) => ({
-        ...obj,
-        [key]: target[key],
-      }),
-      {},
-    );
+export function getExtensions(target: Record<string, unknown>): Extensions {
+  return Object.fromEntries(
+    Object.entries(target).filter(([key]) => key.startsWith('x-') && !ROOT_EXTENSIONS.includes(key)),
+  );
 }

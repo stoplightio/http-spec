@@ -146,17 +146,13 @@ describe('transformOas2Operation', () => {
         path: '/users/{userId}',
         method: 'get',
         internal: true,
-        extensions: {
-          'x-internal': true,
-        },
+        extensions: {},
       }),
       expect.objectContaining({
         path: '/users/{userId}',
         method: 'post',
         internal: false,
-        extensions: {
-          'x-internal': false,
-        },
+        extensions: {},
       }),
       {
         id: '?http-operation-id?',
