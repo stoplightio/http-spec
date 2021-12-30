@@ -3,7 +3,7 @@ import { get, isNil, omitBy } from 'lodash';
 import type { OpenAPIObject, OperationObject, ParameterObject, PathsObject, RequestBodyObject } from 'openapi3-ts';
 
 import { transformOasOperations } from '../oas';
-import { getOasTags, getValidOasParameters } from '../oas/accessors';
+import { getExtensions, getOasTags, getValidOasParameters } from '../oas/accessors';
 import { translateToTags } from '../oas/tag';
 import { Oas3HttpOperationTransformer } from '../oas/types';
 import { maybeResolveLocalRef } from '../utils';
@@ -50,6 +50,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document,
     callbacks: operation.callbacks && translateToCallbacks(operation.callbacks),
     tags: translateToTags(getOasTags(operation.tags)),
     security: translateToSecurities(document, operation.security),
+    extensions: getExtensions(operation),
   };
 
   return omitBy(httpOperation, isNil) as IHttpOperation;

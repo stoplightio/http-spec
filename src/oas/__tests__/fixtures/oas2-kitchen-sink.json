@@ -81,7 +81,11 @@
               "read:pets"
             ]
           }
-        ]
+        ],
+        "x-test": true,
+        "x-another": {
+          "property": "value"
+        }
       },
       "get": {
         "responses": {

@@ -2,7 +2,7 @@ import { IHttpOperation } from '@stoplight/types';
 import { get, isNil, omitBy } from 'lodash';
 import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
 
-import { getOasTags, getValidOasParameters } from '../oas/accessors';
+import { getExtensions, getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
@@ -23,7 +23,9 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as Operation;
+  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as Operation & {
+    [extension: string]: unknown;
+  };
   if (!operation) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
@@ -37,7 +39,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     iid: operation.operationId,
     description: operation.description,
     deprecated: operation.deprecated,
-    internal: operation['x-internal'],
+    internal: operation['x-internal'] as boolean,
     method,
     path,
     summary: operation.summary,
@@ -50,6 +52,7 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     ),
     tags: translateToTags(getOasTags(operation.tags)),
     security: translateToSecurities(document, operation.security),
+    extensions: getExtensions(operation),
   };
 
   return omitBy(httpOperation, isNil) as IHttpOperation;

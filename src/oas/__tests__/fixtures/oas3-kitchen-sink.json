@@ -54,6 +54,10 @@
         ],
         "requestBody": {
           "$ref": "#/components/requestBodies/Pet"
+        },
+        "x-test": true,
+        "x-another": {
+          "property": "value"
         }
       },
       "get": {
