@@ -28,10 +28,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@stoplight/json": "^3.10.2",
+    "@stoplight/json": "^3.17.1",
     "@stoplight/types": "^12.4.0",
     "@types/swagger-schema-official": "~2.0.21",
-    "@types/to-json-schema": "^0.2.0",
     "@types/type-is": "^1.6.3",
     "@types/urijs": "~1.19.9",
     "json-schema": "^0.4.0",
@@ -39,8 +38,7 @@
     "lodash": "^4.17.15",
     "openapi3-ts": "^2.0.1",
     "postman-collection": "^4.1.0",
-    "type-is": "^1.6.18",
-    "urijs": "~1.19.2"
+    "type-is": "^1.6.18"
   },
   "devDependencies": {
     "@stoplight/eslint-config": "^1.1.0",
