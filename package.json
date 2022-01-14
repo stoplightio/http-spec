@@ -12,12 +12,36 @@
     "url": "https://github.com/stoplightio/http-spec"
   },
   "license": "Apache-2.0",
-  "main": "src/index.ts",
   "files": [
     "**/*"
   ],
   "engines": {
     "node": ">=10"
+  },
+  "type": "commonjs",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./oas": {
+      "types": "./oas/index.d.ts",
+      "default": "./oas/index.js"
+    },
+    "./oas2": {
+      "types": "./oas2/index.d.ts",
+      "default": "./oas2/index.js"
+    },
+    "./oas3": {
+      "types": "./oas3/index.d.ts",
+      "default": "./oas3/index.js"
+    },
+    "./postman": {
+      "types": "./postman/index.d.ts",
+      "default": "./postman/index.js"
+    }
   },
   "scripts": {
     "build": "sl-scripts build",
@@ -28,7 +52,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@stoplight/json": "^3.10.2",
+    "@stoplight/json": "^3.17.1",
     "@stoplight/types": "^12.4.0",
     "@types/swagger-schema-official": "~2.0.21",
     "@types/to-json-schema": "^0.2.0",
@@ -39,12 +63,13 @@
     "lodash": "^4.17.15",
     "openapi3-ts": "^2.0.1",
     "postman-collection": "^4.1.0",
+    "tslib": "^2.3.1",
     "type-is": "^1.6.18",
     "urijs": "~1.19.2"
   },
   "devDependencies": {
     "@stoplight/eslint-config": "^1.1.0",
-    "@stoplight/scripts": "^8.2.1",
+    "@stoplight/scripts": "^9.2.0",
     "@stoplight/test-utils": "^0.0.1",
     "@types/jest": "26.0.3",
     "@types/json-schema": "7.0.5",
