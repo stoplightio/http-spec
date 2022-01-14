@@ -5,7 +5,9 @@
     "."
   ],
   "compilerOptions": {
-    "module": "commonjs",
-    "noUnusedLocals": false
+    "module": "ESNext",
+    "noUnusedLocals": false,
+    "target": "ES2020",
+    "esModuleInterop": true
   }
 }

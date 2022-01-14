@@ -1,7 +1,7 @@
 import type { DeepPartial, Dictionary, IHttpService } from '@stoplight/types';
+import pickBy from 'lodash.pickby';
 import type { InfoObject } from 'openapi3-ts/src/model/OpenApi';
 import type { Info } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
 
 export function translateLogo({
   'x-logo': logo,

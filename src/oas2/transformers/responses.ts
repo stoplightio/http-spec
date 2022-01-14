@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 import type { Operation } from 'swagger-schema-official';
 
 import { withContext } from '../../context';

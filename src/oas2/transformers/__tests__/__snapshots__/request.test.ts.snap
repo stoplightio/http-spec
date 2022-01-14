@@ -3,8 +3,14 @@
 exports[`request given single body param should translate to request with body 1`] = `
 Object {
   "body": Object {
-    "in": "body",
-    "name": "param",
+    "contents": Array [
+      Object {
+        "examples": Array [],
+        "id": Any<String>,
+        "mediaType": "*",
+      },
+    ],
+    "id": Any<String>,
   },
   "cookie": Array [],
   "headers": Array [],
@@ -16,9 +22,23 @@ Object {
 exports[`request given single form param should translate to request with form 1`] = `
 Object {
   "body": Object {
-    "in": "formData",
-    "name": "param",
-    "type": "number",
+    "contents": Array [
+      Object {
+        "id": Any<String>,
+        "mediaType": "*",
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "properties": Object {
+            "param": Object {
+              "type": "number",
+            },
+          },
+          "type": "object",
+          "x-stoplight-id": Any<String>,
+        },
+      },
+    ],
+    "id": Any<String>,
   },
   "cookie": Array [],
   "headers": Array [],
@@ -32,8 +52,13 @@ Object {
   "cookie": Array [],
   "headers": Array [
     Object {
-      "in": "header",
+      "id": Any<String>,
       "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
     },
   ],
   "path": Array [],
@@ -47,9 +72,14 @@ Object {
   "headers": Array [],
   "path": Array [
     Object {
-      "in": "path",
+      "id": Any<String>,
       "name": "param",
       "required": true,
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
     },
   ],
   "query": Array [],
@@ -63,8 +93,13 @@ Object {
   "path": Array [],
   "query": Array [
     Object {
-      "in": "query",
+      "id": Any<String>,
       "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "form",
     },
   ],
 }
@@ -75,8 +110,13 @@ Object {
   "cookie": Array [],
   "headers": Array [
     Object {
-      "in": "header",
+      "id": Any<String>,
       "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
     },
   ],
   "path": Array [],
@@ -90,9 +130,14 @@ Object {
   "headers": Array [],
   "path": Array [
     Object {
-      "in": "path",
+      "id": Any<String>,
       "name": "param",
       "required": true,
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
     },
   ],
   "query": Array [],
@@ -106,8 +151,13 @@ Object {
   "path": Array [],
   "query": Array [
     Object {
-      "in": "query",
+      "id": Any<String>,
       "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "form",
     },
   ],
 }
@@ -116,13 +166,49 @@ Object {
 exports[`request should translate mixed request 1`] = `
 Object {
   "body": Object {
-    "in": "formData",
-    "name": "param",
-    "type": "number",
+    "contents": Array [
+      Object {
+        "examples": Array [],
+        "id": Any<String>,
+        "mediaType": "*",
+      },
+    ],
+    "id": Any<String>,
   },
   "cookie": Array [],
-  "headers": Array [],
-  "path": Array [],
-  "query": Array [],
+  "headers": Array [
+    Object {
+      "id": Any<String>,
+      "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
+    },
+  ],
+  "path": Array [
+    Object {
+      "id": Any<String>,
+      "name": "param",
+      "required": true,
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
+    },
+  ],
+  "query": Array [
+    Object {
+      "id": Any<String>,
+      "name": "param",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "form",
+    },
+  ],
 }
 `;

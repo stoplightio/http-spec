@@ -1,6 +1,6 @@
 import { hasRef, isLocalRef } from '@stoplight/json';
 // @ts-ignore
-import * as fnv from 'fnv-plus';
+import fnv from 'fnv-plus';
 
 import type {
   AvailableContext,

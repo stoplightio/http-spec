@@ -8,7 +8,7 @@ import type {
   IOauthFlowObjects,
   Optional,
 } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 import type {
   ApiKeySecurity,
   BasicAuthenticationSecurity,

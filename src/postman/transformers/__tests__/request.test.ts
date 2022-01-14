@@ -1,6 +1,8 @@
-import { Request } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { transformRequest } from '../request';
+
+const { Request } = postmanCollection;
 
 describe('transformRequest()', () => {
   it('transforms correctly', () => {

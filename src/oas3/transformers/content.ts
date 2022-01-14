@@ -8,7 +8,7 @@ import {
   Optional,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';

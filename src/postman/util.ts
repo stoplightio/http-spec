@@ -1,7 +1,10 @@
 import type { IHttpParam } from '@stoplight/types';
-import { Collection, CollectionDefinition, DescriptionDefinition, Version } from 'postman-collection';
+import type { CollectionDefinition, DescriptionDefinition, Version } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { generateId } from './id';
+
+const { Collection } = postmanCollection;
 
 export function transformStringValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
@@ -20,7 +23,7 @@ export function transformDescriptionDefinition(description: string | Description
   return typeof description === 'string' ? description : description.content;
 }
 
-export function resolveCollection(collectionDefinition: CollectionDefinition): Collection {
+export function resolveCollection(collectionDefinition: CollectionDefinition) {
   const collection = new Collection(collectionDefinition);
   return new Collection(collection.toObjectResolved({ variables: collection.variables }, []));
 }

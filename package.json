@@ -20,43 +20,53 @@
   },
   "type": "commonjs",
   "main": "./index.js",
+  "module": "./index.esm.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "default": "./index.js"
+      "import": "./index.mjs",
+      "require": "./index.js"
     },
     "./oas": {
       "types": "./oas/index.d.ts",
-      "default": "./oas/index.js"
+      "import": "./oas/index.mjs",
+      "require": "./oas/index.js"
     },
     "./oas2": {
       "types": "./oas2/index.d.ts",
-      "default": "./oas2/index.js"
+      "import": "./oas2/index.mjs",
+      "require": "./oas2/index.js"
     },
     "./oas2/operation": {
       "types": "./oas2/operation.d.ts",
-      "default": "./oas2/operation.js"
+      "import": "./oas2/operation.mjs",
+      "require": "./oas2/operation.js"
     },
     "./oas3": {
       "types": "./oas3/index.d.ts",
-      "default": "./oas3/index.js"
+      "import": "./oas3/index.mjs",
+      "require": "./oas3/index.js"
     },
     "./oas3/operation": {
       "types": "./oas3/operation.d.ts",
-      "default": "./oas3/operation.js"
+      "import": "./oas3/operation.mjs",
+      "require": "./oas3/operation.js"
     },
     "./postman": {
       "types": "./postman/index.d.ts",
-      "default": "./postman/index.js"
+      "import": "./postman/index.mjs",
+      "require": "./postman/index.js"
     },
     "./postman/operation": {
       "types": "./postman/operation.d.ts",
-      "default": "./postman/operation.js"
+      "import": "./postman/operation.mjs",
+      "require": "./postman/operation.js"
     }
   },
   "scripts": {
-    "build": "sl-scripts build",
+    "build": "sl-scripts bundle && cp ./dist/index.mjs ./dist/index.esm.js && tsc -p tsconfig.build.json --declaration --emitDeclarationOnly --declarationDir dist",
+    "postbuild": "yarn test.packaging",
     "lint": "eslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
@@ -65,7 +75,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.18.0",
-    "@stoplight/types": "^13.0.0-beta.5",
+    "@stoplight/types": "^13.0.0",
     "@types/json-schema": "7.0.5",
     "@types/swagger-schema-official": "~2.0.21",
     "@types/type-is": "^1.6.3",
@@ -97,9 +107,9 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "jest": "26.1.0",
+    "jest": "^27.5.1",
     "prettier": "^2.6.0",
-    "ts-jest": "26.1.1",
+    "ts-jest": "^27.1.4",
     "ts-node": "^8.10.2",
     "typescript": "4.6.2",
     "utility-types": "^3.10.0"

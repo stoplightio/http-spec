@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, Dictionary, HttpSecurityScheme, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';

@@ -14,10 +14,6 @@ const translateHeaderObject = (object: unknown, key: string) =>
   _translateHeaderObject.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), [key, object], 0, []);
 
 describe('translateMediaTypeObject', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('should gracefully handle invalid data', () => {
     expect(translateMediaTypeObject({}, null, 'mediaType')).toBeUndefined();
   });

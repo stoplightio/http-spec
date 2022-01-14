@@ -1,5 +1,6 @@
 import { HttpParamStyles } from '@stoplight/types';
-import { Collection, RequestAuth, RequestAuthDefinition } from 'postman-collection';
+import type { RequestAuthDefinition } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import {
   isPostmanSecuritySchemeEqual,
@@ -7,6 +8,8 @@ import {
   transformSecurityScheme,
   transformSecuritySchemes,
 } from '../securityScheme';
+
+const { Collection, RequestAuth } = postmanCollection;
 
 describe('transformSecurityScheme()', () => {
   describe('given basic auth', () => {

@@ -1,7 +1,9 @@
 import { INodeExample } from '@stoplight/types';
-import { Header, QueryParam, RequestBody } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { transformBody, transformHeader, transformPathParams, transformQueryParam } from '../params';
+
+const { QueryParam, Header, RequestBody } = postmanCollection;
 
 describe('transformQueryParam()', () => {
   describe('value is set', () => {

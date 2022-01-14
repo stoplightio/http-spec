@@ -1,11 +1,16 @@
-import { OpenAPIObject } from 'openapi3-ts';
-import { Spec } from 'swagger-schema-official';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 import { transformOas2Operations } from '../../oas2/operation';
 import { transformOas3Operations } from '../../oas3/operation';
 
-const oas2KitchenSinkJson: Spec = require('./fixtures/oas2-kitchen-sink.json');
-const oas3KitchenSinkJson: OpenAPIObject = require('./fixtures/oas3-kitchen-sink.json');
+const oas2KitchenSinkJson = JSON.parse(
+  await fs.promises.readFile(path.join(fileURLToPath(import.meta.url), '../fixtures/oas2-kitchen-sink.json'), 'utf8'),
+);
+const oas3KitchenSinkJson = JSON.parse(
+  await fs.promises.readFile(path.join(fileURLToPath(import.meta.url), '../fixtures/oas3-kitchen-sink.json'), 'utf8'),
+);
 
 describe('oas operation', () => {
   it('openapi v2', () => {

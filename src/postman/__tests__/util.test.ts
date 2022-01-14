@@ -1,6 +1,8 @@
-import { Version } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { resolveVersion, transformDescriptionDefinition, transformStringValueToSchema } from '../util';
+
+const { Version } = postmanCollection;
 
 describe('transformStringValueToSchema()', () => {
   it('returns param with schema and example', () => {

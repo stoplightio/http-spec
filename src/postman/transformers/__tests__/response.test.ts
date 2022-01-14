@@ -1,6 +1,8 @@
-import { Response } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { transformResponse } from '../response';
+
+const { Response } = postmanCollection;
 
 describe('transformResponse()', () => {
   describe('media type is defined', () => {

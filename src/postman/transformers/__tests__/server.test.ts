@@ -1,6 +1,8 @@
-import { Url } from 'postman-collection';
+import postmanCollection from 'postman-collection';
 
 import { transformServer } from '../server';
+
+const { Url } = postmanCollection;
 
 describe('transformServer()', () => {
   describe('host is defined', () => {
