@@ -20,43 +20,53 @@
   },
   "type": "commonjs",
   "main": "./index.js",
+  "module": "./index.esm.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "default": "./index.js"
+      "import": "./index.mjs",
+      "require": "./index.js"
     },
     "./oas": {
       "types": "./oas/index.d.ts",
-      "default": "./oas/index.js"
+      "import": "./oas/index.mjs",
+      "require": "./oas/index.js"
     },
     "./oas2": {
       "types": "./oas2/index.d.ts",
-      "default": "./oas2/index.js"
+      "import": "./oas2/index.mjs",
+      "require": "./oas2/index.js"
     },
     "./oas2/operation": {
       "types": "./oas2/operation.d.ts",
-      "default": "./oas2/operation.js"
+      "import": "./oas2/operation.mjs",
+      "require": "./oas2/operation.js"
     },
     "./oas3": {
       "types": "./oas3/index.d.ts",
-      "default": "./oas3/index.js"
+      "import": "./oas3/index.mjs",
+      "require": "./oas3/index.js"
     },
     "./oas3/operation": {
       "types": "./oas3/operation.d.ts",
-      "default": "./oas3/operation.js"
+      "import": "./oas3/operation.mjs",
+      "require": "./oas3/operation.js"
     },
     "./postman": {
       "types": "./postman/index.d.ts",
-      "default": "./postman/index.js"
+      "import": "./postman/index.mjs",
+      "require": "./postman/index.js"
     },
     "./postman/operation": {
       "types": "./postman/operation.d.ts",
-      "default": "./postman/operation.js"
+      "import": "./postman/operation.mjs",
+      "require": "./postman/operation.js"
     }
   },
   "scripts": {
-    "build": "sl-scripts build",
+    "build": "rollup -c && cp ./dist/index.mjs ./dist/index.esm.js && tsc -p tsconfig.build.json --declaration --emitDeclarationOnly --declarationDir dist",
+    "postbuild": "cp package.json README.md LICENSE dist && yarn test.packaging",
     "lint": "eslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",

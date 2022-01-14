@@ -1,5 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 
 import { createContext, DEFAULT_ID_GENERATOR } from '../context';
 import { isNonNullable, isString } from '../guards';

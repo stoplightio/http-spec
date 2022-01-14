@@ -1,8 +1,10 @@
 import type { IHttpOperationRequest } from '@stoplight/types';
+import pickBy from 'lodash.pickby';
 
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
+import { Oas2ParamBase } from '../../oas/guards';
 import { getConsumes } from '../accessors';
 import { isBodyParam, isFormDataParam, isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
@@ -13,8 +15,6 @@ import {
   translateToPathParameter,
   translateToQueryParameter,
 } from './params';
-import pickBy = require('lodash.pickby');
-import { Oas2ParamBase } from '../../oas/guards';
 
 const iterateOasParams = createOasParamsIterator(OasVersion.OAS2);
 
