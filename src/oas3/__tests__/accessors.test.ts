@@ -113,4 +113,62 @@ describe('getOas3Securities', () => {
       ),
     ).toStrictEqual([[]]);
   });
+
+  it('should return security for each scope', () => {
+    const res = getSecurities(
+      {
+        components: {
+          securitySchemes: {
+            authWith2Scopes: {
+              type: 'oauth2',
+              flows: {
+                authorizationCode: {
+                  scopes: {
+                    accessToken: 'accessToken description',
+                    secScope: 'secScope description',
+                  },
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            authWith2Scopes: ['accessToken', 'secScope'],
+          },
+        ],
+      },
+      [
+        {
+          authWith2Scopes: ['accessToken'],
+        },
+        { authWith2Scopes: ['secScope'] },
+      ],
+    );
+
+    expect(res).toStrictEqual([
+      [
+        {
+          type: 'oauth2',
+          flows: {
+            authorizationCode: {
+              scopes: { accessToken: 'accessToken description' },
+            },
+          },
+          key: 'authWith2Scopes',
+        },
+      ],
+      [
+        {
+          type: 'oauth2',
+          flows: {
+            authorizationCode: {
+              scopes: { secScope: 'secScope description' },
+            },
+          },
+          key: 'authWith2Scopes',
+        },
+      ],
+    ]);
+  });
 });
