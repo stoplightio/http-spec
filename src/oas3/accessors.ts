@@ -17,8 +17,8 @@ export function getSecurities(
 
   return (operationSecurities || document.security || []).map(operationSecurity => {
     return Object.entries(operationSecurity)
-      .map(([secSchemeKey, scopes]) => {
-        const definition = definitions[secSchemeKey];
+      .map(([opScheme, scopes]) => {
+        const definition = definitions[opScheme];
 
         if (isSecurityScheme(definition) && definition.type === 'oauth2') {
           // Put back only the flows that are part of the current definition
@@ -28,11 +28,11 @@ export function getSecurities(
               ...flow,
               scopes: pickBy(flow.scopes, (_val: string, key: string) => scopes?.includes(key)),
             })),
-            key: secSchemeKey,
+            key: opScheme,
           };
         }
 
-        return { ...definition, key: secSchemeKey };
+        return { ...definition, key: opScheme };
       })
       .filter(isSecuritySchemeWithKey);
   });
