@@ -2,7 +2,6 @@ import type { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/typ
 import { isObject, mapValues, pickBy } from 'lodash';
 import { OAuthFlowObject, OpenAPIObject } from 'openapi3-ts';
 
-import { mapToKeys } from '../utils';
 import { isSecurityScheme, isSecuritySchemeWithKey } from './guards';
 
 export type OperationSecurities = Dictionary<string[], string>[] | undefined;
@@ -10,25 +9,15 @@ export type SecurityWithKey = HttpSecurityScheme & { key: string };
 
 export function getSecurities(
   document: DeepPartial<OpenAPIObject>,
-  operationSecurity?: OperationSecurities,
+  operationSecurities?: OperationSecurities,
 ): SecurityWithKey[][] {
-  const opSchemesPairs = operationSecurity
-    ? mapToKeys(operationSecurity)
-    : document.security
-    ? mapToKeys(document.security)
-    : [];
-  const flattenPairs: Dictionary<string[]> = operationSecurity
-    ? Object.assign({}, ...operationSecurity)
-    : document.security
-    ? Object.assign({}, ...document.security)
-    : {};
   const definitions = document.components?.securitySchemes;
 
   if (!isObject(definitions)) return [];
 
-  return opSchemesPairs.map(opSchemePair =>
-    opSchemePair
-      .map(opScheme => {
+  return (operationSecurities || document.security || []).map(operationSecurity => {
+    return Object.entries(operationSecurity)
+      .map(([opScheme, scopes]) => {
         const definition = definitions[opScheme];
 
         if (isSecurityScheme(definition) && definition.type === 'oauth2') {
@@ -37,7 +26,7 @@ export function getSecurities(
             ...definition,
             flows: mapValues(definition.flows, (flow: OAuthFlowObject) => ({
               ...flow,
-              scopes: pickBy(flow.scopes, (_val: string, key: string) => flattenPairs[opScheme].includes(key)),
+              scopes: pickBy(flow.scopes, (_val: string, key: string) => scopes?.includes(key)),
             })),
             key: opScheme,
           };
@@ -45,6 +34,6 @@ export function getSecurities(
 
         return { ...definition, key: opScheme };
       })
-      .filter(isSecuritySchemeWithKey),
-  );
+      .filter(isSecuritySchemeWithKey);
+  });
 }
