@@ -11,6 +11,7 @@ import {
 import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 
+import { withJsonPath } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { ArrayCallbackParameters, Fragment } from '../../types';
@@ -37,12 +38,16 @@ function isAcceptableStyle<T extends Fragment = Fragment>(
   return typeof encodingPropertyObject.style === 'string' && ACCEPTABLE_STYLES.includes(encodingPropertyObject.style);
 }
 
-const translateEncodingPropertyObject: Oas3TranslateFunction<
-  ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
-  Optional<IHttpEncoding>
-> = function ([property, encodingPropertyObject]) {
+const translateEncodingPropertyObject = withJsonPath<
+  Oas3TranslateFunction<
+    ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
+    Optional<IHttpEncoding>
+  >
+>(function ([property, encodingPropertyObject]) {
   if (!isPlainObject(encodingPropertyObject)) return;
   if (!isAcceptableStyle(encodingPropertyObject)) return;
+
+  this.state.enter('encoding', property);
 
   return {
     property,
@@ -64,16 +69,20 @@ const translateEncodingPropertyObject: Oas3TranslateFunction<
       isString,
     ),
   };
-};
+});
 
-export const translateHeaderObject = <
+export const translateHeaderObject = withJsonPath<
   Oas3TranslateFunction<ArrayCallbackParameters<[name: string, headerObject: unknown]>, Optional<IHttpHeaderParam>>
->function ([name, unresolvedHeaderObject]) {
+>(function ([name, unresolvedHeaderObject]) {
   const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
   if (!isPlainObject(headerObject)) return;
 
+  this.state.enter('headers', name);
+  const id = this.generateId('header');
+
   if (!isHeaderObject(headerObject)) {
     return {
+      id,
       encodings: [],
       examples: [],
       name,
@@ -86,6 +95,7 @@ export const translateHeaderObject = <
   const contentValue = isPlainObject(contentObject) ? Object.values(contentObject)[0] : null;
 
   const baseContent: IHttpHeaderParam = {
+    id,
     name,
     style: HttpParamStyles.Simple,
     explode: !!headerObject.explode,
@@ -128,14 +138,14 @@ export const translateHeaderObject = <
     }
 
     if ('example' in contentValue) {
-      examples.push(transformDefaultExample.call(this, '__default_content', contentValue.example));
+      examples.push(translateToDefaultExample.call(this, '__default_content', contentValue.example));
     }
   }
 
   examples.push(...entries(headerObject.examples).map(translateToExample, this).filter(isNonNullable));
 
   if ('example' in headerObject) {
-    examples.push(transformDefaultExample.call(this, '__default', headerObject.example));
+    examples.push(translateToDefaultExample.call(this, '__default', headerObject.example));
   }
 
   return {
@@ -143,23 +153,25 @@ export const translateHeaderObject = <
     encodings,
     examples,
   };
-};
+});
 
-const translateSchemaMediaTypeObject: Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>> = function (
-  schema,
-) {
-  if (!isPlainObject(schema)) return;
+const translateSchemaMediaTypeObject = withJsonPath<Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>>>(
+  function (schema) {
+    if (!isPlainObject(schema)) return;
 
-  return translateSchemaObject.call(this, schema);
-};
+    this.state.enter('schema');
+    return translateSchemaObject.call(this, schema);
+  },
+);
 
-export const translateMediaTypeObject: Oas3TranslateFunction<
-  ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>,
-  Optional<IMediaTypeContent>
-> = function ([mediaType, mediaObject]) {
+export const translateMediaTypeObject = withJsonPath<
+  Oas3TranslateFunction<ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>, Optional<IMediaTypeContent>>
+>(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 
-  const resolvedMediaObject = resolveMediaObject(this.document, mediaObject);
+  this.state.enter('content', mediaType);
+
+  const resolvedMediaObject = resolveMediaObject(this.state.document, mediaObject);
   const { schema, encoding, examples } = resolvedMediaObject;
 
   const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
@@ -167,10 +179,11 @@ export const translateMediaTypeObject: Oas3TranslateFunction<
   const example = resolvedMediaObject.example || jsonSchema?.examples?.[0];
 
   return {
+    id: this.generateId('media-type'),
     mediaType,
     // Note that I'm assuming all references are resolved
     examples: [
-      example ? transformDefaultExample.call(this, 'default', example) : undefined,
+      example ? translateToDefaultExample.call(this, 'default', example) : undefined,
       ...entries(examples).map(translateToExample, this),
     ].filter(isNonNullable),
     encodings: entries(encoding).map(translateEncodingPropertyObject, this).filter(isNonNullable),
@@ -182,7 +195,7 @@ export const translateMediaTypeObject: Oas3TranslateFunction<
       isNonNullable,
     ),
   };
-};
+});
 
 function resolveMediaObject(document: unknown, maybeMediaObject: Dictionary<unknown>) {
   const mediaObject = { ...maybeMediaObject };
@@ -201,23 +214,27 @@ function resolveMediaObject(document: unknown, maybeMediaObject: Dictionary<unkn
   return mediaObject;
 }
 
-const transformDefaultExample: Oas3TranslateFunction<[key: string, value: unknown], INodeExample> = function (
-  key,
-  value,
-) {
-  return {
-    value,
-    key,
-  };
-};
+const translateToDefaultExample = withJsonPath<Oas3TranslateFunction<[key: string, value: unknown], INodeExample>>(
+  function (key, value) {
+    this.state.enter('example');
 
-const translateToExample: Oas3TranslateFunction<
-  ArrayCallbackParameters<[key: string, example: unknown]>,
-  Optional<INodeExample>
-> = function ([key, example]) {
+    return {
+      id: this.generateId('example'),
+      value,
+      key,
+    };
+  },
+);
+
+const translateToExample = withJsonPath<
+  Oas3TranslateFunction<ArrayCallbackParameters<[key: string, example: unknown]>, Optional<INodeExample>>
+>(function ([key, example]) {
   if (!isPlainObject(example)) return;
 
+  this.state.enter('examples', key);
+
   return {
+    id: this.generateId('example'),
     value: example.value,
     key,
 
@@ -229,4 +246,4 @@ const translateToExample: Oas3TranslateFunction<
       isString,
     ),
   };
-};
+});

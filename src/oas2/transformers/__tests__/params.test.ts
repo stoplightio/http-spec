@@ -1,7 +1,7 @@
 import { DeepPartial, HttpParamStyles } from '@stoplight/types';
 import { FormDataParameter, QueryParameter, Spec } from 'swagger-schema-official';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import {
   translateFromFormDataParameters as _translateFromFormDataParameters,
   translateToBodyParameter as _translateToBodyParameter,
@@ -14,28 +14,28 @@ import {
 const translateFromFormDataParameters = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateFromFormDataParameters>
-) => _translateFromFormDataParameters.call(createContext(document), ...params);
+) => _translateFromFormDataParameters.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToBodyParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToBodyParameter>
-) => _translateToBodyParameter.call(createContext(document), ...params);
+) => _translateToBodyParameter.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToHeaderParam = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParam>) =>
-  _translateToHeaderParam.call(createContext(document), ...params);
+  _translateToHeaderParam.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToHeaderParams = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParams>) =>
-  _translateToHeaderParams.call(createContext(document), ...params);
+  _translateToHeaderParams.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToPathParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToPathParameter>
-) => _translateToPathParameter.call(createContext(document), ...params);
+) => _translateToPathParameter.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToQueryParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToQueryParameter>
-) => _translateToQueryParameter.call(createContext(document), ...params);
+) => _translateToQueryParameter.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
 
 describe('params.translator', () => {
   let consumes = ['*'];

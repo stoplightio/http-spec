@@ -1,21 +1,10 @@
-import { mockPassthroughImplementation } from '@stoplight/test-utils';
-
-import { createContext } from '../../../context';
-import { translateMediaTypeObject } from '../content';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import { translateToRequest as _translateToRequest } from '../request';
 
-jest.mock('../content');
-
-const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) => {
-  const ctx = createContext({ paths: { '/api': path } });
-  return _translateToRequest.call(ctx, path, operation);
-};
+const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) =>
+  _translateToRequest.call(createContext({}, DEFAULT_ID_GENERATOR), path, operation);
 
 describe('translateOas3ToRequest', () => {
-  beforeEach(() => {
-    mockPassthroughImplementation(translateMediaTypeObject);
-  });
-
   it('given no request body should translate parameters', () => {
     const operation = {
       parameters: [

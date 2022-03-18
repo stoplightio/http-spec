@@ -1,22 +1,14 @@
-import { DeepPartial, HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
+import { DeepPartial } from '@stoplight/types';
 import { Operation, Schema, Spec } from 'swagger-schema-official';
 
-import { createContext } from '../../../context';
-import { translateToHeaderParams } from '../params';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import { translateToResponses as _translateToResponses } from '../responses';
 
-jest.mock('../params');
-
 const translateToResponses = (document: DeepPartial<Spec>, responses: DeepPartial<Operation['responses']>) =>
-  _translateToResponses.call(createContext(document), { responses });
+  _translateToResponses.call(createContext(document, DEFAULT_ID_GENERATOR), { responses });
 
 describe('responses', () => {
-  const fakeHeaderParams: IHttpHeaderParam[] = [{ name: 'fake-header', style: HttpParamStyles.Simple }];
   const produces = ['application/json', 'application/xml'];
-
-  beforeEach(() => {
-    (translateToHeaderParams as jest.Mock).mockReturnValue(fakeHeaderParams);
-  });
 
   it('should translate to multiple responses', () => {
     const responses = translateToResponses(

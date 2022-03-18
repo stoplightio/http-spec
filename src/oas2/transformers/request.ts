@@ -4,7 +4,7 @@ import type { BodyParameter, FormDataParameter } from 'swagger-schema-official';
 
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
-import { getValidOasParameters } from '../../oas/accessors';
+import { queryValidOasParameters } from '../../oas/accessors';
 import { getConsumes } from '../accessors';
 import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
@@ -21,7 +21,7 @@ export const translateToRequest: Oas2TranslateFunction<
   IHttpOperationRequest
 > = function (path, operation) {
   const consumes = getConsumes(this.document, operation);
-  const parameters = getValidOasParameters(this.document, OasVersion.OAS2, operation.parameters, path.parameters);
+  const parameters = queryValidOasParameters.bind(this)(OasVersion.OAS2, operation.parameters, path.parameters);
 
   const bodyParameter = parameters.find((p): p is BodyParameter => p.in === 'body');
   const formDataParameters = parameters.filter((p): p is FormDataParameter => p.in === 'formData');
@@ -33,11 +33,10 @@ export const translateToRequest: Oas2TranslateFunction<
     path: [],
   };
 
-  let body;
-  // if 'body' and 'form data' defined prefer 'body'
+  let bodyParameter;
+  let formDataParameters;
   if (!!bodyParameter) {
     // There can be only one body parameter (taking first one)
-    body = translateToBodyParameter.call(this, bodyParameter, consumes);
   } else if (!!formDataParameters.length) {
     body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
   }
@@ -49,8 +48,13 @@ export const translateToRequest: Oas2TranslateFunction<
       params.path.push(translateToPathParameter.call(this, param));
     } else if (isHeaderParam(param)) {
       params.headers.push(translateToHeaderParam.call(this, param));
+    } else if (param.in === 'body') {
+      bodyParameter = translateToBodyParameter.call(this, bodyParameter, consumes);
+    } else if (param.in === 'formData') {
     }
   }
+
+  // if 'body' and 'form data' defined prefer 'body'
 
   return {
     ...params,

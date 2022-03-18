@@ -8,61 +8,63 @@ Array [
       Object {
         "examples": Array [
           Object {
+            "id": "#/responses/r1",
             "key": "application/json",
             "value": Object {},
           },
         ],
+        "id": "#/responses/r1",
         "mediaType": "application/json",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
       Object {
         "examples": Array [],
+        "id": "#/responses/r1",
         "mediaType": "application/xml",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
     ],
     "description": "d1",
-    "headers": Array [
-      Object {
-        "name": "fake-header",
-        "style": "simple",
-      },
-    ],
+    "headers": Array [],
+    "id": "#/responses/r1",
   },
   Object {
     "code": "r2",
     "contents": Array [
       Object {
         "examples": Array [],
+        "id": "#/responses/r1/responses/r2",
         "mediaType": "application/json",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1/responses/r2",
         },
       },
       Object {
         "examples": Array [
           Object {
+            "id": "#/responses/r1/responses/r2",
             "key": "application/xml",
             "value": Object {},
           },
         ],
+        "id": "#/responses/r1/responses/r2",
         "mediaType": "application/xml",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1/responses/r2",
         },
       },
     ],
     "description": "d2",
-    "headers": Array [
-      Object {
-        "name": "fake-header",
-        "style": "simple",
-      },
-    ],
+    "headers": Array [],
+    "id": "#/responses/r1/responses/r2",
   },
 ]
 `;
@@ -74,26 +76,26 @@ Array [
     "contents": Array [
       Object {
         "examples": Array [],
+        "id": "#/responses/r1",
         "mediaType": "application/json",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
       Object {
         "examples": Array [],
+        "id": "#/responses/r1",
         "mediaType": "application/xml",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
     ],
     "description": "d1",
-    "headers": Array [
-      Object {
-        "name": "fake-header",
-        "style": "simple",
-      },
-    ],
+    "headers": Array [],
+    "id": "#/responses/r1",
   },
 ]
 `;
@@ -105,31 +107,32 @@ Array [
     "contents": Array [
       Object {
         "examples": Array [],
+        "id": "#/responses/r1",
         "mediaType": "application/json",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
       Object {
         "examples": Array [
           Object {
+            "id": "#/responses/r1",
             "key": "application/xml",
             "value": Object {},
           },
         ],
+        "id": "#/responses/r1",
         "mediaType": "application/xml",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
+          "x-stoplight-id": "#/responses/r1",
         },
       },
     ],
     "description": "d1",
-    "headers": Array [
-      Object {
-        "name": "fake-header",
-        "style": "simple",
-      },
-    ],
+    "headers": Array [],
+    "id": "#/responses/r1",
   },
 ]
 `;

@@ -4,7 +4,7 @@ import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
-import type { TranslateFunction } from '../../../types';
+import { TranslateFunction } from '../../../types';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
 
@@ -22,6 +22,7 @@ export const translateSchemaObject: TranslateFunction<
   JSONSchema7
 > = function (schema) {
   const document = this.document;
+  const id = this.generateId('schema');
 
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
@@ -29,13 +30,16 @@ export const translateSchemaObject: TranslateFunction<
       // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
       // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
       ...(schema as JSONSchema7),
+      'x-stoplight-id': id,
     };
   }
 
-  return convertSchema(schema);
+  const clonedSchema = convertSchema(schema);
+  clonedSchema['x-stoplight-id'] = id;
+  return clonedSchema;
 };
 
-export function convertSchema(schema: OASSchemaObject) {
+export function convertSchema(schema: OASSchemaObject): JSONSchema7 {
   const clonedSchema = _convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
   });

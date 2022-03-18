@@ -12,8 +12,6 @@ export const maybeResolveLocalRef = (document: unknown, target: unknown): unknow
   return target;
 };
 
-export { isPlainObject as isDictionary };
-
 export function entries<T = Record<string, unknown>>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
 export function entries<T = unknown>(o: T): [string, T][];
 export function entries<T = unknown>(o: T): [string, T][] {

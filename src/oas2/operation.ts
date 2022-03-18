@@ -6,6 +6,7 @@ import pickBy = require('lodash.pickby');
 import { createContext } from '../context';
 import { isString } from '../guards';
 import { getExtensions } from '../oas/accessors';
+import { DEFAULT_ID_GENERATOR } from '../oas/id';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tags';
 import { Oas2HttpOperationTransformer } from '../oas/types';
@@ -16,7 +17,7 @@ import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
 
 export function transformOas2Operations(document: Spec): IHttpOperation[] {
-  return transformOasOperations(document, transformOas2Operation);
+  return transformOasOperations(document, DEFAULT_ID_GENERATOR, transformOas2Operation);
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
@@ -30,10 +31,10 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
 
-  const ctx = createContext(document);
+  const ctx = createContext(document, DEFAULT_ID_GENERATOR);
 
   return {
-    id: '?http-operation-id?',
+    id: ctx.generateId('operation'),
     method,
     path,
 

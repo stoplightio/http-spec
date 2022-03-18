@@ -3,14 +3,15 @@ import pickBy = require('lodash.pickby');
 
 import { createContext } from '../context';
 import { isNonNullable, isString } from '../guards';
+import { DEFAULT_ID_GENERATOR } from '../oas/id';
 import { transformOasService } from '../oas/service';
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { entries } from '../utils';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 
-export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
-  const ctx = createContext(document);
+export const transformOas2Service: Oas2HttpServiceTransformer = ({ document, generateId = DEFAULT_ID_GENERATOR }) => {
+  const ctx = createContext(document, generateId);
   const httpService = transformOasService.call(ctx);
 
   if (document.info?.license) {

@@ -51,12 +51,14 @@ exports[`params.translator translateToHeaderParam should translate header param 
 Object {
   "deprecated": false,
   "description": "desc",
+  "id": "#",
   "name": "name",
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "minimum": 12,
     "type": "integer",
+    "x-stoplight-id": "#",
   },
   "style": "simple",
 }

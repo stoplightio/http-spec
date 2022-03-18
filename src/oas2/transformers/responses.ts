@@ -18,13 +18,16 @@ const translateToResponse: Oas2TranslateFunction<
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
+  this.state.enter('responses', statusCode);
+
   const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
   const objectifiedExamples = entries(
     resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
-  ).map(([key, value]) => ({ key, value }));
+  ).map(([key, value]) => ({ id: this.generateId('example'), key, value }));
 
   const contents = produces
     .map(produceElement => ({
+      id: this.generateId('security'),
       mediaType: produceElement,
       schema: isPlainObject(resolvedResponse.schema)
         ? translateSchemaObject.call(this, resolvedResponse.schema)
@@ -34,6 +37,7 @@ const translateToResponse: Oas2TranslateFunction<
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
+    id: this.generateId('security'),
     code: statusCode,
     description: resolvedResponse.description,
     headers,
@@ -44,6 +48,7 @@ const translateToResponse: Oas2TranslateFunction<
   if (foreignExamples.length > 0) {
     if (translatedResponses.contents.length === 0)
       translatedResponses.contents[0] = {
+        id: this.generateId('param'),
         mediaType: '',
         schema: {},
         examples: [],

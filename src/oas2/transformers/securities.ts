@@ -63,6 +63,7 @@ export const translateToBasicSecurityScheme: Oas2TranslateFunction<
   IBasicSecurityScheme
 > = function (security) {
   return {
+    id: this.generateId('security'),
     type: 'http',
     scheme: 'basic',
     description: security.description,
@@ -78,6 +79,7 @@ export const translateToApiKeySecurityScheme: Oas2TranslateFunction<
 > = function (security) {
   if ('in' in security && security.in && ACCEPTABLE_SECURITY_ORIGINS.includes(security.in)) {
     return {
+      id: this.generateId('security'),
       type: 'apiKey',
       in: security.in,
       name: String(security.name || ''),
@@ -102,6 +104,7 @@ export const translateToOauth2SecurityScheme: Oas2TranslateFunction<
   if (!security.flow || !VALID_OAUTH2_FLOWS.includes(security.flow)) return undefined;
 
   return {
+    id: this.generateId('security'),
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
     description: security.description,

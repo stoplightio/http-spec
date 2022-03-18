@@ -94,7 +94,7 @@ describe('transformPostmanCollectionOperation()', () => {
             }),
           ).toEqual(
             expect.objectContaining({
-              security: [[{ key: 'http-0', scheme: 'basic', type: 'http' }]],
+              security: [[{ id: expect.any(String), key: 'http-0', scheme: 'basic', type: 'http' }]],
             }),
           );
         });
@@ -123,6 +123,7 @@ describe('transformPostmanCollectionOperation()', () => {
               request: expect.objectContaining({
                 headers: [
                   {
+                    id: expect.any(String),
                     description: 'Hawk Authorization Header',
                     name: 'Authorization',
                     required: true,
@@ -166,7 +167,15 @@ describe('transformPostmanCollectionOperation()', () => {
           ).toEqual(
             expect.objectContaining({
               request: expect.objectContaining({
-                query: [{ description: 'OAuth2 Access Token', name: 'access_token', required: true, style: 'form' }],
+                query: [
+                  {
+                    id: expect.any(String),
+                    description: 'OAuth2 Access Token',
+                    name: 'access_token',
+                    required: true,
+                    style: 'form',
+                  },
+                ],
               }),
             }),
           );
@@ -223,7 +232,7 @@ describe('transformPostmanCollectionOperation()', () => {
           }),
         ).toEqual(
           expect.objectContaining({
-            servers: [{ url: 'https://example.com:666' }],
+            servers: [{ id: expect.any(String), url: 'https://example.com:666' }],
           }),
         );
       });
@@ -260,9 +269,18 @@ describe('transformPostmanCollectionOperation()', () => {
         ).toEqual(
           expect.objectContaining({
             request: expect.objectContaining({
-              body: { contents: [{ examples: [{ key: 'default', value: 'testTESTtest' }], mediaType: 'text/plain' }] },
+              body: {
+                id: expect.any(String),
+                contents: [
+                  {
+                    id: expect.any(String),
+                    examples: [{ id: expect.any(String), key: 'default', value: 'testTESTtest' }],
+                    mediaType: 'text/plain',
+                  },
+                ],
+              },
             }),
-            servers: [{ url: 'https://example.com' }],
+            servers: [{ id: expect.any(String), url: 'https://example.com' }],
           }),
         );
       });
@@ -331,8 +349,10 @@ describe('transformPostmanCollectionOperations()', () => {
         request: expect.objectContaining({
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: 'a header',
                 },
@@ -345,8 +365,10 @@ describe('transformPostmanCollectionOperations()', () => {
               required: false,
             },
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: 'b header',
                 },

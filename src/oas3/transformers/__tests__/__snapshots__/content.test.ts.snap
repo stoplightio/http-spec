@@ -10,20 +10,24 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
+      "id": "#/headers/header-name/examples/a",
       "key": "a",
       "summary": "example summary",
       "value": "hey",
     },
     Object {
+      "id": "#/headers/header-name/example",
       "key": "__default",
       "value": Object {},
     },
   ],
   "explode": true,
+  "id": "#/headers/header-name",
   "name": "header-name",
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": "#/headers/header-name",
   },
   "style": "simple",
 }

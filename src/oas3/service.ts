@@ -1,8 +1,9 @@
 import { isPlainObject } from '@stoplight/json';
 import type { Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import { createContext } from '../context';
+import { createContext, withJsonPath } from '../context';
 import { isNonNullable } from '../guards';
+import { DEFAULT_ID_GENERATOR } from '../oas/id';
 import { transformOasService } from '../oas/service';
 import type { Oas3HttpServiceTransformer } from '../oas/types';
 import { ArrayCallbackParameters } from '../types';
@@ -13,8 +14,8 @@ import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
 
-export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
-  const ctx = createContext(document);
+export const transformOas3Service: Oas3HttpServiceTransformer = ({ document, generateId = DEFAULT_ID_GENERATOR }) => {
+  const ctx = createContext(document, generateId);
   const httpService = transformOasService.call(ctx);
 
   if (typeof document.info?.summary === 'string') {
@@ -84,11 +85,12 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
   return httpService;
 };
 
-const translateSecurityScheme: Oas3TranslateFunction<
-  ArrayCallbackParameters<[name: string, scheme: unknown]>,
-  Optional<SecurityWithKey>
-> = function ([key, definition]) {
+const translateSecurityScheme = withJsonPath<
+  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<SecurityWithKey>>
+>(function ([key, definition]) {
   if (!isSecurityScheme(definition)) return;
+
+  this.state.enter('components', 'securitySchemes', key);
 
   const transformed = translateToSingleSecurity.call(this, definition);
   if (transformed && 'key' in transformed) {
@@ -96,4 +98,4 @@ const translateSecurityScheme: Oas3TranslateFunction<
   }
 
   return transformed;
-};
+});

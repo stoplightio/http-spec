@@ -1,43 +1,48 @@
+import { pickBy } from '@oclif/parser/lib/util';
 import type { INodeVariable, IServer, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
 
+import { withJsonPath } from '../../context';
 import { isNonNullable, isString } from '../../guards';
-import { ArrayCallbackParameters, Fragment } from '../../types';
+import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isServerObject, isServerVariableObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToServers: Oas3TranslateFunction<[path: Fragment, operation: Fragment], IServer[]> = function (
-  path,
-  operation,
-) {
+export const translateToServers = withJsonPath<
+  Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IServer[]>
+>(function (path, operation) {
   let servers;
   if (Array.isArray(operation.servers)) {
     servers = operation.servers;
   } else if (Array.isArray(path.servers)) {
     servers = path.servers;
-  } else if (Array.isArray(this.document.servers)) {
-    servers = this.document.servers;
+    this.state.exit(2);
+  } else if (Array.isArray(this.state.document.servers)) {
+    servers = this.state.document.servers;
+    this.state.exit(0);
   } else {
     return [];
   }
 
   return servers.map(translateToServer, this).filter(isNonNullable);
-};
+});
 
-export const translateToServer: Oas3TranslateFunction<ArrayCallbackParameters<unknown>, Optional<IServer>> = function (
-  server,
-) {
+export const translateToServer = withJsonPath<
+  Oas3TranslateFunction<ArrayCallbackParameters<unknown>, Optional<IServer>>
+>(function (server, i) {
   if (!isServerObject(server)) return;
+
+  this.state.enter('servers', i);
 
   const variables = translateServerVariables.call(this, server.variables);
 
   return {
+    id: this.generateId('server'),
     url: server.url,
 
     ...pickBy(
       {
-        name: this.document.info?.title,
+        name: this.state.document.info?.title,
         description: server.description,
       },
       isString,
@@ -50,7 +55,7 @@ export const translateToServer: Oas3TranslateFunction<ArrayCallbackParameters<un
       isNonNullable,
     ),
   };
-};
+});
 
 export const translateServerVariables: Oas3TranslateFunction<
   [variables: unknown],

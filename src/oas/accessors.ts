@@ -1,50 +1,81 @@
 import type { Extensions } from '@stoplight/types';
 
-import { Fragment } from '../types';
+import { Fragment, TransformerContext } from '../types';
 import { entries, maybeResolveLocalRef } from '../utils';
 import { isValidOas2Param, isValidOas3Param, Oas2ParamBase, Oas3ParamBase, ParamBase } from './guards';
 import { OasVersion } from './types';
 
 const ROOT_EXTENSIONS = ['x-internal'];
 
-function getParameters(document: Fragment, spec: OasVersion.OAS2, params: unknown): Oas2ParamBase[];
-function getParameters(document: Fragment, spec: OasVersion.OAS3, params: unknown): Oas3ParamBase[];
-function getParameters(document: Fragment, spec: OasVersion, params: unknown): ParamBase[] {
-  if (!Array.isArray(params)) return [];
+function queryParameters(
+  this: TransformerContext,
+  spec: OasVersion.OAS2,
+  params: unknown,
+  seenParams: Set<string>,
+): Iterable<[index: number, param: Oas2ParamBase]>;
+function queryParameters(
+  this: TransformerContext,
+  spec: OasVersion.OAS3,
+  params: unknown,
+  seenParams: Set<string>,
+): Iterable<[index: number, param: Oas3ParamBase]>;
+function* queryParameters(
+  this: TransformerContext,
+  spec: OasVersion,
+  params: unknown,
+  seenParams: Set<string>,
+): Iterable<[index: number, param: ParamBase]> {
+  if (!Array.isArray(params)) return;
 
-  const resolved = params.map(maybeResolveLocalRef.bind(null, document));
-  return spec === OasVersion.OAS2 ? resolved.filter(isValidOas2Param) : resolved.filter(isValidOas3Param);
+  const resolved = params.map(this.maybeResolveLocalRef, this);
+  const guard = spec === OasVersion.OAS2 ? isValidOas2Param : isValidOas3Param;
+  for (const [index, param] of resolved.entries()) {
+    if (!guard(param)) continue;
+    const key = getIdForParameter(param);
+    if (seenParams.has(key)) continue;
+    seenParams.add(key);
+    yield [index, param];
+  }
 }
 
 const getIdForParameter = (param: ParamBase) => `${param.name}-${param.in}`;
 
-export function getValidOasParameters(
-  document: Fragment,
+export function queryValidOasParameters(
+  this: TransformerContext,
   spec: OasVersion.OAS2,
   operationParams: unknown,
   pathParams: unknown,
-): Oas2ParamBase[];
-export function getValidOasParameters(
-  document: Fragment,
+): Iterable<Oas2ParamBase>;
+export function queryValidOasParameters(
+  this: TransformerContext,
   spec: OasVersion.OAS3,
   operationParams: unknown,
   pathParams: unknown,
-): Oas3ParamBase[];
-export function getValidOasParameters(
-  document: Fragment,
+): Iterable<Oas3ParamBase>;
+export function* queryValidOasParameters(
+  this: TransformerContext,
   spec: any,
   operationParams: unknown,
   pathParams: unknown,
-): ParamBase[] {
-  const uniqueParameters: Record<string, ParamBase> = {};
+): Iterable<ParamBase> {
+  const seenParams = new Set<string>();
+  const method = this.state.path[2];
+  const l = this.state.path.length - 1;
 
-  const params = [...getParameters(document, spec, operationParams), ...getParameters(document, spec, pathParams)];
-
-  for (const param of params) {
-    uniqueParameters[getIdForParameter(param)] ??= param;
+  for (const [i, param] of queryParameters.call(this, spec, operationParams, seenParams)) {
+    this.state.exit(l);
+    this.state.enter(method, 'parameters', String(i));
+    yield param;
   }
 
-  return Object.values(uniqueParameters);
+  for (const [i, param] of queryParameters.call(this, spec, pathParams, seenParams)) {
+    this.state.exit(l);
+    this.state.enter('parameters', String(i));
+    yield param;
+  }
+
+  this.state.exit(l);
+  this.state.enter(method);
 }
 
 export function getExtensions(target: unknown): Extensions {

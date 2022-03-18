@@ -1,6 +1,10 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { transformOas3Service } from '../service';
+import { DEFAULT_ID_GENERATOR } from '../../context';
+import { transformOas3Service as _transformOas3Service } from '../service';
+
+const transformOas3Service: typeof _transformOas3Service = opts =>
+  _transformOas3Service({ generateId: DEFAULT_ID_GENERATOR, ...opts });
 
 describe('oas3 service', () => {
   it('should handle non object security objects', () => {
@@ -16,11 +20,12 @@ describe('oas3 service', () => {
     };
 
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: 'no-title',
       version: '',
       securitySchemes: [
         {
+          id: '#/components/securitySchemes/t1',
           key: 't1',
           type: 'apiKey',
           in: undefined,
@@ -68,11 +73,12 @@ describe('oas3 service', () => {
     },
   ])('should handle lacking flows for oauth2 security object', document => {
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: 'no-title',
       version: '',
       securitySchemes: [
         {
+          id: '#/components/securitySchemes/t1',
           flows: {},
           key: 't1',
           type: 'oauth2',
@@ -87,7 +93,7 @@ describe('oas3 service', () => {
     };
 
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: 'no-title',
       version: '',
     });
@@ -110,15 +116,17 @@ describe('oas3 service', () => {
     };
 
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: '',
       version: '1.0',
       servers: [
         {
+          id: '#/servers/0',
           name: '',
           url: 'https://petstore.swagger.io/v2',
         },
         {
+          id: '#/servers/1',
           name: '',
           url: 'http://petstore.swagger.io/v2',
         },
@@ -135,7 +143,7 @@ describe('oas3 service', () => {
     };
 
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: 'no-title',
       version: '',
     });
@@ -143,7 +151,7 @@ describe('oas3 service', () => {
 
   it('should handle server variables', () => {
     const document: Partial<OpenAPIObject> = {
-      id: '?http-service-id?',
+      id: '#',
       name: '',
       version: '1.0',
       servers: [
@@ -172,11 +180,12 @@ describe('oas3 service', () => {
     };
 
     expect(transformOas3Service({ document })).toStrictEqual({
-      id: '?http-service-id?',
+      id: '#',
       name: 'no-title',
       version: '',
       servers: [
         {
+          id: '#/servers/0',
           description: 'Sample Petstore Server Https',
           url: 'https://petstore.swagger.io/v2',
           variables: {
@@ -194,6 +203,7 @@ describe('oas3 service', () => {
           },
         },
         {
+          id: '#/servers/1',
           description: 'Sample Petstore Server Http',
           url: 'http://petstore.swagger.io/v2',
         },
@@ -240,7 +250,7 @@ describe('oas3 service', () => {
       };
 
       expect(transformOas3Service({ document })).toEqual({
-        id: '?http-service-id?',
+        id: '#',
         name: '',
         version: '1.0',
         summary: 'Very cool API',
@@ -260,7 +270,7 @@ describe('oas3 service', () => {
       };
 
       expect(transformOas3Service({ document })).toEqual({
-        id: '?http-service-id?',
+        id: '#',
         name: '',
         version: '1.0',
         license: {
@@ -286,7 +296,7 @@ describe('oas3 service', () => {
       };
 
       expect(transformOas3Service({ document })).toStrictEqual({
-        id: '?http-service-id?',
+        id: '#',
         name: 'no-title',
         version: '1.0.0',
         logo: {
@@ -310,7 +320,7 @@ describe('oas3 service', () => {
       };
 
       expect(transformOas3Service({ document })).toStrictEqual({
-        id: '?http-service-id?',
+        id: '#',
         name: 'no-title',
         contact: {
           url: 'https://stoplight.io',

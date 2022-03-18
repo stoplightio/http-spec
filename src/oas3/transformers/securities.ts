@@ -1,19 +1,42 @@
 import { isPlainObject } from '@stoplight/json';
-import type { IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
-import type { SecuritySchemeObject } from 'openapi3-ts';
+import type { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
+import type { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
 
-import { isNonNullable } from '../../guards';
+import { withJsonPath } from '../../context';
 import { ArrayCallbackParameters } from '../../types';
-import { getSecurities, SecurityWithKey } from '../accessors';
+import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], SecurityWithKey[][]> =
-  function (operationSecurities) {
-    const securities = getSecurities(this.document, operationSecurities);
+export const translateToSecurities = withJsonPath<
+  Oas3TranslateFunction<[operationSecurities: OperationSecurities], SecurityWithKey[][]>
+>(function (operationSecurities: OperationSecurities) {
+  const length = this.state.enter('security');
 
-    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
-  };
+  const securities: SecurityWithKey[][] = [];
+
+  for (const [path, security] of getSecurities(
+    this.state.document as DeepPartial<OpenAPIObject>,
+    operationSecurities,
+  )) {
+    this.state.exit(length);
+    this.state.enter(...path);
+    const transformed = translateToSingleSecurity.call(this, security);
+    if (!transformed) {
+      continue;
+    }
+
+    // todo: mah, this is awful :D
+    const actualIndex = Number(path[0]);
+    if (actualIndex >= securities.length) {
+      securities.push([]);
+    }
+
+    securities[actualIndex].push(transformed);
+  }
+
+  return securities;
+});
 
 export const translateToSingleSecurity: Oas3TranslateFunction<
   [ArrayCallbackParameters<SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })>[0]],
@@ -21,7 +44,8 @@ export const translateToSingleSecurity: Oas3TranslateFunction<
 > = function (securityScheme) {
   const { key } = securityScheme;
 
-  const baseObject: { key: string; description?: string } = {
+  const baseObject: { id: string; key: string; description?: string } = {
+    id: this.generateId('security-scheme'),
     key,
   };
 

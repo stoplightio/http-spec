@@ -1,30 +1,33 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
+import type { DeepPartial, Dictionary, HttpSecurityScheme, JsonPath } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import type { OpenAPIObject } from 'openapi3-ts';
+import { OpenAPIObject } from 'openapi3-ts';
 
 import { entries } from '../utils';
-import { isSecurityScheme, isSecuritySchemeWithKey } from './guards';
+import { isSecurityScheme } from './guards';
 
 export type OperationSecurities = Dictionary<string[], string>[] | undefined;
 export type SecurityWithKey = HttpSecurityScheme & { key: string };
 
-export function getSecurities(
+export function* getSecurities(
   document: DeepPartial<OpenAPIObject>,
-  operationSecurities?: unknown,
-): SecurityWithKey[][] {
+  operationSecurities: unknown,
+): IterableIterator<[JsonPath, SecurityWithKey]> {
   const definitions = document.components?.securitySchemes;
 
-  if (!isPlainObject(definitions)) return [];
+  if (!isPlainObject(definitions) || !Array.isArray(operationSecurities)) return;
 
-  return (Array.isArray(operationSecurities) ? operationSecurities : document.security || []).map(operationSecurity => {
-    return entries(operationSecurity)
-      .map(([opScheme, scopes]) => {
-        const definition = definitions[opScheme];
+  for (const [i, operationSecurity] of operationSecurities.entries()) {
+    for (const [opScheme, scopes] of entries(operationSecurity)) {
+      const definition = definitions[opScheme];
+      if (!isSecurityScheme(definition)) continue;
+      const path = [String(i), opScheme];
 
-        if (isSecurityScheme(definition) && definition.type === 'oauth2') {
-          // Put back only the flows that are part of the current definition
-          return {
+      if (definition.type === 'oauth2') {
+        // Put back only the flows that are part of the current definition
+        yield [
+          path,
+          {
             ...definition,
             flows: Object.fromEntries(
               entries(definition.flows).map(([name, flow]) => [
@@ -36,11 +39,11 @@ export function getSecurities(
               ]),
             ),
             key: opScheme,
-          };
-        }
-
-        return { ...definition, key: opScheme };
-      })
-      .filter(isSecuritySchemeWithKey);
-  });
+          } as any,
+        ];
+      } else {
+        yield [path, { ...definition, key: opScheme } as any];
+      }
+    }
+  }
 }

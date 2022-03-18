@@ -18,6 +18,8 @@ import type {
   PathParameter,
   QueryParameter,
 } from 'swagger-schema-official';
+
+import { withJsonPath } from '../../context';
 import pickBy = require('lodash.pickby');
 import pick = require('lodash.pick');
 
@@ -61,17 +63,17 @@ function chooseQueryParameterStyle(
   }
 }
 
-export const translateToHeaderParam: Oas2TranslateFunction<
-  [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
-  IHttpHeaderParam
-> = function (parameter) {
+export const translateToHeaderParam = withJsonPath<
+  Oas2TranslateFunction<[param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }], IHttpHeaderParam>
+>(function (parameter) {
   return {
+    id: this.generateId('param'),
     style: HttpParamStyles.Simple,
     name: parameter.name,
     ...buildSchemaForParameter.call(this, parameter),
     required: !!parameter.required,
   };
-};
+});
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
@@ -89,33 +91,42 @@ export const translateToHeaderParams: Oas2TranslateFunction<[headers: unknown], 
   return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
 };
 
-export const translateToBodyParameter: Oas2TranslateFunction<
-  [body: BodyParameter, consumes: string[]],
-  IHttpOperationRequestBody
-> = function (body, consumes) {
+export const translateToBodyParameter = withJsonPath<
+  Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
+>(function (body, consumes) {
   const examples = entries(body['x-examples'] || (body.schema ? getExamplesFromSchema(body.schema) : void 0)).map(
-    ([key, value]) => ({ key, value }),
+    ([key, value]) => ({ id: this.generateId('example'), key, value }),
   );
 
-  return pickBy({
-    description: body.description,
-    required: body.required,
+  return {
+    id: this.generateId('param'),
+
+    required: !!body.required,
     contents: consumes.map(mediaType => {
       return {
+        id: this.generateId('media'),
         mediaType,
         schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
         examples,
       };
     }),
-  });
-};
 
-export const translateFromFormDataParameters: Oas2TranslateFunction<
-  [parameters: FormDataParameter[], consumes: string[]],
-  IHttpOperationRequestBody
-> = function (parameters, consumes) {
+    ...pickBy(
+      {
+        description: body.description,
+      },
+      isString,
+    ),
+  };
+});
+
+export const translateFromFormDataParameters = withJsonPath<
+  Oas2TranslateFunction<[parameters: FormDataParameter[], consumes: string[]], IHttpOperationRequestBody>
+>(function (parameters, consumes) {
   const finalBody: IHttpOperationRequestBody = {
+    id: this.generateId('param'),
     contents: consumes.map(mediaType => ({
+      id: this.generateId('media'),
       mediaType,
       schema: {
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -151,7 +162,7 @@ export const translateFromFormDataParameters: Oas2TranslateFunction<
     });
     return body;
   }, finalBody);
-};
+});
 
 function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   switch (parameter.collectionFormat) {
@@ -183,11 +194,11 @@ function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   return null;
 }
 
-export const translateToQueryParameter: Oas2TranslateFunction<
-  [query: DeepPartial<QueryParameter> & Oas2ParamBase],
-  IHttpQueryParam
-> = function (query) {
+export const translateToQueryParameter = withJsonPath<
+  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam>
+>(function (query) {
   return {
+    id: this.generateId('param'),
     style: chooseQueryParameterStyle(query),
     name: query.name,
     required: !!query.required,
@@ -200,19 +211,19 @@ export const translateToQueryParameter: Oas2TranslateFunction<
       isBoolean,
     ),
   };
-};
+});
 
-export const translateToPathParameter: Oas2TranslateFunction<
-  [param: DeepPartial<PathParameter> & Oas2ParamBase],
-  IHttpPathParam
-> = function (param) {
+export const translateToPathParameter = withJsonPath<
+  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam>
+>(function (param) {
   return {
+    id: this.generateId('param'),
     name: param.name,
     style: HttpParamStyles.Simple,
     required: !!param.required,
     ...buildSchemaForParameter.call(this, param),
   };
-};
+});
 
 const buildSchemaForParameter: Oas2TranslateFunction<
   [param: DeepPartial<QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header>],

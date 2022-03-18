@@ -1,12 +1,12 @@
 import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import { OperationSecurities } from '../../accessors';
 import { translateToSecurities as _translateToSecurities } from '../securities';
 
 const translateToSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) =>
-  _translateToSecurities.call(createContext(document), operationSecurities);
+  _translateToSecurities.call(createContext(document, DEFAULT_ID_GENERATOR), operationSecurities);
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
@@ -29,6 +29,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/basic-security',
             key: 'basic-security',
             type: 'http',
             description: 'a description',
@@ -57,6 +58,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/digest-security',
             key: 'digest-security',
             type: 'http',
             description: 'a description',
@@ -86,6 +88,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/bearer-security',
             key: 'bearer-security',
             type: 'http',
             description: 'a description',
@@ -115,6 +118,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/openIdConnect-security',
             key: 'openIdConnect-security',
             type: 'openIdConnect',
             description: 'a description',
@@ -144,6 +148,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/apiKey-security',
             name: 'a name',
             type: 'apiKey',
             in: 'header',
@@ -173,6 +178,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: '#/security/0/basic-security',
             key: 'basic-security',
             type: 'http',
             description: 'a description',
@@ -207,6 +213,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/implicit-flow-security',
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-flow-security',
@@ -240,6 +247,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/password-flow-security',
               description: 'a description',
               flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'password-flow-security',
@@ -273,6 +281,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/clientCredentials-flow-security',
               description: 'a description',
               flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'clientCredentials-flow-security',
@@ -307,6 +316,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/authorizationCode-flow-security',
               description: 'a description',
               flows: {
                 authorizationCode: {
@@ -371,6 +381,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/http-security',
               type: 'http',
               description: 'a description',
               key: 'http-security',
@@ -378,6 +389,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: '#/security/1/implicit-security',
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
@@ -386,6 +398,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: '#/security/2/api-security',
               name: 'a name',
               type: 'apiKey',
               in: 'query',
@@ -404,17 +417,20 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: '#/security/0/http-security',
               type: 'http',
               description: 'a description',
               key: 'http-security',
             },
             {
+              id: '#/security/0/implicit-security',
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
             },
             {
+              id: '#/security/0/api-security',
               name: 'a name',
               type: 'apiKey',
               in: 'query',

@@ -1,16 +1,16 @@
 import type { SchemaObject } from 'openapi3-ts';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import {
   translateHeaderObject as _translateHeaderObject,
   translateMediaTypeObject as _translateMediaTypeObject,
 } from '../content';
 
 const translateMediaTypeObject = (document: any, object: unknown, key: string) =>
-  _translateMediaTypeObject.call(createContext(document), [key, object], 0, []);
+  _translateMediaTypeObject.call(createContext(document, DEFAULT_ID_GENERATOR), [key, object], 0, []);
 
 const translateHeaderObject = (object: unknown, key: string) =>
-  _translateHeaderObject.call(createContext({}), [key, object], 0, []);
+  _translateHeaderObject.call(createContext({}, DEFAULT_ID_GENERATOR), [key, object], 0, []);
 
 describe('translateMediaTypeObject', () => {
   afterEach(() => {
@@ -23,6 +23,7 @@ describe('translateMediaTypeObject', () => {
 
   it('given empty object, should return nothing', () => {
     expect(translateMediaTypeObject({}, {}, 'mediaType')).toStrictEqual({
+      id: '#/content/mediaType',
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
@@ -39,6 +40,7 @@ describe('translateMediaTypeObject', () => {
         'mediaType',
       ),
     ).toStrictEqual({
+      id: '#/content/mediaType',
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
@@ -257,7 +259,7 @@ describe('translateMediaTypeObject', () => {
             },
             'mediaType',
           ),
-        ).toHaveProperty('examples', [{ key: 'default', value: defaultExample }]);
+        ).toHaveProperty('examples', [{ id: '#/content/mediaType/example', key: 'default', value: defaultExample }]);
       });
     });
 
@@ -279,8 +281,8 @@ describe('translateMediaTypeObject', () => {
             'mediaType',
           ),
         ).toHaveProperty('examples', [
-          { key: 'default', value: { name: 'root default value' } },
-          { key: 'example', value: { name: 'root example value' } },
+          { id: '#/content/mediaType/example', key: 'default', value: { name: 'root default value' } },
+          { id: '#/content/mediaType/examples/example', key: 'example', value: { name: 'root example value' } },
         ]);
       });
     });

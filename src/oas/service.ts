@@ -15,7 +15,7 @@ export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> |
     const document = this.document;
 
     const httpService: IHttpService = {
-      id: '?http-service-id?',
+      id: this.generateId('service'),
 
       version: document.info?.version ?? '',
       name: document.info?.title ?? 'no-title',

@@ -1,11 +1,11 @@
 import type { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
 import { translateToResponses as _translateToResponses } from '../responses';
 
 const translateToResponses = (document: DeepPartial<OpenAPIObject>, responses: unknown) =>
-  _translateToResponses.call(createContext(document), responses);
+  _translateToResponses.call(createContext(document, DEFAULT_ID_GENERATOR), responses);
 
 describe('translateToOas3Responses', () => {
   it('given empty dictionary should return empty array', () => {
@@ -72,6 +72,7 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
+        id: '#/responses/200',
         code: '200',
         contents: [],
         headers: [],
@@ -92,6 +93,7 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
+        id: '#/responses/201',
         code: '201',
         contents: [],
         description: 'description 201',
@@ -149,12 +151,15 @@ describe('translateToOas3Responses', () => {
 
     expect(translateToResponses(document, document.paths!['/user'].get.responses)).toEqual([
       {
+        id: '#/responses/200',
         code: '200',
         contents: [
           {
+            id: '#/responses/200/content/application~1json',
             encodings: [],
             examples: [
               {
+                id: '#/responses/200/content/application~1json/examples/my-example',
                 key: 'my-example',
                 value: {
                   id: 1,
@@ -163,6 +168,7 @@ describe('translateToOas3Responses', () => {
             ],
             mediaType: 'application/json',
             schema: {
+              'x-stoplight-id': '#/responses/200/content/application~1json/schema',
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 id: {
@@ -208,13 +214,16 @@ describe('translateToOas3Responses', () => {
 
     const expected = [
       {
+        id: '#/responses/200',
         code: '200',
         contents: [],
         description: 'OK',
         headers: [
           {
+            id: '#/responses/200/headers/X-Page',
             name: 'X-Page',
             schema: {
+              'x-stoplight-id': '#/responses/200/headers/X-Page',
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
             },
@@ -224,6 +233,7 @@ describe('translateToOas3Responses', () => {
             encodings: [],
             examples: [
               {
+                id: '#/responses/200/headers/X-Page/example',
                 key: '__default',
                 value: 3,
               },
