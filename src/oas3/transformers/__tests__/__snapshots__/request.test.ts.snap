@@ -4,9 +4,20 @@ exports[`translateOas3ToRequest give a request body should translate it 1`] = `
 Object {
   "body": Object {
     "contents": Array [
-      "translateMediaTypeObject([\\"content-a\\",{\\"schema\\":{\\"deprecated\\":true}}], 0, [[\\"content-a\\",{\\"schema\\":{\\"deprecated\\":true}}]])",
+      Object {
+        "encodings": Array [],
+        "examples": Array [],
+        "id": Any<String>,
+        "mediaType": "content-a",
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "deprecated": true,
+          "x-stoplight-id": Any<String>,
+        },
+      },
     ],
     "description": "descr",
+    "id": Any<String>,
     "required": true,
   },
   "cookie": Array [],
@@ -20,6 +31,7 @@ exports[`translateOas3ToRequest given no request body should translate parameter
 Object {
   "body": Object {
     "contents": Array [],
+    "id": "c27fe9940305e",
   },
   "cookie": Array [],
   "headers": Array [
@@ -33,7 +45,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "824b189f6d434",
       "name": "param-name-3",
+      "required": false,
       "style": "simple",
     },
   ],
@@ -49,7 +63,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "7e5f6c5bf0edf",
       "name": "param-name-2",
+      "required": false,
       "style": "simple",
     },
     Object {
@@ -62,7 +78,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "7e8f6c5bf0b36",
       "name": "param-name-1",
+      "required": false,
       "style": "simple",
     },
   ],

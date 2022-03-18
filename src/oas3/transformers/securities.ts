@@ -1,27 +1,34 @@
 import { isPlainObject } from '@stoplight/json';
 import type { IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
+import { HttpSecurityScheme } from '@stoplight/types';
 import type { SecuritySchemeObject } from 'openapi3-ts';
 
+import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
 import { ArrayCallbackParameters } from '../../types';
-import { getSecurities, SecurityWithKey } from '../accessors';
+import { getSecurities } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], SecurityWithKey[][]> =
+export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
   function (operationSecurities) {
     const securities = getSecurities(this.document, operationSecurities);
 
     return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
   };
 
-export const translateToSingleSecurity: Oas3TranslateFunction<
-  [ArrayCallbackParameters<SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })>[0]],
-  Optional<SecurityWithKey>
-> = function (securityScheme) {
-  const { key } = securityScheme;
-
-  const baseObject: { key: string; description?: string } = {
+export const translateToSingleSecurity = withContext<
+  Oas3TranslateFunction<
+    [
+      ArrayCallbackParameters<
+        [key: string, security: SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })]
+      >[0],
+    ],
+    Optional<HttpSecurityScheme>
+  >
+>(function ([key, securityScheme]) {
+  const baseObject: { id: string; key: string; description?: string } = {
+    id: this.generateId(`http_security-${this.ids.service}-${key}`),
     key,
   };
 
@@ -79,7 +86,7 @@ export const translateToSingleSecurity: Oas3TranslateFunction<
   }
 
   return undefined;
-};
+});
 
 function transformFlows(flows: Optional<unknown>): IOauthFlowObjects {
   const transformedFlows: IOauthFlowObjects = {};

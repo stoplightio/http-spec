@@ -4,6 +4,7 @@ exports[`translateToServers translate single ServerObject to IServer 1`] = `
 Array [
   Object {
     "description": "description",
+    "id": "6f520f1ba667c",
     "url": "http://stoplight.io/path",
     "variables": Object {
       "a": Object {
