@@ -22,6 +22,6 @@ export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObj
     'headers' in maybeResponseObject ||
     'examples' in maybeResponseObject);
 
-export function isValidScheme(scheme: unknown) {
+export function isValidScheme(scheme: unknown): scheme is 'http' | 'https' | 'ws' | 'wss' {
   return typeof scheme === 'string' && ['http', 'https', 'ws', 'wss'].includes(scheme);
 }
