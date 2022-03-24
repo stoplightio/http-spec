@@ -37,7 +37,9 @@ workflows:
       - release:
           filters:
             branches:
-              only: master
+              only:
+                - beta
+                - master
           requires:
             - test
             - build
