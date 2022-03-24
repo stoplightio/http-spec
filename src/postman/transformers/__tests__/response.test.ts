@@ -275,7 +275,7 @@ describe('transformResponse()', () => {
                   value: 'functions',
                   domain: 'example.com',
                   path: '/',
-                  expires: (1502442248 as unknown) as string, // @todo remove after postman-collection types fix
+                  expires: 1502442248 as unknown as string, // @todo remove after postman-collection types fix
                 },
               ],
               responseTime: 100,
