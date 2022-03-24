@@ -97,12 +97,12 @@ export function translateHeaderObject(headerObject: unknown, name: string): Opti
     });
   }
 
-  return (pickBy({
+  return pickBy({
     ...baseContent,
     schema: get(headerObject, 'schema') as any,
     encodings,
     examples,
-  }) as unknown) as IHttpHeaderParam;
+  }) as unknown as IHttpHeaderParam;
 }
 
 export function translateMediaTypeObject(
@@ -165,11 +165,13 @@ function resolveMediaObject(document: DeepPartial<OpenAPIObject>, maybeMediaObje
   return mediaObject;
 }
 
-const transformExamples = (source: MediaTypeObject | HeaderObject) => (key: string): INodeExample => {
-  return {
-    summary: get(source, ['examples', key, 'summary']),
-    description: get(source, ['examples', key, 'description']),
-    value: get(source, ['examples', key, 'value']),
-    key,
+const transformExamples =
+  (source: MediaTypeObject | HeaderObject) =>
+  (key: string): INodeExample => {
+    return {
+      summary: get(source, ['examples', key, 'summary']),
+      description: get(source, ['examples', key, 'description']),
+      value: get(source, ['examples', key, 'value']),
+      key,
+    };
   };
-};
