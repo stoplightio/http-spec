@@ -156,9 +156,16 @@ describe('transformOas2Operation', () => {
       }),
       {
         id: '?http-operation-id?',
+        deprecated: false,
+        internal: false,
         path: '/users/{userId}',
         method: 'put',
-        request: {},
+        request: {
+          cookie: [],
+          headers: [],
+          path: [],
+          query: [],
+        },
         responses: [],
         security: [],
         servers: [],
@@ -194,18 +201,25 @@ describe('transformOas2Operation', () => {
       }),
     ).toStrictEqual({
       id: '?http-operation-id?',
+      deprecated: false,
+      internal: false,
       method: 'get',
       path: '/users/{userId}',
       request: {
+        cookie: [],
         headers: [
           {
             name: 'name',
+            required: false,
+            deprecated: false,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
             },
             style: 'simple',
           },
         ],
+        path: [],
+        query: [],
       },
       responses: [],
       security: [],

@@ -339,7 +339,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        description: void 0,
+        name: 'title',
         url: 'operation/server',
       },
     ]);
@@ -437,7 +437,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        description: void 0,
+        name: 'title',
         url: 'path/server',
       },
     ]);
@@ -535,7 +535,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        description: void 0,
+        name: 'title',
         url: 'spec/server',
       },
     ]);
@@ -642,6 +642,9 @@ describe('transformOas3Operation', () => {
               },
             ],
             name: 'name',
+            deprecated: false,
+            explode: false,
+            style: 'simple',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
@@ -718,6 +721,9 @@ describe('transformOas3Operation', () => {
                 value: 'some example',
               },
             ],
+            deprecated: false,
+            explode: false,
+            style: 'simple',
             name: 'name',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -787,18 +793,14 @@ describe('transformOas3Operation', () => {
         variables: {
           basePath: {
             default: 'v2',
-            description: void 0,
-            enum: void 0,
           },
           port: {
             default: '8443',
-            description: void 0,
             enum: ['8443', '443'],
           },
           username: {
             default: 'demo',
             description: 'value is assigned by the service provider',
-            enum: void 0,
           },
         },
       },
@@ -899,9 +901,7 @@ describe('transformOas3Operation', () => {
               encodings: [],
               examples: [
                 {
-                  description: undefined,
                   key: 'pet-shared',
-                  summary: undefined,
                   value: {
                     type: 'object',
                     properties: {
@@ -913,12 +913,10 @@ describe('transformOas3Operation', () => {
                   },
                 },
                 {
-                  description: undefined,
                   key: 'pet-not-shared',
                   value: {
                     'not-shared': true,
                   },
-                  summary: undefined,
                 },
               ],
               mediaType: 'application/json',
@@ -929,8 +927,6 @@ describe('transformOas3Operation', () => {
               },
             },
           ],
-          description: undefined,
-          required: undefined,
         },
         cookie: [],
         headers: [],
@@ -945,9 +941,7 @@ describe('transformOas3Operation', () => {
               encodings: [],
               examples: [
                 {
-                  description: undefined,
                   key: 'pet-shared',
-                  summary: undefined,
                   value: {
                     properties: {
                       id: {
@@ -959,9 +953,7 @@ describe('transformOas3Operation', () => {
                   },
                 },
                 {
-                  description: undefined,
                   key: 'pet-not-shared',
-                  summary: undefined,
                   value: {
                     'not-shared': true,
                   },
@@ -975,7 +967,6 @@ describe('transformOas3Operation', () => {
               },
             },
           ],
-          description: undefined,
           headers: [],
         },
       ],
@@ -1251,30 +1242,25 @@ describe('transformOas3Operation', () => {
           request: {
             body: {
               contents: [
-                {
-                  encodings: [],
-                  examples: [],
-                  mediaType: 'application/json',
+                expect.objectContaining({
                   schema: {
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
                   },
-                },
+                }),
               ],
             },
             cookie: [],
             headers: [
-              {
-                examples: [{ key: 'default', value: 'test' }],
-                name: 'email',
+              expect.objectContaining({
                 schema: {
                   $schema: 'https://json-schema.org/draft/2020-12/schema',
                   type: 'string',
                   format: 'email',
                   example: 'test',
                 },
-              },
+              }),
             ],
             path: [],
             query: [],
@@ -1283,16 +1269,13 @@ describe('transformOas3Operation', () => {
             {
               code: '200',
               contents: [
-                {
-                  encodings: [],
-                  examples: [],
-                  mediaType: 'application/json',
+                expect.objectContaining({
                   schema: {
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
                   },
-                },
+                }),
               ],
               headers: [],
             },

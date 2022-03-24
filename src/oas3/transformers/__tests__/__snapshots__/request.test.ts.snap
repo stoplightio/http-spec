@@ -4,7 +4,7 @@ exports[`translateOas3ToRequest give a request body should translate it 1`] = `
 Object {
   "body": Object {
     "contents": Array [
-      "translateMediaTypeObject({}, {\\"schema\\":{\\"deprecated\\":true}}, content-a, {\\"content-a\\":{\\"schema\\":{\\"deprecated\\":true}}})",
+      "translateMediaTypeObject([\\"content-a\\",{\\"schema\\":{\\"deprecated\\":true}}], 0, [[\\"content-a\\",{\\"schema\\":{\\"deprecated\\":true}}]])",
     ],
     "description": "descr",
     "required": true,
@@ -29,13 +29,29 @@ Object {
           "schema": Object {},
         },
       },
+      "deprecated": false,
       "description": "descr",
       "examples": Array [],
+      "explode": false,
       "name": "param-name-3",
+      "style": "simple",
     },
   ],
   "path": Array [],
   "query": Array [
+    Object {
+      "content": Object {
+        "content-b": Object {
+          "schema": Object {},
+        },
+      },
+      "deprecated": false,
+      "description": "descr",
+      "examples": Array [],
+      "explode": false,
+      "name": "param-name-2",
+      "style": "simple",
+    },
     Object {
       "content": Object {
         "content-a": Object {
@@ -45,17 +61,9 @@ Object {
       "deprecated": true,
       "description": "descr",
       "examples": Array [],
+      "explode": false,
       "name": "param-name-1",
-    },
-    Object {
-      "content": Object {
-        "content-b": Object {
-          "schema": Object {},
-        },
-      },
-      "description": "descr",
-      "examples": Array [],
-      "name": "param-name-2",
+      "style": "simple",
     },
   ],
 }
