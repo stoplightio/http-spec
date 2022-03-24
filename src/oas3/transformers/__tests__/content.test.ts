@@ -322,11 +322,11 @@ describe('translateMediaTypeObject', () => {
 
 describe('schema invalid', () => {
   it('type as array does not throw error', () => {
-    const schema = ({
+    const schema = {
       type: ['string', 'object'],
       description: 'A simple string',
       example: 'hello',
-    } as unknown) as SchemaObject;
+    } as unknown as SchemaObject;
 
     expect(() =>
       translateMediaTypeObject(

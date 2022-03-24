@@ -609,7 +609,7 @@ describe('transformSecurityScheme()', () => {
   it('ignores unknown auth type', () => {
     expect(
       transformSecurityScheme(
-        new RequestAuth(({ type: 'non-existing-type' } as unknown) as RequestAuthDefinition),
+        new RequestAuth({ type: 'non-existing-type' } as unknown as RequestAuthDefinition),
         () => 'a',
       ),
     ).toBeUndefined();
@@ -790,7 +790,7 @@ describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
     true,
   ],
 ])('given %s security schemes', (desc, scheme1, scheme2, result) => {
-  test(`returns ${result ? 'true' : 'false'}`, () => {
+  it(`returns ${result ? 'true' : 'false'}`, () => {
     expect(isPostmanSecuritySchemeEqual(scheme1, scheme2)).toEqual(result);
   });
 });

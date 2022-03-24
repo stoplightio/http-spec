@@ -1,6 +1,6 @@
 import { translateToServers } from '../servers';
 
-type GlobalWithLocation = typeof global & { location: Partial<Location> & { href: string } };
+type GlobalWithLocation = typeof global & { location?: Partial<Location> & { href: string } };
 
 describe('translateToServers', () => {
   afterAll(() => {

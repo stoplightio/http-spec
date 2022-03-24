@@ -56,12 +56,12 @@ function chooseQueryParameterStyle(
 }
 
 export function translateToHeaderParam(document: DeepPartial<Spec>, parameter: HeaderParameter): IHttpHeaderParam {
-  return (pickBy({
+  return pickBy({
     ...buildSchemaForParameter(document, parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
-  }) as unknown) as IHttpHeaderParam;
+  }) as unknown as IHttpHeaderParam;
 }
 
 export function translateToHeaderParams(
@@ -179,22 +179,22 @@ function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
 }
 
 export function translateToQueryParameter(document: DeepPartial<Spec>, query: QueryParameter): IHttpQueryParam {
-  return (pickBy({
+  return pickBy({
     ...buildSchemaForParameter(document, query),
     allowEmptyValue: query.allowEmptyValue,
     name: query.name,
     style: chooseQueryParameterStyle(query),
     required: query.required,
-  }) as unknown) as IHttpQueryParam;
+  }) as unknown as IHttpQueryParam;
 }
 
 export function translateToPathParameter(document: DeepPartial<Spec>, parameter: PathParameter): IHttpPathParam {
-  return (pickBy({
+  return pickBy({
     ...buildSchemaForParameter(document, parameter),
     name: parameter.name,
     style: HttpParamStyles.Simple,
     required: parameter.required,
-  }) as unknown) as IHttpPathParam;
+  }) as unknown as IHttpPathParam;
 }
 
 function buildSchemaForParameter(
