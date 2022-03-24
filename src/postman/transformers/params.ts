@@ -6,13 +6,13 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 // @ts-ignore
 import * as jsonSchemaGenerator from 'json-schema-generator';
 import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
 
-import { translateSchemaObject } from '../../oas/transformers/schema';
+import { convertSchema } from '../../oas/transformers/schema';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
@@ -82,7 +82,7 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
             value: parsed,
           },
         ],
-        schema: translateSchemaObject({}, jsonSchemaGenerator(parsed)),
+        schema: convertSchema(jsonSchemaGenerator(parsed)),
       };
     } catch (e) {
       /* noop, move on.. */
@@ -104,7 +104,7 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   params: PropertyList<T>,
   mediaType: string,
 ): IMediaTypeContent {
-  const paramsList: { name: string; schema: JSONSchema7; value: any }[] = params.map(item => {
+  const paramsList: { name: string; schema: JSONSchema7; value: unknown }[] = params.map(item => {
     return {
       name: item.key || generateId(),
       schema: {

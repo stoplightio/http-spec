@@ -1,29 +1,26 @@
-import { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
-import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
+import { isPlainObject } from '@stoplight/json';
+import type { IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
+import type { SecuritySchemeObject } from 'openapi3-ts';
 
-import { isDictionary } from '../../utils';
-import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
+import { isNonNullable } from '../../guards';
+import { ArrayCallbackParameters } from '../../types';
+import { getSecurities, SecurityWithKey } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
+import { Oas3TranslateFunction } from '../types';
 
-export function translateToSecurities(document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) {
-  const securities = getSecurities(document, operationSecurities);
+export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], SecurityWithKey[][]> =
+  function (operationSecurities) {
+    const securities = getSecurities(this.document, operationSecurities);
 
-  return securities.map(security =>
-    security.reduce<SecurityWithKey[]>((transformedSecurities, sec) => {
-      const transformed = transformToSingleSecurity(sec, sec.key);
-      if (transformed) {
-        transformedSecurities.push(transformed);
-      }
+    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
+  };
 
-      return transformedSecurities;
-    }, []),
-  );
-}
+export const translateToSingleSecurity: Oas3TranslateFunction<
+  [ArrayCallbackParameters<SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })>[0]],
+  Optional<SecurityWithKey>
+> = function (securityScheme) {
+  const { key } = securityScheme;
 
-export function transformToSingleSecurity(
-  securityScheme: SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' }),
-  key: string,
-): SecurityWithKey | undefined {
   const baseObject: { key: string; description?: string } = {
     key,
   };
@@ -82,12 +79,12 @@ export function transformToSingleSecurity(
   }
 
   return undefined;
-}
+};
 
 function transformFlows(flows: Optional<unknown>): IOauthFlowObjects {
   const transformedFlows: IOauthFlowObjects = {};
 
-  if (!isDictionary(flows)) {
+  if (!isPlainObject(flows)) {
     return transformedFlows;
   }
 

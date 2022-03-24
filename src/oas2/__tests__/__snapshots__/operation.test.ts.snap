@@ -7,9 +7,15 @@ Object {
   "extensions": Object {},
   "id": "?http-operation-id?",
   "iid": "oid",
+  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
-  "request": Object {},
+  "request": Object {
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
   "responses": Array [
     Object {
       "code": "response",
@@ -28,8 +34,9 @@ Object {
       "description": "desc",
       "headers": Array [
         Object {
-          "description": undefined,
+          "deprecated": false,
           "name": "header",
+          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "integer",

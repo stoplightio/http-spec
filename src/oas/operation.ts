@@ -1,33 +1,34 @@
-import { IHttpOperation } from '@stoplight/types';
-import { flatten, get, keys, map } from 'lodash';
-import { OpenAPIObject } from 'openapi3-ts';
-import { Spec } from 'swagger-schema-official';
+import { isPlainObject } from '@stoplight/json';
+import type { DeepPartial, IHttpOperation } from '@stoplight/types';
+import type { OpenAPIObject } from 'openapi3-ts';
+import type { Spec } from 'swagger-schema-official';
 
-import { HttpOperationTransformer } from '../types';
+import type { HttpOperationTransformer } from '../types';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
 export function transformOasOperations(
-  document: Spec | OpenAPIObject,
+  document: DeepPartial<Spec | OpenAPIObject>,
   transformer: HttpOperationTransformer<any>,
   methods: string[] | null = DEFAULT_METHODS,
 ): IHttpOperation[] {
-  const paths = keys(get(document, 'paths'));
+  const paths = isPlainObject(document.paths) ? Object.keys(document.paths) : [];
 
-  return flatten(
-    map(paths, path => {
-      let operations = keys(get(document, ['paths', path]));
-      if (methods !== null) {
-        operations = operations.filter(pathKey => methods.includes(pathKey));
-      }
+  return paths.flatMap(path => {
+    const value = document.paths![path];
+    if (!isPlainObject(value)) return [];
 
-      return operations.map(method =>
-        transformer({
-          document,
-          path,
-          method,
-        }),
-      );
-    }),
-  );
+    let operations = Object.keys(value);
+    if (methods !== null) {
+      operations = operations.filter(pathKey => methods.includes(pathKey));
+    }
+
+    return operations.map(method =>
+      transformer({
+        document,
+        path,
+        method,
+      }),
+    );
+  });
 }
