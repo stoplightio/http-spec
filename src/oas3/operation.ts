@@ -1,4 +1,4 @@
-import type { IHttpOperation } from '@stoplight/types';
+import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 
@@ -14,7 +14,7 @@ import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
 
-export function transformOas3Operations(document: OpenAPIObject): IHttpOperation[] {
+export function transformOas3Operations(document: DeepPartial<OpenAPIObject>): IHttpOperation[] {
   return transformOasOperations(document, transformOas3Operation);
 }
 

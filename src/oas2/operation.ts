@@ -1,4 +1,4 @@
-import type { IHttpOperation } from '@stoplight/types';
+import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import type { Spec } from 'swagger-schema-official';
 
 import { createContext, DEFAULT_ID_GENERATOR } from '../context';
@@ -11,7 +11,7 @@ import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
 import { translateToServers } from './transformers/servers';
 
-export function transformOas2Operations(document: Spec): IHttpOperation[] {
+export function transformOas2Operations(document: DeepPartial<Spec>): IHttpOperation[] {
   return transformOasOperations(document, transformOas2Operation);
 }
 
