@@ -1,12 +1,12 @@
-import { isPlainObject, pathToPointer } from '@stoplight/json';
+import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial } from '@stoplight/types';
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
-import { getEdge } from '../../../track';
 import { TranslateFunction } from '../../../types';
+import { getSharedKey } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
 
@@ -15,6 +15,8 @@ const keywordsKeys = Object.keys(keywords);
 type InternalOptions = {
   structs: string[];
 };
+
+const CACHE = new WeakMap();
 
 // Convert from OpenAPI 2.0, OpenAPI 3.0 `SchemaObject` or JSON Schema Draft4/6 to JSON Schema Draft 7
 // This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.
@@ -26,24 +28,31 @@ export const translateSchemaObject = withContext<
   >
 >(function (schema) {
   const document = this.document;
-  const ref = schema.$ref;
   const resolvedSchema = this.maybeResolveLocalRef(schema);
   if (!isPlainObject(resolvedSchema)) return {};
-  const id = ref ?? pathToPointer(getEdge(resolvedSchema) ?? []);
+  let cached = CACHE.get(resolvedSchema);
+  if (cached) {
+    return { ...cached };
+  }
+
+  const actualKey = this.context === 'service' ? getSharedKey(resolvedSchema) : '';
+  const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
 
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
-    return {
+    cached = {
       $schema: document.jsonSchemaDialect,
       // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
       // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
       ...(resolvedSchema as JSONSchema7),
       'x-stoplight-id': id,
     };
+  } else {
+    cached = convertSchema(resolvedSchema);
+    cached['x-stoplight-id'] = id;
   }
 
-  const clonedSchema = convertSchema(resolvedSchema);
-  clonedSchema['x-stoplight-id'] = id;
-  return clonedSchema;
+  CACHE.set(resolvedSchema, cached);
+  return cached;
 });
 
 export function convertSchema(schema: OASSchemaObject): JSONSchema7 {

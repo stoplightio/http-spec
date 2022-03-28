@@ -1,7 +1,6 @@
-import { pointerToPath, resolveInlineRef } from '@stoplight/json';
-import { JsonPath } from '@stoplight/types';
+import { resolveInlineRef } from '@stoplight/json';
+import type { JsonPath } from '@stoplight/types';
 
-import { getEdge } from '../track';
 import type { AvailableContext, RefResolver } from '../types';
 
 function inferContext(path: JsonPath): AvailableContext {
@@ -10,13 +9,23 @@ function inferContext(path: JsonPath): AvailableContext {
   return 'operation';
 }
 
-export const resolveRef: RefResolver = function (target) {
-  const resolved = resolveInlineRef(this.document, target.$ref);
-  const edge = (typeof resolved === 'object' && resolved !== null && getEdge(resolved)) || pointerToPath(target.$ref);
+const SHARED_COMPONENTS_KEYS = new WeakMap();
 
-  const context = edge !== undefined ? inferContext(edge) : null;
+export function getSharedKey(value: object) {
+  return SHARED_COMPONENTS_KEYS.get(value);
+}
+
+export const resolveRef: RefResolver = function (target) {
+  const location: string[] = [];
+  const resolved = resolveInlineRef(this.document, target.$ref, location);
+
+  const context = inferContext(location);
   if (context !== null && this.context !== context) {
     this.context = context;
+  }
+
+  if (typeof resolved === 'object' && resolved !== null && context === 'service') {
+    SHARED_COMPONENTS_KEYS.set(resolved, location[0] === 'components' ? location[2] : location[1]);
   }
 
   return resolved;

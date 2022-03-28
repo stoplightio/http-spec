@@ -83,7 +83,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight-id': '',
               title: 'User',
               type: 'object',
               properties: {
@@ -110,8 +110,8 @@ export default [
             mediaType: 'application/xml',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              // @TODO
-              'x-stoplight-id': expect.any(String),
+              // schema_36bf7233_ErrorResponse
+              'x-stoplight-id': '',
               type: 'string',
             },
             examples: [],
@@ -138,7 +138,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight-id': '',
               type: 'object',
               properties: {
                 error: {
@@ -186,7 +186,7 @@ export default [
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
             // hash(`schema-${parentId}`)? Do we set "id", "$id", "x-stoplight-id"?
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight-id': '',
             type: 'string',
           },
           examples: [],
@@ -208,7 +208,7 @@ export default [
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
             // @TODO
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight-id': '',
           },
           examples: [],
         },
@@ -234,7 +234,7 @@ export default [
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'integer',
             // @TODO
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight-id': '',
           },
           examples: [],
         },
@@ -284,7 +284,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight-id': '',
               title: 'User',
               type: 'object',
               properties: {
@@ -325,8 +325,11 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              // @TODO
-              'x-stoplight-id': expect.any(String),
+              // hash(`schema-${parentId}-${key}`)
+              // This schema was defined in shared components originally.. the closest parent with an
+              // id is the service, and the key was ErrorResponse so ends up being...
+              // hash('schema-36bf7233-ErrorResponse')
+              'x-stoplight-id': '0c58aa77',
               type: 'object',
               properties: {
                 error: {
@@ -368,7 +371,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight-id': '',
               title: 'User',
               type: 'object',
               properties: {
@@ -419,7 +422,7 @@ export default [
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight-id': '',
             type: 'integer',
           },
           examples: [],
@@ -438,7 +441,7 @@ export default [
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight-id': '',
             type: 'string',
           },
           examples: [],
@@ -459,8 +462,10 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            // @TODO
-            'x-stoplight-id': expect.any(String),
+            // hash(`http_media-${parentId}-${key}`)
+            // closest parent with an id is the response, so ends up being...
+            // hash('http_media-54f681ac-application/json')
+            'x-stoplight-id': 'd',
             type: 'integer',
           },
           examples: [],

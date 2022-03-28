@@ -4,7 +4,7 @@ import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isString } from '../../guards';
-import { getEdge } from '../../track';
+import { getSharedKey } from '../../oas/resolver';
 import type { ArrayCallbackParameters } from '../../types';
 import type { Oas3TranslateFunction } from '../types';
 
@@ -15,7 +15,7 @@ export const translateToExample = withContext<
 
   if (!isPlainObject(resolvedExample)) return;
 
-  const actualKey = (this.context === 'service' && getEdge(resolvedExample)?.[2]) || key;
+  const actualKey = this.context === 'service' ? getSharedKey(resolvedExample) : key;
 
   return {
     id: this.generateId(`example-${this.parentId}-${actualKey}`),

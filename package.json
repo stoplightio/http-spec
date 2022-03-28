@@ -52,7 +52,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@stoplight/json": "^3.17.2",
+    "@stoplight/json": "file:.yalc/@stoplight/json",
     "@stoplight/types": "^13.0.0-beta.5",
     "@types/json-schema": "7.0.5",
     "@types/swagger-schema-official": "~2.0.21",

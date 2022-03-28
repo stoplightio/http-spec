@@ -3,7 +3,7 @@ import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
-import { getEdge } from '../../track';
+import { getSharedKey } from '../../oas/resolver';
 import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isResponseObject } from '../guards';
@@ -19,7 +19,7 @@ const translateToResponse = withContext<
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const actualKey = (this.context === 'service' && getEdge(resolvedResponse)?.[2]) || statusCode;
+  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
 
   return {
     id: this.generateId(`http_response-${this.parentId}-${actualKey}`),

@@ -5,9 +5,9 @@ import type { Operation } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
+import { getSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { getEdge } from '../../track';
 import { entries } from '../../utils';
 import { getExamplesFromSchema, getProduces } from '../accessors';
 import { isResponseObject } from '../guards';
@@ -20,7 +20,7 @@ const translateToResponse = withContext<
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const actualKey = (this.context === 'service' && getEdge(resolvedResponse)?.[1]) || statusCode;
+  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
 
   const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
   const objectifiedExamples = entries(resolvedResponse.examples || getExamplesFromSchema(resolvedResponse.schema)).map(

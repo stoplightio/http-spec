@@ -2,7 +2,6 @@ import { hasRef, isLocalRef } from '@stoplight/json';
 // @ts-ignore
 import * as fnv from 'fnv-plus';
 
-import { trackObject } from './track';
 import type {
   AvailableContext,
   Fragment,
@@ -21,7 +20,7 @@ export function createContext<T extends Record<string, unknown>>(
 ): TransformerContext<T> {
   let context: AvailableContext = 'service';
   return {
-    document: trackObject(document),
+    document,
     get context() {
       return context;
     },
