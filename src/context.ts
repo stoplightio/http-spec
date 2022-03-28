@@ -1,7 +1,6 @@
 import { hasRef, isLocalRef } from '@stoplight/json';
 // @ts-ignore
 import * as fnv from 'fnv-plus';
-import * as memoize from 'memoizee';
 
 import { trackObject } from './track';
 import type {
@@ -13,9 +12,7 @@ import type {
   TranslateFunction,
 } from './types';
 
-const hash = memoize((input: string): string => fnv.fast1a32hex(input));
-
-export const DEFAULT_ID_GENERATOR: IdGenerator = hash;
+export const DEFAULT_ID_GENERATOR: IdGenerator = input => fnv.fast1a32hex(input);
 
 export function createContext<T extends Record<string, unknown>>(
   document: T,

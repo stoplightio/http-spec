@@ -62,7 +62,6 @@
     "lodash.isequalwith": "^4.4.0",
     "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
-    "memoizee": "^0.4.15",
     "openapi3-ts": "^2.0.1",
     "postman-collection": "^4.1.0",
     "tslib": "^2.3.1",
