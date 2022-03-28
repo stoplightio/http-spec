@@ -1,10 +1,15 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { DEFAULT_ID_GENERATOR } from '../../context';
 import { transformOas3Service as _transformOas3Service } from '../service';
 
-const transformOas3Service: typeof _transformOas3Service = opts =>
-  _transformOas3Service({ generateId: DEFAULT_ID_GENERATOR, ...opts });
+const transformOas3Service: typeof _transformOas3Service = ({ document, ...opts }) =>
+  _transformOas3Service({
+    document: {
+      'x-stoplight-id': 'abc',
+      ...document,
+    },
+    ...opts,
+  });
 
 describe('oas3 service', () => {
   it('should handle non object security objects', () => {

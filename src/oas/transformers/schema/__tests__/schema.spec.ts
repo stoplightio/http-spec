@@ -1,9 +1,10 @@
 import { createContext, DEFAULT_ID_GENERATOR } from '../../../../context';
+import { resolveRef } from '../../../resolver';
 import { translateSchemaObject } from '..';
 import type { OASSchemaObject } from '../types';
 
 const translate = (schemaObject: OASSchemaObject) =>
-  translateSchemaObject.call(createContext({}, DEFAULT_ID_GENERATOR), schemaObject);
+  translateSchemaObject.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), schemaObject);
 
 describe('translateSchemaObject', () => {
   it('should translate id', () => {

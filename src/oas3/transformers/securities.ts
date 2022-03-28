@@ -1,51 +1,34 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
-import type { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
+import type { IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
+import { HttpSecurityScheme } from '@stoplight/types';
+import type { SecuritySchemeObject } from 'openapi3-ts';
 
-import { withJsonPath } from '../../context';
+import { withContext } from '../../context';
+import { isNonNullable } from '../../guards';
 import { ArrayCallbackParameters } from '../../types';
-import { getSecurities, OperationSecurities, SecurityWithKey } from '../accessors';
+import { getSecurities } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToSecurities = withJsonPath<
-  Oas3TranslateFunction<[operationSecurities: OperationSecurities], SecurityWithKey[][]>
->(function (operationSecurities: OperationSecurities) {
-  const length = this.state.enter('security');
+export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
+  function (operationSecurities) {
+    const securities = getSecurities(this.document, operationSecurities);
 
-  const securities: SecurityWithKey[][] = [];
+    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
+  };
 
-  for (const [path, security] of getSecurities(
-    this.state.document as DeepPartial<OpenAPIObject>,
-    operationSecurities,
-  )) {
-    this.state.exit(length);
-    this.state.enter(...path);
-    const transformed = translateToSingleSecurity.call(this, security);
-    if (!transformed) {
-      continue;
-    }
-
-    // todo: mah, this is awful :D
-    const actualIndex = Number(path[0]);
-    if (actualIndex >= securities.length) {
-      securities.push([]);
-    }
-
-    securities[actualIndex].push(transformed);
-  }
-
-  return securities;
-});
-
-export const translateToSingleSecurity: Oas3TranslateFunction<
-  [ArrayCallbackParameters<SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })>[0]],
-  Optional<SecurityWithKey>
-> = function (securityScheme) {
-  const { key } = securityScheme;
-
+export const translateToSingleSecurity = withContext<
+  Oas3TranslateFunction<
+    [
+      ArrayCallbackParameters<
+        [key: string, security: SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })]
+      >[0],
+    ],
+    Optional<HttpSecurityScheme>
+  >
+>(function ([key, securityScheme]) {
   const baseObject: { id: string; key: string; description?: string } = {
-    id: this.generateId('security-scheme'),
+    id: this.generateId(`http_security-${this.ids.service}-${key}`),
     key,
   };
 
@@ -103,7 +86,7 @@ export const translateToSingleSecurity: Oas3TranslateFunction<
   }
 
   return undefined;
-};
+});
 
 function transformFlows(flows: Optional<unknown>): IOauthFlowObjects {
   const transformedFlows: IOauthFlowObjects = {};

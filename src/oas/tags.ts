@@ -1,18 +1,19 @@
 import { isPlainObject } from '@stoplight/json';
 import type { INodeTag, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import { withJsonPath } from '../context';
+import { withContext } from '../context';
 import { isNonNullable, isSerializablePrimitive, isString } from '../guards';
 import type { ArrayCallbackParameters, Fragment, TranslateFunction } from '../types';
 
-const translateTag = withJsonPath<TranslateFunction<Fragment, ArrayCallbackParameters<unknown>, Optional<INodeTag>>>(
-  function (tag, i) {
+const translateTag = withContext<TranslateFunction<Fragment, ArrayCallbackParameters<unknown>, Optional<INodeTag>>>(
+  function (tag) {
     if (tag === null || !isSerializablePrimitive(tag)) return;
 
-    this.state.enter('tags', String(i));
+    const name = String(tag);
+
     return {
-      id: this.generateId('tag'),
-      name: String(tag),
+      id: this.generateId(`tag-${this.ids.service}-${name}`),
+      name,
     };
   },
 );

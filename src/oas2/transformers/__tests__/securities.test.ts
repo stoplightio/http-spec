@@ -2,10 +2,11 @@ import { DeepPartial } from '@stoplight/types';
 import { Spec } from 'swagger-schema-official';
 
 import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import { translateToSecurities as _translateToSecurities } from '../securities';
 
 const translateToSecurities = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToSecurities>) =>
-  _translateToSecurities.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
+  _translateToSecurities.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 describe('securities', () => {
   describe('translateToSecurities', () => {

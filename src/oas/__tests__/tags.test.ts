@@ -1,7 +1,9 @@
 import { createContext, DEFAULT_ID_GENERATOR } from '../../context';
+import { resolveRef } from '../resolver';
 import { translateToTags as _translateToTags } from '../tags';
 
-const translateToTags = (tags: unknown) => _translateToTags.call(createContext({}, DEFAULT_ID_GENERATOR), tags);
+const translateToTags = (tags: unknown) =>
+  _translateToTags.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), tags);
 
 describe('translateToTags', () => {
   describe.each([2, null, {}, '', 0])('when tags property is not an array', tags => {
@@ -13,7 +15,7 @@ describe('translateToTags', () => {
   it('should filter out invalid values', () => {
     expect(translateToTags([{}, null, 'foo'])).toStrictEqual([
       {
-        id: '#/tags/2',
+        id: expect.any(String),
         name: 'foo',
       },
     ]);

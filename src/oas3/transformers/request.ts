@@ -7,31 +7,31 @@ import type {
   Optional,
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
-import { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 import type { ParameterObject } from 'openapi3-ts';
 
-import { withJsonPath } from '../../context';
+import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
-import { queryValidOasParameters } from '../../oas/accessors';
+import { iterateOasParams } from '../../oas/accessors';
 import { isValidParamStyle } from '../../oas/guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
 import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
+import { translateToDefaultExample, translateToExample } from './examples';
 
-export const translateRequestBody = withJsonPath<
+export const translateRequestBody = withContext<
   Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
 >(function (requestBodyObject) {
-  this.state.enter('requestBody');
-
   const resolvedRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  const id = this.generateId(`http_request_body-${this.parentId}`);
 
   if (isRequestBodyObject(resolvedRequestBodyObject)) {
     return {
-      id: this.generateId('request-body'),
+      id,
       contents: entries(resolvedRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
       ...pickBy(
         {
@@ -43,15 +43,13 @@ export const translateRequestBody = withJsonPath<
     };
   }
 
-  return { id: this.generateId('request-body'), contents: [] };
+  return { id, contents: [] };
 });
 
-const translateParameterObjectSchema = withJsonPath<
+const translateParameterObjectSchema = withContext<
   Oas3TranslateFunction<[parameterObject: Record<string, unknown>], Optional<JSONSchema7>>
 >(function (parameterObject) {
   if (!isPlainObject(parameterObject.schema)) return;
-
-  this.state.enter('schema');
 
   return translateSchemaObject.call(this, {
     ...parameterObject.schema,
@@ -59,28 +57,27 @@ const translateParameterObjectSchema = withJsonPath<
   });
 });
 
-export const translateParameterObject = withJsonPath<
+export const translateParameterObject = withContext<
   Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam>
 >(function (parameterObject) {
-  const examples = entries(parameterObject.examples).map(([key, example]) => ({
-    key,
-    ...(example as any),
-  }));
-
-  const id = this.generateId('parameter');
-  const hasDefaultExample = examples.some(({ key }) => key.includes('default'));
+  const kind = parameterObject.in === 'path' ? 'path_param' : parameterObject.in;
+  const name = parameterObject.name;
+  const id = this.generateId(`http_${kind}-${this.parentId}-${name}`);
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   return {
     id,
-    name: parameterObject.name,
+    name,
     deprecated: !!parameterObject.deprecated,
+    required: !!parameterObject.required,
     style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
     explode: !!(parameterObject.explode ?? parameterObject.style === HttpParamStyles.Form),
-    examples:
-      'example' in parameterObject && !hasDefaultExample
-        ? [{ key: 'default', value: parameterObject.example }, ...examples]
-        : examples,
+    examples: [
+      parameterObject.example !== undefined
+        ? translateToDefaultExample.call(this, 'default', parameterObject.example)
+        : undefined,
+      ...entries(parameterObject.examples).map(translateToExample, this),
+    ].filter(isNonNullable),
 
     ...pickBy(
       {
@@ -99,7 +96,7 @@ export const translateParameterObject = withJsonPath<
   };
 });
 
-export const translateToRequest = withJsonPath<
+export const translateToRequest = withContext<
   Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IHttpOperationRequest>
 >(function (path, operation) {
   const params: Omit<IHttpOperationRequest, 'header'> & { header: IHttpHeaderParam[] } = {
@@ -109,7 +106,7 @@ export const translateToRequest = withJsonPath<
     path: [],
   };
 
-  for (const param of queryValidOasParameters.call(this, OasVersion.OAS3, operation.parameters, path.parameters)) {
+  for (const param of iterateOasParams.call(this, OasVersion.OAS3, path, operation)) {
     const { in: key } = param;
     const target = params[key];
     if (!Array.isArray(target)) continue;

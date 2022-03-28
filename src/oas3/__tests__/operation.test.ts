@@ -1,16 +1,13 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { DEFAULT_ID_GENERATOR } from '../../context';
 import {
   transformOas3Operation as _transformOas3Operation,
   transformOas3Operations as _transformOas3Operations,
 } from '../operation';
 
-const transformOas3Operation: typeof _transformOas3Operation = opts =>
-  _transformOas3Operation({ generateId: DEFAULT_ID_GENERATOR, ...opts });
+const transformOas3Operation: typeof _transformOas3Operation = opts => _transformOas3Operation(opts);
 
-const transformOas3Operations: typeof _transformOas3Operations = opts =>
-  _transformOas3Operations({ generateId: DEFAULT_ID_GENERATOR, ...opts });
+const transformOas3Operations: typeof _transformOas3Operations = opts => _transformOas3Operations(opts);
 
 describe('transformOas3Operation', () => {
   it('should return deprecated property in http operation root', () => {

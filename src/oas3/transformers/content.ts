@@ -1,6 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
 import {
-  Dictionary,
   HttpParamStyles,
   IHttpEncoding,
   IHttpHeaderParam,
@@ -11,13 +10,15 @@ import {
 import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 
-import { withJsonPath } from '../../context';
+import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
+import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { ArrayCallbackParameters, Fragment } from '../../types';
-import { entries, maybeResolveLocalRef } from '../../utils';
+import { entries } from '../../utils';
 import { isHeaderObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
+import { translateToExample } from './examples';
 
 const ACCEPTABLE_STYLES: (string | undefined)[] = [
   HttpParamStyles.Form,
@@ -26,7 +27,7 @@ const ACCEPTABLE_STYLES: (string | undefined)[] = [
   HttpParamStyles.DeepObject,
 ];
 
-function isAcceptableStyle<T extends Fragment = Fragment>(
+function hasAcceptableStyle<T extends Fragment = Fragment>(
   encodingPropertyObject: T,
 ): encodingPropertyObject is T & {
   style:
@@ -38,16 +39,14 @@ function isAcceptableStyle<T extends Fragment = Fragment>(
   return typeof encodingPropertyObject.style === 'string' && ACCEPTABLE_STYLES.includes(encodingPropertyObject.style);
 }
 
-const translateEncodingPropertyObject = withJsonPath<
+const translateEncodingPropertyObject = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
     Optional<IHttpEncoding>
   >
 >(function ([property, encodingPropertyObject]) {
   if (!isPlainObject(encodingPropertyObject)) return;
-  if (!isAcceptableStyle(encodingPropertyObject)) return;
-
-  this.state.enter('encoding', property);
+  if (!hasAcceptableStyle(encodingPropertyObject)) return;
 
   return {
     property,
@@ -71,14 +70,13 @@ const translateEncodingPropertyObject = withJsonPath<
   };
 });
 
-export const translateHeaderObject = withJsonPath<
+export const translateHeaderObject = withContext<
   Oas3TranslateFunction<ArrayCallbackParameters<[name: string, headerObject: unknown]>, Optional<IHttpHeaderParam>>
 >(function ([name, unresolvedHeaderObject]) {
   const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
   if (!isPlainObject(headerObject)) return;
 
-  this.state.enter('headers', name);
-  const id = this.generateId('header');
+  const id = this.generateId(`http_header-${this.parentId}-${name}`);
 
   if (!isHeaderObject(headerObject)) {
     return {
@@ -155,35 +153,31 @@ export const translateHeaderObject = withJsonPath<
   };
 });
 
-const translateSchemaMediaTypeObject = withJsonPath<Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>>>(
+const translateSchemaMediaTypeObject = withContext<Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>>>(
   function (schema) {
     if (!isPlainObject(schema)) return;
 
-    this.state.enter('schema');
     return translateSchemaObject.call(this, schema);
   },
 );
 
-export const translateMediaTypeObject = withJsonPath<
+export const translateMediaTypeObject = withContext<
   Oas3TranslateFunction<ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>, Optional<IMediaTypeContent>>
 >(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 
-  this.state.enter('content', mediaType);
-
-  const resolvedMediaObject = resolveMediaObject(this.state.document, mediaObject);
-  const { schema, encoding, examples } = resolvedMediaObject;
-
+  const id = this.generateId(`http_media-${this.parentId}-${mediaType}`);
+  const { schema, encoding, examples } = mediaObject;
   const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
 
-  const example = resolvedMediaObject.example || jsonSchema?.examples?.[0];
-
   return {
-    id: this.generateId('media-type'),
+    id,
     mediaType,
     // Note that I'm assuming all references are resolved
     examples: [
-      example ? translateToDefaultExample.call(this, 'default', example) : undefined,
+      mediaObject.example !== undefined
+        ? translateToDefaultExample.call(this, 'default', mediaObject.example)
+        : undefined,
       ...entries(examples).map(translateToExample, this),
     ].filter(isNonNullable),
     encodings: entries(encoding).map(translateEncodingPropertyObject, this).filter(isNonNullable),
@@ -193,57 +187,6 @@ export const translateMediaTypeObject = withJsonPath<
         schema: jsonSchema,
       },
       isNonNullable,
-    ),
-  };
-});
-
-function resolveMediaObject(document: unknown, maybeMediaObject: Dictionary<unknown>) {
-  const mediaObject = { ...maybeMediaObject };
-  if (isPlainObject(mediaObject.schema)) {
-    mediaObject.schema = maybeResolveLocalRef(document, mediaObject.schema);
-  }
-
-  if (isPlainObject(mediaObject.examples)) {
-    const examples = { ...mediaObject.examples };
-    mediaObject.examples = examples;
-    for (const [exampleName, exampleValue] of entries(examples)) {
-      examples[exampleName] = maybeResolveLocalRef(document, exampleValue);
-    }
-  }
-
-  return mediaObject;
-}
-
-const translateToDefaultExample = withJsonPath<Oas3TranslateFunction<[key: string, value: unknown], INodeExample>>(
-  function (key, value) {
-    this.state.enter('example');
-
-    return {
-      id: this.generateId('example'),
-      value,
-      key,
-    };
-  },
-);
-
-const translateToExample = withJsonPath<
-  Oas3TranslateFunction<ArrayCallbackParameters<[key: string, example: unknown]>, Optional<INodeExample>>
->(function ([key, example]) {
-  if (!isPlainObject(example)) return;
-
-  this.state.enter('examples', key);
-
-  return {
-    id: this.generateId('example'),
-    value: example.value,
-    key,
-
-    ...pickBy(
-      {
-        summary: example.summary,
-        description: example.description,
-      },
-      isString,
     ),
   };
 });

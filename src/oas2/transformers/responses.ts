@@ -3,22 +3,23 @@ import type { IHttpOperationResponse, Optional } from '@stoplight/types';
 import { DeepPartial } from '@stoplight/types';
 import { Operation } from 'swagger-schema-official';
 
+import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
+import { getEdge } from '../../track';
 import { entries } from '../../utils';
 import { getExamplesFromSchema, getProduces } from '../accessors';
 import { isResponseObject } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
 
-const translateToResponse: Oas2TranslateFunction<
-  [produces: string[], statusCode: string, response: unknown],
-  Optional<IHttpOperationResponse>
-> = function (produces, statusCode, response) {
+const translateToResponse = withContext<
+  Oas2TranslateFunction<[produces: string[], statusCode: string, response: unknown], Optional<IHttpOperationResponse>>
+>(function (produces, statusCode, response) {
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  this.state.enter('responses', statusCode);
+  const actualKey = (this.context === 'service' && getEdge(resolvedResponse)?.[1]) || statusCode;
 
   const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
   const objectifiedExamples = entries(
@@ -37,7 +38,7 @@ const translateToResponse: Oas2TranslateFunction<
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
-    id: this.generateId('security'),
+    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
     description: resolvedResponse.description,
     headers,
@@ -58,7 +59,7 @@ const translateToResponse: Oas2TranslateFunction<
   }
 
   return translatedResponses;
-};
+});
 
 export const translateToResponses: Oas2TranslateFunction<
   [operation: DeepPartial<Operation>],

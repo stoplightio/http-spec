@@ -67,7 +67,7 @@ export default [
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
         // hash('http_response-c24e2e86-200')
-        id: 'db8fc6a',
+        id: '0db8fc6a',
         code: '200',
         description: 'User Found',
         headers: [],
@@ -75,13 +75,13 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-db8fc6a-application/json')
-            id: '5f42ddcb',
+            // hash('http_media-0db8fc6a-application/json')
+            id: 'b3f52bcd',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/components/schemas/User',
+              'x-stoplight-id': expect.any(String),
               title: 'User',
               type: 'object',
               properties: {
@@ -103,13 +103,13 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-db8fc6a-application/xml')
-            id: 'f747e9ce',
+            // hash('http_media-0db8fc6a-application/xml')
+            id: 'da92702c',
             mediaType: 'application/xml',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/paths/~1users~1{userId}/get/responses/200/content/application~1xml/schema',
+              'x-stoplight-id': expect.any(String),
               type: 'string',
             },
             examples: [],
@@ -136,7 +136,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/components/responses/ErrorResponse',
+              'x-stoplight-id': expect.any(String),
               type: 'object',
               properties: {
                 error: {
@@ -164,6 +164,7 @@ export default [
     request: {
       // Request doesn't need an id
       body: {
+        id: '146a07f2',
         // Really this doesn't even need to be here... there is no request body for this op
         contents: [],
       },
@@ -176,11 +177,14 @@ export default [
           id: '7565f628',
           name: 'A-Shared-Header',
           required: false,
+          deprecated: false,
+          explode: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
             // hash(`schema-${parentId}`)? Do we set "id", "$id", "x-stoplight-id"?
-            'x-stoplight-id': '#/components/parameters/Some-Header',
+            'x-stoplight-id': expect.any(String),
             type: 'string',
           },
           examples: [],
@@ -194,11 +198,15 @@ export default [
           // hash('http_query-c24e2e86-summaryOnly')
           id: 'ee62f683',
           name: 'summaryOnly',
+          required: false,
+          deprecated: false,
+          explode: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
             // @TODO
-            'x-stoplight-id': '#/paths/~1users~1{userId}/get/parameters/0/schema',
+            'x-stoplight-id': expect.any(String),
           },
           examples: [],
         },
@@ -210,18 +218,21 @@ export default [
           // This was defined on the path, so we use the path to generate the id (thus if another operation on this path was in this doc, it would have path param with same id)
           // path's id = hash(`http_path-${parentId}-${path}`)
           // The closest parent id to a path, is the service, so this equals... (remember that path segments have characters removed, since they are basically meaningless)
-          // hash('http_path-service_abc-/users/{}') = '5574f79'
+          // hash('http_path-service_abc-/users/{}') = '05574f79'
           // and then the final path param id...
-          // hash('http_path_param-5574f79-userId') = 'e5aad2ac'
-          id: 'e5aad2ac',
+          // hash('http_path_param-05574f79-userId') = 'dc1e6338'
+          id: 'dc1e6338',
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
+          explode: false,
+          deprecated: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'integer',
             // @TODO
-            'x-stoplight-id': '#/paths/~1users~1{userId}/parameters/0/schema',
+            'x-stoplight-id': expect.any(String),
           },
           examples: [],
         },
@@ -245,7 +256,7 @@ export default [
    */
   {
     // Same process as first time... and yes, I know "POST" doesn't make sense on this path lol
-    id: '94973c6',
+    id: '094973c6',
     iid: 'post-users-userId',
     method: 'post',
     path: '/users/{userId}',
@@ -254,8 +265,8 @@ export default [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_response-94973c6-201')
-        id: 'd2f61c4f',
+        // hash('http_response-094973c6-201')
+        id: '81bbfec7',
         code: '201',
         description: 'User Created',
         headers: [],
@@ -263,13 +274,13 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-d2f61c4f-application/json')
-            id: '79d85165',
+            // hash('http_media-81bbfec7-application/json')
+            id: '71007749',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/components/schemas/User',
+              'x-stoplight-id': expect.any(String),
               title: 'User',
               type: 'object',
               properties: {
@@ -311,7 +322,7 @@ export default [
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/components/responses/ErrorResponse',
+              'x-stoplight-id': expect.any(String),
               type: 'object',
               properties: {
                 error: {
@@ -341,19 +352,19 @@ export default [
       body: {
         // hash(`http_request_body-${parentId}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_request_body-94973c6')
-        id: '42f2cb2a',
+        // hash('http_request_body-094973c6')
+        id: '4e8c97ac',
         contents: [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the request body, so ends up being...
-            // hash('http_media-42f2cb2a-application/json')
-            id: '68198af7',
+            // hash('http_media-4e8c97ac-application/json')
+            id: '48156e57',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               // @TODO
-              'x-stoplight-id': '#/components/schemas/User',
+              'x-stoplight-id': expect.any(String),
               title: 'User',
               type: 'object',
               properties: {
@@ -394,13 +405,17 @@ export default [
           // hash(`http_header-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_header-94973c6-Post-Specific-Header')
-          id: 'fde1cd99',
+          // hash('http_header-094973c6-Post-Specific-Header')
+          id: 'aeec5dfd',
           name: 'Post-Specific-Header',
+          required: false,
+          deprecated: false,
+          explode: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
-            'x-stoplight-id': '#/paths/~1users~1{userId}/post/parameters/0/schema',
+            'x-stoplight-id': expect.any(String),
             type: 'integer',
           },
           examples: [],
@@ -413,10 +428,13 @@ export default [
           id: '7565f628',
           name: 'A-Shared-Header',
           required: false,
+          deprecated: false,
+          explode: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
-            'x-stoplight-id': '#/components/parameters/Some-Header',
+            'x-stoplight-id': expect.any(String),
             type: 'string',
           },
           examples: [],
@@ -428,14 +446,17 @@ export default [
         {
           // Same process as other path param, resulting in the same
           // ID (so this path param node will end up as single instance in the graph, with an edge from each operation pointing at it)
-          id: 'e5aad2ac',
+          id: 'dc1e6338',
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
+          deprecated: false,
+          explode: false,
+          style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             // @TODO
-            'x-stoplight-id': '#/paths/~1users~1{userId}/parameters/0/schema',
+            'x-stoplight-id': expect.any(String),
             type: 'integer',
           },
           examples: [],

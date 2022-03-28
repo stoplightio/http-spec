@@ -2,12 +2,13 @@ import type { DeepPartial } from '@stoplight/types';
 import type { Spec } from 'swagger-schema-official';
 
 import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import { translateToServers as _translateToServers } from '../servers';
 
 type GlobalWithLocation = typeof global & { location?: Partial<Location> & { href: string } };
 
 const translateToServers = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToServers>) =>
-  _translateToServers.call(createContext(document, DEFAULT_ID_GENERATOR), ...params);
+  _translateToServers.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 describe('translateToServers', () => {
   afterAll(() => {

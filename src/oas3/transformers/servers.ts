@@ -1,14 +1,14 @@
 import { pickBy } from '@oclif/parser/lib/util';
 import type { INodeVariable, IServer, Optional } from '@stoplight/types';
 
-import { withJsonPath } from '../../context';
+import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
 import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isServerObject, isServerVariableObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToServers = withJsonPath<
+export const translateToServers = withContext<
   Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IServer[]>
 >(function (path, operation) {
   let servers;
@@ -16,10 +16,10 @@ export const translateToServers = withJsonPath<
     servers = operation.servers;
   } else if (Array.isArray(path.servers)) {
     servers = path.servers;
-    this.state.exit(2);
-  } else if (Array.isArray(this.state.document.servers)) {
-    servers = this.state.document.servers;
-    this.state.exit(0);
+    this.context = 'path';
+  } else if (Array.isArray(this.document.servers)) {
+    servers = this.document.servers;
+    this.context = 'service';
   } else {
     return [];
   }
@@ -27,22 +27,20 @@ export const translateToServers = withJsonPath<
   return servers.map(translateToServer, this).filter(isNonNullable);
 });
 
-export const translateToServer = withJsonPath<
+export const translateToServer = withContext<
   Oas3TranslateFunction<ArrayCallbackParameters<unknown>, Optional<IServer>>
->(function (server, i) {
+>(function (server) {
   if (!isServerObject(server)) return;
-
-  this.state.enter('servers', i);
 
   const variables = translateServerVariables.call(this, server.variables);
 
   return {
-    id: this.generateId('server'),
+    id: this.generateId(`http_server-${this.parentId}-${server.url}`),
     url: server.url,
 
     ...pickBy(
       {
-        name: this.state.document.info?.title,
+        name: this.document.info?.title,
         description: server.description,
       },
       isString,

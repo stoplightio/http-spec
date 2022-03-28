@@ -1,6 +1,6 @@
 import type { IServer, Optional } from '@stoplight/types';
 
-import { withJsonPath } from '../../context';
+import { withContext } from '../../context';
 import pickBy = require('lodash.pickby');
 
 import { isNonNullable, isString } from '../../guards';
@@ -14,10 +14,10 @@ export const translateToServers: Oas2TranslateFunction<[operation: Record<string
   let schemes;
   if (Array.isArray(operation.schemes)) {
     schemes = operation.schemes;
-    this.state.exit(2);
+    this.context = 'operation';
   } else if (Array.isArray(this.document.schemes)) {
     schemes = this.document.schemes;
-    this.state.exit(0);
+    this.context = 'service';
   } else {
     return [];
   }
@@ -25,17 +25,15 @@ export const translateToServers: Oas2TranslateFunction<[operation: Record<string
   return schemes.map(translateToServer, this).filter(isNonNullable);
 };
 
-export const translateToServer = withJsonPath<
+export const translateToServer = withContext<
   Oas2TranslateFunction<ArrayCallbackParameters<unknown>, Optional<IServer>>
->(function (scheme, i) {
+>(function (scheme) {
   const { host } = this.document;
   if (typeof host !== 'string' || host.length === 0) {
     return;
   }
 
   if (!isString(scheme) || !isValidScheme(scheme)) return;
-
-  this.state.enter('servers', String(i));
 
   const basePath =
     typeof this.document.basePath === 'string' && this.document.basePath.length > 0 ? this.document.basePath : null;
@@ -49,7 +47,7 @@ export const translateToServer = withJsonPath<
   }
 
   return {
-    id: this.generateId('server'),
+    id: this.generateId(`http_server-${this.parentId}-$.url}`),
     url: uri.toString().replace(/\/$/, ''), // Remove trailing slash
 
     ...pickBy(

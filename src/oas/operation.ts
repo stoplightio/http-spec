@@ -3,13 +3,12 @@ import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
-import type { HttpOperationTransformer, IdGenerator } from '../types';
+import type { HttpOperationTransformer } from '../types';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
 export function transformOasOperations(
   document: DeepPartial<Spec | OpenAPIObject>,
-  generateId: IdGenerator<typeof document>,
   transformer: HttpOperationTransformer<any>,
   methods: string[] | null = DEFAULT_METHODS,
 ): IHttpOperation[] {
@@ -29,7 +28,6 @@ export function transformOasOperations(
         document,
         path,
         method,
-        generateId,
       }),
     );
   });

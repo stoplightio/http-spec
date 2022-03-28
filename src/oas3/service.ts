@@ -1,21 +1,22 @@
 import { isPlainObject } from '@stoplight/json';
-import type { Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
-import { createContext, withJsonPath } from '../context';
+import type { HttpSecurityScheme, Optional } from '@stoplight/types';
+
+import { createContext, DEFAULT_ID_GENERATOR, withContext } from '../context';
 import { isNonNullable } from '../guards';
-import { DEFAULT_ID_GENERATOR } from '../oas/id';
+import { resolveRef } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
 import type { Oas3HttpServiceTransformer } from '../oas/types';
 import { ArrayCallbackParameters } from '../types';
 import { entries } from '../utils';
-import { SecurityWithKey } from './accessors';
 import { isSecurityScheme } from './guards';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
+import pickBy = require('lodash.pickby');
 
-export const transformOas3Service: Oas3HttpServiceTransformer = ({ document, generateId = DEFAULT_ID_GENERATOR }) => {
-  const ctx = createContext(document, generateId);
+export const transformOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
+  const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);
+  const { document } = ctx;
   const httpService = transformOasService.call(ctx);
 
   if (typeof document.info?.summary === 'string') {
@@ -85,17 +86,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document, gen
   return httpService;
 };
 
-const translateSecurityScheme = withJsonPath<
-  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<SecurityWithKey>>
+const translateSecurityScheme = withContext<
+  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<HttpSecurityScheme>>
 >(function ([key, definition]) {
   if (!isSecurityScheme(definition)) return;
 
-  this.state.enter('components', 'securitySchemes', key);
-
-  const transformed = translateToSingleSecurity.call(this, definition);
-  if (transformed && 'key' in transformed) {
-    transformed.key = key;
-  }
-
-  return transformed;
+  return translateToSingleSecurity.call(this, [key, definition]);
 });

@@ -11,13 +11,8 @@ import type {
   TagObject,
 } from 'openapi3-ts';
 
-import type { SecurityWithKey } from './accessors';
-
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
   isPlainObject(maybeSecurityScheme) && typeof maybeSecurityScheme.type === 'string';
-
-export const isSecuritySchemeWithKey = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecurityWithKey =>
-  isSecurityScheme(maybeSecurityScheme) && typeof maybeSecurityScheme.key === 'string';
 
 export const isBaseParameterObject = (
   maybeBaseParameterObject: unknown,

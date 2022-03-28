@@ -129,14 +129,17 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
+      "id": Any<String>,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
     },
   ],
+  "id": Any<String>,
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": Any<String>,
   },
 }
 `;
