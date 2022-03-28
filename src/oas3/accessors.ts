@@ -1,9 +1,7 @@
-import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, Dictionary, HttpSecurityScheme } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
-import type { OpenAPIObject } from 'openapi3-ts';
+import { isObject, mapValues, pickBy } from 'lodash';
+import { OAuthFlowObject, OpenAPIObject } from 'openapi3-ts';
 
-import { entries } from '../utils';
 import { isSecurityScheme, isSecuritySchemeWithKey } from './guards';
 
 export type OperationSecurities = Dictionary<string[], string>[] | undefined;
@@ -11,14 +9,14 @@ export type SecurityWithKey = HttpSecurityScheme & { key: string };
 
 export function getSecurities(
   document: DeepPartial<OpenAPIObject>,
-  operationSecurities?: unknown,
+  operationSecurities?: OperationSecurities,
 ): SecurityWithKey[][] {
   const definitions = document.components?.securitySchemes;
 
-  if (!isPlainObject(definitions)) return [];
+  if (!isObject(definitions)) return [];
 
-  return (Array.isArray(operationSecurities) ? operationSecurities : document.security || []).map(operationSecurity => {
-    return entries(operationSecurity)
+  return (operationSecurities || document.security || []).map(operationSecurity => {
+    return Object.entries(operationSecurity)
       .map(([opScheme, scopes]) => {
         const definition = definitions[opScheme];
 
@@ -26,15 +24,10 @@ export function getSecurities(
           // Put back only the flows that are part of the current definition
           return {
             ...definition,
-            flows: Object.fromEntries(
-              entries(definition.flows).map(([name, flow]) => [
-                name,
-                {
-                  ...flow,
-                  scopes: pickBy(flow?.scopes, (_val, key) => scopes?.includes(key)),
-                },
-              ]),
-            ),
+            flows: mapValues(definition.flows, (flow: OAuthFlowObject) => ({
+              ...flow,
+              scopes: pickBy(flow.scopes, (_val: string, key: string) => scopes?.includes(key)),
+            })),
             key: opScheme,
           };
         }

@@ -1,4 +1,3 @@
-import { isPlainObject } from '@stoplight/json';
 import {
   DeepPartial,
   HttpParamStyles,
@@ -7,31 +6,26 @@ import {
   IHttpOperationRequestBody,
   IHttpPathParam,
   IHttpQueryParam,
-  Optional,
 } from '@stoplight/types';
-import type { JSONSchema7 } from 'json-schema';
-import type {
+import { JSONSchema7 } from 'json-schema';
+import { get, map, pick, pickBy, set } from 'lodash';
+import { OpenAPIObject } from 'openapi3-ts';
+import {
   BodyParameter,
   FormDataParameter,
   Header,
   HeaderParameter,
   PathParameter,
   QueryParameter,
+  Spec,
 } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
-import pick = require('lodash.pick');
 
-import { isBoolean, isNonNullable, isString } from '../../guards';
-import { Oas2ParamBase } from '../../oas/guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { ArrayCallbackParameters } from '../../types';
-import { entries } from '../../utils';
-import { getExamplesFromSchema } from '../accessors';
-import { isHeaderParam } from '../guards';
-import { Oas2TranslateFunction } from '../types';
+import { isDictionary } from '../../utils';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 
 function chooseQueryParameterStyle(
-  parameter: DeepPartial<QueryParameter>,
+  parameter: QueryParameter,
 ):
   | HttpParamStyles.PipeDelimited
   | HttpParamStyles.SpaceDelimited
@@ -61,40 +55,41 @@ function chooseQueryParameterStyle(
   }
 }
 
-export const translateToHeaderParam: Oas2TranslateFunction<
-  [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
-  IHttpHeaderParam
-> = function (parameter) {
-  return {
-    style: HttpParamStyles.Simple,
+export function translateToHeaderParam(document: DeepPartial<Spec>, parameter: HeaderParameter): IHttpHeaderParam {
+  return pickBy({
+    ...buildSchemaForParameter(document, parameter),
     name: parameter.name,
-    ...buildSchemaForParameter.call(this, parameter),
-    required: !!parameter.required,
-  };
-};
+    style: HttpParamStyles.Simple,
+    required: parameter.required,
+  }) as unknown as IHttpHeaderParam;
+}
 
-const translateToHeaderParamsFromPair: Oas2TranslateFunction<
-  ArrayCallbackParameters<[name: string, value: unknown]>,
-  Optional<IHttpHeaderParam>
-> = function ([name, value]) {
-  if (!isPlainObject(value)) return;
-  const param = { name, in: 'header', ...value };
-  if (!isHeaderParam(param)) return;
-  return translateToHeaderParam.call(this, param);
-};
+export function translateToHeaderParams(
+  document: DeepPartial<Spec>,
+  headers: { [headerName: string]: Header },
+): IHttpHeaderParam[] {
+  return map(headers, (header, name) => {
+    const { schema, description } = buildSchemaForParameter(document, Object.assign({ name }, header));
 
-export const translateToHeaderParams: Oas2TranslateFunction<[headers: unknown], IHttpHeaderParam[]> = function (
-  headers,
-) {
-  return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
-};
+    const param: IHttpHeaderParam = {
+      name,
+      style: HttpParamStyles.Simple,
+      schema,
+      description,
+    };
 
-export const translateToBodyParameter: Oas2TranslateFunction<
-  [body: BodyParameter, consumes: string[]],
-  IHttpOperationRequestBody
-> = function (body, consumes) {
-  const examples = entries(body['x-examples'] || (body.schema ? getExamplesFromSchema(body.schema) : void 0)).map(
-    ([key, value]) => ({ key, value }),
+    return param;
+  });
+}
+
+export function translateToBodyParameter(
+  document: DeepPartial<OpenAPIObject>,
+  body: BodyParameter,
+  consumes: string[],
+): IHttpOperationRequestBody {
+  const examples = map(
+    get(body, 'x-examples') || (body.schema ? getExamplesFromSchema(body.schema) : void 0),
+    (value, key) => ({ key, value }),
   );
 
   return pickBy({
@@ -103,17 +98,18 @@ export const translateToBodyParameter: Oas2TranslateFunction<
     contents: consumes.map(mediaType => {
       return {
         mediaType,
-        schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
+        schema: isDictionary(body.schema) ? translateSchemaObject(document, body.schema) : void 0,
         examples,
       };
     }),
   });
-};
+}
 
-export const translateFromFormDataParameters: Oas2TranslateFunction<
-  [parameters: FormDataParameter[], consumes: string[]],
-  IHttpOperationRequestBody
-> = function (parameters, consumes) {
+export function translateFromFormDataParameters(
+  document: DeepPartial<Spec>,
+  parameters: FormDataParameter[],
+  consumes: string[],
+): IHttpOperationRequestBody {
   const finalBody: IHttpOperationRequestBody = {
     contents: consumes.map(mediaType => ({
       mediaType,
@@ -125,7 +121,7 @@ export const translateFromFormDataParameters: Oas2TranslateFunction<
   };
 
   return parameters.reduce((body, parameter) => {
-    const { schema, description } = buildSchemaForParameter.call(this, parameter);
+    const { schema, description } = buildSchemaForParameter(document, parameter);
     (body.contents || []).forEach(content => {
       delete schema.$schema;
 
@@ -133,12 +129,11 @@ export const translateFromFormDataParameters: Oas2TranslateFunction<
         schema.description = description;
       }
 
-      content.schema ||= {};
-      content.schema.properties ||= {};
-      content.schema.properties[parameter.name] = schema;
+      set(content, `schema.properties.${parameter.name}`, schema);
 
       if (parameter.required) {
-        (content.schema.required ||= []).push(parameter.name);
+        const requiredIndex = get(content, 'schema.required.length', 0);
+        set(content, `schema.required.${requiredIndex}`, parameter.name);
       }
 
       if (parameter.collectionFormat) {
@@ -151,7 +146,7 @@ export const translateFromFormDataParameters: Oas2TranslateFunction<
     });
     return body;
   }, finalBody);
-};
+}
 
 function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   switch (parameter.collectionFormat) {
@@ -183,41 +178,29 @@ function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   return null;
 }
 
-export const translateToQueryParameter: Oas2TranslateFunction<
-  [query: DeepPartial<QueryParameter> & Oas2ParamBase],
-  IHttpQueryParam
-> = function (query) {
-  return {
-    style: chooseQueryParameterStyle(query),
+export function translateToQueryParameter(document: DeepPartial<Spec>, query: QueryParameter): IHttpQueryParam {
+  return pickBy({
+    ...buildSchemaForParameter(document, query),
+    allowEmptyValue: query.allowEmptyValue,
     name: query.name,
-    required: !!query.required,
-    ...buildSchemaForParameter.call(this, query),
+    style: chooseQueryParameterStyle(query),
+    required: query.required,
+  }) as unknown as IHttpQueryParam;
+}
 
-    ...pickBy(
-      {
-        allowEmptyValue: query.allowEmptyValue,
-      },
-      isBoolean,
-    ),
-  };
-};
-
-export const translateToPathParameter: Oas2TranslateFunction<
-  [param: DeepPartial<PathParameter> & Oas2ParamBase],
-  IHttpPathParam
-> = function (param) {
-  return {
-    name: param.name,
+export function translateToPathParameter(document: DeepPartial<Spec>, parameter: PathParameter): IHttpPathParam {
+  return pickBy({
+    ...buildSchemaForParameter(document, parameter),
+    name: parameter.name,
     style: HttpParamStyles.Simple,
-    required: !!param.required,
-    ...buildSchemaForParameter.call(this, param),
-  };
-};
+    required: parameter.required,
+  }) as unknown as IHttpPathParam;
+}
 
-const buildSchemaForParameter: Oas2TranslateFunction<
-  [param: DeepPartial<QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header>],
-  { schema: JSONSchema7; description?: string; deprecated?: boolean }
-> = function (param) {
+function buildSchemaForParameter(
+  document: DeepPartial<Spec>,
+  param: QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header,
+): { schema: JSONSchema7; description?: string } {
   const schema = pick(
     param,
     'type',
@@ -237,21 +220,15 @@ const buildSchemaForParameter: Oas2TranslateFunction<
     'pattern',
     'uniqueItems',
     'multipleOf',
-  ) as Record<string, unknown>;
+  );
 
   if ('allowEmptyValue' in param && param.allowEmptyValue === false) {
     schema.minLength = 1;
   }
 
   return {
-    schema: translateSchemaObject.call(this, schema),
-    deprecated: !!param['x-deprecated'],
-
-    ...pickBy(
-      {
-        description: param.description,
-      },
-      isString,
-    ),
+    schema: translateSchemaObject(document, schema),
+    description: param.description,
+    ...('x-deprecated' in param && { deprecated: param['x-deprecated'] }),
   };
-};
+}

@@ -41,10 +41,12 @@ describe('oas2 service', () => {
       version: '1.0',
       servers: [
         {
+          description: void 0,
           name: '',
           url: 'https://petstore.swagger.io/v2',
         },
         {
+          description: void 0,
           name: '',
           url: 'http://petstore.swagger.io/v2',
         },

@@ -48,6 +48,8 @@ Object {
           },
         },
       ],
+      "description": undefined,
+      "required": undefined,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -109,8 +111,9 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "name": "title",
+      "description": undefined,
       "url": "operation/server",
+      "variables": undefined,
     },
   ],
   "summary": "summary",
@@ -140,8 +143,9 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "name": "title",
+      "description": undefined,
       "url": "path/server",
+      "variables": undefined,
     },
   ],
   "summary": "summary",
@@ -201,8 +205,9 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "name": "title",
+      "description": undefined,
       "url": "spec/server",
+      "variables": undefined,
     },
   ],
   "summary": "summary",

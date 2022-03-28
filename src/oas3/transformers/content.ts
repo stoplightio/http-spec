@@ -1,5 +1,5 @@
-import { isPlainObject } from '@stoplight/json';
 import {
+  DeepPartial,
   Dictionary,
   HttpParamStyles,
   IHttpEncoding,
@@ -8,69 +8,48 @@ import {
   INodeExample,
   Optional,
 } from '@stoplight/types';
-import type { JSONSchema7 } from 'json-schema';
-import pickBy = require('lodash.pickby');
+import { JSONSchema7 } from 'json-schema';
+import { compact, each, get, isObject, keys, map, omit, pickBy, union, values } from 'lodash';
+import { EncodingPropertyObject, HeaderObject, MediaTypeObject, OpenAPIObject } from 'openapi3-ts';
 
-import { isBoolean, isNonNullable, isString } from '../../guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { ArrayCallbackParameters, Fragment } from '../../types';
-import { entries, maybeResolveLocalRef } from '../../utils';
+import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isHeaderObject } from '../guards';
-import { Oas3TranslateFunction } from '../types';
 
-const ACCEPTABLE_STYLES: (string | undefined)[] = [
-  HttpParamStyles.Form,
-  HttpParamStyles.SpaceDelimited,
-  HttpParamStyles.PipeDelimited,
-  HttpParamStyles.DeepObject,
-];
+function translateEncodingPropertyObject(
+  encodingPropertyObject: EncodingPropertyObject,
+  property: string,
+): IHttpEncoding {
+  const acceptableStyles: (string | undefined)[] = [
+    HttpParamStyles.Form,
+    HttpParamStyles.SpaceDelimited,
+    HttpParamStyles.PipeDelimited,
+    HttpParamStyles.DeepObject,
+  ];
 
-function isAcceptableStyle<T extends Fragment = Fragment>(
-  encodingPropertyObject: T,
-): encodingPropertyObject is T & {
-  style:
-    | HttpParamStyles.Form
-    | HttpParamStyles.SpaceDelimited
-    | HttpParamStyles.PipeDelimited
-    | HttpParamStyles.DeepObject;
-} {
-  return typeof encodingPropertyObject.style === 'string' && ACCEPTABLE_STYLES.includes(encodingPropertyObject.style);
-}
-
-const translateEncodingPropertyObject: Oas3TranslateFunction<
-  ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
-  Optional<IHttpEncoding>
-> = function ([property, encodingPropertyObject]) {
-  if (!isPlainObject(encodingPropertyObject)) return;
-  if (!isAcceptableStyle(encodingPropertyObject)) return;
+  if (encodingPropertyObject.style && !acceptableStyles.includes(encodingPropertyObject.style)) {
+    throw new Error(
+      `Encoding property style: '${encodingPropertyObject.style}' is incorrect, must be one of: ${acceptableStyles}`,
+    );
+  }
 
   return {
     property,
-    explode: !!(encodingPropertyObject.explode ?? encodingPropertyObject.style === HttpParamStyles.Form),
-    style: encodingPropertyObject.style,
-    headers: entries(encodingPropertyObject.headers).map(translateHeaderObject, this).filter(isNonNullable),
-
-    ...pickBy(
-      {
-        allowReserved: encodingPropertyObject.allowReserved,
-      },
-      isBoolean,
-    ),
-
-    ...pickBy(
-      {
-        mediaType: encodingPropertyObject.contentType,
-      },
-      isString,
+    ...encodingPropertyObject,
+    // workaround for 'style' being one of the accepted HttpParamStyles
+    style: encodingPropertyObject.style as any,
+    mediaType: encodingPropertyObject.contentType,
+    headers: compact<IHttpHeaderParam>(
+      map<Dictionary<unknown> & unknown, Optional<IHttpHeaderParam>>(
+        encodingPropertyObject.headers,
+        translateHeaderObject,
+      ),
     ),
   };
-};
+}
 
-export const translateHeaderObject = <
-  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, headerObject: unknown]>, Optional<IHttpHeaderParam>>
->function ([name, unresolvedHeaderObject]) {
-  const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
-  if (!isPlainObject(headerObject)) return;
+export function translateHeaderObject(headerObject: unknown, name: string): Optional<IHttpHeaderParam> {
+  if (!isObject(headerObject)) return;
 
   if (!isHeaderObject(headerObject)) {
     return {
@@ -83,150 +62,116 @@ export const translateHeaderObject = <
 
   const { content: contentObject } = headerObject;
 
-  const contentValue = isPlainObject(contentObject) ? Object.values(contentObject)[0] : null;
+  const contentValue = values(contentObject)[0];
 
-  const baseContent: IHttpHeaderParam = {
+  const baseContent = {
+    // TODO(SL-249): we are missing examples in our types, on purpose?
+    // examples: parameterObject.examples,
+    ...omit(headerObject, 'content', 'style', 'examples', 'example', 'schema'),
     name,
-    style: HttpParamStyles.Simple,
-    explode: !!headerObject.explode,
-
-    ...pickBy(
-      {
-        schema: isPlainObject(headerObject.schema) ? translateSchemaObject.call(this, headerObject.schema) : null,
-        content: headerObject.content,
-      },
-      isNonNullable,
-    ),
-
-    ...pickBy(
-      {
-        description: headerObject.description,
-      },
-      isString,
-    ),
-
-    ...pickBy(
-      {
-        allowEmptyValue: headerObject.allowEmptyValue,
-        allowReserved: headerObject.allowReserved,
-
-        required: headerObject.required,
-        deprecated: headerObject.deprecated,
-      },
-      isBoolean,
-    ),
+    style: headerObject?.style ?? HttpParamStyles.Simple,
   };
 
   const examples: INodeExample[] = [];
   const encodings: IHttpEncoding[] = [];
 
-  if (isPlainObject(contentValue)) {
-    examples.push(...entries(contentValue.examples).map(translateToExample, this).filter(isNonNullable));
+  if (contentValue) {
+    examples.push(...keys(contentValue.examples).map<INodeExample>(transformExamples(contentValue)));
 
-    if (isPlainObject(contentValue.encoding)) {
-      encodings.push(...(Object.values(contentValue.encoding) as IHttpEncoding[]));
-    }
+    encodings.push(...values<IHttpEncoding>(contentValue.encoding));
 
-    if ('example' in contentValue) {
-      examples.push(transformDefaultExample.call(this, '__default_content', contentValue.example));
+    if (contentValue.example) {
+      examples.push({
+        key: '__default_content',
+        value: contentValue.example,
+      });
     }
   }
 
-  examples.push(...entries(headerObject.examples).map(translateToExample, this).filter(isNonNullable));
+  examples.push(...keys(headerObject.examples).map<INodeExample>(transformExamples(headerObject)));
 
-  if ('example' in headerObject) {
-    examples.push(transformDefaultExample.call(this, '__default', headerObject.example));
+  if (headerObject.example) {
+    examples.push({
+      key: '__default',
+      value: headerObject.example,
+    });
   }
 
-  return {
+  return pickBy({
     ...baseContent,
+    schema: get(headerObject, 'schema') as any,
     encodings,
     examples,
-  };
-};
+  }) as unknown as IHttpHeaderParam;
+}
 
-const translateSchemaMediaTypeObject: Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>> = function (
-  schema,
-) {
-  if (!isPlainObject(schema)) return;
+export function translateMediaTypeObject(
+  document: DeepPartial<OpenAPIObject>,
+  mediaObject: unknown,
+  mediaType: string,
+): Optional<IMediaTypeContent> {
+  if (!isDictionary(mediaObject)) return;
 
-  return translateSchemaObject.call(this, schema);
-};
-
-export const translateMediaTypeObject: Oas3TranslateFunction<
-  ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>,
-  Optional<IMediaTypeContent>
-> = function ([mediaType, mediaObject]) {
-  if (!isPlainObject(mediaObject)) return;
-
-  const resolvedMediaObject = resolveMediaObject(this.document, mediaObject);
+  const resolvedMediaObject = resolveMediaObject(document, mediaObject);
   const { schema, encoding, examples } = resolvedMediaObject;
 
-  const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
+  let jsonSchema: Optional<JSONSchema7>;
+
+  if (isObject(schema)) {
+    try {
+      jsonSchema = translateSchemaObject(document, schema);
+    } catch {
+      // happens
+    }
+  }
 
   const example = resolvedMediaObject.example || jsonSchema?.examples?.[0];
 
   return {
     mediaType,
+    schema: jsonSchema,
     // Note that I'm assuming all references are resolved
-    examples: [
-      example ? transformDefaultExample.call(this, 'default', example) : undefined,
-      ...entries(examples).map(translateToExample, this),
-    ].filter(isNonNullable),
-    encodings: entries(encoding).map(translateEncodingPropertyObject, this).filter(isNonNullable),
-
-    ...pickBy(
-      {
-        schema: jsonSchema,
-      },
-      isNonNullable,
+    examples: compact(
+      union<INodeExample>(
+        example ? [{ key: 'default', value: example }] : undefined,
+        isDictionary(examples)
+          ? Object.keys(examples).map<INodeExample>(exampleKey => ({
+              key: exampleKey,
+              summary: get(examples, [exampleKey, 'summary']),
+              description: get(examples, [exampleKey, 'description']),
+              value: get(examples, [exampleKey, 'value']),
+            }))
+          : [],
+      ),
     ),
+    encodings: map<any, IHttpEncoding>(encoding, translateEncodingPropertyObject),
   };
-};
+}
 
-function resolveMediaObject(document: unknown, maybeMediaObject: Dictionary<unknown>) {
+function resolveMediaObject(document: DeepPartial<OpenAPIObject>, maybeMediaObject: Dictionary<unknown>) {
   const mediaObject = { ...maybeMediaObject };
-  if (isPlainObject(mediaObject.schema)) {
+  if (isDictionary(mediaObject.schema)) {
     mediaObject.schema = maybeResolveLocalRef(document, mediaObject.schema);
   }
 
-  if (isPlainObject(mediaObject.examples)) {
+  if (isDictionary(mediaObject.examples)) {
     const examples = { ...mediaObject.examples };
     mediaObject.examples = examples;
-    for (const [exampleName, exampleValue] of entries(examples)) {
+    each(examples, (exampleValue, exampleName) => {
       examples[exampleName] = maybeResolveLocalRef(document, exampleValue);
-    }
+    });
   }
 
   return mediaObject;
 }
 
-const transformDefaultExample: Oas3TranslateFunction<[key: string, value: unknown], INodeExample> = function (
-  key,
-  value,
-) {
-  return {
-    value,
-    key,
+const transformExamples =
+  (source: MediaTypeObject | HeaderObject) =>
+  (key: string): INodeExample => {
+    return {
+      summary: get(source, ['examples', key, 'summary']),
+      description: get(source, ['examples', key, 'description']),
+      value: get(source, ['examples', key, 'value']),
+      key,
+    };
   };
-};
-
-const translateToExample: Oas3TranslateFunction<
-  ArrayCallbackParameters<[key: string, example: unknown]>,
-  Optional<INodeExample>
-> = function ([key, example]) {
-  if (!isPlainObject(example)) return;
-
-  return {
-    value: example.value,
-    key,
-
-    ...pickBy(
-      {
-        summary: example.summary,
-        description: example.description,
-      },
-      isString,
-    ),
-  };
-};

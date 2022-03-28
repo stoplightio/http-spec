@@ -1,8 +1,7 @@
-import { createContext } from '../../../../context';
 import { translateSchemaObject } from '..';
-import type { OASSchemaObject } from '../types';
+import { OASSchemaObject } from '../types';
 
-const translate = (schemaObject: OASSchemaObject) => translateSchemaObject.call(createContext({}), schemaObject);
+const translate = (schemaObject: OASSchemaObject) => translateSchemaObject({}, schemaObject);
 
 describe('translateSchemaObject', () => {
   it('should translate id', () => {

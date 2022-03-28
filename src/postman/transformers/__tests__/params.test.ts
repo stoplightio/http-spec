@@ -255,7 +255,7 @@ describe('transformBody()', () => {
         );
 
         // verify shape of example object
-        expect(Object.entries((result!.contents![0].examples![0] as INodeExample).value as unknown[])).toEqual(
+        expect(Object.entries((result!.contents![0].examples![0] as INodeExample).value)).toEqual(
           expect.arrayContaining([
             [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), 'v1'],
             [expect.stringMatching(/^_gen_[0-9a-f]{6}$/), 'v2'],
@@ -264,7 +264,7 @@ describe('transformBody()', () => {
 
         // ensure both share exactly the same keys
         expect(Object.keys(result!.contents![0].schema!.properties!).sort()).toEqual(
-          Object.keys((result!.contents![0].examples![0] as INodeExample).value as unknown[]).sort(),
+          Object.keys((result!.contents![0].examples![0] as INodeExample).value).sort(),
         );
       });
     });

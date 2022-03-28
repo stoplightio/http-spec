@@ -37,10 +37,12 @@ Object {
   ],
   "servers": Array [
     Object {
+      "description": undefined,
       "name": "Swagger Petstore",
       "url": "https://petstore.swagger.io/v2",
     },
     Object {
+      "description": undefined,
       "name": "Swagger Petstore",
       "url": "http://petstore.swagger.io/v2",
     },
@@ -48,6 +50,10 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "externalDocs": Object {
+        "description": "Find out more",
+        "url": "http://swagger.io",
+      },
       "name": "pet",
     },
     Object {
@@ -56,6 +62,10 @@ Object {
     },
     Object {
       "description": "Operations about user",
+      "externalDocs": Object {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io",
+      },
       "name": "user",
     },
   ],
@@ -99,10 +109,12 @@ Object {
   ],
   "servers": Array [
     Object {
+      "description": undefined,
       "name": "Swagger Petstore",
       "url": "https://petstore.swagger.io/v2",
     },
     Object {
+      "description": undefined,
       "name": "Swagger Petstore",
       "url": "http://petstore.swagger.io/v2",
     },
@@ -110,6 +122,10 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "externalDocs": Object {
+        "description": "Find out more",
+        "url": "http://swagger.io",
+      },
       "name": "pet",
     },
     Object {
@@ -118,6 +134,10 @@ Object {
     },
     Object {
       "description": "Operations about user",
+      "externalDocs": Object {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io",
+      },
       "name": "user",
     },
   ],

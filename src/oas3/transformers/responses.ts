@@ -1,36 +1,56 @@
-import type { IHttpOperationResponse, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import {
+  DeepPartial,
+  Dictionary,
+  IHttpHeaderParam,
+  IHttpOperationResponse,
+  IMediaTypeContent,
+  Optional,
+} from '@stoplight/types';
+import { compact, map, partial, reduce } from 'lodash';
+import { OpenAPIObject } from 'openapi3-ts';
 
-import { isNonNullable, isString } from '../../guards';
-import type { ArrayCallbackParameters } from '../../types';
-import { entries } from '../../utils';
+import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
-import type { Oas3TranslateFunction } from '../types';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-const translateToResponse: Oas3TranslateFunction<
-  ArrayCallbackParameters<[statusCode: string, response: unknown]>,
-  Optional<IHttpOperationResponse>
-> = function ([statusCode, response]) {
-  const resolvedResponse = this.maybeResolveLocalRef(response);
+function translateToResponse(
+  document: DeepPartial<OpenAPIObject>,
+  response: unknown,
+  statusCode: string,
+): Optional<IHttpOperationResponse> {
+  const resolvedResponse = maybeResolveLocalRef(document, response);
   if (!isResponseObject(resolvedResponse)) return;
+
+  const dereferencedHeaders = reduce(
+    resolvedResponse.headers,
+    (result, header, name) => {
+      return { ...result, [name]: maybeResolveLocalRef(document, header) };
+    },
+    {},
+  );
 
   return {
     code: statusCode,
-    headers: entries(resolvedResponse.headers).map(translateHeaderObject, this).filter(isNonNullable),
-    contents: entries(resolvedResponse.content).map(translateMediaTypeObject, this).filter(isNonNullable),
-
-    ...pickBy(
-      {
-        description: resolvedResponse.description,
-      },
-      isString,
+    description: resolvedResponse.description,
+    headers: compact<IHttpHeaderParam>(map(dereferencedHeaders, translateHeaderObject)),
+    contents: compact<IMediaTypeContent>(
+      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
+        resolvedResponse.content,
+        partial(translateMediaTypeObject, document),
+      ),
     ),
   };
-};
+}
 
-export const translateToResponses: Oas3TranslateFunction<[responses: unknown], IHttpOperationResponse[]> = function (
-  responses,
-) {
-  return entries(responses).map(translateToResponse, this).filter(isNonNullable);
-};
+export function translateToResponses(
+  document: DeepPartial<OpenAPIObject>,
+  responses: unknown,
+): IHttpOperationResponse[] {
+  if (!isDictionary(responses)) {
+    return [];
+  }
+
+  return compact<IHttpOperationResponse>(
+    map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(responses, partial(translateToResponse, document)),
+  );
+}

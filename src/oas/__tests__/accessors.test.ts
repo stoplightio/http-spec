@@ -1,29 +1,27 @@
-import { getValidOasParameters } from '../accessors';
-import { OasVersion } from '../types';
+import { getOasTags, getValidOasParameters } from '../accessors';
 
 describe('getOasParameters', () => {
   it('should return empty array', () => {
-    expect(getValidOasParameters({}, OasVersion.OAS2, undefined, undefined)).toEqual([]);
+    expect(getValidOasParameters({}, undefined, undefined)).toEqual([]);
   });
 
   it('should fallback to operation parameters', () => {
     expect(
       getValidOasParameters(
         {},
-        OasVersion.OAS2,
         [
-          { name: 'n1', in: 'header' },
-          { name: 'n2', in: 'query' },
+          { name: 'n1', in: 'i1' },
+          { name: 'n2', in: 'i2' },
         ],
         undefined,
       ),
     ).toEqual([
       {
-        in: 'header',
+        in: 'i1',
         name: 'n1',
       },
       {
-        in: 'query',
+        in: 'i2',
         name: 'n2',
       },
     ]);
@@ -31,17 +29,17 @@ describe('getOasParameters', () => {
 
   it('should fallback to path parameters', () => {
     expect(
-      getValidOasParameters({}, OasVersion.OAS2, undefined, [
-        { name: 'n1', in: 'header' },
-        { name: 'n2', in: 'query' },
+      getValidOasParameters({}, undefined, [
+        { name: 'n1', in: 'i1' },
+        { name: 'n2', in: 'i2' },
       ]),
     ).toEqual([
       {
-        in: 'header',
+        in: 'i1',
         name: 'n1',
       },
       {
-        in: 'query',
+        in: 'i2',
         name: 'n2',
       },
     ]);
@@ -51,30 +49,45 @@ describe('getOasParameters', () => {
     expect(
       getValidOasParameters(
         {},
-        OasVersion.OAS3,
         [
-          { name: 'n1', in: 'query', type: 'array' },
-          { name: 'no2', in: 'header' },
+          { name: 'n1', in: 'n1', type: 'array' },
+          { name: 'no2', in: 'io2' },
         ],
         [
-          { name: 'n1', in: 'query', type: 'string' },
-          { name: 'np3', in: 'header' },
+          { name: 'n1', in: 'n1', type: 'string' },
+          { name: 'np3', in: 'ip3' },
         ],
       ),
     ).toEqual([
       {
-        in: 'query',
+        in: 'n1',
         name: 'n1',
         type: 'array',
       },
       {
-        in: 'header',
+        in: 'io2',
         name: 'no2',
       },
       {
-        in: 'header',
+        in: 'ip3',
         name: 'np3',
       },
     ]);
+  });
+});
+
+describe('getOasTags', () => {
+  describe.each([2, null, {}, '', 0])('when tags property is not an array', tags => {
+    it('should return empty array', () => {
+      expect(getOasTags(tags)).toEqual([]);
+    });
+  });
+
+  it('should filter out invalid values', () => {
+    expect(getOasTags([{}, null, 'foo'])).toEqual(['foo']);
+  });
+
+  it('should normalize values', () => {
+    expect(getOasTags([0, 'foo', true])).toEqual(['0', 'foo', 'true']);
   });
 });

@@ -1,15 +1,13 @@
-import { isPlainObject } from '@stoplight/json';
-import type { IHttpOperation } from '@stoplight/types';
-import type { Spec } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
+import { IHttpOperation } from '@stoplight/types';
+import { get, isNil, omitBy } from 'lodash';
+import { Operation, Parameter, Path, Response, Spec } from 'swagger-schema-official';
 
-import { createContext } from '../context';
-import { isString } from '../guards';
-import { getExtensions } from '../oas/accessors';
+import { getExtensions, getOasTags, getValidOasParameters } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
-import { translateToTags } from '../oas/tags';
+import { translateToTags } from '../oas/tag';
 import { Oas2HttpOperationTransformer } from '../oas/types';
 import { maybeResolveLocalRef } from '../utils';
+import { getConsumes, getProduces } from './accessors';
 import { translateToRequest } from './transformers/request';
 import { translateToResponses } from './transformers/responses';
 import { translateToSecurities } from './transformers/securities';
@@ -20,40 +18,42 @@ export function transformOas2Operations(document: Spec): IHttpOperation[] {
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document, path, method }) => {
-  const pathObj = maybeResolveLocalRef(document, document?.paths?.[path]);
-  if (!isPlainObject(pathObj)) {
+  const pathObj = maybeResolveLocalRef(document, get(document, ['paths', path])) as Path;
+  if (!pathObj) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = maybeResolveLocalRef(document, pathObj[method]);
-  if (!isPlainObject(operation)) {
+  const operation = maybeResolveLocalRef(document, get(document, ['paths', path, method])) as Operation & {
+    [extension: string]: unknown;
+  };
+  if (!operation) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
 
-  const ctx = createContext(document);
+  const produces = getProduces(document, operation);
+  const consumes = getConsumes(document, operation);
 
-  return {
+  const httpOperation: IHttpOperation = {
+    // TODO(SL-248): what shall we do with id?
     id: '?http-operation-id?',
+    iid: operation.operationId,
+    description: operation.description,
+    deprecated: operation.deprecated,
+    internal: operation['x-internal'] as boolean,
     method,
     path,
-
-    deprecated: !!operation.deprecated,
-    internal: !!operation['x-internal'],
-
-    responses: translateToResponses.call(ctx, operation),
-    servers: translateToServers.call(ctx, operation),
-    request: translateToRequest.call(ctx, pathObj, operation),
-    tags: translateToTags.call(ctx, operation.tags),
-    security: translateToSecurities.call(ctx, operation.security),
-    extensions: getExtensions(operation),
-
-    ...pickBy(
-      {
-        iid: operation.operationId,
-        description: operation.description,
-        summary: operation.summary,
-      },
-      isString,
+    summary: operation.summary,
+    responses: translateToResponses(document, operation.responses as { [name: string]: Response }, produces),
+    servers: translateToServers(document, operation),
+    request: translateToRequest(
+      document,
+      getValidOasParameters(document, operation.parameters as Parameter[], pathObj.parameters as Parameter[]),
+      consumes,
     ),
+    tags: translateToTags(getOasTags(operation.tags)),
+    security: translateToSecurities(document, operation.security),
+    extensions: getExtensions(operation),
   };
+
+  return omitBy(httpOperation, isNil) as IHttpOperation;
 };

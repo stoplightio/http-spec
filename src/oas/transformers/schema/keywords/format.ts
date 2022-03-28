@@ -1,6 +1,6 @@
-import type { JSONSchema7 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
-import type { Converter } from '../types';
+import { Converter } from '../types';
 
 const ranges = {
   MIN_INT_32: 0 - 2 ** 31,

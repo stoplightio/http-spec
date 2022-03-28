@@ -1,7 +1,16 @@
-import { hasRef, isLocalRef, isPlainObject, resolveInlineRef } from '@stoplight/json';
+import { hasRef, isLocalRef, resolveInlineRef } from '@stoplight/json';
+import { Dictionary, Optional } from '@stoplight/types';
+import { isObjectLike, map } from 'lodash';
+
+export function mapToKeys<T>(collection: Optional<T[]>) {
+  return map(collection, Object.keys);
+}
+
+export const isDictionary = (maybeDictionary: unknown): maybeDictionary is Dictionary<unknown> =>
+  isObjectLike(maybeDictionary);
 
 export const maybeResolveLocalRef = (document: unknown, target: unknown): unknown => {
-  if (isPlainObject(document) && hasRef(target) && isLocalRef(target.$ref)) {
+  if (isDictionary(document) && hasRef(target) && isLocalRef(target.$ref)) {
     try {
       return resolveInlineRef(document, target.$ref);
     } catch {
@@ -11,11 +20,3 @@ export const maybeResolveLocalRef = (document: unknown, target: unknown): unknow
 
   return target;
 };
-
-export { isPlainObject as isDictionary };
-
-export function entries<T = Record<string, unknown>>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
-export function entries<T = unknown>(o: T): [string, T][];
-export function entries<T = unknown>(o: T): [string, T][] {
-  return isPlainObject(o) ? Object.entries(o as T) : [];
-}

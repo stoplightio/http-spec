@@ -1,13 +1,6 @@
-import type { IHttpOperationRequest } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
-import type { BodyParameter, FormDataParameter } from 'swagger-schema-official';
+import { DeepPartial, IHttpOperationRequest } from '@stoplight/types';
+import { BodyParameter, FormDataParameter, Parameter, Spec } from 'swagger-schema-official';
 
-import { isNonNullable } from '../../guards';
-import { OasVersion } from '../../oas';
-import { getValidOasParameters } from '../../oas/accessors';
-import { getConsumes } from '../accessors';
-import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
-import { Oas2TranslateFunction } from '../types';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -16,50 +9,38 @@ import {
   translateToQueryParameter,
 } from './params';
 
-export const translateToRequest: Oas2TranslateFunction<
-  [path: Record<string, unknown>, operation: Record<string, unknown>],
-  IHttpOperationRequest
-> = function (path, operation) {
-  const consumes = getConsumes(this.document, operation);
-  const parameters = getValidOasParameters(this.document, OasVersion.OAS2, operation.parameters, path.parameters);
-
-  const bodyParameter = parameters.find((p): p is BodyParameter => p.in === 'body');
+export function translateToRequest(
+  document: DeepPartial<Spec>,
+  parameters: Parameter[],
+  consumes: string[],
+): IHttpOperationRequest {
+  const bodyParameters = parameters.filter((p): p is BodyParameter => p.in === 'body');
   const formDataParameters = parameters.filter((p): p is FormDataParameter => p.in === 'formData');
+  const request: IHttpOperationRequest = {};
 
-  const params: Omit<Required<IHttpOperationRequest>, 'body'> = {
-    headers: [],
-    query: [],
-    cookie: [],
-    path: [],
-  };
-
-  let body;
   // if 'body' and 'form data' defined prefer 'body'
-  if (!!bodyParameter) {
+  if (!!bodyParameters.length) {
     // There can be only one body parameter (taking first one)
-    body = translateToBodyParameter.call(this, bodyParameter, consumes);
+    request.body = translateToBodyParameter(document, bodyParameters[0], consumes);
   } else if (!!formDataParameters.length) {
-    body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
+    request.body = translateFromFormDataParameters(document, formDataParameters, consumes);
   }
 
-  for (const param of parameters) {
-    if (isQueryParam(param)) {
-      params.query.push(translateToQueryParameter.call(this, param));
-    } else if (isPathParam(param)) {
-      params.path.push(translateToPathParameter.call(this, param));
-    } else if (isHeaderParam(param)) {
-      params.headers.push(translateToHeaderParam.call(this, param));
+  return parameters.reduce(createReduceRemainingParameters(document), request);
+}
+
+function createReduceRemainingParameters(document: DeepPartial<Spec>) {
+  return function (request: IHttpOperationRequest, parameter: Parameter) {
+    if (parameter.in === 'query') {
+      const queryParameter = translateToQueryParameter(document, parameter);
+      request.query = (request.query || []).concat(queryParameter);
+    } else if (parameter.in === 'path') {
+      const pathParameter = translateToPathParameter(document, parameter);
+      request.path = (request.path || []).concat(pathParameter);
+    } else if (parameter.in === 'header') {
+      const headerParameter = translateToHeaderParam(document, parameter);
+      request.headers = (request.headers || []).concat(headerParameter);
     }
-  }
-
-  return {
-    ...params,
-
-    ...pickBy(
-      {
-        body,
-      },
-      isNonNullable,
-    ),
+    return request;
   };
-};
+}

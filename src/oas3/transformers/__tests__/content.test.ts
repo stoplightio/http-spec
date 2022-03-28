@@ -1,16 +1,6 @@
-import type { SchemaObject } from 'openapi3-ts';
+import { SchemaObject } from 'openapi3-ts';
 
-import { createContext } from '../../../context';
-import {
-  translateHeaderObject as _translateHeaderObject,
-  translateMediaTypeObject as _translateMediaTypeObject,
-} from '../content';
-
-const translateMediaTypeObject = (document: any, object: unknown, key: string) =>
-  _translateMediaTypeObject.call(createContext(document), [key, object], 0, []);
-
-const translateHeaderObject = (object: unknown, key: string) =>
-  _translateHeaderObject.call(createContext({}), [key, object], 0, []);
+import { translateHeaderObject, translateMediaTypeObject } from '../content';
 
 describe('translateMediaTypeObject', () => {
   afterEach(() => {
@@ -26,6 +16,28 @@ describe('translateMediaTypeObject', () => {
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
+      schema: void 0,
+    });
+  });
+
+  it('given invalid schema, should return nothing', () => {
+    expect(
+      translateMediaTypeObject(
+        {},
+        {
+          schema: {
+            get properties() {
+              throw new Error('I am invalid');
+            },
+          },
+        },
+        'mediaType',
+      ),
+    ).toStrictEqual({
+      encodings: [],
+      examples: [],
+      mediaType: 'mediaType',
+      schema: void 0,
     });
   });
 
@@ -42,6 +54,7 @@ describe('translateMediaTypeObject', () => {
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
+      schema: void 0,
     });
   });
 
@@ -146,7 +159,7 @@ describe('translateMediaTypeObject', () => {
     ).toMatchSnapshot();
   });
 
-  it('should skip nullish headers', () => {
+  it('given complex nested media type object with nullish headers should translate correctly', () => {
     expect(
       translateMediaTypeObject(
         {},
@@ -166,6 +179,26 @@ describe('translateMediaTypeObject', () => {
         'mediaType',
       ),
     ).toMatchSnapshot();
+  });
+
+  it('given encoding with incorrect style should throw an error', () => {
+    const testedFunction = () => {
+      translateMediaTypeObject(
+        {},
+        {
+          schema: {},
+          examples: { example: { summary: 'multi example' } },
+          encoding: {
+            enc1: {
+              contentType: 'text/plain',
+              style: 'xyz',
+            },
+          },
+        },
+        'mediaType',
+      );
+    };
+    expect(testedFunction).toThrowErrorMatchingSnapshot();
   });
 
   it('given encoding with no style it should not throw an error', () => {

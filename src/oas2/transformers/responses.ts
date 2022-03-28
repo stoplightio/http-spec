@@ -1,34 +1,34 @@
-import { isPlainObject } from '@stoplight/json';
-import type { IHttpOperationResponse, Optional } from '@stoplight/types';
-import { DeepPartial } from '@stoplight/types';
-import { Operation } from 'swagger-schema-official';
+import type { DeepPartial, Dictionary, IHttpOperationResponse, Optional } from '@stoplight/types';
+import { chain, compact, map, partial } from 'lodash';
+import type { Spec } from 'swagger-schema-official';
 
-import { isNonNullable } from '../../guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { entries } from '../../utils';
-import { getExamplesFromSchema, getProduces } from '../accessors';
+import { isDictionary, maybeResolveLocalRef } from '../../utils';
 import { isResponseObject } from '../guards';
-import { Oas2TranslateFunction } from '../types';
+import { getExamplesFromSchema } from './getExamplesFromSchema';
 import { translateToHeaderParams } from './params';
 
-const translateToResponse: Oas2TranslateFunction<
-  [produces: string[], statusCode: string, response: unknown],
-  Optional<IHttpOperationResponse>
-> = function (produces, statusCode, response) {
-  const resolvedResponse = this.maybeResolveLocalRef(response);
+function translateToResponse(
+  document: DeepPartial<Spec>,
+  produces: string[],
+  response: unknown,
+  statusCode: string,
+): Optional<IHttpOperationResponse> {
+  const resolvedResponse = maybeResolveLocalRef(document, response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
-  const objectifiedExamples = entries(
+  const headers = translateToHeaderParams(document, resolvedResponse.headers || {});
+  const objectifiedExamples = chain(
     resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
-  ).map(([key, value]) => ({ key, value }));
+  )
+    .mapValues((value, key) => ({ key, value }))
+    .values()
+    .value();
 
   const contents = produces
     .map(produceElement => ({
       mediaType: produceElement,
-      schema: isPlainObject(resolvedResponse.schema)
-        ? translateSchemaObject.call(this, resolvedResponse.schema)
-        : void 0,
+      schema: isDictionary(resolvedResponse.schema) ? translateSchemaObject(document, resolvedResponse.schema) : void 0,
       examples: objectifiedExamples.filter(example => example.key === produceElement),
     }))
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
@@ -53,14 +53,21 @@ const translateToResponse: Oas2TranslateFunction<
   }
 
   return translatedResponses;
-};
+}
 
-export const translateToResponses: Oas2TranslateFunction<
-  [operation: DeepPartial<Operation>],
-  IHttpOperationResponse[]
-> = function (operation) {
-  const produces = getProduces(this.document, operation);
-  return entries(operation.responses)
-    .map(([statusCode, response]) => translateToResponse.call(this, produces, statusCode, response))
-    .filter(isNonNullable);
-};
+export function translateToResponses(
+  document: DeepPartial<Spec>,
+  responses: unknown,
+  produces: string[],
+): IHttpOperationResponse[] {
+  if (!isDictionary(responses)) {
+    return [];
+  }
+
+  return compact<IHttpOperationResponse>(
+    map<Dictionary<unknown>, Optional<IHttpOperationResponse>>(
+      responses,
+      partial(translateToResponse, document, produces),
+    ),
+  );
+}

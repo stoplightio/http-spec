@@ -3,7 +3,6 @@
 exports[`oas operation openapi v2 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {
       "x-another": Object {
@@ -13,7 +12,6 @@ Array [
     },
     "id": "?http-operation-id?",
     "iid": "addPet",
-    "internal": false,
     "method": "post",
     "path": "/pets",
     "request": Object {
@@ -39,10 +37,6 @@ Array [
         "description": "Pet object that needs to be added to the store",
         "required": true,
       },
-      "cookie": Array [],
-      "headers": Array [],
-      "path": Array [],
-      "query": Array [],
     },
     "responses": Array [
       Object {
@@ -72,11 +66,9 @@ Array [
     ],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
-        "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -88,19 +80,14 @@ Array [
     ],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "get",
     "path": "/pets",
     "request": Object {
-      "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -108,12 +95,9 @@ Array [
           "style": "simple",
         },
       ],
-      "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -121,9 +105,7 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -143,11 +125,9 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
-        "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -155,19 +135,14 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "options",
     "path": "/pets",
     "request": Object {
-      "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -175,12 +150,9 @@ Array [
           "style": "simple",
         },
       ],
-      "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -188,9 +160,7 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -206,10 +176,8 @@ Array [
         "description": "",
         "headers": Array [
           Object {
-            "deprecated": false,
             "description": "Allowed clients",
             "name": "Allow",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
@@ -217,10 +185,8 @@ Array [
             "style": "simple",
           },
           Object {
-            "deprecated": false,
             "description": "Remaining requests",
             "name": "X-Rate-Limit",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "format": "int64",
@@ -236,11 +202,9 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
-        "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -248,19 +212,12 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "delete",
     "path": "/pets",
-    "request": Object {
-      "cookie": Array [],
-      "headers": Array [],
-      "path": Array [],
-      "query": Array [],
-    },
+    "request": Object {},
     "responses": Array [
       Object {
         "code": "400",
@@ -278,11 +235,9 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
-        "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -290,12 +245,10 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "?http-operation-id?",
     "iid": "updatePet",
-    "internal": false,
     "method": "put",
     "path": "/pet/{petId}",
     "request": Object {
@@ -321,11 +274,8 @@ Array [
         "description": "Pet object that needs to be added to the store",
         "required": true,
       },
-      "cookie": Array [],
-      "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "name": "petId",
           "required": true,
           "schema": Object {
@@ -335,7 +285,6 @@ Array [
           "style": "simple",
         },
       ],
-      "query": Array [],
     },
     "responses": Array [
       Object {
@@ -394,11 +343,9 @@ Array [
     ],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
-        "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
     ],
@@ -569,12 +516,14 @@ Array [
     ],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
       },
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
       },
     ],
     "summary": "Add a new pet to the store",
@@ -598,26 +547,20 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "skip",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
           },
-          "style": "simple",
         },
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
           },
-          "style": "simple",
         },
       ],
     },
@@ -643,12 +586,14 @@ Array [
     "security": Array [],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
       },
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
       },
     ],
     "summary": "List pets",
@@ -776,15 +721,13 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "petId",
+          "required": true,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
           },
-          "style": "simple",
         },
       ],
       "query": Array [],
@@ -849,12 +792,14 @@ Array [
     ],
     "servers": Array [
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "https://petstore.swagger.io/v2",
+        "variables": undefined,
       },
       Object {
-        "name": "Swagger Petstore",
+        "description": undefined,
         "url": "http://petstore.swagger.io/v2",
+        "variables": undefined,
       },
     ],
     "summary": "Update an existing pet",
