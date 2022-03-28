@@ -10,24 +10,24 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
-      "id": "#/headers/header-name/examples/a",
+      "id": Any<String>,
       "key": "a",
       "summary": "example summary",
       "value": "hey",
     },
     Object {
-      "id": "#/headers/header-name/example",
+      "id": Any<String>,
       "key": "__default",
       "value": Object {},
     },
   ],
   "explode": true,
-  "id": "#/headers/header-name",
+  "id": Any<String>,
   "name": "header-name",
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": "#/headers/header-name",
+    "x-stoplight-id": Any<String>,
   },
   "style": "simple",
 }
@@ -47,12 +47,14 @@ Object {
           "encodings": Array [],
           "examples": Array [
             Object {
+              "id": Any<String>,
               "key": "a",
               "summary": "example summary",
               "value": "hey",
             },
           ],
           "explode": false,
+          "id": Any<String>,
           "name": "h1",
           "style": "simple",
         },
@@ -64,14 +66,17 @@ Object {
   ],
   "examples": Array [
     Object {
+      "id": Any<String>,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
     },
   ],
+  "id": Any<String>,
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": Any<String>,
   },
 }
 `;
@@ -86,6 +91,7 @@ Object {
         Object {
           "encodings": Array [],
           "examples": Array [],
+          "id": Any<String>,
           "name": "h1",
           "style": "simple",
         },
@@ -101,6 +107,7 @@ Object {
         Object {
           "encodings": Array [],
           "examples": Array [],
+          "id": Any<String>,
           "name": "h1",
           "style": "simple",
         },
@@ -112,14 +119,17 @@ Object {
   ],
   "examples": Array [
     Object {
+      "id": Any<String>,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
     },
   ],
+  "id": Any<String>,
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": Any<String>,
   },
 }
 `;
@@ -149,13 +159,16 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
+      "id": Any<String>,
       "key": "default",
       "value": "hey",
     },
   ],
+  "id": Any<String>,
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": Any<String>,
   },
 }
 `;
@@ -173,14 +186,17 @@ Object {
   ],
   "examples": Array [
     Object {
+      "id": Any<String>,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
     },
   ],
+  "id": Any<String>,
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight-id": Any<String>,
   },
 }
 `;

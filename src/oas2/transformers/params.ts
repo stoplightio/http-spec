@@ -102,17 +102,20 @@ export const translateToBodyParameter = withContext<
   );
 
   return {
-    id: this.generateId('param'),
+    id: this.generateId(`http_request_body-${this.parentId}`),
 
     required: !!body.required,
-    contents: consumes.map(mediaType => {
-      return {
-        id: this.generateId('media'),
-        mediaType,
-        schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
-        examples,
-      };
-    }),
+    contents: consumes.map(
+      withContext(mediaType => {
+        return {
+          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          mediaType,
+          schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
+          examples,
+        };
+      }),
+      this,
+    ),
 
     ...pickBy(
       {
@@ -124,15 +127,21 @@ export const translateToBodyParameter = withContext<
 });
 
 export const translateFromFormDataParameters = withContext<
-  Oas2TranslateFunction<[parameters: FormDataParameter[], consumes: string[]], IHttpOperationRequestBody>
+  Oas2TranslateFunction<
+    [parameters: (Oas2ParamBase & Partial<FormDataParameter>)[], consumes: string[]],
+    IHttpOperationRequestBody
+  >
 >(function (parameters, consumes) {
   const finalBody: IHttpOperationRequestBody = {
-    id: this.generateId('param'),
-    contents: consumes.map(mediaType => ({
-      id: this.generateId('media'),
-      mediaType,
-      schema: translateSchemaObject.call(this, { type: 'object' }),
-    })),
+    id: this.generateId(`http_request_body-${this.parentId}`),
+    contents: consumes.map(
+      withContext(mediaType => ({
+        id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+        mediaType,
+        schema: translateSchemaObject.call(this, { type: 'object' }),
+      })),
+      this,
+    ),
   };
 
   return parameters.reduce((body, parameter) => {
@@ -164,7 +173,7 @@ export const translateFromFormDataParameters = withContext<
   }, finalBody);
 });
 
-function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
+function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): IHttpEncoding | null {
   switch (parameter.collectionFormat) {
     case 'csv':
       return {

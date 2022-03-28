@@ -144,7 +144,14 @@ describe('transformOas3Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+        },
+      },
+    });
   });
 
   it('given some tags should translate operation with those tags', () => {
@@ -180,7 +187,19 @@ describe('transformOas3Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+        },
+      },
+      tags: [
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
   });
 
   it('given invalid tags should translate operation as there were no tags specified', () => {
@@ -242,15 +261,15 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('tags', [
       {
-        id: '#/paths/~1users~1{userId}/get/tags/0',
+        id: expect.any(String),
         name: '2',
       },
       {
-        id: '#/paths/~1users~1{userId}/get/tags/1',
+        id: expect.any(String),
         name: 'test',
       },
       {
-        id: '#/paths/~1users~1{userId}/get/tags/2',
+        id: expect.any(String),
         name: 'false',
       },
     ]);
@@ -283,7 +302,19 @@ describe('transformOas3Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+        },
+      },
+      servers: [
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
   });
 
   it.each([2, '', null, [null]])(
@@ -348,7 +379,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        id: '#/paths/~1users~1{userId}/get/servers/1',
+        id: expect.any(String),
         name: 'title',
         url: 'operation/server',
       },
@@ -382,7 +413,19 @@ describe('transformOas3Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+        },
+      },
+      servers: [
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
   });
 
   it.each([2, '', null, [null]])(
@@ -447,7 +490,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        id: '#/paths/~1users~1{userId}/servers/1',
+        id: expect.any(String),
         name: 'title',
         url: 'path/server',
       },
@@ -481,7 +524,19 @@ describe('transformOas3Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+        },
+      },
+      servers: [
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
   });
 
   it.each([2, '', null, [null]])(
@@ -546,7 +601,7 @@ describe('transformOas3Operation', () => {
       }),
     ).toHaveProperty('servers', [
       {
-        id: '#/servers/3',
+        id: expect.any(String),
         name: 'title',
         url: 'spec/server',
       },
@@ -600,7 +655,32 @@ describe('transformOas3Operation', () => {
         method: 'post',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      request: {
+        body: {
+          id: expect.any(String),
+          contents: [
+            {
+              id: expect.any(String),
+              schema: {
+                'x-stoplight-id': expect.any(String),
+              },
+            },
+          ],
+        },
+      },
+      callbacks: [
+        {
+          id: expect.any(String),
+          request: {
+            body: {
+              id: expect.any(String),
+            },
+          },
+        },
+      ],
+    });
   });
 
   it('given malformed parameters should translate operation with those parameters', () => {
@@ -637,20 +717,23 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toStrictEqual({
-      id: '#/paths/~1users~1{userId}/get',
+      id: expect.any(String),
       method: 'get',
       path: '/users/{userId}',
+      deprecated: false,
+      internal: false,
       request: {
         body: {
-          id: '#/paths/~1users~1{userId}/get/requestBody',
+          id: expect.any(String),
           contents: [],
         },
         cookie: [],
         headers: [
           {
-            id: '#/paths/~1users~1{userId}/get/parameters/0',
+            id: expect.any(String),
             examples: [
               {
+                id: expect.any(String),
                 key: 'default',
                 value: 'test',
               },
@@ -658,9 +741,10 @@ describe('transformOas3Operation', () => {
             name: 'name',
             deprecated: false,
             explode: false,
+            required: false,
             style: 'simple',
             schema: {
-              'x-stoplight-id': '#/paths/~1users~1{userId}/get/parameters/0/schema',
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               format: 'int32',
@@ -720,30 +804,34 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toStrictEqual({
-      id: '#/paths/~1users~1{userId}/get',
+      id: expect.any(String),
       method: 'get',
       path: '/users/{userId}',
+      deprecated: false,
+      internal: false,
       request: {
         body: {
-          id: '#/paths/~1users~1{userId}/get/requestBody',
+          id: expect.any(String),
           contents: [],
         },
         cookie: [],
         headers: [
           {
-            id: '#/paths/~1users~1{userId}/get/parameters/0',
+            id: expect.any(String),
             examples: [
               {
+                id: expect.any(String),
                 key: 'default',
                 value: 'some example',
               },
             ],
+            required: false,
             deprecated: false,
             explode: false,
             style: 'simple',
             name: 'name',
             schema: {
-              'x-stoplight-id': '#/paths/~1users~1{userId}/get/parameters/0/schema',
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               format: 'int32',
@@ -805,7 +893,7 @@ describe('transformOas3Operation', () => {
 
     expect(transformOas3Operation({ document, path: '/pets', method: 'get' }).servers).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         description: 'Sample Petstore Server Https',
         url: 'https://petstore.swagger.io/v2',
         variables: {
@@ -823,7 +911,7 @@ describe('transformOas3Operation', () => {
         },
       },
       {
-        id: '#/servers/1',
+        id: expect.any(String),
         description: 'Sample Petstore Server Http',
         url: 'http://petstore.swagger.io/v2',
       },
@@ -910,19 +998,21 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toStrictEqual({
-      id: '#/paths/~1pet/get',
+      id: expect.any(String),
       method: 'get',
       path: '/pet',
+      deprecated: false,
+      internal: false,
       request: {
         body: {
-          id: '#/paths/~1pet/get/requestBody',
+          id: expect.any(String),
           contents: [
             {
-              id: '#/paths/~1pet/get/requestBody/content/application~1json',
+              id: expect.any(String),
               encodings: [],
               examples: [
                 {
-                  id: '#/paths/~1pet/get/responses/200/content/application~1json/examples/pet-shared',
+                  id: expect.any(String),
                   key: 'pet-shared',
                   value: {
                     type: 'object',
@@ -935,7 +1025,7 @@ describe('transformOas3Operation', () => {
                   },
                 },
                 {
-                  id: '#/paths/~1pet/get/requestBody/content/application~1json/examples/pet-not-shared',
+                  id: expect.any(String),
                   key: 'pet-not-shared',
                   value: {
                     'not-shared': true,
@@ -959,15 +1049,15 @@ describe('transformOas3Operation', () => {
       },
       responses: [
         {
-          id: '#/paths/~1pet/get/responses/200',
+          id: expect.any(String),
           code: '200',
           contents: [
             {
-              id: '#/paths/~1pet/get/responses/200/content/application~1json',
+              id: expect.any(String),
               encodings: [],
               examples: [
                 {
-                  id: '#/paths/~1pet/get/responses/200/content/application~1json/examples/pet-shared',
+                  id: expect.any(String),
                   key: 'pet-shared',
                   value: {
                     properties: {
@@ -980,7 +1070,7 @@ describe('transformOas3Operation', () => {
                   },
                 },
                 {
-                  id: '#/paths/~1pet/get/responses/200/content/application~1json/examples/pet-not-shared',
+                  id: expect.any(String),
                   key: 'pet-not-shared',
                   value: {
                     'not-shared': true,
@@ -1047,15 +1137,15 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toHaveProperty('request.body', {
-      id: '#/paths/~1pets/post/requestBody',
+      id: expect.any(String),
       contents: [
         {
-          id: '#/paths/~1pets/post/requestBody/content/application~1json',
+          id: expect.any(String),
           encodings: [],
           examples: [],
           mediaType: 'application/json',
           schema: {
-            'x-stoplight-id': '#/paths/~1pets/post/requestBody/content/application~1json/schema',
+            'x-stoplight-id': expect.any(String),
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
@@ -1112,15 +1202,15 @@ describe('transformOas3Operation', () => {
         document,
       }),
     ).toHaveProperty('request.body', {
-      id: '#/paths/~1pets/post/requestBody',
+      id: expect.any(String),
       contents: [
         {
-          id: '#/paths/~1pets/post/requestBody/content/application~1json',
+          id: expect.any(String),
           encodings: [],
           examples: [],
           mediaType: 'application/json',
           schema: {
-            'x-stoplight-id': '#/paths/~1pets/post/requestBody/content/application~1json/schema',
+            'x-stoplight-id': expect.any(String),
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
@@ -1254,7 +1344,7 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': '#/paths/~1users~1{userId}/get/responses/200/content/application~1json/schema',
+                    'x-stoplight-id': expect.any(String),
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1280,7 +1370,7 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': '#/paths/~1pet/get/requestBody/content/application~1json/schema',
+                    'x-stoplight-id': expect.any(String),
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1292,7 +1382,7 @@ describe('transformOas3Operation', () => {
             headers: [
               expect.objectContaining({
                 schema: {
-                  'x-stoplight-id': '#/paths/~1pet/parameters/0/schema',
+                  'x-stoplight-id': expect.any(String),
                   $schema: 'https://json-schema.org/draft/2020-12/schema',
                   type: 'string',
                   format: 'email',
@@ -1309,7 +1399,7 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': '#/paths/~1pet/get/responses/200/content/application~1json/schema',
+                    'x-stoplight-id': expect.any(String),
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1360,7 +1450,7 @@ describe('transformOas3Operation', () => {
         }),
       ).toHaveProperty('responses', [
         {
-          id: '#/paths/~1users~1{userId}/get/responses/200',
+          id: expect.any(String),
           code: '200',
           contents: expect.any(Array),
           headers: expect.any(Array),
@@ -1403,15 +1493,15 @@ describe('transformOas3Operation', () => {
           document,
         }),
       ).toHaveProperty('request.body', {
-        id: '#/paths/~1subscribe/connect/requestBody',
+        id: expect.any(String),
         contents: [
           {
-            id: '#/paths/~1subscribe/connect/requestBody/content/application~1json',
+            id: expect.any(String),
             encodings: [],
             examples: [],
             mediaType: 'application/json',
             schema: {
-              'x-stoplight-id': '#/paths/~1subscribe/connect/requestBody/content/application~1json/schema',
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'object',
               properties: {

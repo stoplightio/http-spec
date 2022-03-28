@@ -1,11 +1,10 @@
 import type { IHttpOperationRequest } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
 
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
-import { iterateOasParams } from '../../oas/accessors';
+import { createOasParamsIterator } from '../../oas/accessors';
 import { getConsumes } from '../accessors';
-import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
+import { isBodyParam, isFormDataParam, isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import {
   translateFromFormDataParameters,
@@ -14,13 +13,17 @@ import {
   translateToPathParameter,
   translateToQueryParameter,
 } from './params';
+import pickBy = require('lodash.pickby');
+import { Oas2ParamBase } from '../../oas/guards';
+
+const iterateOasParams = createOasParamsIterator(OasVersion.OAS2);
 
 export const translateToRequest: Oas2TranslateFunction<
   [path: Record<string, unknown>, operation: Record<string, unknown>],
   IHttpOperationRequest
 > = function (path, operation) {
   const consumes = getConsumes(this.document, operation);
-  const parameters = iterateOasParams.bind(this)(OasVersion.OAS2, operation.parameters, path.parameters);
+  const parameters = iterateOasParams.call(this, operation, path);
 
   const params: Omit<Required<IHttpOperationRequest>, 'body'> = {
     headers: [],
@@ -30,7 +33,7 @@ export const translateToRequest: Oas2TranslateFunction<
   };
 
   let bodyParameter;
-  const formDataParameters = [];
+  const formDataParameters: (Oas2ParamBase & { in: 'formData' })[] = [];
 
   for (const param of parameters) {
     if (isQueryParam(param)) {
@@ -39,9 +42,9 @@ export const translateToRequest: Oas2TranslateFunction<
       params.path.push(translateToPathParameter.call(this, param));
     } else if (isHeaderParam(param)) {
       params.headers.push(translateToHeaderParam.call(this, param));
-    } else if (param.in === 'body') {
+    } else if (isBodyParam(param)) {
       bodyParameter = translateToBodyParameter.call(this, param, consumes);
-    } else if (param.in === 'formData') {
+    } else if (isFormDataParam(param)) {
       formDataParameters.push(param);
     }
   }
@@ -54,8 +57,6 @@ export const translateToRequest: Oas2TranslateFunction<
   } else if (!!formDataParameters.length) {
     body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
   }
-
-  // if 'body' and 'form data' defined prefer 'body'
 
   return {
     ...params,

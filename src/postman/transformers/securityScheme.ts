@@ -1,7 +1,7 @@
 import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
 import type { Collection, RequestAuth } from 'postman-collection';
-import isEqual = require('lodash.isequal');
 
+import { isEqual } from '../../utils';
 import { generateId } from '../id';
 
 export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
@@ -248,9 +248,7 @@ export function isPostmanSecuritySchemeEqual(pss1: PostmanSecurityScheme, pss2: 
   if (pss1.type !== pss2.type) return false;
 
   if (isStandardSecurityScheme(pss1) && isStandardSecurityScheme(pss2)) {
-    const { id: _id, key: _key, ...pss1SecurityScheme } = pss1.securityScheme;
-    const { id: _id2, key: _key2, ...pss2SecurityScheme } = pss2.securityScheme;
-    return isEqual(pss1SecurityScheme, pss2SecurityScheme);
+    return isEqual({ ...pss1.securityScheme, key: '' }, { ...pss2.securityScheme, key: '' });
   }
 
   return isEqual(pss1, pss2);

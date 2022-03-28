@@ -228,18 +228,28 @@ describe('mergeResponses()', () => {
       {
         id: 'a',
         code: '200',
-        contents: [{ mediaType: '200-tion/a-son' }, { mediaType: '200-tion/b-son' }, { mediaType: '200-tion/c-son' }],
+        contents: [
+          { id: 'a1', mediaType: '200-tion/a-son' },
+          { id: 'a2', mediaType: '200-tion/b-son' },
+          { id: 'c2', mediaType: '200-tion/c-son' },
+        ],
         headers: [],
       },
       {
         id: 'b',
         code: '400',
-        contents: [{ mediaType: '400-tion/a-son' }, { mediaType: '400-tion/b-son' }],
+        contents: [
+          { id: 'b1', mediaType: '400-tion/a-son' },
+          { id: 'b2', mediaType: '400-tion/b-son' },
+        ],
       },
       {
         id: 'd',
         code: '500',
-        contents: [{ mediaType: '500-tion/a-son' }, { mediaType: '500-tion/b-son' }],
+        contents: [
+          { id: 'd1', mediaType: '500-tion/a-son' },
+          { id: 'd2', mediaType: '500-tion/b-son' },
+        ],
       },
     ]);
   });
@@ -280,6 +290,7 @@ describe('mergeResponses()', () => {
         code: '200',
         contents: [
           {
+            id: 'a1',
             mediaType: 'application/json',
             schema: {
               anyOf: [
@@ -316,7 +327,7 @@ describe('mergeResponses()', () => {
       {
         id: 'a',
         code: '200',
-        contents: [{ mediaType: 'Aa/Oo' }],
+        contents: [{ id: 'a1', mediaType: 'Aa/Oo' }],
         headers: [],
       },
     ]);
@@ -503,6 +514,7 @@ describe('mergeOperations()', () => {
             description: 'The cadillac stood by the house; And the yanks they were within',
             contents: [
               {
+                id: 'g1',
                 mediaType: 'application/json',
                 schema: { anyOf: [{ type: 'string' }, { type: 'number' }] },
               },

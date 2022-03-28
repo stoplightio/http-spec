@@ -68,8 +68,14 @@ export const translateToBasicSecurityScheme = withContext<
     id: this.generateId(`http_security-${this.ids.service}-${key}`),
     type: 'http',
     scheme: 'basic',
-    description: security.description,
     key,
+
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
   };
 });
 
@@ -85,9 +91,15 @@ export const translateToApiKeySecurityScheme = withContext<
       id: this.generateId(`http_security-${this.ids.service}-${key}`),
       type: 'apiKey',
       in: security.in,
-      name: String(security.name || ''),
-      description: security.description,
+      name: isString(security.name) ? security.name : '',
       key,
+
+      ...pickBy(
+        {
+          description: security.description,
+        },
+        isString,
+      ),
     };
   }
 
@@ -113,8 +125,14 @@ export const translateToOauth2SecurityScheme = withContext<
     id: this.generateId(`http_security-${this.ids.service}-${key}`),
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
-    description: security.description,
     key,
+
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
   };
 });
 

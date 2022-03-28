@@ -21,7 +21,7 @@ describe('translateToServers', () => {
       href: 'https://www.someotherdomain.com?query=123',
     };
     expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['http'] })).toEqual([
-      { id: '#/servers/0', url: 'http://stoplight.io' },
+      { id: expect.any(String), url: 'http://stoplight.io' },
     ]);
   });
 
@@ -30,11 +30,11 @@ describe('translateToServers', () => {
       translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http', 'https'] }),
     ).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
       {
-        id: '#/servers/1',
+        id: expect.any(String),
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -52,11 +52,11 @@ describe('translateToServers', () => {
       ),
     ).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
       {
-        id: '#/servers/1',
+        id: expect.any(String),
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -67,7 +67,7 @@ describe('translateToServers', () => {
       translateToServers({ schemes: ['https'], host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http'] }),
     ).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
     ]);
@@ -80,7 +80,7 @@ describe('translateToServers', () => {
   it('given no basePath should return servers', () => {
     expect(translateToServers({ schemes: ['http'], host: 'stoplight.io' }, {})).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         url: 'http://stoplight.io',
       },
     ]);
@@ -121,11 +121,11 @@ describe('translateToServers', () => {
   it('should handle invalid server basePath gracefully', () => {
     expect(translateToServers({ host: 'stoplight.io', basePath: 123 as any }, { schemes: ['http', 'https'] })).toEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         url: 'http://stoplight.io',
       },
       {
-        id: '#/servers/1',
+        id: expect.any(String),
         url: 'https://stoplight.io',
       },
     ]);

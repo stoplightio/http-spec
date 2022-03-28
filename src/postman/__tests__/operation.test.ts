@@ -94,7 +94,9 @@ describe('transformPostmanCollectionOperation()', () => {
             }),
           ).toEqual(
             expect.objectContaining({
-              security: [[{ id: expect.any(String), key: 'http-0', scheme: 'basic', type: 'http' }]],
+              security: [
+                [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'http-0', scheme: 'basic', type: 'http' }],
+              ],
             }),
           );
         });
@@ -123,7 +125,7 @@ describe('transformPostmanCollectionOperation()', () => {
               request: expect.objectContaining({
                 headers: [
                   {
-                    id: expect.any(String),
+                    id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                     description: 'Hawk Authorization Header',
                     name: 'Authorization',
                     required: true,
@@ -169,7 +171,7 @@ describe('transformPostmanCollectionOperation()', () => {
               request: expect.objectContaining({
                 query: [
                   {
-                    id: expect.any(String),
+                    id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                     description: 'OAuth2 Access Token',
                     name: 'access_token',
                     required: true,
@@ -232,7 +234,7 @@ describe('transformPostmanCollectionOperation()', () => {
           }),
         ).toEqual(
           expect.objectContaining({
-            servers: [{ id: expect.any(String), url: 'https://example.com:666' }],
+            servers: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), url: 'https://example.com:666' }],
           }),
         );
       });
@@ -270,17 +272,19 @@ describe('transformPostmanCollectionOperation()', () => {
           expect.objectContaining({
             request: expect.objectContaining({
               body: {
-                id: expect.any(String),
+                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                 contents: [
                   {
-                    id: expect.any(String),
-                    examples: [{ id: expect.any(String), key: 'default', value: 'testTESTtest' }],
+                    id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
+                    examples: [
+                      { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: 'testTESTtest' },
+                    ],
                     mediaType: 'text/plain',
                   },
                 ],
               },
             }),
-            servers: [{ id: expect.any(String), url: 'https://example.com' }],
+            servers: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), url: 'https://example.com' }],
           }),
         );
       });
@@ -349,10 +353,10 @@ describe('transformPostmanCollectionOperations()', () => {
         request: expect.objectContaining({
           headers: [
             {
-              id: expect.any(String),
+              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               examples: [
                 {
-                  id: expect.any(String),
+                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                   key: 'default',
                   value: 'a header',
                 },
@@ -365,10 +369,10 @@ describe('transformPostmanCollectionOperations()', () => {
               required: false,
             },
             {
-              id: expect.any(String),
+              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               examples: [
                 {
-                  id: expect.any(String),
+                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                   key: 'default',
                   value: 'b header',
                 },

@@ -74,7 +74,7 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: '#/servers/0',
+        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/path',
         variables: {
@@ -119,7 +119,7 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: '#/paths/~1pet/get/servers/0',
+        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/pet.get',
       },
@@ -150,7 +150,7 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: '#/paths/~1pet/servers/0',
+        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/pet',
       },

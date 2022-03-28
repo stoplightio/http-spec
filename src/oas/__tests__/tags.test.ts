@@ -24,15 +24,15 @@ describe('translateToTags', () => {
   it('should normalize values', () => {
     expect(translateToTags([0, 'foo', true])).toStrictEqual([
       {
-        id: '#/tags/0',
+        id: expect.any(String),
         name: '0',
       },
       {
-        id: '#/tags/1',
+        id: expect.any(String),
         name: 'foo',
       },
       {
-        id: '#/tags/2',
+        id: expect.any(String),
         name: 'true',
       },
     ]);
@@ -41,15 +41,15 @@ describe('translateToTags', () => {
   it('should translate array of strings to tags', () => {
     expect(translateToTags(['a', 'b', 'c'])).toStrictEqual([
       {
-        id: '#/tags/0',
+        id: expect.any(String),
         name: 'a',
       },
       {
-        id: '#/tags/1',
+        id: expect.any(String),
         name: 'b',
       },
       {
-        id: '#/tags/2',
+        id: expect.any(String),
         name: 'c',
       },
     ]);

@@ -8,20 +8,21 @@ import type {
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
-import pickBy = require('lodash.pickby');
 import type { ParameterObject } from 'openapi3-ts';
 
 import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
-import { iterateOasParams } from '../../oas/accessors';
+import { createOasParamsIterator } from '../../oas/accessors';
 import { isValidParamStyle } from '../../oas/guards';
+import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
 import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
-import { translateToDefaultExample, translateToExample } from './examples';
+import { translateToExample } from './examples';
+import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
   Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
@@ -65,6 +66,9 @@ export const translateParameterObject = withContext<
   const id = this.generateId(`http_${kind}-${this.parentId}-${name}`);
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
+  const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
+  const hasDefaultExample = examples.some(({ key }) => key.includes('default'));
+
   return {
     id,
     name,
@@ -73,10 +77,10 @@ export const translateParameterObject = withContext<
     style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
     explode: !!(parameterObject.explode ?? parameterObject.style === HttpParamStyles.Form),
     examples: [
-      parameterObject.example !== undefined
+      !hasDefaultExample && parameterObject.example !== undefined
         ? translateToDefaultExample.call(this, 'default', parameterObject.example)
         : undefined,
-      ...entries(parameterObject.examples).map(translateToExample, this),
+      ...examples,
     ].filter(isNonNullable),
 
     ...pickBy(
@@ -96,6 +100,8 @@ export const translateParameterObject = withContext<
   };
 });
 
+const iterateOasParams = createOasParamsIterator(OasVersion.OAS3);
+
 export const translateToRequest = withContext<
   Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IHttpOperationRequest>
 >(function (path, operation) {
@@ -106,7 +112,7 @@ export const translateToRequest = withContext<
     path: [],
   };
 
-  for (const param of iterateOasParams.call(this, OasVersion.OAS3, path, operation)) {
+  for (const param of iterateOasParams.call(this, path, operation)) {
     const { in: key } = param;
     const target = params[key];
     if (!Array.isArray(target)) continue;

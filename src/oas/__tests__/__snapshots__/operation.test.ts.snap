@@ -11,7 +11,7 @@ Array [
       },
       "x-test": true,
     },
-    "id": "?http-operation-id?",
+    "id": "87bea6ad",
     "iid": "addPet",
     "internal": false,
     "method": "post",
@@ -21,22 +21,113 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
+            "id": "b9a74577",
             "mediaType": "application/json",
             "schema": Object {
-              "$ref": "#/definitions/Pet",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/definitions/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "examples": Array [
+                    "doggie",
+                  ],
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Pet",
+              "xml": Object {
+                "name": "Pet",
+              },
             },
           },
           Object {
             "examples": Array [],
+            "id": "a37e5c12",
             "mediaType": "application/xml",
             "schema": Object {
-              "$ref": "#/definitions/Pet",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/definitions/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "examples": Array [
+                    "doggie",
+                  ],
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Pet",
+              "xml": Object {
+                "name": "Pet",
+              },
             },
           },
         ],
         "description": "Pet object that needs to be added to the store",
+        "id": "00207fd3",
         "required": true,
       },
       "cookie": Array [],
@@ -50,12 +141,12 @@ Array [
         "contents": Array [],
         "description": "Invalid input",
         "headers": Array [],
+        "id": "d61e3a98",
       },
     ],
     "security": Array [
       Array [
         Object {
-          "description": undefined,
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -65,6 +156,7 @@ Array [
               },
             },
           },
+          "id": "0407a17d",
           "key": "petstore_auth",
           "type": "oauth2",
         },
@@ -72,10 +164,12 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -83,6 +177,7 @@ Array [
     "summary": "Add a new pet to the store",
     "tags": Array [
       Object {
+        "id": "2e010d1a",
         "name": "pet",
       },
     ],
@@ -90,7 +185,7 @@ Array [
   Object {
     "deprecated": false,
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "122ea0ed",
     "internal": false,
     "method": "get",
     "path": "/pets",
@@ -99,11 +194,13 @@ Array [
       "headers": Array [
         Object {
           "deprecated": false,
+          "id": "eb6bbad5",
           "name": "Rate-Limit",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -112,21 +209,25 @@ Array [
       "query": Array [
         Object {
           "deprecated": false,
+          "id": "7831e071",
           "name": "skip",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "form",
         },
         Object {
           "deprecated": false,
+          "id": "8d2b0bf9",
           "name": "limit",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "form",
         },
@@ -138,15 +239,18 @@ Array [
         "contents": Array [],
         "description": "",
         "headers": Array [],
+        "id": "d3eaa051",
       },
     ],
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -157,7 +261,7 @@ Array [
   Object {
     "deprecated": false,
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "7a7196f3",
     "internal": false,
     "method": "options",
     "path": "/pets",
@@ -166,11 +270,13 @@ Array [
       "headers": Array [
         Object {
           "deprecated": false,
+          "id": "eb6bbad5",
           "name": "Rate-Limit",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -179,21 +285,25 @@ Array [
       "query": Array [
         Object {
           "deprecated": false,
+          "id": "7831e071",
           "name": "skip",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "form",
         },
         Object {
           "deprecated": false,
+          "id": "8d2b0bf9",
           "name": "limit",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "form",
         },
@@ -208,17 +318,20 @@ Array [
           Object {
             "deprecated": false,
             "description": "Allowed clients",
+            "id": "08ccc12a",
             "name": "Allow",
             "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
+              "x-stoplight-id": "#",
             },
             "style": "simple",
           },
           Object {
             "deprecated": false,
             "description": "Remaining requests",
+            "id": "e3387166",
             "name": "X-Rate-Limit",
             "required": false,
             "schema": Object {
@@ -227,19 +340,23 @@ Array [
               "maximum": 9223372036854776000,
               "minimum": -9223372036854776000,
               "type": "number",
+              "x-stoplight-id": "#",
             },
             "style": "simple",
           },
         ],
+        "id": "f9cadce3",
       },
     ],
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -251,7 +368,7 @@ Array [
     "deprecated": false,
     "description": "",
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "979de13c",
     "internal": false,
     "method": "delete",
     "path": "/pets",
@@ -267,21 +384,25 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
+        "id": "29d958a0",
       },
       Object {
         "code": "404",
         "contents": Array [],
         "description": "Pet not found",
         "headers": Array [],
+        "id": "2dd95eec",
       },
     ],
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -293,7 +414,7 @@ Array [
     "deprecated": false,
     "description": "",
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "d2549ba8",
     "iid": "updatePet",
     "internal": false,
     "method": "put",
@@ -303,22 +424,113 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
+            "id": "3304f039",
             "mediaType": "application/json",
             "schema": Object {
-              "$ref": "#/definitions/Pet",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/definitions/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "examples": Array [
+                    "doggie",
+                  ],
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Pet",
+              "xml": Object {
+                "name": "Pet",
+              },
             },
           },
           Object {
             "examples": Array [],
+            "id": "6c5c3870",
             "mediaType": "application/xml",
             "schema": Object {
-              "$ref": "#/definitions/Pet",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "category": Object {
+                  "$ref": "#/definitions/Category",
+                },
+                "id": Object {
+                  "format": "int64",
+                  "maximum": 9223372036854776000,
+                  "minimum": -9223372036854776000,
+                  "type": "integer",
+                },
+                "name": Object {
+                  "examples": Array [
+                    "doggie",
+                  ],
+                  "type": "string",
+                },
+                "photoUrls": Object {
+                  "items": Object {
+                    "type": "string",
+                  },
+                  "type": "array",
+                  "xml": Object {
+                    "name": "photoUrl",
+                    "wrapped": true,
+                  },
+                },
+                "status": Object {
+                  "description": "pet status in the store",
+                  "enum": Array [
+                    "available",
+                    "pending",
+                    "sold",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+                "photoUrls",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Pet",
+              "xml": Object {
+                "name": "Pet",
+              },
             },
           },
         ],
         "description": "Pet object that needs to be added to the store",
+        "id": "731b94c9",
         "required": true,
       },
       "cookie": Array [],
@@ -326,11 +538,13 @@ Array [
       "path": Array [
         Object {
           "deprecated": false,
+          "id": "27770c6b",
           "name": "petId",
           "required": true,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -343,41 +557,69 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
+        "id": "215a09a8",
       },
       Object {
         "code": "404",
         "contents": Array [
           Object {
             "examples": Array [],
+            "id": "1ff04a4a",
             "mediaType": "application/xml",
             "schema": Object {
-              "$ref": "#/definitions/Error",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "code": Object {
+                  "type": "string",
+                },
+                "message": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "code",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Error",
             },
           },
           Object {
             "examples": Array [],
+            "id": "fdbf905f",
             "mediaType": "application/json",
             "schema": Object {
-              "$ref": "#/definitions/Error",
               "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "code": Object {
+                  "type": "string",
+                },
+                "message": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "code",
+              ],
+              "type": "object",
+              "x-stoplight-id": "#/definitions/Error",
             },
           },
         ],
         "description": "Our shared 404 response.",
         "headers": Array [],
+        "id": "deff0751",
       },
       Object {
         "code": "405",
         "contents": Array [],
         "description": "Validation exception",
         "headers": Array [],
+        "id": "265a1187",
       },
     ],
     "security": Array [
       Array [
         Object {
-          "description": undefined,
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -387,6 +629,7 @@ Array [
               },
             },
           },
+          "id": "0407a17d",
           "key": "petstore_auth",
           "type": "oauth2",
         },
@@ -394,10 +637,12 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -405,6 +650,7 @@ Array [
     "summary": "Update an existing pet",
     "tags": Array [
       Object {
+        "id": "2e010d1a",
         "name": "pet",
       },
     ],
@@ -415,6 +661,7 @@ Array [
 exports[`oas operation openapi v3 1`] = `
 Array [
   Object {
+    "deprecated": false,
     "description": "",
     "extensions": Object {
       "x-another": Object {
@@ -422,8 +669,9 @@ Array [
       },
       "x-test": true,
     },
-    "id": "?http-operation-id?",
+    "id": "87bea6ad",
     "iid": "addPet",
+    "internal": false,
     "method": "post",
     "path": "/pets",
     "request": Object {
@@ -432,6 +680,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "3304f039",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -476,6 +725,7 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
+              "x-stoplight-id": "#/components/schemas/Pet",
               "xml": Object {
                 "name": "Pet",
               },
@@ -484,6 +734,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "6c5c3870",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -528,6 +779,7 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
+              "x-stoplight-id": "#/components/schemas/Pet",
               "xml": Object {
                 "name": "Pet",
               },
@@ -535,6 +787,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
+        "id": "731b94c9",
         "required": true,
       },
       "cookie": Array [],
@@ -548,6 +801,7 @@ Array [
         "contents": Array [],
         "description": "Invalid input",
         "headers": Array [],
+        "id": "d61e3a98",
       },
     ],
     "security": Array [
@@ -562,6 +816,7 @@ Array [
               },
             },
           },
+          "id": "0407a17d",
           "key": "petstore_auth",
           "type": "oauth2",
         },
@@ -569,10 +824,12 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -580,18 +837,22 @@ Array [
     "summary": "Add a new pet to the store",
     "tags": Array [
       Object {
+        "id": "2e010d1a",
         "name": "pet",
       },
     ],
   },
   Object {
+    "deprecated": false,
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "122ea0ed",
+    "internal": false,
     "method": "get",
     "path": "/pets",
     "request": Object {
       "body": Object {
         "contents": Array [],
+        "id": "9b4cefc9",
       },
       "cookie": Array [],
       "headers": Array [],
@@ -601,10 +862,13 @@ Array [
           "deprecated": false,
           "examples": Array [],
           "explode": false,
+          "id": "7831e071",
           "name": "skip",
+          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -612,10 +876,13 @@ Array [
           "deprecated": false,
           "examples": Array [],
           "explode": false,
+          "id": "8d2b0bf9",
           "name": "limit",
+          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -628,25 +895,30 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "9254a353",
             "mediaType": "*/*",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {},
               "type": "object",
+              "x-stoplight-id": "#/paths/~1pets/get/responses/200/content/*~1*/schema",
             },
           },
         ],
         "description": "OK",
         "headers": Array [],
+        "id": "d3eaa051",
       },
     ],
     "security": Array [],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -655,10 +927,12 @@ Array [
     "tags": Array [],
   },
   Object {
+    "deprecated": false,
     "description": "",
     "extensions": Object {},
-    "id": "?http-operation-id?",
+    "id": "d2549ba8",
     "iid": "updatePet",
+    "internal": false,
     "method": "put",
     "path": "/pet/{petId}",
     "request": Object {
@@ -667,6 +941,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "3304f039",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -711,6 +986,7 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
+              "x-stoplight-id": "#/components/schemas/Pet",
               "xml": Object {
                 "name": "Pet",
               },
@@ -719,6 +995,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "6c5c3870",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -763,6 +1040,7 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
+              "x-stoplight-id": "#/components/schemas/Pet",
               "xml": Object {
                 "name": "Pet",
               },
@@ -770,6 +1048,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
+        "id": "731b94c9",
         "required": true,
       },
       "cookie": Array [],
@@ -779,10 +1058,13 @@ Array [
           "deprecated": false,
           "examples": Array [],
           "explode": false,
+          "id": "27770c6b",
           "name": "petId",
+          "required": true,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
+            "x-stoplight-id": "#",
           },
           "style": "simple",
         },
@@ -795,6 +1077,7 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
+        "id": "215a09a8",
       },
       Object {
         "code": "404",
@@ -802,6 +1085,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
+            "id": "f21878b7",
             "mediaType": "*/*",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -817,17 +1101,20 @@ Array [
                 "code",
               ],
               "type": "object",
+              "x-stoplight-id": "#/components/schemas/Error",
             },
           },
         ],
         "description": "Our shared 404 response.",
         "headers": Array [],
+        "id": "deff0751",
       },
       Object {
         "code": "405",
         "contents": Array [],
         "description": "Validation exception",
         "headers": Array [],
+        "id": "265a1187",
       },
     ],
     "security": Array [
@@ -842,6 +1129,7 @@ Array [
               },
             },
           },
+          "id": "0407a17d",
           "key": "petstore_auth",
           "type": "oauth2",
         },
@@ -849,10 +1137,12 @@ Array [
     ],
     "servers": Array [
       Object {
+        "id": "e60403d7",
         "name": "Swagger Petstore",
         "url": "https://petstore.swagger.io/v2",
       },
       Object {
+        "id": "ecbccfaa",
         "name": "Swagger Petstore",
         "url": "http://petstore.swagger.io/v2",
       },
@@ -860,6 +1150,7 @@ Array [
     "summary": "Update an existing pet",
     "tags": Array [
       Object {
+        "id": "2e010d1a",
         "name": "pet",
       },
     ],

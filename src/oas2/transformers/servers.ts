@@ -8,22 +8,22 @@ import { ArrayCallbackParameters } from '../../types';
 import { isValidScheme } from '../guards';
 import type { Oas2TranslateFunction } from '../types';
 
-export const translateToServers: Oas2TranslateFunction<[operation: Record<string, unknown>], IServer[]> = function (
-  operation,
-) {
-  let schemes;
-  if (Array.isArray(operation.schemes)) {
-    schemes = operation.schemes;
-    this.context = 'operation';
-  } else if (Array.isArray(this.document.schemes)) {
-    schemes = this.document.schemes;
-    this.context = 'service';
-  } else {
-    return [];
-  }
+export const translateToServers = withContext<Oas2TranslateFunction<[operation: Record<string, unknown>], IServer[]>>(
+  function (operation) {
+    let schemes;
+    if (Array.isArray(operation.schemes)) {
+      schemes = operation.schemes;
+      this.context = 'operation';
+    } else if (Array.isArray(this.document.schemes)) {
+      schemes = this.document.schemes;
+      this.context = 'service';
+    } else {
+      return [];
+    }
 
-  return schemes.map(translateToServer, this).filter(isNonNullable);
-};
+    return schemes.map(translateToServer, this).filter(isNonNullable);
+  },
+);
 
 export const translateToServer = withContext<
   Oas2TranslateFunction<ArrayCallbackParameters<unknown>, Optional<IServer>>
@@ -46,9 +46,11 @@ export const translateToServer = withContext<
     uri.pathname = basePath;
   }
 
+  const url = uri.toString().replace(/\/$/, ''); // Remove trailing slash
+
   return {
-    id: this.generateId(`http_server-${this.parentId}-$.url}`),
-    url: uri.toString().replace(/\/$/, ''), // Remove trailing slash
+    id: this.generateId(`http_server-${this.parentId}-${url}`),
+    url,
 
     ...pickBy(
       {

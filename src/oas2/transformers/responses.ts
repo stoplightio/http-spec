@@ -1,3 +1,4 @@
+import { pickBy } from '@oclif/parser/lib/util';
 import { isPlainObject } from '@stoplight/json';
 import type { IHttpOperationResponse, Optional } from '@stoplight/types';
 import { DeepPartial } from '@stoplight/types';
@@ -5,6 +6,7 @@ import { Operation } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
+import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { getEdge } from '../../track';
 import { entries } from '../../utils';
@@ -22,19 +24,27 @@ const translateToResponse = withContext<
   const actualKey = (this.context === 'service' && getEdge(resolvedResponse)?.[1]) || statusCode;
 
   const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
-  const objectifiedExamples = entries(
-    resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
-  ).map(([key, value]) => ({ id: this.generateId('example'), key, value }));
+  const objectifiedExamples = entries(resolvedResponse.examples || getExamplesFromSchema(resolvedResponse.schema)).map(
+    ([key, value]) => translateToDefaultExample.call(this, key, value),
+  );
 
   const contents = produces
-    .map(produceElement => ({
-      id: this.generateId('security'),
-      mediaType: produceElement,
-      schema: isPlainObject(resolvedResponse.schema)
-        ? translateSchemaObject.call(this, resolvedResponse.schema)
-        : void 0,
-      examples: objectifiedExamples.filter(example => example.key === produceElement),
-    }))
+    .map(
+      withContext(produceElement => ({
+        id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
+        mediaType: produceElement,
+        examples: objectifiedExamples.filter(example => example.key === produceElement),
+        ...pickBy(
+          {
+            schema: isPlainObject(resolvedResponse.schema)
+              ? translateSchemaObject.call(this, resolvedResponse.schema)
+              : undefined,
+          },
+          isNonNullable,
+        ),
+      })),
+      this,
+    )
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
@@ -49,7 +59,7 @@ const translateToResponse = withContext<
   if (foreignExamples.length > 0) {
     if (translatedResponses.contents.length === 0)
       translatedResponses.contents[0] = {
-        id: this.generateId('param'),
+        id: this.generateId(`http_media-${this.parentId}-`),
         mediaType: '',
         schema: {},
         examples: [],

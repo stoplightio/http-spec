@@ -9,47 +9,36 @@ const ROOT_EXTENSIONS = ['x-internal'];
 
 const getIdForParameter = (param: ParamBase) => `${param.name}-${param.in}`;
 
-export function iterateOasParams(
-  this: TransformerContext,
-  spec: OasVersion.OAS2,
-  path: Fragment,
-  operation: Fragment,
-): Iterable<Oas2ParamBase>;
-export function iterateOasParams(
-  this: TransformerContext,
-  spec: OasVersion.OAS3,
-  path: Fragment,
-  operation: Fragment,
-): Iterable<Oas3ParamBase>;
-export function* iterateOasParams(
-  this: TransformerContext,
-  spec: OasVersion,
-  path: Fragment,
-  operation: Fragment,
-): Iterable<Oas2ParamBase | Oas3ParamBase> {
-  const seenParams = new Set();
-  const { parentId, context } = this;
-  const opParams = Array.isArray(operation.parameters) ? operation.parameters : [];
-  const params = [...opParams, ...(Array.isArray(path.parameters) ? path.parameters : [])];
+type OasParamsIterator<N> = (this: TransformerContext, path: Fragment, operation: Fragment) => Iterable<N>;
 
-  for (let i = 0; i < params.length; i++) {
-    const param = this.maybeResolveLocalRef(params[i]);
-    if (!(spec === OasVersion.OAS2 ? isValidOas2Param : isValidOas3Param)(param)) continue;
+export function createOasParamsIterator(spec: OasVersion.OAS2): OasParamsIterator<Oas2ParamBase>;
+export function createOasParamsIterator(spec: OasVersion.OAS3): OasParamsIterator<Oas3ParamBase>;
+export function createOasParamsIterator(spec: OasVersion): OasParamsIterator<Oas2ParamBase | Oas3ParamBase> {
+  return function* (path, operation) {
+    const seenParams = new Set();
+    const { parentId, context } = this;
+    const opParams = Array.isArray(operation.parameters) ? operation.parameters : [];
+    const params = [...opParams, ...(Array.isArray(path.parameters) ? path.parameters : [])];
 
-    const key = getIdForParameter(param);
+    for (let i = 0; i < params.length; i++) {
+      const param = this.maybeResolveLocalRef(params[i]);
+      if (!(spec === OasVersion.OAS2 ? isValidOas2Param : isValidOas3Param)(param)) continue;
 
-    if (seenParams.has(key)) continue;
-    seenParams.add(key);
+      const key = getIdForParameter(param);
 
-    if (this.context !== 'service') {
-      this.context = i < opParams.length ? 'operation' : 'path';
+      if (seenParams.has(key)) continue;
+      seenParams.add(key);
+
+      if (this.context !== 'service') {
+        this.context = i < opParams.length ? 'operation' : 'path';
+      }
+
+      yield param;
     }
 
-    yield param;
-  }
-
-  this.context = context;
-  this.parentId = parentId;
+    this.context = context;
+    this.parentId = parentId;
+  };
 }
 
 export function getExtensions(target: unknown): Extensions {

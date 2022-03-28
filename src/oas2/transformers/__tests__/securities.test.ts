@@ -41,6 +41,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             scheme: 'basic',
             type: 'http',
             description: 'a description',
@@ -68,6 +69,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             name: 'a name',
             type: 'apiKey',
             in: 'header',
@@ -95,6 +97,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             name: '',
             type: 'apiKey',
             in: 'header',
@@ -141,6 +144,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-flow-security',
@@ -168,6 +172,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: {} } },
               key: 'implicit-flow-security',
@@ -196,6 +201,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'password-flow-security',
@@ -224,6 +230,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'application-flow-security',
@@ -253,6 +260,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: {
                 authorizationCode: {
@@ -318,6 +326,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               scheme: 'basic',
               type: 'http',
               description: 'a description',
@@ -326,6 +335,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
@@ -334,6 +344,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: expect.any(String),
               name: 'a name',
               type: 'apiKey',
               in: 'query',
@@ -350,18 +361,21 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               scheme: 'basic',
               type: 'http',
               description: 'a description',
               key: 'basic-security',
             },
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
             },
             {
+              id: expect.any(String),
               name: 'a name',
               type: 'apiKey',
               in: 'query',

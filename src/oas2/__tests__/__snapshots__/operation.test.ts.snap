@@ -5,7 +5,7 @@ Object {
   "deprecated": true,
   "description": "odesc",
   "extensions": Object {},
-  "id": "?http-operation-id?",
+  "id": Any<String>,
   "iid": "oid",
   "internal": false,
   "method": "get",
@@ -23,10 +23,12 @@ Object {
         Object {
           "examples": Array [
             Object {
+              "id": Any<String>,
               "key": "example",
               "value": Object {},
             },
           ],
+          "id": Any<String>,
           "mediaType": "",
           "schema": Object {},
         },
@@ -35,21 +37,23 @@ Object {
       "headers": Array [
         Object {
           "deprecated": false,
+          "id": Any<String>,
           "name": "header",
           "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "integer",
+            "x-stoplight-id": Any<String>,
           },
           "style": "simple",
         },
       ],
+      "id": Any<String>,
     },
   ],
   "security": Array [
     Array [
       Object {
-        "description": undefined,
         "flows": Object {
           "implicit": Object {
             "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -58,13 +62,14 @@ Object {
             },
           },
         },
+        "id": Any<String>,
         "key": "petstore_auth",
         "type": "oauth2",
       },
     ],
     Array [
       Object {
-        "description": undefined,
+        "id": Any<String>,
         "in": "header",
         "key": "api_key",
         "name": "api_key_name",

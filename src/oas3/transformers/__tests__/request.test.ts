@@ -71,6 +71,18 @@ describe('translateOas3ToRequest', () => {
       post: operation,
     };
 
-    expect(translateToRequest(path, operation)).toMatchSnapshot();
+    expect(translateToRequest(path, operation)).toMatchSnapshot({
+      body: {
+        id: expect.any(String),
+        contents: [
+          {
+            id: expect.any(String),
+            schema: {
+              'x-stoplight-id': expect.any(String),
+            },
+          },
+        ],
+      },
+    });
   });
 });

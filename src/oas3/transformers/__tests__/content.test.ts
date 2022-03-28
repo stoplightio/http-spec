@@ -66,6 +66,9 @@ describe('translateMediaTypeObject', () => {
           id: expect.any(String),
         },
       ],
+      schema: {
+        'x-stoplight-id': expect.any(String),
+      },
     });
   });
 
@@ -131,6 +134,30 @@ describe('translateMediaTypeObject', () => {
       ),
     ).toMatchSnapshot({
       id: expect.any(String),
+      encodings: [
+        {
+          headers: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+        {
+          headers: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+      ],
+      examples: [
+        {
+          id: expect.any(String),
+        },
+      ],
+      schema: {
+        'x-stoplight-id': expect.any(String),
+      },
     });
   });
 
@@ -167,6 +194,20 @@ describe('translateMediaTypeObject', () => {
       ),
     ).toMatchSnapshot({
       id: expect.any(String),
+      encodings: [
+        {
+          headers: [
+            {
+              id: expect.any(String),
+              examples: [
+                {
+                  id: expect.any(String),
+                },
+              ],
+            },
+          ],
+        },
+      ],
       examples: [
         {
           id: expect.any(String),
@@ -299,7 +340,7 @@ describe('translateMediaTypeObject', () => {
             },
             'mediaType',
           ),
-        ).toHaveProperty('examples', [{ id: '#/content/mediaType/example', key: 'default', value: defaultExample }]);
+        ).toHaveProperty('examples', [{ id: expect.any(String), key: 'default', value: defaultExample }]);
       });
     });
 
@@ -419,7 +460,20 @@ describe('translateHeaderObject', () => {
         },
         'header-name',
       ),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      examples: [
+        {
+          id: expect.any(String),
+        },
+        {
+          id: expect.any(String),
+        },
+      ],
+      schema: {
+        'x-stoplight-id': expect.any(String),
+      },
+    });
   });
 
   it('should handle nullish value gracefully', () => {

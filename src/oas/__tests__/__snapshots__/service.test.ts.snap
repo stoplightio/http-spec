@@ -6,7 +6,7 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
-  "id": "?http-service-id?",
+  "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",
@@ -14,7 +14,6 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
-      "description": undefined,
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -24,11 +23,12 @@ Object {
           },
         },
       },
+      "id": "0407a17d",
       "key": "petstore_auth",
       "type": "oauth2",
     },
     Object {
-      "description": undefined,
+      "id": "ada3fcd8",
       "in": "header",
       "key": "api_key",
       "name": "api_key",
@@ -37,10 +37,12 @@ Object {
   ],
   "servers": Array [
     Object {
+      "id": "e60403d7",
       "name": "Swagger Petstore",
       "url": "https://petstore.swagger.io/v2",
     },
     Object {
+      "id": "ecbccfaa",
       "name": "Swagger Petstore",
       "url": "http://petstore.swagger.io/v2",
     },
@@ -48,14 +50,17 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "id": "2e010d1a",
       "name": "pet",
     },
     Object {
       "description": "Access to Petstore orders",
+      "id": "08f80d32",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
+      "id": "4d9de526",
       "name": "user",
     },
   ],
@@ -70,7 +75,7 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
-  "id": "?http-service-id?",
+  "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",
@@ -87,10 +92,12 @@ Object {
           },
         },
       },
+      "id": "0407a17d",
       "key": "petstore_auth",
       "type": "oauth2",
     },
     Object {
+      "id": "ada3fcd8",
       "in": "header",
       "key": "api_key",
       "name": "api_key",
@@ -99,10 +106,12 @@ Object {
   ],
   "servers": Array [
     Object {
+      "id": "e60403d7",
       "name": "Swagger Petstore",
       "url": "https://petstore.swagger.io/v2",
     },
     Object {
+      "id": "ecbccfaa",
       "name": "Swagger Petstore",
       "url": "http://petstore.swagger.io/v2",
     },
@@ -110,14 +119,17 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "id": "2e010d1a",
       "name": "pet",
     },
     Object {
       "description": "Access to Petstore orders",
+      "id": "08f80d32",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
+      "id": "4d9de526",
       "name": "user",
     },
   ],

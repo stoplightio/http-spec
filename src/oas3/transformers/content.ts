@@ -170,14 +170,14 @@ export const translateMediaTypeObject = withContext<
   const { schema, encoding, examples } = mediaObject;
   const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
 
+  const defaultExample = 'example' in mediaObject ? mediaObject.example : jsonSchema?.examples?.[0];
+
   return {
     id,
     mediaType,
     // Note that I'm assuming all references are resolved
     examples: [
-      mediaObject.example !== undefined
-        ? translateToDefaultExample.call(this, 'default', mediaObject.example)
-        : undefined,
+      defaultExample !== undefined ? translateToDefaultExample.call(this, 'default', defaultExample) : undefined,
       ...entries(examples).map(translateToExample, this),
     ].filter(isNonNullable),
     encodings: entries(encoding).map(translateEncodingPropertyObject, this).filter(isNonNullable),

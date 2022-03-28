@@ -23,13 +23,14 @@ describe('transformResponse()', () => {
           }),
         ),
       ).toEqual({
-        id: expect.any(String),
+        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         code: '200',
         contents: [
           {
+            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             examples: [
               {
-                id: expect.any(String),
+                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                 key: 'default',
                 value: {
                   "I'm a JSON": 'Jieeeet!',

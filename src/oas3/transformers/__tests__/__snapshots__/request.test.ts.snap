@@ -7,17 +7,17 @@ Object {
       Object {
         "encodings": Array [],
         "examples": Array [],
-        "id": "#/method/requestBody/content/content-a",
+        "id": Any<String>,
         "mediaType": "content-a",
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
           "deprecated": true,
-          "x-stoplight-id": "#/method/requestBody/content/content-a/schema",
+          "x-stoplight-id": Any<String>,
         },
       },
     ],
     "description": "descr",
-    "id": "#/method/requestBody",
+    "id": Any<String>,
     "required": true,
   },
   "cookie": Array [],
@@ -31,6 +31,7 @@ exports[`translateOas3ToRequest given no request body should translate parameter
 Object {
   "body": Object {
     "contents": Array [],
+    "id": "b5da2007",
   },
   "cookie": Array [],
   "headers": Array [
@@ -44,7 +45,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "a32abb0a",
       "name": "param-name-3",
+      "required": false,
       "style": "simple",
     },
   ],
@@ -60,7 +63,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "08f3127c",
       "name": "param-name-2",
+      "required": false,
       "style": "simple",
     },
     Object {
@@ -73,7 +78,9 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
+      "id": "0bf31735",
       "name": "param-name-1",
+      "required": false,
       "style": "simple",
     },
   ],

@@ -4,9 +4,9 @@ import { OpenAPIObject } from 'openapi3-ts';
 import { getSecurities as _getSecurities, OperationSecurities } from '../accessors';
 
 const getSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities?: OperationSecurities) =>
-  Array.from(_getSecurities(document, operationSecurities));
+  _getSecurities(document, operationSecurities);
 
-xdescribe('getOas3Securities', () => {
+describe('getOas3Securities', () => {
   it('given no global securities should return empty array', () => {
     expect(getSecurities({})).toEqual([]);
   });
@@ -39,10 +39,12 @@ xdescribe('getOas3Securities', () => {
       }),
     ).toStrictEqual([
       [
-        {
-          type: 'apiKey',
-          key: 'operationScheme',
-        },
+        [
+          'operationScheme',
+          {
+            type: 'apiKey',
+          },
+        ],
       ],
     ]);
   });
@@ -63,10 +65,12 @@ xdescribe('getOas3Securities', () => {
       ),
     ).toStrictEqual([
       [
-        {
-          type: 'apiKey',
-          key: 'specScheme',
-        },
+        [
+          'specScheme',
+          {
+            type: 'apiKey',
+          },
+        ],
       ],
     ]);
   });
@@ -91,10 +95,12 @@ xdescribe('getOas3Securities', () => {
       ),
     ).toStrictEqual([
       [
-        {
-          type: 'apiKey',
-          key: 'specScheme',
-        },
+        [
+          'specScheme',
+          {
+            type: 'apiKey',
+          },
+        ],
       ],
     ]);
   });
@@ -117,13 +123,6 @@ xdescribe('getOas3Securities', () => {
         },
         [{ operationSchemeX: [] }],
       ),
-    ).toStrictEqual([
-      [
-        ['0', 'operationSchemeX'],
-        {
-          key: 'operationSchemeX',
-        },
-      ],
-    ]);
+    ).toStrictEqual([[]]);
   });
 });

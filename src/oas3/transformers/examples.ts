@@ -5,8 +5,8 @@ import pickBy = require('lodash.pickby');
 import { withContext } from '../../context';
 import { isString } from '../../guards';
 import { getEdge } from '../../track';
-import { ArrayCallbackParameters } from '../../types';
-import { Oas3TranslateFunction } from '../types';
+import type { ArrayCallbackParameters } from '../../types';
+import type { Oas3TranslateFunction } from '../types';
 
 export const translateToExample = withContext<
   Oas3TranslateFunction<ArrayCallbackParameters<[key: string, example: unknown]>, Optional<INodeExample>>

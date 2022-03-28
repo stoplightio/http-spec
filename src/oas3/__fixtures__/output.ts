@@ -62,6 +62,8 @@ export default [
     method: 'get',
     path: '/users/{userId}',
     summary: 'Get User Info by User ID',
+    deprecated: false,
+    internal: false,
     responses: [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
@@ -261,6 +263,8 @@ export default [
     method: 'post',
     path: '/users/{userId}',
     summary: 'Create user',
+    deprecated: false,
+    internal: false,
     responses: [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)

@@ -14,49 +14,99 @@ describe('translateToOas3Responses', () => {
   });
 
   it('given a response in dictionary should translate', () => {
-    expect(
-      translateToResponses(
-        {},
-        {
-          default: {
-            content: {
-              'fake-content-type': {},
-            },
-            description: 'descr',
-            headers: {
-              'fake-header-name-1': {
-                description: 'calls per hour allowed by the user',
-                schema: {
-                  type: 'integer',
-                  format: 'int32',
-                },
-                example: 1000,
-              },
-              'fake-header-name-2': {
-                description: 'calls per hour allowed by the user',
-                schema: {
-                  type: 'integer',
-                  format: 'int32',
-                },
-                required: true,
-                example: 1000,
-              },
-            },
+    const responses = translateToResponses(
+      {},
+      {
+        default: {
+          content: {
+            'fake-content-type': {},
           },
-          200: {
-            content: {
-              'fake-content-type-200': {
-                example: 'dumb',
+          description: 'descr',
+          headers: {
+            'fake-header-name-1': {
+              description: 'calls per hour allowed by the user',
+              schema: {
+                type: 'integer',
+                format: 'int32',
               },
+              example: 1000,
             },
-            description: 'descr 200',
-            headers: {
-              'fake-header-name-200': {},
+            'fake-header-name-2': {
+              description: 'calls per hour allowed by the user',
+              schema: {
+                type: 'integer',
+                format: 'int32',
+              },
+              required: true,
+              example: 1000,
             },
           },
         },
-      ),
-    ).toMatchSnapshot();
+        200: {
+          content: {
+            'fake-content-type-200': {
+              example: 'dumb',
+            },
+          },
+          description: 'descr 200',
+          headers: {
+            'fake-header-name-200': {},
+          },
+        },
+      },
+    );
+
+    expect(responses).toHaveLength(2);
+    expect(responses[0]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
+        {
+          id: expect.any(String),
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+      ],
+      headers: [
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
+    expect(responses[1]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
+        {
+          id: expect.any(String),
+        },
+      ],
+      headers: [
+        {
+          id: expect.any(String),
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+        },
+        {
+          id: expect.any(String),
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+        },
+      ],
+    });
   });
 
   it('given a response with nullish headers in dictionary should translate', () => {
@@ -73,7 +123,7 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
-        id: '#/responses/200',
+        id: expect.any(String),
         code: '200',
         contents: [],
         headers: [],
@@ -94,7 +144,7 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
-        id: '#/responses/201',
+        id: expect.any(String),
         code: '201',
         contents: [],
         description: 'description 201',
@@ -152,15 +202,15 @@ describe('translateToOas3Responses', () => {
 
     expect(translateToResponses(document, document.paths!['/user'].get.responses)).toEqual([
       {
-        id: '#/responses/200',
+        id: expect.any(String),
         code: '200',
         contents: [
           {
-            id: '#/responses/200/content/application~1json',
+            id: expect.any(String),
             encodings: [],
             examples: [
               {
-                id: '#/responses/200/content/application~1json/examples/my-example',
+                id: expect.any(String),
                 key: 'my-example',
                 value: {
                   id: 1,
@@ -169,7 +219,7 @@ describe('translateToOas3Responses', () => {
             ],
             mediaType: 'application/json',
             schema: {
-              'x-stoplight-id': '#/responses/200/content/application~1json/schema',
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 id: {
@@ -215,16 +265,16 @@ describe('translateToOas3Responses', () => {
 
     const expected = [
       {
-        id: '#/responses/200',
+        id: expect.any(String),
         code: '200',
         contents: [],
         description: 'OK',
         headers: [
           {
-            id: '#/responses/200/headers/X-Page',
+            id: expect.any(String),
             name: 'X-Page',
             schema: {
-              'x-stoplight-id': '#/responses/200/headers/X-Page',
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
             },
@@ -234,7 +284,7 @@ describe('translateToOas3Responses', () => {
             encodings: [],
             examples: [
               {
-                id: '#/responses/200/headers/X-Page/example',
+                id: expect.any(String),
                 key: '__default',
                 value: 3,
               },

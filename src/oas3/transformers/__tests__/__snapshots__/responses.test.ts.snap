@@ -1,84 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`translateToOas3Responses given a response in dictionary should translate 1`] = `
-Array [
-  Object {
-    "code": "200",
-    "contents": Array [
-      Object {
-        "encodings": Array [],
-        "examples": Array [
-          Object {
-            "key": "default",
-            "value": "dumb",
-          },
-        ],
-        "mediaType": "fake-content-type-200",
-      },
-    ],
-    "description": "descr 200",
-    "headers": Array [
-      Object {
-        "encodings": Array [],
-        "examples": Array [],
-        "name": "fake-header-name-200",
-        "style": "simple",
-      },
-    ],
-  },
-  Object {
-    "code": "default",
-    "contents": Array [
-      Object {
-        "encodings": Array [],
-        "examples": Array [],
-        "mediaType": "fake-content-type",
-      },
-    ],
-    "description": "descr",
-    "headers": Array [
-      Object {
-        "description": "calls per hour allowed by the user",
-        "encodings": Array [],
-        "examples": Array [
-          Object {
-            "key": "__default",
-            "value": 1000,
-          },
-        ],
-        "explode": false,
-        "name": "fake-header-name-1",
-        "schema": Object {
-          "$schema": "http://json-schema.org/draft-07/schema#",
-          "format": "int32",
-          "maximum": 2147483647,
-          "minimum": -2147483648,
-          "type": "integer",
+Object {
+  "code": "200",
+  "contents": Array [
+    Object {
+      "encodings": Array [],
+      "examples": Array [
+        Object {
+          "id": Any<String>,
+          "key": "default",
+          "value": "dumb",
         },
-        "style": "simple",
-      },
-      Object {
-        "description": "calls per hour allowed by the user",
-        "encodings": Array [],
-        "examples": Array [
-          Object {
-            "key": "__default",
-            "value": 1000,
-          },
-        ],
-        "explode": false,
-        "name": "fake-header-name-2",
-        "required": true,
-        "schema": Object {
-          "$schema": "http://json-schema.org/draft-07/schema#",
-          "format": "int32",
-          "maximum": 2147483647,
-          "minimum": -2147483648,
-          "type": "integer",
+      ],
+      "id": Any<String>,
+      "mediaType": "fake-content-type-200",
+    },
+  ],
+  "description": "descr 200",
+  "headers": Array [
+    Object {
+      "encodings": Array [],
+      "examples": Array [],
+      "id": Any<String>,
+      "name": "fake-header-name-200",
+      "style": "simple",
+    },
+  ],
+  "id": Any<String>,
+}
+`;
+
+exports[`translateToOas3Responses given a response in dictionary should translate 2`] = `
+Object {
+  "code": "default",
+  "contents": Array [
+    Object {
+      "encodings": Array [],
+      "examples": Array [],
+      "id": Any<String>,
+      "mediaType": "fake-content-type",
+    },
+  ],
+  "description": "descr",
+  "headers": Array [
+    Object {
+      "description": "calls per hour allowed by the user",
+      "encodings": Array [],
+      "examples": Array [
+        Object {
+          "id": Any<String>,
+          "key": "__default",
+          "value": 1000,
         },
-        "style": "simple",
+      ],
+      "explode": false,
+      "id": Any<String>,
+      "name": "fake-header-name-1",
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "format": "int32",
+        "maximum": 2147483647,
+        "minimum": -2147483648,
+        "type": "integer",
+        "x-stoplight-id": Any<String>,
       },
-    ],
-  },
-]
+      "style": "simple",
+    },
+    Object {
+      "description": "calls per hour allowed by the user",
+      "encodings": Array [],
+      "examples": Array [
+        Object {
+          "id": Any<String>,
+          "key": "__default",
+          "value": 1000,
+        },
+      ],
+      "explode": false,
+      "id": Any<String>,
+      "name": "fake-header-name-2",
+      "required": true,
+      "schema": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "format": "int32",
+        "maximum": 2147483647,
+        "minimum": -2147483648,
+        "type": "integer",
+        "x-stoplight-id": Any<String>,
+      },
+      "style": "simple",
+    },
+  ],
+  "id": Any<String>,
+}
 `;
