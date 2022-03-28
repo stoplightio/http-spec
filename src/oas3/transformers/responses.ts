@@ -1,28 +1,21 @@
 import type { IHttpOperationResponse, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
-import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
-import { getSharedKey } from '../../oas/resolver';
-import { ArrayCallbackParameters } from '../../types';
+import type { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isResponseObject } from '../guards';
-import { Oas3TranslateFunction } from '../types';
+import type { Oas3TranslateFunction } from '../types';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-const translateToResponse = withContext<
-  Oas3TranslateFunction<
-    ArrayCallbackParameters<[statusCode: string, response: unknown]>,
-    Optional<IHttpOperationResponse>
-  >
->(function ([statusCode, response]) {
+const translateToResponse: Oas3TranslateFunction<
+  ArrayCallbackParameters<[statusCode: string, response: unknown]>,
+  Optional<IHttpOperationResponse>
+> = function ([statusCode, response]) {
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
-
   return {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
     headers: entries(resolvedResponse.headers).map(translateHeaderObject, this).filter(isNonNullable),
     contents: entries(resolvedResponse.content).map(translateMediaTypeObject, this).filter(isNonNullable),
@@ -34,7 +27,7 @@ const translateToResponse = withContext<
       isString,
     ),
   };
-});
+};
 
 export const translateToResponses: Oas3TranslateFunction<[responses: unknown], IHttpOperationResponse[]> = function (
   responses,

@@ -1,6 +1,6 @@
-import type { CollectionDefinition } from 'postman-collection';
+import { CollectionDefinition } from 'postman-collection';
 
-import type { HttpOperationTransformer } from '../types';
+import { HttpOperationTransformer } from '../types';
 
 export type PostmanCollectionHttpOperationTransformer = HttpOperationTransformer<{
   document: CollectionDefinition;

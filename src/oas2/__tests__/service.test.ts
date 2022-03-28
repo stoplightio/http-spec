@@ -1,13 +1,11 @@
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
-import { Fragment } from '../../types';
 import { transformOas2Service } from '../service';
 
 describe('oas2 service', () => {
   it('should handle non array schemes', () => {
-    const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'def',
+    const document: Partial<Spec> = {
       schemes: 2 as any,
     };
 
@@ -16,15 +14,14 @@ describe('oas2 service', () => {
         document,
       }),
     ).toStrictEqual({
-      id: 'def',
+      id: '?http-service-id?',
       name: 'no-title',
       version: '',
     });
   });
 
   it('should accept empty title', () => {
-    const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'abc',
+    const document: Partial<Spec> = {
       host: 'petstore.swagger.io',
       basePath: '/v2',
       info: {
@@ -39,17 +36,15 @@ describe('oas2 service', () => {
         document,
       }),
     ).toStrictEqual({
-      id: 'abc',
+      id: '?http-service-id?',
       name: '',
       version: '1.0',
       servers: [
         {
-          id: expect.any(String),
           name: '',
           url: 'https://petstore.swagger.io/v2',
         },
         {
-          id: expect.any(String),
           name: '',
           url: 'http://petstore.swagger.io/v2',
         },
@@ -58,22 +53,20 @@ describe('oas2 service', () => {
   });
 
   it('should handle invalid document securities gracefully', () => {
-    const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'abc',
+    const document: Partial<Spec> = {
       securityDefinitions: {},
       security: ['API-Key'] as any,
     };
 
     expect(transformOas2Service({ document })).toStrictEqual({
-      id: 'abc',
+      id: '?http-service-id?',
       name: 'no-title',
       version: '',
     });
   });
 
   it('filters out scopes', () => {
-    const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'def',
+    const document: Partial<Spec> = {
       swagger: '2.0',
       securityDefinitions: {
         'API Key': {
@@ -95,7 +88,6 @@ describe('oas2 service', () => {
   describe('x-logo support', () => {
     it('should support x-logo', () => {
       const document: Partial<OpenAPIObject> = {
-        'x-stoplight-id': 'abc',
         info: {
           title: 'no-title',
           version: '1.0.0',
@@ -109,7 +101,7 @@ describe('oas2 service', () => {
       };
 
       expect(transformOas2Service({ document })).toStrictEqual({
-        id: 'abc',
+        id: '?http-service-id?',
         name: 'no-title',
         version: '1.0.0',
         logo: {
@@ -122,7 +114,6 @@ describe('oas2 service', () => {
     });
     it('should provide default values for href and altText', () => {
       const document: Partial<OpenAPIObject> = {
-        'x-stoplight-id': 'abc',
         info: {
           title: 'no-title',
           version: '1.0.0',
@@ -134,7 +125,7 @@ describe('oas2 service', () => {
       };
 
       expect(transformOas2Service({ document })).toStrictEqual({
-        id: 'abc',
+        id: '?http-service-id?',
         name: 'no-title',
         contact: {
           url: 'https://stoplight.io',

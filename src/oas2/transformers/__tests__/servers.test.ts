@@ -1,14 +1,13 @@
 import type { DeepPartial } from '@stoplight/types';
 import type { Spec } from 'swagger-schema-official';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../context';
 import { translateToServers as _translateToServers } from '../servers';
 
 type GlobalWithLocation = typeof global & { location?: Partial<Location> & { href: string } };
 
 const translateToServers = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToServers>) =>
-  _translateToServers.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+  _translateToServers.call(createContext(document), ...params);
 
 describe('translateToServers', () => {
   afterAll(() => {
@@ -21,7 +20,7 @@ describe('translateToServers', () => {
       href: 'https://www.someotherdomain.com?query=123',
     };
     expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['http'] })).toEqual([
-      { id: expect.any(String), url: 'http://stoplight.io' },
+      { url: 'http://stoplight.io' },
     ]);
   });
 
@@ -30,11 +29,9 @@ describe('translateToServers', () => {
       translateToServers({ host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http', 'https'] }),
     ).toEqual([
       {
-        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
       {
-        id: expect.any(String),
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -52,11 +49,9 @@ describe('translateToServers', () => {
       ),
     ).toEqual([
       {
-        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
       {
-        id: expect.any(String),
         url: 'https://stoplight.io/base-path',
       },
     ]);
@@ -67,7 +62,6 @@ describe('translateToServers', () => {
       translateToServers({ schemes: ['https'], host: 'stoplight.io', basePath: '/base-path' }, { schemes: ['http'] }),
     ).toEqual([
       {
-        id: expect.any(String),
         url: 'http://stoplight.io/base-path',
       },
     ]);
@@ -80,7 +74,6 @@ describe('translateToServers', () => {
   it('given no basePath should return servers', () => {
     expect(translateToServers({ schemes: ['http'], host: 'stoplight.io' }, {})).toEqual([
       {
-        id: expect.any(String),
         url: 'http://stoplight.io',
       },
     ]);
@@ -121,11 +114,9 @@ describe('translateToServers', () => {
   it('should handle invalid server basePath gracefully', () => {
     expect(translateToServers({ host: 'stoplight.io', basePath: 123 as any }, { schemes: ['http', 'https'] })).toEqual([
       {
-        id: expect.any(String),
         url: 'http://stoplight.io',
       },
       {
-        id: expect.any(String),
         url: 'https://stoplight.io',
       },
     ]);

@@ -1,12 +1,9 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
-import type { Operation } from 'swagger-schema-official';
+import type { IHttpOperationResponse, Optional } from '@stoplight/types';
+import { DeepPartial } from '@stoplight/types';
+import { Operation } from 'swagger-schema-official';
 
-import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
-import { getSharedKey } from '../../oas/resolver';
-import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
 import { getExamplesFromSchema, getProduces } from '../accessors';
@@ -14,40 +11,29 @@ import { isResponseObject } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
 
-const translateToResponse = withContext<
-  Oas2TranslateFunction<[produces: string[], statusCode: string, response: unknown], Optional<IHttpOperationResponse>>
->(function (produces, statusCode, response) {
+const translateToResponse: Oas2TranslateFunction<
+  [produces: string[], statusCode: string, response: unknown],
+  Optional<IHttpOperationResponse>
+> = function (produces, statusCode, response) {
   const resolvedResponse = this.maybeResolveLocalRef(response);
   if (!isResponseObject(resolvedResponse)) return;
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
-
   const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
-  const objectifiedExamples = entries(resolvedResponse.examples || getExamplesFromSchema(resolvedResponse.schema)).map(
-    ([key, value]) => translateToDefaultExample.call(this, key, value),
-  );
+  const objectifiedExamples = entries(
+    resolvedResponse.examples || (resolvedResponse.schema ? getExamplesFromSchema(resolvedResponse.schema) : void 0),
+  ).map(([key, value]) => ({ key, value }));
 
   const contents = produces
-    .map<IMediaTypeContent & { examples: NonNullable<IMediaTypeContent['examples']> }>(
-      withContext(produceElement => ({
-        id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
-        mediaType: produceElement,
-        examples: objectifiedExamples.filter(example => example.key === produceElement),
-        ...pickBy(
-          {
-            schema: isPlainObject(resolvedResponse.schema)
-              ? translateSchemaObject.call(this, resolvedResponse.schema)
-              : undefined,
-          },
-          isNonNullable,
-        ),
-      })),
-      this,
-    )
+    .map(produceElement => ({
+      mediaType: produceElement,
+      schema: isPlainObject(resolvedResponse.schema)
+        ? translateSchemaObject.call(this, resolvedResponse.schema)
+        : void 0,
+      examples: objectifiedExamples.filter(example => example.key === produceElement),
+    }))
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
     description: resolvedResponse.description,
     headers,
@@ -58,7 +44,6 @@ const translateToResponse = withContext<
   if (foreignExamples.length > 0) {
     if (translatedResponses.contents.length === 0)
       translatedResponses.contents[0] = {
-        id: this.generateId(`http_media-${this.parentId}-`),
         mediaType: '',
         schema: {},
         examples: [],
@@ -68,7 +53,7 @@ const translateToResponse = withContext<
   }
 
   return translatedResponses;
-});
+};
 
 export const translateToResponses: Oas2TranslateFunction<
   [operation: DeepPartial<Operation>],

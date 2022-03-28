@@ -18,14 +18,11 @@ import type {
   PathParameter,
   QueryParameter,
 } from 'swagger-schema-official';
-
-import { withContext } from '../../context';
 import pickBy = require('lodash.pickby');
 import pick = require('lodash.pick');
 
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { Oas2ParamBase } from '../../oas/guards';
-import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
@@ -64,19 +61,17 @@ function chooseQueryParameterStyle(
   }
 }
 
-export const translateToHeaderParam = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }], IHttpHeaderParam>
->(function (param) {
-  const name = param.name;
-
+export const translateToHeaderParam: Oas2TranslateFunction<
+  [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
+  IHttpHeaderParam
+> = function (parameter) {
   return {
-    id: this.generateId(`http_header-${this.parentId}-${name}`),
-    name,
     style: HttpParamStyles.Simple,
-    ...buildSchemaForParameter.call(this, param),
-    required: !!param.required,
+    name: parameter.name,
+    ...buildSchemaForParameter.call(this, parameter),
+    required: !!parameter.required,
   };
-});
+};
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
@@ -94,54 +89,39 @@ export const translateToHeaderParams: Oas2TranslateFunction<[headers: unknown], 
   return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
 };
 
-export const translateToBodyParameter = withContext<
-  Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
->(function (body, consumes) {
-  const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
-    translateToDefaultExample.call(this, key, value),
+export const translateToBodyParameter: Oas2TranslateFunction<
+  [body: BodyParameter, consumes: string[]],
+  IHttpOperationRequestBody
+> = function (body, consumes) {
+  const examples = entries(body['x-examples'] || (body.schema ? getExamplesFromSchema(body.schema) : void 0)).map(
+    ([key, value]) => ({ key, value }),
   );
 
-  return {
-    id: this.generateId(`http_request_body-${this.parentId}`),
-
-    required: !!body.required,
-    contents: consumes.map(
-      withContext(mediaType => {
-        return {
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
-          mediaType,
-          schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
-          examples,
-        };
-      }),
-      this,
-    ),
-
-    ...pickBy(
-      {
-        description: body.description,
-      },
-      isString,
-    ),
-  };
-});
-
-export const translateFromFormDataParameters = withContext<
-  Oas2TranslateFunction<
-    [parameters: (Oas2ParamBase & Partial<FormDataParameter>)[], consumes: string[]],
-    IHttpOperationRequestBody
-  >
->(function (parameters, consumes) {
-  const finalBody: IHttpOperationRequestBody = {
-    id: this.generateId(`http_request_body-${this.parentId}`),
-    contents: consumes.map(
-      withContext(mediaType => ({
-        id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+  return pickBy({
+    description: body.description,
+    required: body.required,
+    contents: consumes.map(mediaType => {
+      return {
         mediaType,
-        schema: translateSchemaObject.call(this, { type: 'object' }),
-      })),
-      this,
-    ),
+        schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
+        examples,
+      };
+    }),
+  });
+};
+
+export const translateFromFormDataParameters: Oas2TranslateFunction<
+  [parameters: FormDataParameter[], consumes: string[]],
+  IHttpOperationRequestBody
+> = function (parameters, consumes) {
+  const finalBody: IHttpOperationRequestBody = {
+    contents: consumes.map(mediaType => ({
+      mediaType,
+      schema: {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+      },
+    })),
   };
 
   return parameters.reduce((body, parameter) => {
@@ -171,9 +151,9 @@ export const translateFromFormDataParameters = withContext<
     });
     return body;
   }, finalBody);
-});
+};
 
-function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): IHttpEncoding | null {
+function buildEncoding(parameter: FormDataParameter): IHttpEncoding | null {
   switch (parameter.collectionFormat) {
     case 'csv':
       return {
@@ -203,41 +183,36 @@ function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): I
   return null;
 }
 
-export const translateToQueryParameter = withContext<
-  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam>
->(function (param) {
-  const name = param.name;
-
+export const translateToQueryParameter: Oas2TranslateFunction<
+  [query: DeepPartial<QueryParameter> & Oas2ParamBase],
+  IHttpQueryParam
+> = function (query) {
   return {
-    id: this.generateId(`http_query-${this.parentId}-${name}`),
-    name,
-    style: chooseQueryParameterStyle(param),
-
-    required: !!param.required,
-    ...buildSchemaForParameter.call(this, param),
+    style: chooseQueryParameterStyle(query),
+    name: query.name,
+    required: !!query.required,
+    ...buildSchemaForParameter.call(this, query),
 
     ...pickBy(
       {
-        allowEmptyValue: param.allowEmptyValue,
+        allowEmptyValue: query.allowEmptyValue,
       },
       isBoolean,
     ),
   };
-});
+};
 
-export const translateToPathParameter = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam>
->(function (param) {
-  const name = param.name;
-
+export const translateToPathParameter: Oas2TranslateFunction<
+  [param: DeepPartial<PathParameter> & Oas2ParamBase],
+  IHttpPathParam
+> = function (param) {
   return {
-    id: this.generateId(`http_path_param-${this.parentId}-${name}`),
-    name,
+    name: param.name,
     style: HttpParamStyles.Simple,
     required: !!param.required,
     ...buildSchemaForParameter.call(this, param),
   };
-});
+};
 
 const buildSchemaForParameter: Oas2TranslateFunction<
   [param: DeepPartial<QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header>],

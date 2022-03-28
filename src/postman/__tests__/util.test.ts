@@ -6,7 +6,7 @@ describe('transformStringValueToSchema()', () => {
   it('returns param with schema and example', () => {
     expect(transformStringValueToSchema('test')).toEqual({
       schema: { type: 'string' },
-      examples: [{ id: expect.any(String), key: 'default', value: 'test' }],
+      examples: [{ key: 'default', value: 'test' }],
     });
   });
 });

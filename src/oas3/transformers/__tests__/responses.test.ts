@@ -1,12 +1,11 @@
 import type { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../context';
 import { translateToResponses as _translateToResponses } from '../responses';
 
 const translateToResponses = (document: DeepPartial<OpenAPIObject>, responses: unknown) =>
-  _translateToResponses.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), responses);
+  _translateToResponses.call(createContext(document), responses);
 
 describe('translateToOas3Responses', () => {
   it('given empty dictionary should return empty array', () => {
@@ -14,99 +13,49 @@ describe('translateToOas3Responses', () => {
   });
 
   it('given a response in dictionary should translate', () => {
-    const responses = translateToResponses(
-      {},
-      {
-        default: {
-          content: {
-            'fake-content-type': {},
-          },
-          description: 'descr',
-          headers: {
-            'fake-header-name-1': {
-              description: 'calls per hour allowed by the user',
-              schema: {
-                type: 'integer',
-                format: 'int32',
+    expect(
+      translateToResponses(
+        {},
+        {
+          default: {
+            content: {
+              'fake-content-type': {},
+            },
+            description: 'descr',
+            headers: {
+              'fake-header-name-1': {
+                description: 'calls per hour allowed by the user',
+                schema: {
+                  type: 'integer',
+                  format: 'int32',
+                },
+                example: 1000,
               },
-              example: 1000,
-            },
-            'fake-header-name-2': {
-              description: 'calls per hour allowed by the user',
-              schema: {
-                type: 'integer',
-                format: 'int32',
+              'fake-header-name-2': {
+                description: 'calls per hour allowed by the user',
+                schema: {
+                  type: 'integer',
+                  format: 'int32',
+                },
+                required: true,
+                example: 1000,
               },
-              required: true,
-              example: 1000,
+            },
+          },
+          200: {
+            content: {
+              'fake-content-type-200': {
+                example: 'dumb',
+              },
+            },
+            description: 'descr 200',
+            headers: {
+              'fake-header-name-200': {},
             },
           },
         },
-        200: {
-          content: {
-            'fake-content-type-200': {
-              example: 'dumb',
-            },
-          },
-          description: 'descr 200',
-          headers: {
-            'fake-header-name-200': {},
-          },
-        },
-      },
-    );
-
-    expect(responses).toHaveLength(2);
-    expect(responses[0]).toMatchSnapshot({
-      id: expect.any(String),
-      contents: [
-        {
-          id: expect.any(String),
-          examples: [
-            {
-              id: expect.any(String),
-            },
-          ],
-        },
-      ],
-      headers: [
-        {
-          id: expect.any(String),
-        },
-      ],
-    });
-    expect(responses[1]).toMatchSnapshot({
-      id: expect.any(String),
-      contents: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      headers: [
-        {
-          id: expect.any(String),
-          examples: [
-            {
-              id: expect.any(String),
-            },
-          ],
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
-        },
-        {
-          id: expect.any(String),
-          examples: [
-            {
-              id: expect.any(String),
-            },
-          ],
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
-        },
-      ],
-    });
+      ),
+    ).toMatchSnapshot();
   });
 
   it('given a response with nullish headers in dictionary should translate', () => {
@@ -123,7 +72,6 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
-        id: expect.any(String),
         code: '200',
         contents: [],
         headers: [],
@@ -144,7 +92,6 @@ describe('translateToOas3Responses', () => {
       ),
     ).toStrictEqual([
       {
-        id: expect.any(String),
         code: '201',
         contents: [],
         description: 'description 201',
@@ -202,15 +149,12 @@ describe('translateToOas3Responses', () => {
 
     expect(translateToResponses(document, document.paths!['/user'].get.responses)).toEqual([
       {
-        id: expect.any(String),
         code: '200',
         contents: [
           {
-            id: expect.any(String),
             encodings: [],
             examples: [
               {
-                id: expect.any(String),
                 key: 'my-example',
                 value: {
                   id: 1,
@@ -219,7 +163,6 @@ describe('translateToOas3Responses', () => {
             ],
             mediaType: 'application/json',
             schema: {
-              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 id: {
@@ -265,16 +208,13 @@ describe('translateToOas3Responses', () => {
 
     const expected = [
       {
-        id: expect.any(String),
         code: '200',
         contents: [],
         description: 'OK',
         headers: [
           {
-            id: expect.any(String),
             name: 'X-Page',
             schema: {
-              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
             },
@@ -284,7 +224,6 @@ describe('translateToOas3Responses', () => {
             encodings: [],
             examples: [
               {
-                id: expect.any(String),
                 key: '__default',
                 value: 3,
               },

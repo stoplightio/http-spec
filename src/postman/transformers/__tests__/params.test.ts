@@ -7,10 +7,8 @@ describe('transformQueryParam()', () => {
   describe('value is set', () => {
     it('transforms correctly', () => {
       expect(transformQueryParam(new QueryParam({ key: 'testKey', value: 'testValue' }))).toEqual({
-        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         examples: [
           {
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             key: 'default',
             value: 'testValue',
           },
@@ -28,7 +26,6 @@ describe('transformQueryParam()', () => {
   describe('value is null', () => {
     it('transforms correctly', () => {
       expect(transformQueryParam(new QueryParam({ key: 'testKey', value: null }))).toEqual({
-        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         name: 'testKey',
         style: 'form',
         required: true,
@@ -39,7 +36,6 @@ describe('transformQueryParam()', () => {
   describe('key is null', () => {
     it('transforms correctly with key being empty string', () => {
       expect(transformQueryParam(new QueryParam({ key: null, value: null }))).toEqual({
-        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         name: '',
         style: 'form',
         required: true,
@@ -52,7 +48,6 @@ describe('transformHeader()', () => {
   describe('value is defined', () => {
     it('result contains schema', () => {
       expect(transformHeader(new Header({ key: 'testKey', value: 'some string' }))).toEqual({
-        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         name: 'testkey',
         schema: {
           type: 'string',
@@ -61,7 +56,6 @@ describe('transformHeader()', () => {
         required: true,
         examples: [
           {
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             key: 'default',
             value: 'some string',
           },
@@ -73,7 +67,6 @@ describe('transformHeader()', () => {
   describe('value is not defined', () => {
     it('results does not contain schema', () => {
       expect(transformHeader(new Header({ key: 'testKey' }))).toEqual({
-        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         name: 'testkey',
         style: 'simple',
         required: true,
@@ -85,8 +78,8 @@ describe('transformHeader()', () => {
 describe('transformPathParams()', () => {
   it('transforms correctly', () => {
     expect(transformPathParams(['elem1', ':param1', ':param2', 'elem2'])).toEqual([
-      { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), name: 'param1', style: 'simple', required: true },
-      { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), name: 'param2', style: 'simple', required: true },
+      { name: 'param1', style: 'simple', required: true },
+      { name: 'param2', style: 'simple', required: true },
     ]);
   });
 });
@@ -98,11 +91,9 @@ describe('transformBody()', () => {
         describe('body is correctly defined json', () => {
           it('returns body containing example, schema and media type', () => {
             expect(transformBody(new RequestBody({ mode: 'raw', raw: '{"a":"b"}' }), 'application/nice+json')).toEqual({
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               contents: [
                 {
-                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                  examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: { a: 'b' } }],
+                  examples: [{ key: 'default', value: { a: 'b' } }],
                   mediaType: 'application/nice+json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',
@@ -125,11 +116,9 @@ describe('transformBody()', () => {
         describe('body is not a correct JSON', () => {
           it('returns body containing example and media type', () => {
             expect(transformBody(new RequestBody({ mode: 'raw', raw: '"a":"b"' }), 'application/json')).toEqual({
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               contents: [
                 {
-                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                  examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: '"a":"b"' }],
+                  examples: [{ key: 'default', value: '"a":"b"' }],
                   mediaType: 'application/json',
                 },
               ],
@@ -142,11 +131,9 @@ describe('transformBody()', () => {
         describe('media type is defined', () => {
           it('returns body containing example and given media type', () => {
             expect(transformBody(new RequestBody({ mode: 'raw', raw: '<a />' }), 'application/xml')).toEqual({
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               contents: [
                 {
-                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                  examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: '<a />' }],
+                  examples: [{ key: 'default', value: '<a />' }],
                   mediaType: 'application/xml',
                 },
               ],
@@ -157,13 +144,9 @@ describe('transformBody()', () => {
         describe('media type is not defined', () => {
           it('returns body containing example and text/plain media type', () => {
             expect(transformBody(new RequestBody({ mode: 'raw', raw: "I'm a goat. Bleeet!" }))).toEqual({
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
               contents: [
                 {
-                  id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                  examples: [
-                    { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: "I'm a goat. Bleeet!" },
-                  ],
+                  examples: [{ key: 'default', value: "I'm a goat. Bleeet!" }],
                   mediaType: 'text/plain',
                 },
               ],
@@ -196,13 +179,9 @@ describe('transformBody()', () => {
               'multipart/test+form-data',
             ),
           ).toEqual({
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             contents: [
               {
-                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                examples: [
-                  { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: { k1: 'v1', k2: 'v2' } },
-                ],
+                examples: [{ key: 'default', value: { k1: 'v1', k2: 'v2' } }],
                 mediaType: 'multipart/test+form-data',
                 schema: {
                   type: 'object',
@@ -227,11 +206,9 @@ describe('transformBody()', () => {
               }),
             ),
           ).toEqual({
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             contents: [
               {
-                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: { k1: 'v1' } }],
+                examples: [{ key: 'default', value: { k1: 'v1' } }],
                 mediaType: 'multipart/form-data',
                 schema: {
                   type: 'object',
@@ -257,13 +234,9 @@ describe('transformBody()', () => {
         );
 
         expect(result).toEqual({
-          id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
           contents: [
             {
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-              examples: [
-                { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: expect.any(Object) },
-              ],
+              examples: [{ key: 'default', value: expect.any(Object) }],
               mediaType: 'multipart/test+form-data',
               schema: {
                 type: 'object',
@@ -299,11 +272,9 @@ describe('transformBody()', () => {
     describe('body is not defined', () => {
       it('returns default empty body', () => {
         expect(transformBody(new RequestBody({ mode: 'formdata' }))).toEqual({
-          id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
           contents: [
             {
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-              examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: {} }],
+              examples: [{ key: 'default', value: {} }],
               mediaType: 'multipart/form-data',
               schema: { properties: {}, type: 'object' },
             },
@@ -329,13 +300,9 @@ describe('transformBody()', () => {
               'application/test+x-www-form-urlencoded',
             ),
           ).toEqual({
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             contents: [
               {
-                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                examples: [
-                  { id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: { k1: 'v1', k2: 'v2' } },
-                ],
+                examples: [{ key: 'default', value: { k1: 'v1', k2: 'v2' } }],
                 mediaType: 'application/test+x-www-form-urlencoded',
                 schema: {
                   type: 'object',
@@ -360,11 +327,9 @@ describe('transformBody()', () => {
               }),
             ),
           ).toEqual({
-            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             contents: [
               {
-                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-                examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: { k1: 'v1' } }],
+                examples: [{ key: 'default', value: { k1: 'v1' } }],
                 mediaType: 'application/x-www-form-urlencoded',
                 schema: {
                   type: 'object',
@@ -382,11 +347,9 @@ describe('transformBody()', () => {
     describe('body is not defined', () => {
       it('returns default empty body', () => {
         expect(transformBody(new RequestBody({ mode: 'urlencoded' }))).toEqual({
-          id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
           contents: [
             {
-              id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
-              examples: [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'default', value: {} }],
+              examples: [{ key: 'default', value: {} }],
               mediaType: 'application/x-www-form-urlencoded',
               schema: { properties: {}, type: 'object' },
             },

@@ -9,16 +9,14 @@ import {
 import type { JSONSchema7 } from 'json-schema';
 // @ts-ignore
 import * as jsonSchemaGenerator from 'json-schema-generator';
-import type { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
+import { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
 
 import { convertSchema } from '../../oas/transformers/schema';
-import { generateId } from '../id';
 import { transformDescriptionDefinition, transformStringValueToSchema } from '../util';
 
 export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
   return {
-    id: generateId(),
     name: queryParam.key || '',
     style: HttpParamStyles.Form,
     required: true,
@@ -28,7 +26,6 @@ export function transformQueryParam(queryParam: QueryParam): IHttpQueryParam {
 
 export function transformHeader(header: Header): IHttpHeaderParam {
   return {
-    id: generateId(),
     name: header.key.toLowerCase(),
     style: HttpParamStyles.Simple,
     required: true,
@@ -40,7 +37,6 @@ export function transformPathParams(segments: string[]): IHttpPathParam[] {
   return segments.reduce<IHttpHeaderParam[]>((params, segment) => {
     if (segment.startsWith(':')) {
       params.push({
-        id: generateId(),
         name: segment.substring(1),
         style: HttpParamStyles.Simple,
         required: true,
@@ -55,19 +51,17 @@ export function transformBody(body: RequestBody, mediaType?: string): IHttpOpera
   switch (body.mode) {
     case 'raw':
       if (!body.raw) return;
-      return { id: generateId(), contents: [transformRawBody(body.raw, mediaType)] };
+      return { contents: [transformRawBody(body.raw, mediaType)] };
 
     case 'formdata':
       if (!body.formdata) return;
       return {
-        id: generateId(),
         contents: [transformParamsBody<FormParam>(body.formdata, mediaType || 'multipart/form-data')],
       };
 
     case 'urlencoded':
       if (!body.urlencoded) return;
       return {
-        id: generateId(),
         contents: [transformParamsBody<QueryParam>(body.urlencoded, mediaType || 'application/x-www-form-urlencoded')],
       };
   }
@@ -81,11 +75,9 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
       const parsed = JSON.parse(raw);
 
       return {
-        id: generateId(),
         mediaType,
         examples: [
           {
-            id: generateId(),
             key: 'default',
             value: parsed,
           },
@@ -98,11 +90,9 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
   }
 
   return {
-    id: generateId(),
     mediaType,
     examples: [
       {
-        id: generateId(),
         key: 'default',
         value: raw,
       },
@@ -126,7 +116,6 @@ function transformParamsBody<T extends FormParam | QueryParam>(
   });
 
   return {
-    id: generateId(),
     mediaType,
     schema: {
       type: 'object',
@@ -137,7 +126,6 @@ function transformParamsBody<T extends FormParam | QueryParam>(
     },
     examples: [
       {
-        id: generateId(),
         key: 'default',
         value: paramsList.reduce((values, param) => {
           values[param.name] = param.value;
@@ -146,4 +134,13 @@ function transformParamsBody<T extends FormParam | QueryParam>(
       },
     ],
   };
+}
+
+function generateId() {
+  return (
+    '_gen_' +
+    Math.round(Math.pow(8, 6) * Math.random())
+      .toString(16)
+      .padStart(6, '0')
+  );
 }

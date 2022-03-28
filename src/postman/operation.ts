@@ -1,5 +1,5 @@
-import type { HttpSecurityScheme, IHttpOperation } from '@stoplight/types';
-import type { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
+import { HttpSecurityScheme, IHttpOperation } from '@stoplight/types';
+import { Collection, CollectionDefinition, Item, RequestAuth, Url } from 'postman-collection';
 
 import { mergeOperations, mergeResponses } from '../merge';
 import { transformRequest } from './transformers/request';
@@ -11,7 +11,7 @@ import {
   transformSecuritySchemes,
 } from './transformers/securityScheme';
 import { transformServer } from './transformers/server';
-import type { PostmanCollectionHttpOperationTransformer } from './types';
+import { PostmanCollectionHttpOperationTransformer } from './types';
 import { resolveCollection, transformDescriptionDefinition } from './util';
 
 export const transformPostmanCollectionOperations = (document: CollectionDefinition): IHttpOperation[] => {

@@ -8,66 +8,59 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
             headers: [
-              { id: 'b', name: '200h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'c', name: '200h2', style: HttpParamStyles.Simple, required: true },
+              { name: '200h1', style: HttpParamStyles.Simple, required: true },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
-            id: 'd',
             code: '400',
             headers: [
-              { id: 'e', name: '400h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'f', name: '400h2', style: HttpParamStyles.Simple, required: true },
+              { name: '400h1', style: HttpParamStyles.Simple, required: true },
+              { name: '400h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
         [
           {
-            id: 'g',
             code: '200',
             headers: [
-              { id: 'h', name: '200h2', style: HttpParamStyles.Simple, required: true },
-              { id: 'i', name: '200h3', style: HttpParamStyles.Simple, required: true },
+              { name: '200h2', style: HttpParamStyles.Simple, required: true },
+              { name: '200h3', style: HttpParamStyles.Simple, required: true },
             ],
           },
           {
-            id: 'j',
             code: '500',
             headers: [
-              { id: 'k', name: '500h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'l', name: '500h2', style: HttpParamStyles.Simple, required: true },
+              { name: '500h1', style: HttpParamStyles.Simple, required: true },
+              { name: '500h2', style: HttpParamStyles.Simple, required: true },
             ],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
         headers: [
-          { id: 'b', name: '200h1', style: HttpParamStyles.Simple, required: false },
-          { id: 'c', name: '200h2', style: HttpParamStyles.Simple, required: true },
-          { id: 'i', name: '200h3', style: HttpParamStyles.Simple, required: false },
+          { name: '200h1', style: HttpParamStyles.Simple, required: false },
+          { name: '200h2', style: HttpParamStyles.Simple, required: true },
+          { name: '200h3', style: HttpParamStyles.Simple, required: false },
         ],
         contents: [],
       },
       {
-        id: 'd',
         code: '400',
         headers: [
-          { id: 'e', name: '400h1', style: HttpParamStyles.Simple, required: true },
-          { id: 'f', name: '400h2', style: HttpParamStyles.Simple, required: true },
+          { name: '400h1', style: HttpParamStyles.Simple, required: true },
+          { name: '400h2', style: HttpParamStyles.Simple, required: true },
         ],
       },
       {
-        id: 'j',
         code: '500',
         headers: [
-          { id: 'k', name: '500h1', style: HttpParamStyles.Simple, required: true },
-          { id: 'l', name: '500h2', style: HttpParamStyles.Simple, required: true },
+          { name: '500h1', style: HttpParamStyles.Simple, required: true },
+          { name: '500h2', style: HttpParamStyles.Simple, required: true },
         ],
       },
     ]);
@@ -78,50 +71,45 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
             headers: [
-              { id: 'b', name: 'h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'c', name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
-              { id: 'd', name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
             ],
           },
         ],
         [
           {
-            id: 'e',
             code: '200',
             headers: [
-              { id: 'f', name: 'h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'g', name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'string' } },
-              { id: 'h', name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'string' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
             ],
           },
           {
-            id: 'i',
             code: '200',
             headers: [
-              { id: 'j', name: 'h1', style: HttpParamStyles.Simple, required: true },
-              { id: 'k', name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'boolean' } },
-              { id: 'l', name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+              { name: 'h1', style: HttpParamStyles.Simple, required: true },
+              { name: 'h2', style: HttpParamStyles.Simple, required: true, schema: { type: 'boolean' } },
+              { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
             ],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
         headers: [
-          { id: 'b', name: 'h1', style: HttpParamStyles.Simple, required: true },
+          { name: 'h1', style: HttpParamStyles.Simple, required: true },
           {
-            id: 'c',
             name: 'h2',
             style: HttpParamStyles.Simple,
             required: true,
             schema: { anyOf: [{ type: 'number' }, { type: 'string' }, { type: 'boolean' }] },
           },
-          { id: 'd', name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
+          { name: 'h3', style: HttpParamStyles.Simple, required: true, schema: { type: 'number' } },
         ],
         contents: [],
       },
@@ -133,24 +121,21 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
-            headers: [{ id: 'b', name: 'h', style: HttpParamStyles.Simple, required: true }],
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: true }],
           },
         ],
         [
           {
-            id: 'c',
             code: '200',
-            headers: [{ id: 'd', name: 'h', style: HttpParamStyles.Simple, required: false }],
+            headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
-        headers: [{ id: 'b', name: 'h', style: HttpParamStyles.Simple, required: false }],
+        headers: [{ name: 'h', style: HttpParamStyles.Simple, required: false }],
         contents: [],
       },
     ]);
@@ -161,24 +146,21 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
-            headers: [{ id: 'b', name: 'Oo', style: HttpParamStyles.Simple, required: true }],
+            headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
           },
         ],
         [
           {
-            id: 'c',
             code: '200',
-            headers: [{ id: 'd', name: 'oO', style: HttpParamStyles.Simple, required: true }],
+            headers: [{ name: 'oO', style: HttpParamStyles.Simple, required: true }],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
-        headers: [{ id: 'b', name: 'Oo', style: HttpParamStyles.Simple, required: true }],
+        headers: [{ name: 'Oo', style: HttpParamStyles.Simple, required: true }],
         contents: [],
       },
     ]);
@@ -189,67 +171,38 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
-            contents: [
-              { id: 'a1', mediaType: '200-tion/a-son' },
-              { id: 'a2', mediaType: '200-tion/b-son' },
-            ],
+            contents: [{ mediaType: '200-tion/a-son' }, { mediaType: '200-tion/b-son' }],
           },
           {
-            id: 'b',
             code: '400',
-            contents: [
-              { id: 'b1', mediaType: '400-tion/a-son' },
-              { id: 'b2', mediaType: '400-tion/b-son' },
-            ],
+            contents: [{ mediaType: '400-tion/a-son' }, { mediaType: '400-tion/b-son' }],
           },
         ],
         [
           {
-            id: 'c',
             code: '200',
-            contents: [
-              { id: 'c1', mediaType: '200-tion/b-son' },
-              { id: 'c2', mediaType: '200-tion/c-son' },
-            ],
+            contents: [{ mediaType: '200-tion/b-son' }, { mediaType: '200-tion/c-son' }],
           },
           {
-            id: 'd',
             code: '500',
-            contents: [
-              { id: 'd1', mediaType: '500-tion/a-son' },
-              { id: 'd2', mediaType: '500-tion/b-son' },
-            ],
+            contents: [{ mediaType: '500-tion/a-son' }, { mediaType: '500-tion/b-son' }],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
-        contents: [
-          { id: 'a1', mediaType: '200-tion/a-son' },
-          { id: 'a2', mediaType: '200-tion/b-son' },
-          { id: 'c2', mediaType: '200-tion/c-son' },
-        ],
+        contents: [{ mediaType: '200-tion/a-son' }, { mediaType: '200-tion/b-son' }, { mediaType: '200-tion/c-son' }],
         headers: [],
       },
       {
-        id: 'b',
         code: '400',
-        contents: [
-          { id: 'b1', mediaType: '400-tion/a-son' },
-          { id: 'b2', mediaType: '400-tion/b-son' },
-        ],
+        contents: [{ mediaType: '400-tion/a-son' }, { mediaType: '400-tion/b-son' }],
       },
       {
-        id: 'd',
         code: '500',
-        contents: [
-          { id: 'd1', mediaType: '500-tion/a-son' },
-          { id: 'd2', mediaType: '500-tion/b-son' },
-        ],
+        contents: [{ mediaType: '500-tion/a-son' }, { mediaType: '500-tion/b-son' }],
       },
     ]);
   });
@@ -259,24 +212,17 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
             contents: [
-              {
-                id: 'a1',
-                mediaType: 'application/json',
-                schema: { type: 'object', properties: { a: { type: 'string' } } },
-              },
+              { mediaType: 'application/json', schema: { type: 'object', properties: { a: { type: 'string' } } } },
             ],
           },
         ],
         [
           {
-            id: 'b',
             code: '200',
             contents: [
               {
-                id: 'b1',
                 mediaType: 'application/json',
                 schema: { type: 'object', properties: { a: { type: 'string' }, b: { type: 'string' } } },
               },
@@ -286,11 +232,9 @@ describe('mergeResponses()', () => {
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
         contents: [
           {
-            id: 'a1',
             mediaType: 'application/json',
             schema: {
               anyOf: [
@@ -310,24 +254,21 @@ describe('mergeResponses()', () => {
       mergeResponses(
         [
           {
-            id: 'a',
             code: '200',
-            contents: [{ id: 'a1', mediaType: 'Aa/Oo' }],
+            contents: [{ mediaType: 'Aa/Oo' }],
           },
         ],
         [
           {
-            id: 'b',
             code: '200',
-            contents: [{ id: 'b1', mediaType: 'aA/oO' }],
+            contents: [{ mediaType: 'aA/oO' }],
           },
         ],
       ),
     ).toEqual([
       {
-        id: 'a',
         code: '200',
-        contents: [{ id: 'a1', mediaType: 'Aa/Oo' }],
+        contents: [{ mediaType: 'Aa/Oo' }],
         headers: [],
       },
     ]);
@@ -339,28 +280,12 @@ describe('mergeOperations()', () => {
     expect(
       mergeOperations(
         [
-          {
-            id: '1',
-            method: 'get',
-            path: '/a',
-            responses: [
-              { id: 'a', code: '200' },
-              { id: 'b', code: '400' },
-            ],
-          },
-          { id: '2', method: 'get', path: '/b', responses: [{ id: 'c', code: '200' }] },
+          { id: '1', method: 'get', path: '/a', responses: [{ code: '200' }, { code: '400' }] },
+          { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
         ],
         [
-          {
-            id: '3',
-            method: 'get',
-            path: '/a',
-            responses: [
-              { id: 'd', code: '200' },
-              { id: 'e', code: '500' },
-            ],
-          },
-          { id: '4', method: 'get', path: '/c', responses: [{ id: 'f', code: '200' }] },
+          { id: '3', method: 'get', path: '/a', responses: [{ code: '200' }, { code: '500' }] },
+          { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
         ],
       ),
     ).toEqual([
@@ -368,16 +293,12 @@ describe('mergeOperations()', () => {
         id: '1',
         method: 'get',
         path: '/a',
-        responses: [
-          { id: 'a', code: '200', contents: [], headers: [] },
-          { id: 'b', code: '400' },
-          { id: 'e', code: '500' },
-        ],
+        responses: [{ code: '200', contents: [], headers: [] }, { code: '400' }, { code: '500' }],
         servers: [],
         request: {},
       },
-      { id: '2', method: 'get', path: '/b', responses: [{ id: 'c', code: '200' }] },
-      { id: '4', method: 'get', path: '/c', responses: [{ id: 'f', code: '200' }] },
+      { id: '2', method: 'get', path: '/b', responses: [{ code: '200' }] },
+      { id: '4', method: 'get', path: '/c', responses: [{ code: '200' }] },
     ]);
   });
 
@@ -389,8 +310,8 @@ describe('mergeOperations()', () => {
             id: '1',
             method: 'get',
             path: '/a',
-            responses: [{ id: 'a', code: '200' }],
-            servers: [{ id: 'b', url: 'http://example.com' }],
+            responses: [{ code: '200' }],
+            servers: [{ url: 'http://example.com' }],
           },
         ],
         [
@@ -398,8 +319,8 @@ describe('mergeOperations()', () => {
             id: '2',
             method: 'get',
             path: '/a',
-            responses: [{ id: 'c', code: '200' }],
-            servers: [{ id: 'd', url: 'https://example.com' }],
+            responses: [{ code: '200' }],
+            servers: [{ url: 'https://example.com' }],
           },
         ],
       ),
@@ -408,11 +329,8 @@ describe('mergeOperations()', () => {
         id: '1',
         method: 'get',
         path: '/a',
-        responses: [{ id: 'a', code: '200', headers: [], contents: [] }],
-        servers: [
-          { id: 'b', url: 'http://example.com' },
-          { id: 'd', url: 'https://example.com' },
-        ],
+        responses: [{ code: '200', headers: [], contents: [] }],
+        servers: [{ url: 'http://example.com' }, { url: 'https://example.com' }],
         request: {},
       },
     ]);
@@ -426,24 +344,22 @@ describe('mergeOperations()', () => {
             id: '1',
             method: 'get',
             path: '/a',
-            responses: [{ id: 'a', code: '200' }],
+            responses: [{ code: '200' }],
             request: {
               headers: [
-                { id: 'b', name: 'a', style: HttpParamStyles.Simple, required: true },
-                { id: 'c', name: 'b', style: HttpParamStyles.Simple, required: true },
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
               ],
               query: [
-                { id: 'd', name: 'a', style: HttpParamStyles.Form, required: true },
-                { id: 'e', name: 'b', style: HttpParamStyles.Form, required: true },
+                { name: 'a', style: HttpParamStyles.Form, required: true },
+                { name: 'b', style: HttpParamStyles.Form, required: true },
               ],
-              path: [{ id: 'f', name: 'a', style: HttpParamStyles.Simple, required: true }],
+              path: [{ name: 'a', style: HttpParamStyles.Simple, required: true }],
               body: {
-                id: 'g',
                 description: 'The cadillac stood by the house',
                 required: true,
                 contents: [
                   {
-                    id: 'g1',
                     mediaType: 'application/json',
                     schema: { type: 'string' },
                   },
@@ -457,27 +373,25 @@ describe('mergeOperations()', () => {
             id: '2',
             method: 'get',
             path: '/a',
-            responses: [{ id: '11', code: '200' }],
+            responses: [{ code: '200' }],
             request: {
               headers: [
-                { id: 'b1', name: 'b', style: HttpParamStyles.Simple, required: true },
-                { id: 'c1', name: 'c', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
+                { name: 'c', style: HttpParamStyles.Simple, required: true },
               ],
               query: [
-                { id: 'd1', name: 'b', style: HttpParamStyles.Form, required: true },
-                { id: 'e1', name: 'c', style: HttpParamStyles.Form, required: true },
+                { name: 'b', style: HttpParamStyles.Form, required: true },
+                { name: 'c', style: HttpParamStyles.Form, required: true },
               ],
               path: [
-                { id: 'f1', name: 'a', style: HttpParamStyles.Simple, required: true },
-                { id: 'g1', name: 'b', style: HttpParamStyles.Simple, required: true },
+                { name: 'a', style: HttpParamStyles.Simple, required: true },
+                { name: 'b', style: HttpParamStyles.Simple, required: true },
               ],
               body: {
-                id: 'h1',
                 description: 'And the yanks they were within',
                 required: true,
                 contents: [
                   {
-                    id: 'h2',
                     mediaType: 'application/json',
                     schema: { type: 'number' },
                   },
@@ -492,29 +406,27 @@ describe('mergeOperations()', () => {
         id: '1',
         method: 'get',
         path: '/a',
-        responses: [{ id: 'a', code: '200', headers: [], contents: [] }],
+        responses: [{ code: '200', headers: [], contents: [] }],
         request: {
           headers: [
-            { id: 'b', name: 'a', style: HttpParamStyles.Simple, required: false },
-            { id: 'c', name: 'b', style: HttpParamStyles.Simple, required: true },
-            { id: 'c1', name: 'c', style: HttpParamStyles.Simple, required: false },
+            { name: 'a', style: HttpParamStyles.Simple, required: false },
+            { name: 'b', style: HttpParamStyles.Simple, required: true },
+            { name: 'c', style: HttpParamStyles.Simple, required: false },
           ],
           query: [
-            { id: 'd', name: 'a', style: HttpParamStyles.Form, required: false },
-            { id: 'e', name: 'b', style: HttpParamStyles.Form, required: true },
-            { id: 'e1', name: 'c', style: HttpParamStyles.Form, required: false },
+            { name: 'a', style: HttpParamStyles.Form, required: false },
+            { name: 'b', style: HttpParamStyles.Form, required: true },
+            { name: 'c', style: HttpParamStyles.Form, required: false },
           ],
           path: [
-            { id: 'f', name: 'a', style: HttpParamStyles.Simple, required: true },
-            { id: 'g1', name: 'b', style: HttpParamStyles.Simple, required: false },
+            { name: 'a', style: HttpParamStyles.Simple, required: true },
+            { name: 'b', style: HttpParamStyles.Simple, required: false },
           ],
           body: {
-            id: 'g',
             required: true,
             description: 'The cadillac stood by the house; And the yanks they were within',
             contents: [
               {
-                id: 'g1',
                 mediaType: 'application/json',
                 schema: { anyOf: [{ type: 'string' }, { type: 'number' }] },
               },

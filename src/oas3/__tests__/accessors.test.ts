@@ -1,10 +1,4 @@
-import { DeepPartial } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
-
-import { getSecurities as _getSecurities, OperationSecurities } from '../accessors';
-
-const getSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities?: OperationSecurities) =>
-  _getSecurities(document, operationSecurities);
+import { getSecurities } from '../accessors';
 
 describe('getOas3Securities', () => {
   it('given no global securities should return empty array', () => {
@@ -39,12 +33,10 @@ describe('getOas3Securities', () => {
       }),
     ).toStrictEqual([
       [
-        [
-          'operationScheme',
-          {
-            type: 'apiKey',
-          },
-        ],
+        {
+          type: 'apiKey',
+          key: 'operationScheme',
+        },
       ],
     ]);
   });
@@ -65,12 +57,10 @@ describe('getOas3Securities', () => {
       ),
     ).toStrictEqual([
       [
-        [
-          'specScheme',
-          {
-            type: 'apiKey',
-          },
-        ],
+        {
+          type: 'apiKey',
+          key: 'specScheme',
+        },
       ],
     ]);
   });
@@ -95,12 +85,10 @@ describe('getOas3Securities', () => {
       ),
     ).toStrictEqual([
       [
-        [
-          'specScheme',
-          {
-            type: 'apiKey',
-          },
-        ],
+        {
+          type: 'apiKey',
+          key: 'specScheme',
+        },
       ],
     ]);
   });
@@ -124,5 +112,63 @@ describe('getOas3Securities', () => {
         [{ operationSchemeX: [] }],
       ),
     ).toStrictEqual([[]]);
+  });
+
+  it('should return security for each scope', () => {
+    const res = getSecurities(
+      {
+        components: {
+          securitySchemes: {
+            authWith2Scopes: {
+              type: 'oauth2',
+              flows: {
+                authorizationCode: {
+                  scopes: {
+                    accessToken: 'accessToken description',
+                    secScope: 'secScope description',
+                  },
+                },
+              },
+            },
+          },
+        },
+        security: [
+          {
+            authWith2Scopes: ['accessToken', 'secScope'],
+          },
+        ],
+      },
+      [
+        {
+          authWith2Scopes: ['accessToken'],
+        },
+        { authWith2Scopes: ['secScope'] },
+      ],
+    );
+
+    expect(res).toStrictEqual([
+      [
+        {
+          type: 'oauth2',
+          flows: {
+            authorizationCode: {
+              scopes: { accessToken: 'accessToken description' },
+            },
+          },
+          key: 'authWith2Scopes',
+        },
+      ],
+      [
+        {
+          type: 'oauth2',
+          flows: {
+            authorizationCode: {
+              scopes: { secScope: 'secScope description' },
+            },
+          },
+          key: 'authWith2Scopes',
+        },
+      ],
+    ]);
   });
 });

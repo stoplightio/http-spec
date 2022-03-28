@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial } from '@stoplight/types';
-import type { Operation, Security, Spec } from 'swagger-schema-official';
+import { DeepPartial, Dictionary } from '@stoplight/types';
+import { Operation, Schema, Security, Spec } from 'swagger-schema-official';
 import pickBy = require('lodash.pickby');
 
 import { isNonNullable, isString } from '../guards';
@@ -68,11 +68,11 @@ function getProducesOrConsumes(
   return mimeTypes.flat().filter(isString);
 }
 
-export function getExamplesFromSchema(data: unknown): Record<string, unknown> {
+export function getExamplesFromSchema(data: Schema & { 'x-examples'?: Dictionary<unknown> }): Record<string, unknown> {
   if (!isPlainObject(data)) return {};
 
   return {
-    ...(isPlainObject(data['x-examples']) && { ...data['x-examples'] }),
+    ...('x-examples' in data && isPlainObject(data['x-examples']) && { ...data['x-examples'] }),
     ...('example' in data && { default: data.example }),
   };
 }

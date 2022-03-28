@@ -33,7 +33,6 @@ describe('transformSecurityScheme()', () => {
       ).toEqual({
         type: 'securityScheme',
         securityScheme: {
-          id: expect.any(String),
           key: 'auth-http',
           type: 'http',
           scheme: 'basic',
@@ -71,7 +70,6 @@ describe('transformSecurityScheme()', () => {
       ).toEqual({
         type: 'securityScheme',
         securityScheme: {
-          id: expect.any(String),
           key: 'auth-http',
           type: 'http',
           scheme: 'digest',
@@ -99,7 +97,6 @@ describe('transformSecurityScheme()', () => {
       ).toEqual({
         type: 'securityScheme',
         securityScheme: {
-          id: expect.any(String),
           key: 'auth-http',
           type: 'http',
           scheme: 'bearer',
@@ -138,7 +135,6 @@ describe('transformSecurityScheme()', () => {
         ).toEqual({
           type: 'securityScheme',
           securityScheme: {
-            id: expect.any(String),
             key: 'auth-apiKey',
             type: 'apiKey',
             name: 'TestApiKey',
@@ -172,7 +168,6 @@ describe('transformSecurityScheme()', () => {
         ).toEqual({
           type: 'securityScheme',
           securityScheme: {
-            id: expect.any(String),
             key: 'auth-apiKey',
             type: 'apiKey',
             name: 'TestApiKey',
@@ -213,14 +208,12 @@ describe('transformSecurityScheme()', () => {
             type: 'headerParams',
             headerParams: [
               {
-                id: expect.any(String),
                 name: 'Authorization',
                 style: HttpParamStyles.Simple,
                 description: 'OAuth1 Authorization Header',
                 required: true,
                 examples: [
                   {
-                    id: expect.any(String),
                     key: 'default',
                     value:
                       'OAuth realm="karol@stoplight.io",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="123123123123",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
@@ -248,14 +241,12 @@ describe('transformSecurityScheme()', () => {
             type: 'headerParams',
             headerParams: [
               {
-                id: expect.any(String),
                 name: 'Authorization',
                 style: HttpParamStyles.Simple,
                 description: 'OAuth1 Authorization Header',
                 required: true,
                 examples: [
                   {
-                    id: expect.any(String),
                     key: 'default',
                     value:
                       'OAuth realm="a_realm",oauth_consumer_key="a_consumer_key",oauth_token="a_token",oauth_signature_method="HMAC-SHA1",oauth_timestamp="0",oauth_nonce="a",oauth_version="1.0",oauth_signature="a_signature"',
@@ -283,32 +274,29 @@ describe('transformSecurityScheme()', () => {
             ).toEqual({
               type: 'queryParams',
               queryParams: [
-                { id: expect.any(String), name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
-                { id: expect.any(String), name: 'oauth_token', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
                 {
-                  id: expect.any(String),
                   name: 'oauth_signature_method',
                   style: HttpParamStyles.Form,
                   required: false,
-                  examples: [{ id: expect.any(String), key: 'default', value: 'HMAC-SHA1' }],
+                  examples: [{ key: 'default', value: 'HMAC-SHA1' }],
                 },
                 {
-                  id: expect.any(String),
                   name: 'oauth_timestamp',
                   style: HttpParamStyles.Form,
                   required: false,
                   schema: { type: 'string' },
-                  examples: [{ id: expect.any(String), key: 'default', value: '123123123123' }],
+                  examples: [{ key: 'default', value: '123123123123' }],
                 },
-                { id: expect.any(String), name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
                 {
-                  id: expect.any(String),
                   name: 'oauth_version',
                   style: HttpParamStyles.Form,
                   required: false,
-                  examples: [{ id: expect.any(String), key: 'default', value: '1.0' }],
+                  examples: [{ key: 'default', value: '1.0' }],
                 },
-                { id: expect.any(String), name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
               ],
             });
           });
@@ -329,32 +317,29 @@ describe('transformSecurityScheme()', () => {
             ).toEqual({
               type: 'queryParams',
               queryParams: [
-                { id: expect.any(String), name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
-                { id: expect.any(String), name: 'oauth_token', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_token', style: HttpParamStyles.Form, required: false },
                 {
-                  id: expect.any(String),
                   name: 'oauth_signature_method',
                   style: HttpParamStyles.Form,
                   required: false,
                   examples: [],
                 },
                 {
-                  id: expect.any(String),
                   name: 'oauth_timestamp',
                   style: HttpParamStyles.Form,
                   required: false,
                   schema: { type: 'string' },
                   examples: [],
                 },
-                { id: expect.any(String), name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_nonce', style: HttpParamStyles.Form, required: false },
                 {
-                  id: expect.any(String),
                   name: 'oauth_version',
                   style: HttpParamStyles.Form,
                   required: false,
                   examples: [],
                 },
-                { id: expect.any(String), name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
+                { name: 'oauth_signature', style: HttpParamStyles.Form, required: false },
               ],
             });
           });
@@ -374,32 +359,29 @@ describe('transformSecurityScheme()', () => {
           ).toEqual({
             type: 'queryParams',
             queryParams: [
-              { id: expect.any(String), name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
-              { id: expect.any(String), name: 'oauth_token', style: HttpParamStyles.Form, required: true },
+              { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required: true },
+              { name: 'oauth_token', style: HttpParamStyles.Form, required: true },
               {
-                id: expect.any(String),
                 name: 'oauth_signature_method',
                 style: HttpParamStyles.Form,
                 required: true,
-                examples: [{ id: expect.any(String), key: 'default', value: 'HMAC-SHA1' }],
+                examples: [{ key: 'default', value: 'HMAC-SHA1' }],
               },
               {
-                id: expect.any(String),
                 name: 'oauth_timestamp',
                 style: HttpParamStyles.Form,
                 required: true,
                 schema: { type: 'string' },
-                examples: [{ id: expect.any(String), key: 'default', value: '123123123123' }],
+                examples: [{ key: 'default', value: '123123123123' }],
               },
-              { id: expect.any(String), name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
+              { name: 'oauth_nonce', style: HttpParamStyles.Form, required: true },
               {
-                id: expect.any(String),
                 name: 'oauth_version',
                 style: HttpParamStyles.Form,
                 required: true,
-                examples: [{ id: expect.any(String), key: 'default', value: '1.0' }],
+                examples: [{ key: 'default', value: '1.0' }],
               },
-              { id: expect.any(String), name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
+              { name: 'oauth_signature', style: HttpParamStyles.Form, required: true },
             ],
           });
         });
@@ -432,7 +414,6 @@ describe('transformSecurityScheme()', () => {
         ).toEqual({
           type: 'securityScheme',
           securityScheme: {
-            id: expect.any(String),
             key: 'auth-oauth2',
             description: 'OAuth2 Access Token',
             scheme: 'bearer',
@@ -467,7 +448,6 @@ describe('transformSecurityScheme()', () => {
           type: 'queryParams',
           queryParams: [
             {
-              id: expect.any(String),
               name: 'access_token',
               style: HttpParamStyles.Form,
               description: 'OAuth2 Access Token',
@@ -503,7 +483,6 @@ describe('transformSecurityScheme()', () => {
         type: 'headerParams',
         headerParams: [
           {
-            id: expect.any(String),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             description: 'Hawk Authorization Header',
@@ -538,19 +517,16 @@ describe('transformSecurityScheme()', () => {
         type: 'headerParams',
         headerParams: [
           {
-            id: expect.any(String),
             name: 'X-Amz-Security-Token',
             style: HttpParamStyles.Simple,
             required: true,
           },
           {
-            id: expect.any(String),
             name: 'X-Amz-Date',
             style: HttpParamStyles.Simple,
             required: true,
           },
           {
-            id: expect.any(String),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             required: true,
@@ -583,7 +559,6 @@ describe('transformSecurityScheme()', () => {
         type: 'headerParams',
         headerParams: [
           {
-            id: expect.any(String),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             description: 'Akamai EdgeGrid Authorization Header',
@@ -613,7 +588,6 @@ describe('transformSecurityScheme()', () => {
         type: 'headerParams',
         headerParams: [
           {
-            id: expect.any(String),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             description: 'NTLM Authorization Header',
@@ -673,7 +647,6 @@ describe('transformPostmanSecuritySchemes()', () => {
       ).toEqual([
         {
           securityScheme: {
-            id: expect.any(String),
             key: 'http-0',
             scheme: 'basic',
             type: 'http',
@@ -682,7 +655,6 @@ describe('transformPostmanSecuritySchemes()', () => {
         },
         {
           securityScheme: {
-            id: expect.any(String),
             key: 'http-1',
             scheme: 'digest',
             type: 'http',
@@ -781,7 +753,6 @@ describe('transformPostmanSecuritySchemes()', () => {
       ).toEqual([
         {
           securityScheme: {
-            id: expect.any(String),
             key: 'http-0',
             scheme: 'basic',
             type: 'http',
@@ -796,26 +767,26 @@ describe('transformPostmanSecuritySchemes()', () => {
 describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
   [
     'two equal security schemes',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
-    { type: 'securityScheme', securityScheme: { id: '', key: '2', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'basic' } },
     true,
   ],
   [
     'different types',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
     { type: 'headerParams', headerParams: [] },
     false,
   ],
   [
     'two different',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
-    { type: 'securityScheme', securityScheme: { id: '', key: '2', type: 'http', scheme: 'digest' } },
+    { type: 'securityScheme', securityScheme: { key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { key: '2', type: 'http', scheme: 'digest' } },
     false,
   ],
   [
     'two equal query params',
-    { type: 'queryParams', queryParams: [{ id: '', name: 'token', style: HttpParamStyles.Form }] },
-    { type: 'queryParams', queryParams: [{ id: '', name: 'token', style: HttpParamStyles.Form }] },
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
+    { type: 'queryParams', queryParams: [{ name: 'token', style: HttpParamStyles.Form }] },
     true,
   ],
 ])('given %s security schemes', (desc, scheme1, scheme2, result) => {

@@ -13,12 +13,9 @@ import { translateLogo } from './transformers/translateLogo';
 export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> | DeepPartial<Spec>, [], IHttpService> =
   function () {
     const document = this.document;
-    const id = String(document['x-stoplight-id']);
-    this.ids.service = id;
-    this.parentId = id;
 
     const httpService: IHttpService = {
-      id,
+      id: '?http-service-id?',
 
       version: document.info?.version ?? '',
       name: document.info?.title ?? 'no-title',

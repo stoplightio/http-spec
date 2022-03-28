@@ -1,8 +1,6 @@
 import { HttpParamStyles, HttpSecurityScheme, IHttpHeaderParam, IHttpQueryParam } from '@stoplight/types';
-import type { Collection, RequestAuth } from 'postman-collection';
-
-import { isEqual } from '../../utils';
-import { generateId } from '../id';
+import { Collection, RequestAuth } from 'postman-collection';
+import isEqual = require('lodash.isequal');
 
 export type PostmanSecurityScheme = StandardSecurityScheme | QuerySecurityScheme | HeaderSecurityScheme;
 
@@ -38,14 +36,12 @@ export function transformSecurityScheme(
           type: 'headerParams',
           headerParams: [
             {
-              id: generateId(),
               name: 'Authorization',
               style: HttpParamStyles.Simple,
               description: 'OAuth1 Authorization Header',
               required: true,
               examples: [
                 {
-                  id: generateId(),
                   key: 'default',
                   value:
                     'OAuth ' +
@@ -73,38 +69,31 @@ export function transformSecurityScheme(
         return {
           type: 'queryParams',
           queryParams: [
-            { id: generateId(), name: 'oauth_consumer_key', style: HttpParamStyles.Form, required },
-            { id: generateId(), name: 'oauth_token', style: HttpParamStyles.Form, required },
+            { name: 'oauth_consumer_key', style: HttpParamStyles.Form, required },
+            { name: 'oauth_token', style: HttpParamStyles.Form, required },
             {
-              id: generateId(),
               name: 'oauth_signature_method',
               style: HttpParamStyles.Form,
               required,
               examples: parameters.has('signatureMethod')
-                ? [{ id: generateId(), key: 'default', value: parameters.get('signatureMethod') }]
+                ? [{ key: 'default', value: parameters.get('signatureMethod') }]
                 : [],
             },
             {
-              id: generateId(),
               name: 'oauth_timestamp',
               style: HttpParamStyles.Form,
               required,
               schema: { type: 'string' },
-              examples: parameters.has('timestamp')
-                ? [{ id: generateId(), key: 'default', value: parameters.get('timestamp') }]
-                : [],
+              examples: parameters.has('timestamp') ? [{ key: 'default', value: parameters.get('timestamp') }] : [],
             },
-            { id: generateId(), name: 'oauth_nonce', style: HttpParamStyles.Form, required },
+            { name: 'oauth_nonce', style: HttpParamStyles.Form, required },
             {
-              id: generateId(),
               name: 'oauth_version',
               style: HttpParamStyles.Form,
               required,
-              examples: parameters.has('version')
-                ? [{ id: generateId(), key: 'default', value: parameters.get('version') }]
-                : [],
+              examples: parameters.has('version') ? [{ key: 'default', value: parameters.get('version') }] : [],
             },
-            { id: generateId(), name: 'oauth_signature', style: HttpParamStyles.Form, required },
+            { name: 'oauth_signature', style: HttpParamStyles.Form, required },
           ],
         };
       }
@@ -114,7 +103,6 @@ export function transformSecurityScheme(
           type: 'queryParams',
           queryParams: [
             {
-              id: generateId(),
               name: 'access_token',
               description: 'OAuth2 Access Token',
               style: HttpParamStyles.Form,
@@ -126,7 +114,6 @@ export function transformSecurityScheme(
         return {
           type: 'securityScheme',
           securityScheme: {
-            id: generateId(),
             key: nextKey('oauth2'),
             type: 'http',
             scheme: 'bearer',
@@ -139,7 +126,6 @@ export function transformSecurityScheme(
       return {
         type: 'securityScheme',
         securityScheme: {
-          id: generateId(),
           key: nextKey('apiKey'),
           type: 'apiKey',
           name: parameters.get('key'),
@@ -153,7 +139,6 @@ export function transformSecurityScheme(
       return {
         type: 'securityScheme',
         securityScheme: {
-          id: generateId(),
           key: nextKey('http'),
           type: 'http',
           scheme: auth.type,
@@ -165,7 +150,6 @@ export function transformSecurityScheme(
         type: 'headerParams',
         headerParams: [
           {
-            id: generateId(),
             name: 'Authorization',
             description: 'Hawk Authorization Header',
             required: true,
@@ -183,19 +167,16 @@ export function transformSecurityScheme(
         type: 'headerParams',
         headerParams: [
           {
-            id: generateId(),
             name: 'X-Amz-Security-Token',
             style: HttpParamStyles.Simple,
             required: true,
           },
           {
-            id: generateId(),
             name: 'X-Amz-Date',
             style: HttpParamStyles.Simple,
             required: true,
           },
           {
-            id: generateId(),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             required: true,
@@ -209,7 +190,6 @@ export function transformSecurityScheme(
         type: 'headerParams',
         headerParams: [
           {
-            id: generateId(),
             name: 'Authorization',
             style: HttpParamStyles.Simple,
             required: true,
@@ -223,7 +203,6 @@ export function transformSecurityScheme(
         type: 'headerParams',
         headerParams: [
           {
-            id: generateId(),
             name: 'Authorization',
             description: 'NTLM Authorization Header',
             required: true,
@@ -248,7 +227,9 @@ export function isPostmanSecuritySchemeEqual(pss1: PostmanSecurityScheme, pss2: 
   if (pss1.type !== pss2.type) return false;
 
   if (isStandardSecurityScheme(pss1) && isStandardSecurityScheme(pss2)) {
-    return isEqual({ ...pss1.securityScheme, key: '' }, { ...pss2.securityScheme, key: '' });
+    const { key: _key, ...pss1SecurityScheme } = pss1.securityScheme;
+    const { key: _key2, ...pss2SecurityScheme } = pss2.securityScheme;
+    return isEqual(pss1SecurityScheme, pss2SecurityScheme);
   }
 
   return isEqual(pss1, pss2);

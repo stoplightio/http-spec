@@ -15,30 +15,26 @@ describe('transformRequest()', () => {
       ),
     ).toEqual({
       body: {
-        id: expect.any(String),
         contents: [
           {
-            id: expect.any(String),
-            examples: [{ id: expect.any(String), key: 'default', value: 'test' }],
+            examples: [{ key: 'default', value: 'test' }],
             mediaType: 'text/plain',
           },
         ],
       },
       headers: [
         {
-          id: expect.any(String),
           name: 'header',
           schema: { type: 'string' },
-          examples: [{ id: expect.any(String), key: 'default', value: 'a header' }],
+          examples: [{ key: 'default', value: 'a header' }],
           style: 'simple',
           required: true,
         },
       ],
-      path: [{ id: expect.any(String), name: 'param', style: 'simple', required: true }],
+      path: [{ name: 'param', style: 'simple', required: true }],
       query: [
         {
-          id: expect.any(String),
-          examples: [{ id: expect.any(String), key: 'default', value: 'b' }],
+          examples: [{ key: 'default', value: 'b' }],
           schema: { type: 'string' },
           name: 'a',
           style: 'form',

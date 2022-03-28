@@ -33,11 +33,3 @@ export function isPathParam(param: unknown): param is Oas2ParamBase & { in: 'pat
 export function isHeaderParam(param: unknown): param is Oas2ParamBase & { in: 'header' } {
   return isValidOas2Param(param) && param.in === 'header';
 }
-
-export function isBodyParam(param: unknown): param is Oas2ParamBase & { in: 'body' } {
-  return isValidOas2Param(param) && param.in === 'body';
-}
-
-export function isFormDataParam(param: unknown): param is Oas2ParamBase & { in: 'formData' } {
-  return isValidOas2Param(param) && param.in === 'formData';
-}

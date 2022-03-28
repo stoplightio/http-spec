@@ -1,10 +1,8 @@
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../../context';
-import { resolveRef } from '../../../resolver';
+import { createContext } from '../../../../context';
 import { translateSchemaObject } from '..';
 import type { OASSchemaObject } from '../types';
 
-const translate = (schemaObject: OASSchemaObject) =>
-  translateSchemaObject.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), schemaObject);
+const translate = (schemaObject: OASSchemaObject) => translateSchemaObject.call(createContext({}), schemaObject);
 
 describe('translateSchemaObject', () => {
   it('should translate id', () => {
@@ -18,7 +16,6 @@ describe('translateSchemaObject', () => {
         },
       }),
     ).toStrictEqual({
-      'x-stoplight-id': expect.any(String),
       $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'object',
       properties: {
@@ -39,7 +36,6 @@ describe('translateSchemaObject', () => {
         exclusiveMaximum: true,
       }),
     ).toStrictEqual({
-      'x-stoplight-id': expect.any(String),
       $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'integer',
       exclusiveMinimum: 2,
@@ -72,7 +68,6 @@ describe('translateSchemaObject', () => {
         ],
       }),
     ).toStrictEqual({
-      'x-stoplight-id': expect.any(String),
       $schema: 'http://json-schema.org/draft-07/schema#',
       anyOf: [
         {
@@ -115,7 +110,6 @@ describe('translateSchemaObject', () => {
         },
       }),
     ).toStrictEqual({
-      'x-stoplight-id': expect.any(String),
       $schema: 'http://json-schema.org/draft-07/schema#',
       properties: {
         exclusiveMinimum: {
@@ -158,7 +152,6 @@ describe('translateSchemaObject', () => {
           'x-nullable': true,
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: ['string', 'null'],
       });
@@ -171,7 +164,6 @@ describe('translateSchemaObject', () => {
           'x-example': 'Cat',
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
         examples: ['Cat'],
@@ -187,7 +179,6 @@ describe('translateSchemaObject', () => {
           nullable: true,
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: ['string', 'null'],
       });
@@ -200,7 +191,6 @@ describe('translateSchemaObject', () => {
           example: 'Cat',
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
         examples: ['Cat'],
@@ -214,7 +204,6 @@ describe('translateSchemaObject', () => {
           format: 'base64',
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
         contentEncoding: 'base64',
@@ -228,7 +217,6 @@ describe('translateSchemaObject', () => {
           format: 'binary',
         }),
       ).toStrictEqual({
-        'x-stoplight-id': expect.any(String),
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
         contentMediaType: 'application/octet-stream',

@@ -1,18 +1,12 @@
 import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../context';
 import { translateToServers as _translateToServers } from '../servers';
 
 const translateToServers = (
   document: DeepPartial<OpenAPIObject> & { paths: { '/pet': { get: Record<string, unknown> } } },
-) =>
-  _translateToServers.call(
-    createContext(document, resolveRef, DEFAULT_ID_GENERATOR),
-    document.paths['/pet'],
-    document.paths['/pet'].get,
-  );
+) => _translateToServers.call(createContext(document), document.paths['/pet'], document.paths['/pet'].get);
 
 describe('translateToServers', () => {
   it('translate single ServerObject to IServer', () => {
@@ -74,7 +68,6 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/path',
         variables: {
@@ -119,7 +112,6 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/pet.get',
       },
@@ -150,7 +142,6 @@ describe('translateToServers', () => {
 
     expect(translateToServers(document)).toStrictEqual([
       {
-        id: expect.any(String),
         description: 'description',
         url: 'http://stoplight.io/pet',
       },

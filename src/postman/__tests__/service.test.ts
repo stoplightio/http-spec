@@ -30,7 +30,6 @@ describe('transformPostmanCollectionService()', () => {
           id: expect.any(String),
           securitySchemes: [
             {
-              id: expect.any(String),
               key: 'http-0',
               scheme: 'basic',
               type: 'http',

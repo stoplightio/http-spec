@@ -1,10 +1,12 @@
 import type { IHttpOperationRequest } from '@stoplight/types';
+import pickBy = require('lodash.pickby');
+import type { BodyParameter, FormDataParameter } from 'swagger-schema-official';
 
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
-import { createOasParamsIterator } from '../../oas/accessors';
+import { getValidOasParameters } from '../../oas/accessors';
 import { getConsumes } from '../accessors';
-import { isBodyParam, isFormDataParam, isHeaderParam, isPathParam, isQueryParam } from '../guards';
+import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import {
   translateFromFormDataParameters,
@@ -13,17 +15,16 @@ import {
   translateToPathParameter,
   translateToQueryParameter,
 } from './params';
-import pickBy = require('lodash.pickby');
-import { Oas2ParamBase } from '../../oas/guards';
-
-const iterateOasParams = createOasParamsIterator(OasVersion.OAS2);
 
 export const translateToRequest: Oas2TranslateFunction<
   [path: Record<string, unknown>, operation: Record<string, unknown>],
   IHttpOperationRequest
 > = function (path, operation) {
   const consumes = getConsumes(this.document, operation);
-  const parameters = iterateOasParams.call(this, operation, path);
+  const parameters = getValidOasParameters(this.document, OasVersion.OAS2, operation.parameters, path.parameters);
+
+  const bodyParameter = parameters.find((p): p is BodyParameter => p.in === 'body');
+  const formDataParameters = parameters.filter((p): p is FormDataParameter => p.in === 'formData');
 
   const params: Omit<Required<IHttpOperationRequest>, 'body'> = {
     headers: [],
@@ -32,8 +33,14 @@ export const translateToRequest: Oas2TranslateFunction<
     path: [],
   };
 
-  let bodyParameter;
-  const formDataParameters: (Oas2ParamBase & { in: 'formData' })[] = [];
+  let body;
+  // if 'body' and 'form data' defined prefer 'body'
+  if (!!bodyParameter) {
+    // There can be only one body parameter (taking first one)
+    body = translateToBodyParameter.call(this, bodyParameter, consumes);
+  } else if (!!formDataParameters.length) {
+    body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
+  }
 
   for (const param of parameters) {
     if (isQueryParam(param)) {
@@ -42,20 +49,7 @@ export const translateToRequest: Oas2TranslateFunction<
       params.path.push(translateToPathParameter.call(this, param));
     } else if (isHeaderParam(param)) {
       params.headers.push(translateToHeaderParam.call(this, param));
-    } else if (isBodyParam(param)) {
-      bodyParameter = translateToBodyParameter.call(this, param, consumes);
-    } else if (isFormDataParam(param)) {
-      formDataParameters.push(param);
     }
-  }
-
-  let body;
-  // if 'body' and 'form data' defined prefer 'body'
-  if (!!bodyParameter) {
-    // There can be only one body parameter (taking first one)
-    body = bodyParameter;
-  } else if (!!formDataParameters.length) {
-    body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
   }
 
   return {

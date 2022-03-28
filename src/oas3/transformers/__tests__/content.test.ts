@@ -1,17 +1,16 @@
 import type { SchemaObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../context';
 import {
   translateHeaderObject as _translateHeaderObject,
   translateMediaTypeObject as _translateMediaTypeObject,
 } from '../content';
 
 const translateMediaTypeObject = (document: any, object: unknown, key: string) =>
-  _translateMediaTypeObject.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), [key, object], 0, []);
+  _translateMediaTypeObject.call(createContext(document), [key, object], 0, []);
 
 const translateHeaderObject = (object: unknown, key: string) =>
-  _translateHeaderObject.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), [key, object], 0, []);
+  _translateHeaderObject.call(createContext({}), [key, object], 0, []);
 
 describe('translateMediaTypeObject', () => {
   afterEach(() => {
@@ -24,7 +23,6 @@ describe('translateMediaTypeObject', () => {
 
   it('given empty object, should return nothing', () => {
     expect(translateMediaTypeObject({}, {}, 'mediaType')).toStrictEqual({
-      id: expect.any(String),
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
@@ -41,7 +39,6 @@ describe('translateMediaTypeObject', () => {
         'mediaType',
       ),
     ).toStrictEqual({
-      id: expect.any(String),
       encodings: [],
       examples: [],
       mediaType: 'mediaType',
@@ -59,17 +56,7 @@ describe('translateMediaTypeObject', () => {
         },
         'mediaType',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      examples: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('given multiple examples should translate to IHttpContent', () => {
@@ -83,17 +70,7 @@ describe('translateMediaTypeObject', () => {
         },
         'mediaType',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      examples: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('given encodings should translate each encoding to array item', () => {
@@ -132,33 +109,7 @@ describe('translateMediaTypeObject', () => {
         },
         'mediaType',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      encodings: [
-        {
-          headers: [
-            {
-              id: expect.any(String),
-            },
-          ],
-        },
-        {
-          headers: [
-            {
-              id: expect.any(String),
-            },
-          ],
-        },
-      ],
-      examples: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('given complex nested media type object should translate correctly', () => {
@@ -192,31 +143,7 @@ describe('translateMediaTypeObject', () => {
         },
         'mediaType',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      encodings: [
-        {
-          headers: [
-            {
-              id: expect.any(String),
-              examples: [
-                {
-                  id: expect.any(String),
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      examples: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('should skip nullish headers', () => {
@@ -238,17 +165,7 @@ describe('translateMediaTypeObject', () => {
         },
         'mediaType',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      examples: [
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('given encoding with no style it should not throw an error', () => {
@@ -340,7 +257,7 @@ describe('translateMediaTypeObject', () => {
             },
             'mediaType',
           ),
-        ).toHaveProperty('examples', [{ id: expect.any(String), key: 'default', value: defaultExample }]);
+        ).toHaveProperty('examples', [{ key: 'default', value: defaultExample }]);
       });
     });
 
@@ -362,8 +279,8 @@ describe('translateMediaTypeObject', () => {
             'mediaType',
           ),
         ).toHaveProperty('examples', [
-          { id: expect.any(String), key: 'default', value: { name: 'root default value' } },
-          { id: expect.any(String), key: 'example', value: { name: 'root example value' } },
+          { key: 'default', value: { name: 'root default value' } },
+          { key: 'example', value: { name: 'root example value' } },
         ]);
       });
     });
@@ -460,20 +377,7 @@ describe('translateHeaderObject', () => {
         },
         'header-name',
       ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      examples: [
-        {
-          id: expect.any(String),
-        },
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight-id': expect.any(String),
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('should handle nullish value gracefully', () => {

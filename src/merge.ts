@@ -8,8 +8,7 @@ import {
   IServer,
 } from '@stoplight/types';
 import type { JSONSchema7 as JSONSchema } from 'json-schema';
-
-import { isEqual } from './utils';
+import isEqual = require('lodash.isequal');
 
 function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema[] } {
   return !!(schema.anyOf && Object.keys(schema).length === 1);
@@ -67,7 +66,6 @@ const mergeContents = mergeLists<IMediaTypeContent[]>(
   (c1, c2) => c1.mediaType.toLowerCase() === c2.mediaType.toLowerCase(),
   (c1, c2) => {
     return {
-      id: c1.id,
       mediaType: c1.mediaType,
       schema: mergeTwo(mergeSchemas, c1.schema, c2.schema),
       examples: mergeContentExamples([c1.examples, c2.examples]),
@@ -109,7 +107,6 @@ export const mergeResponses = mergeLists<IHttpOperation['responses']>(
 
 function mergeRequestBodies(b1: IHttpOperationRequestBody, b2: IHttpOperationRequestBody): IHttpOperationRequestBody {
   return {
-    id: b1.id,
     description: [b1.description, b2.description].filter(Boolean).join('; ') || undefined,
     required: b1.required && b2.required,
     contents: mergeContents(b1.contents || [], b2.contents || []),

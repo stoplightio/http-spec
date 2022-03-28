@@ -5,17 +5,14 @@ Object {
   "callbacks": Array [
     Object {
       "callbackName": "myCallback",
-      "deprecated": false,
       "extensions": Object {},
-      "id": Any<String>,
+      "id": "?http-operation-id?",
       "iid": "cbId",
-      "internal": false,
       "method": "post",
       "path": "http://example.com?transactionId={$request.body#/id}",
       "request": Object {
         "body": Object {
           "contents": Array [],
-          "id": Any<String>,
         },
         "cookie": Array [],
         "headers": Array [],
@@ -28,11 +25,9 @@ Object {
       "tags": Array [],
     },
   ],
-  "deprecated": false,
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "post",
   "path": "/subscribe",
   "request": Object {
@@ -41,7 +36,6 @@ Object {
         Object {
           "encodings": Array [],
           "examples": Array [],
-          "id": Any<String>,
           "mediaType": "application/json",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -51,11 +45,9 @@ Object {
               },
             },
             "type": "object",
-            "x-stoplight-id": Any<String>,
           },
         },
       ],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -74,15 +66,13 @@ Object {
   "deprecated": true,
   "description": "descr",
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
       "contents": Array [],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -102,15 +92,13 @@ Object {
   "deprecated": true,
   "description": "descr",
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
       "contents": Array [],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -121,7 +109,6 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "id": Any<String>,
       "name": "title",
       "url": "operation/server",
     },
@@ -136,15 +123,13 @@ Object {
   "deprecated": true,
   "description": "descr",
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
       "contents": Array [],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -155,7 +140,6 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "id": Any<String>,
       "name": "title",
       "url": "path/server",
     },
@@ -170,15 +154,13 @@ Object {
   "deprecated": true,
   "description": "descr",
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
       "contents": Array [],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -191,7 +173,6 @@ Object {
   "summary": "summary",
   "tags": Array [
     Object {
-      "id": Any<String>,
       "name": "tag1",
     },
   ],
@@ -203,15 +184,13 @@ Object {
   "deprecated": true,
   "description": "descr",
   "extensions": Object {},
-  "id": Any<String>,
+  "id": "?http-operation-id?",
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
     "body": Object {
       "contents": Array [],
-      "id": Any<String>,
     },
     "cookie": Array [],
     "headers": Array [],
@@ -222,7 +201,6 @@ Object {
   "security": Array [],
   "servers": Array [
     Object {
-      "id": Any<String>,
       "name": "title",
       "url": "spec/server",
     },

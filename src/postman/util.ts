@@ -1,13 +1,10 @@
-import type { IHttpParam } from '@stoplight/types';
+import { IHttpParam } from '@stoplight/types';
 import { Collection, CollectionDefinition, DescriptionDefinition, Version } from 'postman-collection';
-
-import { generateId } from './id';
 
 export function transformStringValueToSchema(value: string): Pick<IHttpParam, 'schema' | 'examples'> {
   return {
     examples: [
       {
-        id: generateId(),
         key: 'default',
         value,
       },
