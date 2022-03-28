@@ -1034,7 +1034,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                'x-stoplight-id': '#/paths/~1pet/get/requestBody/content/application~1json/schema',
+                'x-stoplight-id': expect.any(String),
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
@@ -1079,7 +1079,7 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                'x-stoplight-id': '#/paths/~1pet/get/responses/200/content/application~1json/schema',
+                'x-stoplight-id': expect.any(String),
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},

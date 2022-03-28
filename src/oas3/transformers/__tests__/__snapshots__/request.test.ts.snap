@@ -31,7 +31,7 @@ exports[`translateOas3ToRequest given no request body should translate parameter
 Object {
   "body": Object {
     "contents": Array [],
-    "id": "b5da2007",
+    "id": Any<String>,
   },
   "cookie": Array [],
   "headers": Array [
@@ -45,7 +45,7 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
-      "id": "a32abb0a",
+      "id": Any<String>,
       "name": "param-name-3",
       "required": false,
       "style": "simple",
@@ -63,7 +63,7 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
-      "id": "08f3127c",
+      "id": Any<String>,
       "name": "param-name-2",
       "required": false,
       "style": "simple",
@@ -78,7 +78,7 @@ Object {
       "description": "descr",
       "examples": Array [],
       "explode": false,
-      "id": "0bf31735",
+      "id": Any<String>,
       "name": "param-name-1",
       "required": false,
       "style": "simple",

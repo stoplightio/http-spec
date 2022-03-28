@@ -57,6 +57,9 @@ describe('params.translator', () => {
         ),
       ).toMatchSnapshot({
         id: expect.any(String),
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
       });
     });
   });
@@ -195,6 +198,9 @@ describe('params.translator', () => {
                 id: expect.any(String),
               },
             ],
+            schema: {
+              'x-stoplight-id': expect.any(String),
+            },
           },
         ],
       });

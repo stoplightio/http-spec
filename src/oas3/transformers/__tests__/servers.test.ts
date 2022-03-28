@@ -42,7 +42,25 @@ describe('translateToServers', () => {
       },
     };
 
-    expect(translateToServers(document)).toMatchSnapshot();
+    expect(translateToServers(document)).toStrictEqual([
+      {
+        id: expect.any(String),
+        description: 'description',
+        url: 'http://stoplight.io/path',
+        variables: {
+          a: {
+            default: 'false',
+            description: 'a - descr',
+            enum: ['false', 'true', 'false'],
+          },
+          b: {
+            default: '123',
+            description: 'b - descr',
+            enum: ['1', '2', '3'],
+          },
+        },
+      },
+    ]);
   });
 
   it('filters out invalid variables', () => {

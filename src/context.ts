@@ -11,7 +11,7 @@ import type {
   TranslateFunction,
 } from './types';
 
-export const DEFAULT_ID_GENERATOR: IdGenerator = input => fnv.fast1a32hex(input);
+export const DEFAULT_ID_GENERATOR: IdGenerator = input => fnv.fast1a52hex(input);
 
 export function createContext<T extends Record<string, unknown>>(
   document: T,

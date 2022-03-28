@@ -43,6 +43,11 @@ describe('responses', () => {
           schema: {
             'x-stoplight-id': expect.any(String),
           },
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
         },
         {
           id: expect.any(String),

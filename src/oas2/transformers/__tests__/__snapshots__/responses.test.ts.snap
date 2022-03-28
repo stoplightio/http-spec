@@ -7,7 +7,7 @@ Object {
     Object {
       "examples": Array [
         Object {
-          "id": "5b16088e",
+          "id": Any<String>,
           "key": "application/json",
           "value": Object {},
         },
