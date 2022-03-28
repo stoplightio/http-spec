@@ -1,8 +1,7 @@
-import { pickBy } from '@oclif/parser/lib/util';
 import { isPlainObject } from '@stoplight/json';
-import type { IHttpOperationResponse, Optional } from '@stoplight/types';
-import { DeepPartial } from '@stoplight/types';
-import { Operation } from 'swagger-schema-official';
+import type { DeepPartial, IHttpOperationResponse, Optional } from '@stoplight/types';
+import pickBy = require('lodash.pickby');
+import type { Operation } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
