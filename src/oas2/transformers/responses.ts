@@ -1,5 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, IHttpOperationResponse, Optional } from '@stoplight/types';
+import type { DeepPartial, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { Operation } from 'swagger-schema-official';
 
@@ -28,7 +28,7 @@ const translateToResponse = withContext<
   );
 
   const contents = produces
-    .map(
+    .map<IMediaTypeContent & { examples: NonNullable<IMediaTypeContent['examples']> }>(
       withContext(produceElement => ({
         id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
         mediaType: produceElement,
