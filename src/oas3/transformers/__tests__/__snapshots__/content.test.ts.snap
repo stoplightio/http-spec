@@ -37,7 +37,6 @@ exports[`translateMediaTypeObject given complex nested media type object should 
 Object {
   "encodings": Array [
     Object {
-      "explode": true,
       "headers": Array [
         Object {
           "content": Object {
@@ -53,7 +52,6 @@ Object {
               "value": "hey",
             },
           ],
-          "explode": false,
           "id": Any<String>,
           "name": "h1",
           "style": "simple",
@@ -177,7 +175,6 @@ exports[`translateMediaTypeObject should skip nullish headers 1`] = `
 Object {
   "encodings": Array [
     Object {
-      "explode": true,
       "headers": Array [],
       "mediaType": "text/plain",
       "property": "enc1",

@@ -5,11 +5,9 @@ Object {
   "callbacks": Array [
     Object {
       "callbackName": "myCallback",
-      "deprecated": false,
       "extensions": Object {},
       "id": Any<String>,
       "iid": "cbId",
-      "internal": false,
       "method": "post",
       "path": "http://example.com?transactionId={$request.body#/id}",
       "request": Object {
@@ -28,11 +26,9 @@ Object {
       "tags": Array [],
     },
   ],
-  "deprecated": false,
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "post",
   "path": "/subscribe",
   "request": Object {
@@ -76,7 +72,6 @@ Object {
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
@@ -104,7 +99,6 @@ Object {
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
@@ -138,7 +132,6 @@ Object {
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
@@ -172,7 +165,6 @@ Object {
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {
@@ -205,7 +197,6 @@ Object {
   "extensions": Object {},
   "id": Any<String>,
   "iid": "opid",
-  "internal": false,
   "method": "get",
   "path": "/users/{userId}",
   "request": Object {

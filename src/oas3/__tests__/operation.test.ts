@@ -720,8 +720,6 @@ describe('transformOas3Operation', () => {
       id: expect.any(String),
       method: 'get',
       path: '/users/{userId}',
-      deprecated: false,
-      internal: false,
       request: {
         body: {
           id: expect.any(String),
@@ -739,9 +737,6 @@ describe('transformOas3Operation', () => {
               },
             ],
             name: 'name',
-            deprecated: false,
-            explode: false,
-            required: false,
             style: 'simple',
             schema: {
               'x-stoplight-id': expect.any(String),
@@ -807,8 +802,6 @@ describe('transformOas3Operation', () => {
       id: expect.any(String),
       method: 'get',
       path: '/users/{userId}',
-      deprecated: false,
-      internal: false,
       request: {
         body: {
           id: expect.any(String),
@@ -825,9 +818,6 @@ describe('transformOas3Operation', () => {
                 value: 'some example',
               },
             ],
-            required: false,
-            deprecated: false,
-            explode: false,
             style: 'simple',
             name: 'name',
             schema: {
@@ -1001,8 +991,6 @@ describe('transformOas3Operation', () => {
       id: expect.any(String),
       method: 'get',
       path: '/pet',
-      deprecated: false,
-      internal: false,
       request: {
         body: {
           id: expect.any(String),

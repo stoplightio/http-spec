@@ -18,11 +18,10 @@ import type {
   PathParameter,
   QueryParameter,
 } from 'swagger-schema-official';
-
-import { withContext } from '../../context';
 import pickBy = require('lodash.pickby');
 import pick = require('lodash.pick');
 
+import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { Oas2ParamBase } from '../../oas/guards';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
@@ -74,7 +73,13 @@ export const translateToHeaderParam = withContext<
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),
-    required: !!param.required,
+
+    ...pickBy(
+      {
+        required: param.required,
+      },
+      isBoolean,
+    ),
   };
 });
 
@@ -104,7 +109,6 @@ export const translateToBodyParameter = withContext<
   return {
     id: this.generateId(`http_request_body-${this.parentId}`),
 
-    required: !!body.required,
     contents: consumes.map(
       withContext(mediaType => {
         return {
@@ -115,6 +119,13 @@ export const translateToBodyParameter = withContext<
         };
       }),
       this,
+    ),
+
+    ...pickBy(
+      {
+        required: body.required,
+      },
+      isBoolean,
     ),
 
     ...pickBy(
@@ -213,12 +224,12 @@ export const translateToQueryParameter = withContext<
     name,
     style: chooseQueryParameterStyle(param),
 
-    required: !!param.required,
     ...buildSchemaForParameter.call(this, param),
 
     ...pickBy(
       {
         allowEmptyValue: param.allowEmptyValue,
+        required: param.required,
       },
       isBoolean,
     ),
@@ -234,8 +245,15 @@ export const translateToPathParameter = withContext<
     id: this.generateId(`http_path_param-${this.parentId}-${name}`),
     name,
     style: HttpParamStyles.Simple,
-    required: !!param.required,
+
     ...buildSchemaForParameter.call(this, param),
+
+    ...pickBy(
+      {
+        required: param.required,
+      },
+      isBoolean,
+    ),
   };
 });
 
@@ -270,8 +288,13 @@ const buildSchemaForParameter: Oas2TranslateFunction<
 
   return {
     schema: translateSchemaObject.call(this, schema),
-    deprecated: !!param['x-deprecated'],
 
+    ...pickBy(
+      {
+        deprecated: param['x-deprecated'],
+      },
+      isBoolean,
+    ),
     ...pickBy(
       {
         description: param.description,

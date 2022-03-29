@@ -62,8 +62,6 @@ export default [
     method: 'get',
     path: '/users/{userId}',
     summary: 'Get User Info by User ID',
-    deprecated: false,
-    internal: false,
     responses: [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
@@ -176,8 +174,6 @@ export default [
           id: '21b1f96bd26ee',
           name: 'A-Shared-Header',
           required: false,
-          deprecated: false,
-          explode: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -195,9 +191,6 @@ export default [
           // hash('http_query-96043a63b6901-summaryOnly')
           id: 'efe9534d001fc',
           name: 'summaryOnly',
-          required: false,
-          deprecated: false,
-          explode: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -221,8 +214,6 @@ export default [
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
-          explode: false,
-          deprecated: false,
           style: 'simple',
           schema: {
             'x-stoplight-id': '13ad531bed72e',
@@ -256,8 +247,6 @@ export default [
     method: 'post',
     path: '/users/{userId}',
     summary: 'Create user',
-    deprecated: false,
-    internal: false,
     responses: [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
@@ -406,9 +395,6 @@ export default [
           // hash('http_header-b16a96d287951-Post-Specific-Header')
           id: '1ead595922478',
           name: 'Post-Specific-Header',
-          required: false,
-          deprecated: false,
-          explode: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -425,8 +411,6 @@ export default [
           id: '21b1f96bd26ee',
           name: 'A-Shared-Header',
           required: false,
-          deprecated: false,
-          explode: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -446,8 +430,6 @@ export default [
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
-          deprecated: false,
-          explode: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',

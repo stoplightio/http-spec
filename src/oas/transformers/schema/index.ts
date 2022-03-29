@@ -5,7 +5,7 @@ import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
-import { TranslateFunction } from '../../../types';
+import type { TranslateFunction } from '../../../types';
 import { getSharedKey } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';

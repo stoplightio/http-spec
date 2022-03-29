@@ -57,7 +57,6 @@ Object {
 
 exports[`params.translator translateToHeaderParam should translate header param 1`] = `
 Object {
-  "deprecated": false,
   "description": "desc",
   "id": Any<String>,
   "name": "name",
@@ -77,11 +76,9 @@ exports[`params.translator translateToHeaderParams should translate empty dictio
 exports[`params.translator translateToHeaderParams should translate to multiple header params 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "a description",
     "id": "117996bbb6f45",
     "name": "header-name",
-    "required": false,
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
@@ -90,11 +87,9 @@ Array [
     "style": "simple",
   },
   Object {
-    "deprecated": false,
     "description": "another description",
     "id": "dce8b374eb7d6",
     "name": "plain-tex",
-    "required": false,
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
@@ -108,11 +103,9 @@ Array [
 exports[`params.translator translateToHeaderParams should translate to simple header param 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "a description",
     "id": "117996bbb6f45",
     "name": "header-name",
-    "required": false,
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
@@ -125,7 +118,6 @@ Array [
 
 exports[`params.translator translateToPathParameter should translate 1`] = `
 Object {
-  "deprecated": false,
   "description": "descr",
   "id": Any<String>,
   "name": "name",

@@ -1,6 +1,7 @@
 import { isPlainObject } from '@stoplight/json';
 import type { INodeTag, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
+
 import { withContext } from '../context';
 import { isNonNullable, isSerializablePrimitive, isString } from '../guards';
 import type { ArrayCallbackParameters, Fragment, TranslateFunction } from '../types';

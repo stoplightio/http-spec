@@ -54,7 +54,6 @@ Object {
           "value": 1000,
         },
       ],
-      "explode": false,
       "id": Any<String>,
       "name": "fake-header-name-1",
       "schema": Object {
@@ -77,7 +76,6 @@ Object {
           "value": 1000,
         },
       ],
-      "explode": false,
       "id": Any<String>,
       "name": "fake-header-name-2",
       "required": true,

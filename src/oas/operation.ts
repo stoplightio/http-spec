@@ -4,7 +4,7 @@ import pickBy = require('lodash.pickby');
 import type { OpenAPIObject, OperationObject, PathsObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
-import { isString } from '../guards';
+import { isBoolean, isString } from '../guards';
 import type { HttpOperationTransformer } from '../types';
 import { TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
@@ -67,13 +67,19 @@ export const transformOasOperation: TranslateFunction<
   return {
     id: operationId,
 
-    deprecated: !!operation.deprecated,
-    internal: !!operation['x-internal'],
     method,
     path,
 
     tags: translateToTags.call(this, operation.tags),
     extensions: getExtensions(operation),
+
+    ...pickBy(
+      {
+        deprecated: operation.deprecated,
+        internal: operation['x-internal'],
+      },
+      isBoolean,
+    ),
 
     ...pickBy(
       {

@@ -1,5 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import type { HttpSecurityScheme, Optional } from '@stoplight/types';
+import pickBy = require('lodash.pickby');
 
 import { createContext, DEFAULT_ID_GENERATOR, withContext } from '../context';
 import { isNonNullable } from '../guards';
@@ -12,7 +13,6 @@ import { isSecurityScheme } from './guards';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
-import pickBy = require('lodash.pickby');
 
 export const transformOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
   const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);

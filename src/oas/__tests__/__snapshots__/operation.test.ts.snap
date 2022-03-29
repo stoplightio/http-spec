@@ -3,7 +3,6 @@
 exports[`oas operation openapi v2 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {
       "x-another": Object {
@@ -13,7 +12,6 @@ Array [
     },
     "id": "9ab1c1339675f",
     "iid": "addPet",
-    "internal": false,
     "method": "post",
     "path": "/pets",
     "request": Object {
@@ -183,20 +181,16 @@ Array [
     ],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "29e0f9745e980",
-    "internal": false,
     "method": "get",
     "path": "/pets",
     "request": Object {
       "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "id": "b93f4ef60cf1d",
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -208,10 +202,8 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "id": "e1c08deab8b36",
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -220,10 +212,8 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "id": "d04bcf1c141cf",
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -259,20 +249,16 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "8bd67834e0236",
-    "internal": false,
     "method": "options",
     "path": "/pets",
     "request": Object {
       "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "id": "b93f4ef60cf1d",
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -284,10 +270,8 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "id": "e1c08deab8b36",
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -296,10 +280,8 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "id": "d04bcf1c141cf",
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -316,11 +298,9 @@ Array [
         "description": "",
         "headers": Array [
           Object {
-            "deprecated": false,
             "description": "Allowed clients",
             "id": "0b9c41debc794",
             "name": "Allow",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
@@ -329,11 +309,9 @@ Array [
             "style": "simple",
           },
           Object {
-            "deprecated": false,
             "description": "Remaining requests",
             "id": "bbf28e682b54b",
             "name": "X-Rate-Limit",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "format": "int64",
@@ -365,11 +343,9 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "4f51735d06d77",
-    "internal": false,
     "method": "delete",
     "path": "/pets",
     "request": Object {
@@ -411,12 +387,10 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "fc497ea5adb47",
     "iid": "updatePet",
-    "internal": false,
     "method": "put",
     "path": "/pet/{petId}",
     "request": Object {
@@ -537,7 +511,6 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "id": "1ee79143656f4",
           "name": "petId",
           "required": true,
@@ -661,7 +634,6 @@ Array [
 exports[`oas operation openapi v3 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {
       "x-another": Object {
@@ -671,7 +643,6 @@ Array [
     },
     "id": "9ab1c1339675f",
     "iid": "addPet",
-    "internal": false,
     "method": "post",
     "path": "/pets",
     "request": Object {
@@ -843,10 +814,8 @@ Array [
     ],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "29e0f9745e980",
-    "internal": false,
     "method": "get",
     "path": "/pets",
     "request": Object {
@@ -859,12 +828,9 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "id": "e1c08deab8b36",
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -873,12 +839,9 @@ Array [
           "style": "simple",
         },
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "id": "d04bcf1c141cf",
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -927,12 +890,10 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "fc497ea5adb47",
     "iid": "updatePet",
-    "internal": false,
     "method": "put",
     "path": "/pet/{petId}",
     "request": Object {
@@ -1055,9 +1016,7 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "id": "1ee79143656f4",
           "name": "petId",
           "required": true,

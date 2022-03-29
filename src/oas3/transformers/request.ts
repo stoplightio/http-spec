@@ -9,9 +9,10 @@ import type {
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import type { ParameterObject } from 'openapi3-ts';
+import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
-import { isNonNullable, isString } from '../../guards';
+import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
 import { isValidParamStyle } from '../../oas/guards';
@@ -22,7 +23,6 @@ import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
 import { translateToExample } from './examples';
-import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
   Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
@@ -34,12 +34,19 @@ export const translateRequestBody = withContext<
     return {
       id,
       contents: entries(resolvedRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+
       ...pickBy(
         {
           required: resolvedRequestBodyObject.required,
+        },
+        isBoolean,
+      ),
+
+      ...pickBy(
+        {
           description: resolvedRequestBodyObject.description,
         },
-        isNonNullable,
+        isString,
       ),
     };
   }
@@ -72,10 +79,7 @@ export const translateParameterObject = withContext<
   return {
     id,
     name,
-    deprecated: !!parameterObject.deprecated,
-    required: !!parameterObject.required,
     style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
-    explode: !!(parameterObject.explode ?? parameterObject.style === HttpParamStyles.Form),
     examples: [
       !hasDefaultExample && parameterObject.example !== undefined
         ? translateToDefaultExample.call(this, 'default', parameterObject.example)
@@ -88,6 +92,15 @@ export const translateParameterObject = withContext<
         description: parameterObject.description,
       },
       isString,
+    ),
+
+    ...pickBy(
+      {
+        deprecated: parameterObject.deprecated,
+        required: parameterObject.required,
+        explode: parameterObject.explode,
+      },
+      isBoolean,
     ),
 
     ...pickBy(

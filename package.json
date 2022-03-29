@@ -75,7 +75,6 @@
     "@types/lodash.isequalwith": "^4.4.6",
     "@types/lodash.pick": "^4.4.6",
     "@types/lodash.pickby": "^4.6.6",
-    "@types/memoizee": "^0.4.7",
     "@types/postman-collection": "^3.5.3",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
