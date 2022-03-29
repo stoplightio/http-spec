@@ -3,7 +3,6 @@
 exports[`oas operation openapi v2 1`] = `
 Array [
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {
       "x-another": Object {
@@ -13,7 +12,6 @@ Array [
     },
     "id": "?http-operation-id?",
     "iid": "addPet",
-    "internal": false,
     "method": "post",
     "path": "/pets",
     "request": Object {
@@ -55,7 +53,6 @@ Array [
     "security": Array [
       Array [
         Object {
-          "description": undefined,
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -88,19 +85,15 @@ Array [
     ],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "get",
     "path": "/pets",
     "request": Object {
       "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -111,9 +104,7 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -121,9 +112,7 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -155,19 +144,15 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "options",
     "path": "/pets",
     "request": Object {
       "cookie": Array [],
       "headers": Array [
         Object {
-          "deprecated": false,
           "name": "Rate-Limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -178,9 +163,7 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "name": "skip",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -188,9 +171,7 @@ Array [
           "style": "form",
         },
         Object {
-          "deprecated": false,
           "name": "limit",
-          "required": false,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
@@ -206,10 +187,8 @@ Array [
         "description": "",
         "headers": Array [
           Object {
-            "deprecated": false,
             "description": "Allowed clients",
             "name": "Allow",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
@@ -217,10 +196,8 @@ Array [
             "style": "simple",
           },
           Object {
-            "deprecated": false,
             "description": "Remaining requests",
             "name": "X-Rate-Limit",
-            "required": false,
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "format": "int64",
@@ -248,11 +225,9 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "?http-operation-id?",
-    "internal": false,
     "method": "delete",
     "path": "/pets",
     "request": Object {
@@ -290,12 +265,10 @@ Array [
     "tags": Array [],
   },
   Object {
-    "deprecated": false,
     "description": "",
     "extensions": Object {},
     "id": "?http-operation-id?",
     "iid": "updatePet",
-    "internal": false,
     "method": "put",
     "path": "/pet/{petId}",
     "request": Object {
@@ -325,7 +298,6 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "name": "petId",
           "required": true,
           "schema": Object {
@@ -377,7 +349,6 @@ Array [
     "security": Array [
       Array [
         Object {
-          "description": undefined,
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -598,9 +569,7 @@ Array [
       "path": Array [],
       "query": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "skip",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -609,9 +578,7 @@ Array [
           "style": "simple",
         },
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -776,9 +743,7 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "deprecated": false,
           "examples": Array [],
-          "explode": false,
           "name": "petId",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",

@@ -220,7 +220,6 @@ describe('translateToOas3Responses', () => {
             },
             style: 'simple',
             description: 'Current page (if pagination parameters were provided in the request)',
-            explode: false,
             encodings: [],
             examples: [
               {

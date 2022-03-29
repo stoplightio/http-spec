@@ -642,8 +642,6 @@ describe('transformOas3Operation', () => {
               },
             ],
             name: 'name',
-            deprecated: false,
-            explode: false,
             style: 'simple',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -721,8 +719,6 @@ describe('transformOas3Operation', () => {
                 value: 'some example',
               },
             ],
-            deprecated: false,
-            explode: false,
             style: 'simple',
             name: 'name',
             schema: {

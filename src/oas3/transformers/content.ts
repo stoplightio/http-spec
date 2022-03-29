@@ -46,13 +46,13 @@ const translateEncodingPropertyObject: Oas3TranslateFunction<
 
   return {
     property,
-    explode: !!(encodingPropertyObject.explode ?? encodingPropertyObject.style === HttpParamStyles.Form),
     style: encodingPropertyObject.style,
     headers: entries(encodingPropertyObject.headers).map(translateHeaderObject, this).filter(isNonNullable),
 
     ...pickBy(
       {
         allowReserved: encodingPropertyObject.allowReserved,
+        explode: encodingPropertyObject.explode,
       },
       isBoolean,
     ),
@@ -88,7 +88,6 @@ export const translateHeaderObject = <
   const baseContent: IHttpHeaderParam = {
     name,
     style: HttpParamStyles.Simple,
-    explode: !!headerObject.explode,
 
     ...pickBy(
       {
@@ -110,6 +109,7 @@ export const translateHeaderObject = <
         allowEmptyValue: headerObject.allowEmptyValue,
         allowReserved: headerObject.allowReserved,
 
+        explode: headerObject.explode,
         required: headerObject.required,
         deprecated: headerObject.deprecated,
       },

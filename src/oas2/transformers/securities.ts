@@ -65,8 +65,14 @@ export const translateToBasicSecurityScheme: Oas2TranslateFunction<
   return {
     type: 'http',
     scheme: 'basic',
-    description: security.description,
     key: security.key,
+
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
   };
 };
 
@@ -81,8 +87,14 @@ export const translateToApiKeySecurityScheme: Oas2TranslateFunction<
       type: 'apiKey',
       in: security.in,
       name: String(security.name || ''),
-      description: security.description,
       key: security.key,
+
+      ...pickBy(
+        {
+          description: security.description,
+        },
+        isString,
+      ),
     };
   }
 
@@ -104,8 +116,14 @@ export const translateToOauth2SecurityScheme: Oas2TranslateFunction<
   return {
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
-    description: security.description,
     key: security.key,
+
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
   };
 };
 

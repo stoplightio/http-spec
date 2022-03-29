@@ -13,7 +13,7 @@ import type { JSONSchema7 } from 'json-schema';
 import type { ParameterObject } from 'openapi3-ts';
 import pickBy = require('lodash.pickby');
 
-import { isNonNullable, isString } from '../../guards';
+import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { getValidOasParameters } from '../../oas/accessors';
 import { isValidParamStyle } from '../../oas/guards';
@@ -91,9 +91,7 @@ export const translateParameterObject: Oas3TranslateFunction<[parameterObject: P
 
     return {
       name: parameterObject.name,
-      deprecated: !!parameterObject.deprecated,
       style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
-      explode: !!(parameterObject.explode ?? parameterObject.style === HttpParamStyles.Form),
       examples:
         'example' in parameterObject && !hasDefaultExample
           ? [{ key: 'default', value: parameterObject.example }, ...examples]
@@ -104,6 +102,14 @@ export const translateParameterObject: Oas3TranslateFunction<[parameterObject: P
           description: parameterObject.description,
         },
         isString,
+      ),
+
+      ...pickBy(
+        {
+          explode: parameterObject.explode,
+          deprecated: parameterObject.deprecated,
+        },
+        isBoolean,
       ),
 
       ...pickBy(

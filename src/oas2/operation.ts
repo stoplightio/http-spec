@@ -4,7 +4,7 @@ import type { Spec } from 'swagger-schema-official';
 import pickBy = require('lodash.pickby');
 
 import { createContext } from '../context';
-import { isString } from '../guards';
+import { isBoolean, isString } from '../guards';
 import { getExtensions } from '../oas/accessors';
 import { transformOasOperations } from '../oas/operation';
 import { translateToTags } from '../oas/tags';
@@ -37,15 +37,20 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document,
     method,
     path,
 
-    deprecated: !!operation.deprecated,
-    internal: !!operation['x-internal'],
-
     responses: translateToResponses.call(ctx, operation),
     servers: translateToServers.call(ctx, operation),
     request: translateToRequest.call(ctx, pathObj, operation),
     tags: translateToTags.call(ctx, operation.tags),
     security: translateToSecurities.call(ctx, operation.security),
     extensions: getExtensions(operation),
+
+    ...pickBy(
+      {
+        deprecated: operation.deprecated,
+        internal: operation['x-internal'],
+      },
+      isBoolean,
+    ),
 
     ...pickBy(
       {

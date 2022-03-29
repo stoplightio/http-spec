@@ -64,12 +64,18 @@ function chooseQueryParameterStyle(
 export const translateToHeaderParam: Oas2TranslateFunction<
   [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
   IHttpHeaderParam
-> = function (parameter) {
+> = function (param) {
   return {
     style: HttpParamStyles.Simple,
-    name: parameter.name,
-    ...buildSchemaForParameter.call(this, parameter),
-    required: !!parameter.required,
+    name: param.name,
+    ...buildSchemaForParameter.call(this, param),
+
+    ...pickBy(
+      {
+        required: param.required,
+      },
+      isBoolean,
+    ),
   };
 };
 
@@ -190,11 +196,11 @@ export const translateToQueryParameter: Oas2TranslateFunction<
   return {
     style: chooseQueryParameterStyle(query),
     name: query.name,
-    required: !!query.required,
     ...buildSchemaForParameter.call(this, query),
 
     ...pickBy(
       {
+        required: query.required,
         allowEmptyValue: query.allowEmptyValue,
       },
       isBoolean,
@@ -209,8 +215,15 @@ export const translateToPathParameter: Oas2TranslateFunction<
   return {
     name: param.name,
     style: HttpParamStyles.Simple,
-    required: !!param.required,
+
     ...buildSchemaForParameter.call(this, param),
+
+    ...pickBy(
+      {
+        required: param.required,
+      },
+      isBoolean,
+    ),
   };
 };
 
@@ -245,7 +258,13 @@ const buildSchemaForParameter: Oas2TranslateFunction<
 
   return {
     schema: translateSchemaObject.call(this, schema),
-    deprecated: !!param['x-deprecated'],
+
+    ...pickBy(
+      {
+        deprecated: param['x-deprecated'],
+      },
+      isBoolean,
+    ),
 
     ...pickBy(
       {
