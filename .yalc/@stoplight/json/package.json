@@ -32,5 +32,5 @@
   "main": "index.cjs.js",
   "module": "index.es.js",
   "typings": "index.d.ts",
-  "yalcSig": "7348a1b0c10ce3147388515d672a52d9"
+  "yalcSig": "5b7f8bc9c27738622f22c4abc8faad9b"
 }

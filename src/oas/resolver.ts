@@ -1,4 +1,4 @@
-import { resolveInlineRef } from '@stoplight/json';
+import { resolveInlineRefWithLocation } from '@stoplight/json';
 import type { JsonPath } from '@stoplight/types';
 
 import type { AvailableContext, RefResolver } from '../types';
@@ -16,8 +16,7 @@ export function getSharedKey(value: object) {
 }
 
 export const resolveRef: RefResolver = function (target) {
-  const location: string[] = [];
-  const resolved = resolveInlineRef(this.document, target.$ref, location);
+  const { value: resolved, location } = resolveInlineRefWithLocation(this.document, target.$ref);
 
   const context = inferContext(location);
   if (context !== null && this.context !== context) {
