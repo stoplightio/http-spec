@@ -1,10 +1,14 @@
-import { HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
-import { Schema } from 'swagger-schema-official';
+import { DeepPartial, HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
+import { Operation, Schema, Spec } from 'swagger-schema-official';
 
+import { createContext } from '../../../context';
 import { translateToHeaderParams } from '../params';
-import { translateToResponses } from '../responses';
+import { translateToResponses as _translateToResponses } from '../responses';
 
 jest.mock('../params');
+
+const translateToResponses = (document: DeepPartial<Spec>, responses: DeepPartial<Operation['responses']>) =>
+  _translateToResponses.call(createContext(document), { responses });
 
 describe('responses', () => {
   const fakeHeaderParams: IHttpHeaderParam[] = [{ name: 'fake-header', style: HttpParamStyles.Simple }];
@@ -16,7 +20,7 @@ describe('responses', () => {
 
   it('should translate to multiple responses', () => {
     const responses = translateToResponses(
-      {},
+      { produces },
       {
         r1: {
           description: 'd1',
@@ -35,7 +39,6 @@ describe('responses', () => {
           schema: {},
         },
       },
-      produces,
     );
 
     expect(responses).toMatchSnapshot();
@@ -44,7 +47,7 @@ describe('responses', () => {
   it('should translate to response w/o headers', () => {
     expect(
       translateToResponses(
-        {},
+        { produces },
         {
           r1: {
             description: 'd1',
@@ -54,7 +57,6 @@ describe('responses', () => {
             schema: {},
           },
         },
-        produces,
       ),
     ).toMatchSnapshot();
   });
@@ -62,14 +64,13 @@ describe('responses', () => {
   it('should translate to response w/o examples', () => {
     expect(
       translateToResponses(
-        {},
+        { produces },
         {
           r1: {
             description: 'd1',
             schema: {},
           },
         },
-        produces,
       ),
     ).toMatchSnapshot();
   });
@@ -77,7 +78,7 @@ describe('responses', () => {
   describe('should keep foreign examples', () => {
     it('aggregating them to the first example', () => {
       const responses = translateToResponses(
-        {},
+        { produces },
         {
           r1: {
             description: 'd1',
@@ -89,7 +90,6 @@ describe('responses', () => {
             schema: {},
           },
         },
-        produces,
       );
 
       expect(responses[0].contents).toBeDefined();
@@ -104,7 +104,7 @@ describe('responses', () => {
     describe('given a response with a schema with an example', () => {
       it('should translate to response with examples', () => {
         const responses = translateToResponses(
-          {},
+          { produces },
           {
             r1: {
               description: 'd1',
@@ -116,7 +116,6 @@ describe('responses', () => {
               },
             },
           },
-          produces,
         );
         expect(responses[0].contents![0]).toHaveProperty('examples', [{ key: 'default', value: { name: 'value' } }]);
       });
@@ -125,7 +124,7 @@ describe('responses', () => {
     describe('given multiple schema example properties', () => {
       it('should translate all examples', () => {
         const responses = translateToResponses(
-          {},
+          { produces },
           {
             r1: {
               description: 'd1',
@@ -142,7 +141,6 @@ describe('responses', () => {
               } as Schema,
             },
           },
-          produces,
         );
         expect(responses[0].contents![0]).toHaveProperty('examples', [
           { key: 'application/json', value: { name: 'examples value' } },
@@ -154,7 +152,7 @@ describe('responses', () => {
     describe('given response with examples in root and schema objects', () => {
       it('root examples should take precedence over schema examples', () => {
         const responses = translateToResponses(
-          {},
+          { produces },
           {
             r1: {
               description: 'd1',
@@ -170,7 +168,6 @@ describe('responses', () => {
               },
             },
           },
-          produces,
         );
         expect(responses[0].contents![0].examples).toHaveLength(2);
         expect(responses[0].contents![0].examples).toEqual([

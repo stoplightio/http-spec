@@ -8,7 +8,7 @@ import {
   IServer,
 } from '@stoplight/types';
 import type { JSONSchema7 as JSONSchema } from 'json-schema';
-import { isEqual } from 'lodash';
+import isEqual = require('lodash.isequal');
 
 function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema[] } {
   return !!(schema.anyOf && Object.keys(schema).length === 1);

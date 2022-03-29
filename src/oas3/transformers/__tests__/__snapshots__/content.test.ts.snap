@@ -4,12 +4,12 @@ exports[`translateHeaderObject should translate to IHttpHeaderParam 1`] = `
 Object {
   "allowEmptyValue": true,
   "allowReserved": true,
+  "content": Object {},
   "deprecated": true,
   "description": "descr",
   "encodings": Array [],
   "examples": Array [
     Object {
-      "description": undefined,
       "key": "a",
       "summary": "example summary",
       "value": "hey",
@@ -22,8 +22,10 @@ Object {
   "explode": true,
   "name": "header-name",
   "required": true,
-  "schema": Object {},
-  "style": "matrix",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+  },
+  "style": "simple",
 }
 `;
 
@@ -31,21 +33,22 @@ exports[`translateMediaTypeObject given complex nested media type object should 
 Object {
   "encodings": Array [
     Object {
-      "contentType": "text/plain",
       "headers": Array [
         Object {
+          "content": Object {
+            "nested/media": Object {},
+          },
           "description": "descr",
           "encodings": Array [],
           "examples": Array [
             Object {
-              "description": undefined,
               "key": "a",
               "summary": "example summary",
               "value": "hey",
             },
           ],
           "name": "h1",
-          "style": "matrix",
+          "style": "simple",
         },
       ],
       "mediaType": "text/plain",
@@ -55,7 +58,6 @@ Object {
   ],
   "examples": Array [
     Object {
-      "description": undefined,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
@@ -67,41 +69,12 @@ Object {
   },
 }
 `;
-
-exports[`translateMediaTypeObject given complex nested media type object with nullish headers should translate correctly 1`] = `
-Object {
-  "encodings": Array [
-    Object {
-      "contentType": "text/plain",
-      "headers": Array [],
-      "mediaType": "text/plain",
-      "property": "enc1",
-      "style": "form",
-    },
-  ],
-  "examples": Array [
-    Object {
-      "description": undefined,
-      "key": "example",
-      "summary": "multi example",
-      "value": "hey",
-    },
-  ],
-  "mediaType": "mediaType",
-  "schema": Object {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-  },
-}
-`;
-
-exports[`translateMediaTypeObject given encoding with incorrect style should throw an error 1`] = `"Encoding property style: 'xyz' is incorrect, must be one of: form,spaceDelimited,pipeDelimited,deepObject"`;
 
 exports[`translateMediaTypeObject given encodings should translate each encoding to array item 1`] = `
 Object {
   "encodings": Array [
     Object {
       "allowReserved": true,
-      "contentType": "text/plain",
       "explode": true,
       "headers": Array [
         Object {
@@ -117,7 +90,6 @@ Object {
     },
     Object {
       "allowReserved": true,
-      "contentType": "text/plain",
       "explode": true,
       "headers": Array [
         Object {
@@ -134,7 +106,6 @@ Object {
   ],
   "examples": Array [
     Object {
-      "description": undefined,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
@@ -152,7 +123,6 @@ Object {
   "encodings": Array [],
   "examples": Array [
     Object {
-      "description": undefined,
       "key": "example",
       "summary": "multi example",
       "value": "hey",
@@ -171,6 +141,30 @@ Object {
   "examples": Array [
     Object {
       "key": "default",
+      "value": "hey",
+    },
+  ],
+  "mediaType": "mediaType",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+  },
+}
+`;
+
+exports[`translateMediaTypeObject should skip nullish headers 1`] = `
+Object {
+  "encodings": Array [
+    Object {
+      "headers": Array [],
+      "mediaType": "text/plain",
+      "property": "enc1",
+      "style": "form",
+    },
+  ],
+  "examples": Array [
+    Object {
+      "key": "example",
+      "summary": "multi example",
       "value": "hey",
     },
   ],

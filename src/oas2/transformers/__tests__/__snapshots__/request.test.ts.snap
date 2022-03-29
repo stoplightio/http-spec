@@ -6,6 +6,10 @@ Object {
     "in": "body",
     "name": "param",
   },
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [],
 }
 `;
 
@@ -16,22 +20,31 @@ Object {
     "name": "param",
     "type": "number",
   },
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [],
 }
 `;
 
 exports[`request given single header param should translate to request with header 1`] = `
 Object {
+  "cookie": Array [],
   "headers": Array [
     Object {
       "in": "header",
       "name": "param",
     },
   ],
+  "path": Array [],
+  "query": Array [],
 }
 `;
 
 exports[`request given single path param should translate to request with path 1`] = `
 Object {
+  "cookie": Array [],
+  "headers": Array [],
   "path": Array [
     Object {
       "in": "path",
@@ -39,11 +52,15 @@ Object {
       "required": true,
     },
   ],
+  "query": Array [],
 }
 `;
 
 exports[`request given single query param should translate to request with query 1`] = `
 Object {
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
   "query": Array [
     Object {
       "in": "query",
@@ -55,43 +72,39 @@ Object {
 
 exports[`request given two header params should translate 1`] = `
 Object {
+  "cookie": Array [],
   "headers": Array [
     Object {
       "in": "header",
       "name": "param",
     },
-    Object {
-      "in": "header",
-      "name": "param",
-    },
   ],
+  "path": Array [],
+  "query": Array [],
 }
 `;
 
 exports[`request given two path params should translate 1`] = `
 Object {
+  "cookie": Array [],
+  "headers": Array [],
   "path": Array [
     Object {
       "in": "path",
       "name": "param",
       "required": true,
     },
-    Object {
-      "in": "path",
-      "name": "param",
-      "required": true,
-    },
   ],
+  "query": Array [],
 }
 `;
 
 exports[`request given two query params should translate 1`] = `
 Object {
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
   "query": Array [
-    Object {
-      "in": "query",
-      "name": "param",
-    },
     Object {
       "in": "query",
       "name": "param",
@@ -107,5 +120,9 @@ Object {
     "name": "param",
     "type": "number",
   },
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [],
 }
 `;

@@ -158,7 +158,12 @@ describe('transformOas2Operation', () => {
         id: '?http-operation-id?',
         path: '/users/{userId}',
         method: 'put',
-        request: {},
+        request: {
+          cookie: [],
+          headers: [],
+          path: [],
+          query: [],
+        },
         responses: [],
         security: [],
         servers: [],
@@ -197,6 +202,7 @@ describe('transformOas2Operation', () => {
       method: 'get',
       path: '/users/{userId}',
       request: {
+        cookie: [],
         headers: [
           {
             name: 'name',
@@ -206,6 +212,8 @@ describe('transformOas2Operation', () => {
             style: 'simple',
           },
         ],
+        path: [],
+        query: [],
       },
       responses: [],
       security: [],

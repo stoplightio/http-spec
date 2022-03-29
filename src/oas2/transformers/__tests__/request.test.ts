@@ -6,6 +6,7 @@ import {
   QueryParameter,
 } from 'swagger-schema-official';
 
+import { createContext } from '../../../context';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -13,13 +14,16 @@ import {
   translateToPathParameter,
   translateToQueryParameter,
 } from '../params';
-import { translateToRequest } from '../request';
+import { translateToRequest as _translateToRequest } from '../request';
 
 jest.mock('../params');
-jest.mock('../../guards');
+
+const translateToRequest = (path: Record<string, unknown>, parameters: any[]) => {
+  const ctx = createContext({ consumes: ['*'], paths: { '/api': { parameters } } });
+  return _translateToRequest.call(ctx, path, { parameters });
+};
 
 describe('request', () => {
-  const consumes = ['*'];
   const fakeParameter: FormDataParameter = {
     name: 'name',
     type: 'string',
@@ -43,45 +47,41 @@ describe('request', () => {
     jest.resetAllMocks();
   });
 
-  it('given empty params collection should return empty object', () => {
-    expect(translateToRequest({}, [], consumes)).toEqual({});
-  });
-
   it('given single body param should translate to request with body', () => {
-    expect(translateToRequest({}, [fakeBodyParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeBodyParameter])).toMatchSnapshot();
   });
 
   it('given single form param should translate to request with form', () => {
-    expect(translateToRequest({}, [fakeFormParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeFormParameter])).toMatchSnapshot();
   });
 
   it('given single path param should translate to request with path', () => {
-    expect(translateToRequest({}, [fakePathParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakePathParameter])).toMatchSnapshot();
   });
 
   it('given single query param should translate to request with query', () => {
-    expect(translateToRequest({}, [fakeQueryParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeQueryParameter])).toMatchSnapshot();
   });
 
   it('given single header param should translate to request with header', () => {
-    expect(translateToRequest({}, [fakeHeaderParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeHeaderParameter])).toMatchSnapshot();
   });
 
   it('given two query params should translate', () => {
-    expect(translateToRequest({}, [fakeQueryParameter, fakeQueryParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeQueryParameter, fakeQueryParameter])).toMatchSnapshot();
   });
 
   it('given two header params should translate', () => {
-    expect(translateToRequest({}, [fakeHeaderParameter, fakeHeaderParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakeHeaderParameter, fakeHeaderParameter])).toMatchSnapshot();
   });
 
   it('given two path params should translate', () => {
-    expect(translateToRequest({}, [fakePathParameter, fakePathParameter], consumes)).toMatchSnapshot();
+    expect(translateToRequest({}, [fakePathParameter, fakePathParameter])).toMatchSnapshot();
   });
 
   it('should translate mixed request', () => {
     expect(
-      translateToRequest({}, [fakeParameter, fakeParameter, fakeParameter, fakeParameter, fakeParameter], consumes),
+      translateToRequest({}, [fakeParameter, fakeParameter, fakeParameter, fakeParameter, fakeParameter]),
     ).toMatchSnapshot();
   });
 });

@@ -1,6 +1,13 @@
-import { translateToServers } from '../servers';
+import type { DeepPartial } from '@stoplight/types';
+import type { Spec } from 'swagger-schema-official';
+
+import { createContext } from '../../../context';
+import { translateToServers as _translateToServers } from '../servers';
 
 type GlobalWithLocation = typeof global & { location?: Partial<Location> & { href: string } };
+
+const translateToServers = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToServers>) =>
+  _translateToServers.call(createContext(document), ...params);
 
 describe('translateToServers', () => {
   afterAll(() => {

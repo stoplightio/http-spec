@@ -9,7 +9,12 @@ Object {
   "iid": "oid",
   "method": "get",
   "path": "/users/{userId}",
-  "request": Object {},
+  "request": Object {
+    "cookie": Array [],
+    "headers": Array [],
+    "path": Array [],
+    "query": Array [],
+  },
   "responses": Array [
     Object {
       "code": "response",
@@ -28,7 +33,6 @@ Object {
       "description": "desc",
       "headers": Array [
         Object {
-          "description": undefined,
           "name": "header",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -42,7 +46,6 @@ Object {
   "security": Array [
     Array [
       Object {
-        "description": undefined,
         "flows": Object {
           "implicit": Object {
             "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -57,7 +60,6 @@ Object {
     ],
     Array [
       Object {
-        "description": undefined,
         "in": "header",
         "key": "api_key",
         "name": "api_key_name",
