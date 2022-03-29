@@ -1,107 +1,149 @@
+import { isPlainObject } from '@stoplight/json';
 import type {
-  DeepPartial,
-  Dictionary,
-  IHttpCookieParam,
   IHttpHeaderParam,
   IHttpOperationRequest,
   IHttpOperationRequestBody,
   IHttpParam,
-  IHttpPathParam,
-  IHttpQueryParam,
-  IMediaTypeContent,
+  INodeExample,
+  INodeExternalExample,
   Optional,
 } from '@stoplight/types';
-import { compact, map, omit, partial, pickBy } from 'lodash';
-import type { OpenAPIObject, ParameterObject, RequestBodyObject } from 'openapi3-ts';
+import { HttpParamStyles } from '@stoplight/types';
+import type { JSONSchema7 } from 'json-schema';
+import type { ParameterObject } from 'openapi3-ts';
+import pickBy = require('lodash.pickby');
 
+import { isBoolean, isNonNullable, isString } from '../../guards';
+import { OasVersion } from '../../oas';
+import { getValidOasParameters } from '../../oas/accessors';
+import { isValidParamStyle } from '../../oas/guards';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { isDictionary, maybeResolveLocalRef } from '../../utils';
+import type { ArrayCallbackParameters, Fragment } from '../../types';
+import { entries } from '../../utils';
 import { isRequestBodyObject } from '../guards';
+import type { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
 
-function translateRequestBody(
-  document: DeepPartial<OpenAPIObject>,
-  requestBodyObject: RequestBodyObject,
-): IHttpOperationRequestBody {
+export const translateRequestBody: Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody> =
+  function (requestBodyObject) {
+    const resolvedRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+
+    if (isRequestBodyObject(resolvedRequestBodyObject)) {
+      return {
+        contents: entries(resolvedRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+
+        ...pickBy(
+          {
+            required: resolvedRequestBodyObject.required,
+            description: resolvedRequestBodyObject.description,
+          },
+          isNonNullable,
+        ),
+      };
+    }
+
+    return { contents: [] };
+  };
+
+const translateParameterObjectSchema: Oas3TranslateFunction<
+  [parameterObject: Fragment],
+  Optional<JSONSchema7>
+> = function (parameterObject) {
+  if (!isPlainObject(parameterObject.schema)) return;
+
+  return translateSchemaObject.call(this, {
+    ...parameterObject.schema,
+    ...('example' in parameterObject ? { example: parameterObject.example } : null),
+  });
+};
+
+const translateToExample: Oas3TranslateFunction<
+  ArrayCallbackParameters<[key: string, example: unknown]>,
+  Optional<INodeExample | INodeExternalExample>
+> = function ([key, example]) {
+  if (!isPlainObject(example)) return;
+
+  if (!('value' in example) && typeof example.externalValue !== 'string') return;
+
   return {
-    required: requestBodyObject.required,
-    description: requestBodyObject.description,
-    contents: compact<IMediaTypeContent>(
-      map<Dictionary<unknown> & unknown, Optional<IMediaTypeContent>>(
-        requestBodyObject.content,
-        partial(translateMediaTypeObject, document),
-      ),
+    key,
+
+    ...(typeof example.externalValue === 'string'
+      ? { externalValue: example.externalValue }
+      : { value: example.value }),
+
+    ...pickBy(
+      {
+        summary: example.summary,
+        description: example.description,
+      },
+      isString,
     ),
   };
-}
+};
 
-export function translateParameterObject(
-  document: DeepPartial<OpenAPIObject>,
-  parameterObject: ParameterObject,
-): IHttpParam | any {
-  const examples = map(parameterObject.examples, (example, key) => ({
-    key,
-    ...example,
-  }));
+export const translateParameterObject: Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam> =
+  function (parameterObject) {
+    const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
 
-  const hasDefaultExample = examples.map(({ key }) => key).includes('default');
+    const hasDefaultExample = examples.some(({ key }) => key.includes('default'));
+    const schema = translateParameterObjectSchema.call(this, parameterObject);
 
-  return pickBy({
-    ...omit(parameterObject, 'in', 'schema', 'example'),
-    name: parameterObject.name,
-    style: parameterObject.style,
-    schema: isDictionary(parameterObject.schema)
-      ? translateSchemaObject(document, {
-          ...parameterObject.schema,
-          ...('example' in parameterObject ? { example: parameterObject.example } : null),
-        })
-      : void 0,
-    examples:
-      'example' in parameterObject && !hasDefaultExample
-        ? [{ key: 'default', value: parameterObject.example }, ...examples]
-        : examples,
-  });
-}
+    return {
+      name: parameterObject.name,
+      style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
+      examples:
+        'example' in parameterObject && !hasDefaultExample
+          ? [{ key: 'default', value: parameterObject.example }, ...examples]
+          : examples,
 
-export function translateToRequest(
-  document: DeepPartial<OpenAPIObject>,
-  parameters: ParameterObject[],
-  requestBodyObject?: RequestBodyObject,
-): IHttpOperationRequest {
-  const params: {
-    header: IHttpHeaderParam[];
-    query: IHttpQueryParam[];
-    cookie: IHttpCookieParam[];
-    path: IHttpPathParam[];
-  } = {
-    header: [],
-    query: [],
-    cookie: [],
-    path: [],
+      ...pickBy(
+        {
+          description: parameterObject.description,
+        },
+        isString,
+      ),
+
+      ...pickBy(
+        {
+          explode: parameterObject.explode,
+          deprecated: parameterObject.deprecated,
+        },
+        isBoolean,
+      ),
+
+      ...pickBy(
+        {
+          schema,
+          content: parameterObject.content,
+        },
+        isPlainObject,
+      ),
+    };
   };
 
-  for (const parameter of parameters) {
-    const { in: key } = parameter;
-    if (!params.hasOwnProperty(key)) continue;
+export const translateToRequest: Oas3TranslateFunction<[path: Fragment, operation: Fragment], IHttpOperationRequest> =
+  function (path, operation) {
+    const params: Omit<IHttpOperationRequest, 'header'> & { header: IHttpHeaderParam[] } = {
+      header: [],
+      query: [],
+      cookie: [],
+      path: [],
+    };
 
-    params[key].push(translateParameterObject(document, parameter));
-  }
+    for (const param of getValidOasParameters(this.document, OasVersion.OAS3, operation.parameters, path.parameters)) {
+      const { in: key } = param;
+      const target = params[key];
+      if (!Array.isArray(target)) continue;
 
-  let body;
-  if (isDictionary(requestBodyObject)) {
-    const resolvedRequestBodyObject = maybeResolveLocalRef(document, requestBodyObject) as RequestBodyObject;
-    body = isRequestBodyObject(resolvedRequestBodyObject)
-      ? translateRequestBody(document, resolvedRequestBodyObject)
-      : { contents: [] };
-  } else {
-    body = { contents: [] };
-  }
+      target.push(translateParameterObject.call(this, param) as any);
+    }
 
-  return {
-    body,
-    headers: params.header,
-    query: params.query,
-    cookie: params.cookie,
-    path: params.path,
+    return {
+      body: translateRequestBody.call(this, operation?.requestBody),
+      headers: params.header,
+      query: params.query,
+      cookie: params.cookie,
+      path: params.path,
+    };
   };
-}

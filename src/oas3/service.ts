@@ -1,34 +1,27 @@
-import { HttpSecurityScheme, IHttpService, IServer } from '@stoplight/types';
-import { compact, filter, flatMap, keys, map, pickBy } from 'lodash';
-
-import { hasXLogo } from '../oas/guards';
-import { translateLogo } from '../oas/transformers/translateLogo';
-import { Oas3HttpServiceTransformer } from '../oas/types';
-import { isDictionary } from '../utils';
-import { isSecurityScheme, isTagObject } from './guards';
-import { transformToSingleSecurity } from './transformers/securities';
-import { translateServerVariables } from './transformers/servers';
+import { isPlainObject } from '@stoplight/json';
+import type { Optional } from '@stoplight/types';
+import pickBy = require('lodash.pickby');
+import { createContext } from '../context';
+import { isNonNullable } from '../guards';
+import { transformOasService } from '../oas/service';
+import type { Oas3HttpServiceTransformer } from '../oas/types';
+import { ArrayCallbackParameters } from '../types';
+import { entries } from '../utils';
+import { SecurityWithKey } from './accessors';
+import { isSecurityScheme } from './guards';
+import { translateToSingleSecurity } from './transformers/securities';
+import { translateToServer } from './transformers/servers';
+import { Oas3TranslateFunction } from './types';
 
 export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
-  const httpService: IHttpService = {
-    id: '?http-service-id?',
-    version: document.info?.version ?? '',
-    name: document.info?.title ?? 'no-title',
-  };
-
-  if (typeof document.info?.description === 'string') {
-    httpService.description = document.info.description;
-  }
+  const ctx = createContext(document);
+  const httpService = transformOasService.call(ctx);
 
   if (typeof document.info?.summary === 'string') {
     httpService.summary = document.info.summary;
   }
 
-  if (document.info?.contact) {
-    httpService.contact = document.info.contact;
-  }
-
-  if (typeof document.info?.license === 'object' && document.info.license !== null) {
+  if (document.info?.license) {
     const { name, identifier, ...license } = document.info.license;
     httpService.license = {
       ...license,
@@ -37,50 +30,27 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
     };
   }
 
-  if (document.info?.termsOfService) {
-    httpService.termsOfService = document.info.termsOfService;
-  }
+  const servers = Array.isArray(document.servers)
+    ? document.servers.map(translateToServer, ctx).filter(isNonNullable)
+    : [];
 
-  if (isDictionary(document.info) && hasXLogo(document.info)) {
-    httpService.logo = translateLogo(document.info);
-  }
-
-  const servers = compact<IServer>(
-    map(document.servers, server => {
-      if (!server) return null;
-
-      const serv: IServer = {
-        name: document.info?.title ?? '',
-        description: server.description,
-        url: server.url ?? '',
-      };
-
-      const variables = server.variables && translateServerVariables(server.variables);
-      if (variables && Object.keys(variables).length) serv.variables = variables;
-
-      return serv;
-    }),
-  );
   if (servers.length) {
     httpService.servers = servers;
   }
 
-  const securitySchemes = compact<HttpSecurityScheme>(
-    keys(document.components?.securitySchemes).map(key => {
-      const definition = document?.components?.securitySchemes?.[key];
-      return isSecurityScheme(definition) && transformToSingleSecurity(definition, key);
-    }),
-  );
+  const securitySchemes = entries(document.components?.securitySchemes)
+    .map(translateSecurityScheme, ctx)
+    .filter(isNonNullable);
 
   if (securitySchemes.length) {
     httpService.securitySchemes = securitySchemes;
   }
 
-  const security = compact(
-    flatMap(document.security, sec => {
-      if (!sec) return null;
+  const security = (Array.isArray(document.security) ? document.security : [])
+    .flatMap(sec => {
+      if (!isPlainObject(sec)) return null;
 
-      return keys(sec).map(key => {
+      return Object.keys(sec).map(key => {
         const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
         if (ss && ss.type === 'oauth2') {
           const flows = {};
@@ -104,18 +74,26 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
 
         return ss;
       });
-    }),
-  );
+    })
+    .filter(isNonNullable);
 
   if (security.length) {
-    //@ts-ignore I hate doing this, but unfortunately Lodash types are (rightfully) very loose and put undefined when it can't happen
     httpService.security = security;
   }
 
-  const tags = filter(document.tags, isTagObject);
-  if (tags.length) {
-    httpService.tags = tags;
+  return httpService;
+};
+
+const translateSecurityScheme: Oas3TranslateFunction<
+  ArrayCallbackParameters<[name: string, scheme: unknown]>,
+  Optional<SecurityWithKey>
+> = function ([key, definition]) {
+  if (!isSecurityScheme(definition)) return;
+
+  const transformed = translateToSingleSecurity.call(this, definition);
+  if (transformed && 'key' in transformed) {
+    transformed.key = key;
   }
 
-  return httpService;
+  return transformed;
 };

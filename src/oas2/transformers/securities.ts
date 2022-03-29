@@ -1,141 +1,153 @@
-import {
+import { isPlainObject } from '@stoplight/json';
+import type {
   DeepPartial,
-  Dictionary,
-  HttpSecurityScheme,
   IApiKeySecurityScheme,
   IBasicSecurityScheme,
   IOauth2SecurityScheme,
   IOauthFlowObjects,
+  Optional,
 } from '@stoplight/types';
-import { isString, pickBy } from 'lodash';
-import {
+import pickBy = require('lodash.pickby');
+import type {
   ApiKeySecurity,
+  BasicAuthenticationSecurity,
   OAuth2AccessCodeSecurity,
   OAuth2ApplicationSecurity,
   OAuth2ImplicitSecurity,
   OAuth2PasswordSecurity,
-  Security,
-  Spec,
 } from 'swagger-schema-official';
 
+import { isNonNullable, isString } from '../../guards';
 import { SecurityWithKey } from '../../oas3/accessors';
-import { isDictionary } from '../../utils';
 import { getSecurities } from '../accessors';
 import { isSecurityScheme } from '../guards';
+import { Oas2TranslateFunction } from '../types';
 
-/**
- * @param security the union with 'any' is purposeful. Passing strict types does not help much here,
- * because all these checks happen in runtime. I'm leaving 'Security' only for visibility.
- */
-function translateToFlows(security: Dictionary<unknown>): IOauthFlowObjects {
-  const flows: IOauthFlowObjects = {};
+export const translateToFlows: Oas2TranslateFunction<[security: Record<string, unknown>], IOauthFlowObjects> =
+  function (security) {
+    const flows: IOauthFlowObjects = {};
 
-  const scopes = isDictionary(security.scopes) ? pickBy<unknown, string>(security.scopes, isString) : {};
-  const authorizationUrl =
-    'authorizationUrl' in security && typeof security.authorizationUrl === 'string' ? security.authorizationUrl : '';
-  const tokenUrl = 'tokenUrl' in security && typeof security.tokenUrl === 'string' ? security.tokenUrl : '';
+    const scopes = isPlainObject(security.scopes) ? pickBy<unknown, string>(security.scopes, isString) : {};
+    const authorizationUrl =
+      'authorizationUrl' in security && typeof security.authorizationUrl === 'string' ? security.authorizationUrl : '';
+    const tokenUrl = 'tokenUrl' in security && typeof security.tokenUrl === 'string' ? security.tokenUrl : '';
 
-  if (security.flow === 'implicit') {
-    flows.implicit = {
-      authorizationUrl,
-      scopes,
-    };
-  } else if (security.flow === 'password') {
-    flows.password = {
-      tokenUrl,
-      scopes,
-    };
-  } else if (security.flow === 'application') {
-    flows.clientCredentials = {
-      tokenUrl,
-      scopes,
-    };
-  } else if (security.flow === 'accessCode') {
-    flows.authorizationCode = {
-      authorizationUrl,
-      tokenUrl,
-      scopes,
-    };
-  }
+    if (security.flow === 'implicit') {
+      flows.implicit = {
+        authorizationUrl,
+        scopes,
+      };
+    } else if (security.flow === 'password') {
+      flows.password = {
+        tokenUrl,
+        scopes,
+      };
+    } else if (security.flow === 'application') {
+      flows.clientCredentials = {
+        tokenUrl,
+        scopes,
+      };
+    } else if (security.flow === 'accessCode') {
+      flows.authorizationCode = {
+        authorizationUrl,
+        tokenUrl,
+        scopes,
+      };
+    }
 
-  return flows;
-}
+    return flows;
+  };
 
-function translateToBasicSecurityScheme(security: DeepPartial<Security>, key: string): IBasicSecurityScheme {
+export const translateToBasicSecurityScheme: Oas2TranslateFunction<
+  [security: DeepPartial<BasicAuthenticationSecurity> & { key: string }],
+  IBasicSecurityScheme
+> = function (security) {
   return {
     type: 'http',
     scheme: 'basic',
-    description: security.description,
-    key,
+    key: security.key,
+
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
   };
-}
+};
 
-function translateToApiKeySecurityScheme(
-  security: DeepPartial<ApiKeySecurity>,
-  key: string,
-): IApiKeySecurityScheme | undefined {
-  const acceptableSecurityOrigins: ApiKeySecurity['in'][] = ['query', 'header'];
+const ACCEPTABLE_SECURITY_ORIGINS: ApiKeySecurity['in'][] = ['query', 'header'];
 
-  if ('in' in security && security.in && acceptableSecurityOrigins.includes(security.in)) {
+export const translateToApiKeySecurityScheme: Oas2TranslateFunction<
+  [security: DeepPartial<ApiKeySecurity> & { key: string }],
+  Optional<IApiKeySecurityScheme>
+> = function (security) {
+  if ('in' in security && security.in && ACCEPTABLE_SECURITY_ORIGINS.includes(security.in)) {
     return {
       type: 'apiKey',
-      name: security.name || '',
       in: security.in,
-      description: security.description,
-      key,
+      name: String(security.name || ''),
+      key: security.key,
+
+      ...pickBy(
+        {
+          description: security.description,
+        },
+        isString,
+      ),
     };
   }
 
-  return undefined;
-}
+  return;
+};
 
 const VALID_OAUTH2_FLOWS = ['implicit', 'password', 'application', 'accessCode'];
 
-function translateToOauth2SecurityScheme(
-  security: DeepPartial<
-    OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
-  >,
-  key: string,
-): IOauth2SecurityScheme | undefined {
+export const translateToOauth2SecurityScheme: Oas2TranslateFunction<
+  [
+    security: DeepPartial<
+      OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
+    > & { key: string },
+  ],
+  Optional<IOauth2SecurityScheme>
+> = function (security) {
   if (!security.flow || !VALID_OAUTH2_FLOWS.includes(security.flow)) return undefined;
 
   return {
     type: 'oauth2',
-    flows: translateToFlows(security),
-    description: security.description,
-    key,
-  };
-}
+    flows: translateToFlows.call(this, security),
+    key: security.key,
 
-export function translateToSingleSecurity(security: unknown, key: string) {
+    ...pickBy(
+      {
+        description: security.description,
+      },
+      isString,
+    ),
+  };
+};
+
+export const translateToSingleSecurity: Oas2TranslateFunction<
+  [security: unknown & { key: string }],
+  Optional<SecurityWithKey>
+> = function (security) {
   if (isSecurityScheme(security)) {
     switch (security.type) {
       case 'basic':
-        return translateToBasicSecurityScheme(security, key);
+        return translateToBasicSecurityScheme.call(this, security);
       case 'apiKey':
-        return translateToApiKeySecurityScheme(security, key);
+        return translateToApiKeySecurityScheme.call(this, security);
       case 'oauth2':
-        return translateToOauth2SecurityScheme(security, key);
+        return translateToOauth2SecurityScheme.call(this, security);
     }
   }
 
   return;
-}
+};
 
-export function translateToSecurities(
-  document: DeepPartial<Spec>,
-  operationSecurity: Dictionary<string[], string>[] | undefined,
-): HttpSecurityScheme[][] {
-  const securities = getSecurities(document, operationSecurity);
+export const translateToSecurities: Oas2TranslateFunction<[operationSecurities: unknown], SecurityWithKey[][]> =
+  function (operationSecurities) {
+    const securities = getSecurities(this.document, operationSecurities);
 
-  return securities.map(security =>
-    security.reduce<SecurityWithKey[]>((transformedSecurities, sec) => {
-      const transformed = translateToSingleSecurity(sec, sec.key);
-      if (transformed) {
-        transformedSecurities.push(transformed);
-      }
-
-      return transformedSecurities;
-    }, []),
-  );
-}
+    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
+  };
