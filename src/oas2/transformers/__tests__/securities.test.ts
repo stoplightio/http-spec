@@ -1,6 +1,11 @@
+import { DeepPartial } from '@stoplight/types';
 import { Spec } from 'swagger-schema-official';
 
-import { translateToSecurities } from '../securities';
+import { createContext } from '../../../context';
+import { translateToSecurities as _translateToSecurities } from '../securities';
+
+const translateToSecurities = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToSecurities>) =>
+  _translateToSecurities.call(createContext(document), ...params);
 
 describe('securities', () => {
   describe('translateToSecurities', () => {

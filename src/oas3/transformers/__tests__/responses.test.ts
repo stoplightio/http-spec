@@ -1,7 +1,11 @@
 import type { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { translateToResponses } from '../responses';
+import { createContext } from '../../../context';
+import { translateToResponses as _translateToResponses } from '../responses';
+
+const translateToResponses = (document: DeepPartial<OpenAPIObject>, responses: unknown) =>
+  _translateToResponses.call(createContext(document), responses);
 
 describe('translateToOas3Responses', () => {
   it('given empty dictionary should return empty array', () => {
@@ -70,7 +74,6 @@ describe('translateToOas3Responses', () => {
       {
         code: '200',
         contents: [],
-        description: void 0,
         headers: [],
       },
     ]);
@@ -212,6 +215,7 @@ describe('translateToOas3Responses', () => {
           {
             name: 'X-Page',
             schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
             },
             style: 'simple',

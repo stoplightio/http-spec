@@ -1,7 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { Security } from 'swagger-schema-official';
 
-import { getConsumes, getProduces, getSecurities } from '../accessors';
+import { getConsumes, getExamplesFromSchema, getProduces, getSecurities } from '../accessors';
 
 const securityDefinitionsFixture: Dictionary<Security> = {
   api_key: {
@@ -266,6 +266,35 @@ describe('accessors', () => {
       expect(getConsumes({ consumes: 2 } as any, {})).toEqual([]);
       expect(getConsumes({}, { consumes: ['text/plain', null] } as any)).toEqual(['text/plain']);
       expect(getConsumes({ consumes: ['text/plain', null] } as any, {})).toEqual(['text/plain']);
+    });
+  });
+
+  describe('getExamplesFromSchema', () => {
+    it('should ignore invalid data', () => {
+      // @ts-ignore
+      expect(getExamplesFromSchema(null)).toEqual({});
+    });
+
+    it('should work with x-examples', () => {
+      expect(
+        getExamplesFromSchema({
+          'x-examples': {
+            'my-example': {},
+          },
+        }),
+      ).toEqual({
+        'my-example': {},
+      });
+    });
+
+    it('should work with example', () => {
+      expect(
+        getExamplesFromSchema({
+          example: 'my-example',
+        }),
+      ).toEqual({
+        default: 'my-example',
+      });
     });
   });
 });

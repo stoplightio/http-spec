@@ -1,6 +1,5 @@
-import { Dictionary } from '@stoplight/types';
-import { isObject } from 'lodash';
-import {
+import { isPlainObject } from '@stoplight/json';
+import type {
   BaseParameterObject,
   HeaderObject,
   OAuthFlowObject,
@@ -12,19 +11,18 @@ import {
   TagObject,
 } from 'openapi3-ts';
 
-import { isDictionary } from '../utils';
-import { SecurityWithKey } from './accessors';
+import type { SecurityWithKey } from './accessors';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
-  isObject(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).type === 'string';
+  isPlainObject(maybeSecurityScheme) && typeof maybeSecurityScheme.type === 'string';
 
 export const isSecuritySchemeWithKey = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecurityWithKey =>
-  isSecurityScheme(maybeSecurityScheme) && typeof (maybeSecurityScheme as Dictionary<unknown>).key === 'string';
+  isSecurityScheme(maybeSecurityScheme) && typeof maybeSecurityScheme.key === 'string';
 
 export const isBaseParameterObject = (
   maybeBaseParameterObject: unknown,
 ): maybeBaseParameterObject is BaseParameterObject =>
-  isObject(maybeBaseParameterObject) &&
+  isPlainObject(maybeBaseParameterObject) &&
   ('description' in maybeBaseParameterObject ||
     'required' in maybeBaseParameterObject ||
     'content' in maybeBaseParameterObject ||
@@ -38,33 +36,33 @@ export const isHeaderObject = (maybeHeaderObject: unknown): maybeHeaderObject is
   isBaseParameterObject(maybeHeaderObject);
 
 export const isServerObject = (maybeServerObject: unknown): maybeServerObject is ServerObject =>
-  isObject(maybeServerObject) && typeof (maybeServerObject as Dictionary<unknown>).url === 'string';
+  isPlainObject(maybeServerObject) && typeof maybeServerObject.url === 'string';
 
 export const isServerVariableObject = (
   maybeServerVariableObject: unknown,
 ): maybeServerVariableObject is ServerVariableObject => {
-  if (!isObject(maybeServerVariableObject)) return false;
-  const typeofDefault = typeof (maybeServerVariableObject as Dictionary<unknown>).default;
+  if (!isPlainObject(maybeServerVariableObject)) return false;
+  const typeofDefault = typeof maybeServerVariableObject.default;
   return typeofDefault === 'string' || typeofDefault === 'boolean' || typeofDefault === 'number';
 };
 
 export const isTagObject = (maybeTagObject: unknown): maybeTagObject is TagObject => {
-  if (isObject(maybeTagObject) && 'name' in maybeTagObject) {
-    return typeof (maybeTagObject as TagObject).name === 'string';
+  if (isPlainObject(maybeTagObject) && 'name' in maybeTagObject) {
+    return typeof maybeTagObject.name === 'string';
   }
 
   return false;
 };
 
 export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObject is ResponseObject =>
-  isObject(maybeResponseObject) &&
+  isPlainObject(maybeResponseObject) &&
   ('description' in maybeResponseObject ||
     'headers' in maybeResponseObject ||
     'content' in maybeResponseObject ||
     'links' in maybeResponseObject);
 
 export const isOAuthFlowObject = (maybeOAuthFlowObject: unknown): maybeOAuthFlowObject is OAuthFlowObject =>
-  isDictionary(maybeOAuthFlowObject) && isDictionary(maybeOAuthFlowObject.scopes);
+  isPlainObject(maybeOAuthFlowObject) && isPlainObject(maybeOAuthFlowObject.scopes);
 
 export const isRequestBodyObject = (maybeRequestBodyObject: unknown): maybeRequestBodyObject is RequestBodyObject =>
-  isDictionary(maybeRequestBodyObject) && isDictionary(maybeRequestBodyObject.content);
+  isPlainObject(maybeRequestBodyObject) && isPlainObject(maybeRequestBodyObject.content);
