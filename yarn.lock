@@ -1023,8 +1023,10 @@
   dependencies:
     eslint-config-prettier "^8.3.0"
 
-"@stoplight/json@file:.yalc/@stoplight/json":
-  version "0.0.0"
+"@stoplight/json@^3.18.0":
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.18.0.tgz#271ca5c7da5b8175b3b1e8344346a835aabc54a4"
+  integrity sha512-JeaOaee2dKOxz3gZKMfx+KxUi5pH7AU/TRgqnSEkQ+3FQhNgx6XYPZwvcfcsVOiHUa2tYIP3kRl30BgYWtSOow==
   dependencies:
     "@stoplight/ordered-object-literal" "^1.0.2"
     "@stoplight/types" "^12.3.0"
