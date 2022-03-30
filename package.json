@@ -35,24 +35,24 @@
       "default": "./oas2/index.js"
     },
     "./oas2/operation": {
-      "types": "./oas2/operation/index.d.ts",
-      "default": "./oas2/operation/index.js"
+      "types": "./oas2/operation.d.ts",
+      "default": "./oas2/operation.js"
     },
     "./oas3": {
       "types": "./oas3/index.d.ts",
       "default": "./oas3/index.js"
     },
     "./oas3/operation": {
-      "types": "./oas3/operation/index.d.ts",
-      "default": "./oas3/operation/index.js"
+      "types": "./oas3/operation.d.ts",
+      "default": "./oas3/operation.js"
     },
     "./postman": {
       "types": "./postman/index.d.ts",
       "default": "./postman/index.js"
     },
     "./postman/operation": {
-      "types": "./postman/operation/index.d.ts",
-      "default": "./postman/operation/index.js"
+      "types": "./postman/operation.d.ts",
+      "default": "./postman/operation.js"
     }
   },
   "scripts": {
