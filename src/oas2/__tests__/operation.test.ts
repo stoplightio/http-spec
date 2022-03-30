@@ -68,7 +68,44 @@ describe('transformOas2Operation', () => {
         method: 'get',
         document,
       }),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      id: expect.any(String),
+      responses: [
+        {
+          id: expect.any(String),
+          contents: [
+            {
+              id: expect.any(String),
+              examples: [
+                {
+                  id: expect.any(String),
+                },
+              ],
+            },
+          ],
+          headers: [
+            {
+              id: expect.any(String),
+              schema: {
+                'x-stoplight-id': expect.any(String),
+              },
+            },
+          ],
+        },
+      ],
+      security: [
+        [
+          {
+            id: expect.any(String),
+          },
+        ],
+        [
+          {
+            id: expect.any(String),
+          },
+        ],
+      ],
+    });
   });
 
   it('should properly translate operation with no response body', () => {
@@ -155,7 +192,7 @@ describe('transformOas2Operation', () => {
         extensions: {},
       }),
       {
-        id: '?http-operation-id?',
+        id: expect.any(String),
         path: '/users/{userId}',
         method: 'put',
         request: {
@@ -198,15 +235,17 @@ describe('transformOas2Operation', () => {
         document,
       }),
     ).toStrictEqual({
-      id: '?http-operation-id?',
+      id: expect.any(String),
       method: 'get',
       path: '/users/{userId}',
       request: {
         cookie: [],
         headers: [
           {
+            id: expect.any(String),
             name: 'name',
             schema: {
+              'x-stoplight-id': expect.any(String),
               $schema: 'http://json-schema.org/draft-07/schema#',
             },
             style: 'simple',

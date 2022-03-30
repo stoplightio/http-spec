@@ -1,10 +1,9 @@
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import { translateToRequest as _translateToRequest } from '../request';
 
-const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) => {
-  const ctx = createContext({ paths: { '/api': path } });
-  return _translateToRequest.call(ctx, path, operation);
-};
+const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) =>
+  _translateToRequest.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), path, operation);
 
 describe('translateOas3ToRequest', () => {
   it('given no request body should translate parameters', () => {
@@ -50,7 +49,24 @@ describe('translateOas3ToRequest', () => {
       get: operation,
     };
 
-    expect(translateToRequest(path, operation)).toMatchSnapshot();
+    expect(translateToRequest(path, operation)).toMatchSnapshot({
+      body: {
+        id: expect.any(String),
+      },
+      headers: [
+        {
+          id: expect.any(String),
+        },
+      ],
+      query: [
+        {
+          id: expect.any(String),
+        },
+        {
+          id: expect.any(String),
+        },
+      ],
+    });
   });
 
   it('give a request body should translate it', () => {
@@ -72,6 +88,18 @@ describe('translateOas3ToRequest', () => {
       post: operation,
     };
 
-    expect(translateToRequest(path, operation)).toMatchSnapshot();
+    expect(translateToRequest(path, operation)).toMatchSnapshot({
+      body: {
+        id: expect.any(String),
+        contents: [
+          {
+            id: expect.any(String),
+            schema: {
+              'x-stoplight-id': expect.any(String),
+            },
+          },
+        ],
+      },
+    });
   });
 });
