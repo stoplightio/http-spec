@@ -90,7 +90,7 @@ export function transformRawBody(raw: string, mediaType: string = 'text/plain'):
             value: parsed,
           },
         ],
-        schema: convertSchema(jsonSchemaGenerator(parsed)),
+        schema: convertSchema({}, jsonSchemaGenerator(parsed)),
       };
     } catch (e) {
       /* noop, move on.. */
