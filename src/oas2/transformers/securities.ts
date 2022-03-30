@@ -1,6 +1,7 @@
 import { isPlainObject } from '@stoplight/json';
 import type {
   DeepPartial,
+  HttpSecurityScheme,
   IApiKeySecurityScheme,
   IBasicSecurityScheme,
   IOauth2SecurityScheme,
@@ -17,11 +18,11 @@ import type {
   OAuth2PasswordSecurity,
 } from 'swagger-schema-official';
 
+import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
-import { SecurityWithKey } from '../../oas3/accessors';
 import { getSecurities } from '../accessors';
 import { isSecurityScheme } from '../guards';
-import { Oas2TranslateFunction } from '../types';
+import type { Oas2TranslateFunction } from '../types';
 
 export const translateToFlows: Oas2TranslateFunction<[security: Record<string, unknown>], IOauthFlowObjects> =
   function (security) {
@@ -58,14 +59,16 @@ export const translateToFlows: Oas2TranslateFunction<[security: Record<string, u
     return flows;
   };
 
-export const translateToBasicSecurityScheme: Oas2TranslateFunction<
-  [security: DeepPartial<BasicAuthenticationSecurity> & { key: string }],
-  IBasicSecurityScheme
-> = function (security) {
+export const translateToBasicSecurityScheme = withContext<
+  Oas2TranslateFunction<[security: DeepPartial<BasicAuthenticationSecurity> & { key: string }], IBasicSecurityScheme>
+>(function (security) {
+  const key = security.key;
+
   return {
+    id: this.generateId(`http_security-${this.ids.service}-${key}`),
     type: 'http',
     scheme: 'basic',
-    key: security.key,
+    key,
 
     ...pickBy(
       {
@@ -74,20 +77,22 @@ export const translateToBasicSecurityScheme: Oas2TranslateFunction<
       isString,
     ),
   };
-};
+});
 
 const ACCEPTABLE_SECURITY_ORIGINS: ApiKeySecurity['in'][] = ['query', 'header'];
 
-export const translateToApiKeySecurityScheme: Oas2TranslateFunction<
-  [security: DeepPartial<ApiKeySecurity> & { key: string }],
-  Optional<IApiKeySecurityScheme>
-> = function (security) {
+export const translateToApiKeySecurityScheme = withContext<
+  Oas2TranslateFunction<[security: DeepPartial<ApiKeySecurity> & { key: string }], Optional<IApiKeySecurityScheme>>
+>(function (security) {
   if ('in' in security && security.in && ACCEPTABLE_SECURITY_ORIGINS.includes(security.in)) {
+    const key = security.key;
+
     return {
+      id: this.generateId(`http_security-${this.ids.service}-${key}`),
       type: 'apiKey',
       in: security.in,
-      name: String(security.name || ''),
-      key: security.key,
+      name: isString(security.name) ? security.name : '',
+      key,
 
       ...pickBy(
         {
@@ -99,24 +104,28 @@ export const translateToApiKeySecurityScheme: Oas2TranslateFunction<
   }
 
   return;
-};
+});
 
 const VALID_OAUTH2_FLOWS = ['implicit', 'password', 'application', 'accessCode'];
 
-export const translateToOauth2SecurityScheme: Oas2TranslateFunction<
-  [
-    security: DeepPartial<
-      OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
-    > & { key: string },
-  ],
-  Optional<IOauth2SecurityScheme>
-> = function (security) {
+export const translateToOauth2SecurityScheme = withContext<
+  Oas2TranslateFunction<
+    [
+      security: DeepPartial<
+        OAuth2AccessCodeSecurity | OAuth2ApplicationSecurity | OAuth2ImplicitSecurity | OAuth2PasswordSecurity
+      > & { key: string },
+    ],
+    Optional<IOauth2SecurityScheme>
+  >
+>(function (security) {
   if (!security.flow || !VALID_OAUTH2_FLOWS.includes(security.flow)) return undefined;
+  const key = security.key;
 
   return {
+    id: this.generateId(`http_security-${this.ids.service}-${key}`),
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
-    key: security.key,
+    key,
 
     ...pickBy(
       {
@@ -125,11 +134,11 @@ export const translateToOauth2SecurityScheme: Oas2TranslateFunction<
       isString,
     ),
   };
-};
+});
 
 export const translateToSingleSecurity: Oas2TranslateFunction<
   [security: unknown & { key: string }],
-  Optional<SecurityWithKey>
+  Optional<HttpSecurityScheme>
 > = function (security) {
   if (isSecurityScheme(security)) {
     switch (security.type) {
@@ -145,7 +154,7 @@ export const translateToSingleSecurity: Oas2TranslateFunction<
   return;
 };
 
-export const translateToSecurities: Oas2TranslateFunction<[operationSecurities: unknown], SecurityWithKey[][]> =
+export const translateToSecurities: Oas2TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
   function (operationSecurities) {
     const securities = getSecurities(this.document, operationSecurities);
 

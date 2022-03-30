@@ -15,6 +15,6 @@ describe('oas service', () => {
   it('openapi v2 and v3 should transform in the same way', () => {
     const oas2MappedService = transformOas2Service({ document: oas2KitchenSinkJson as any });
     const oas3MappedService = transformOas3Service({ document: oas3KitchenSinkJson as any });
-    expect(oas2MappedService).toEqual(oas3MappedService);
+    expect(oas2MappedService).toStrictEqual(oas3MappedService);
   });
 });

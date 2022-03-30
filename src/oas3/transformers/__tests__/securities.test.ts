@@ -1,12 +1,13 @@
 import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import { OperationSecurities } from '../../accessors';
 import { translateToSecurities as _translateToSecurities } from '../securities';
 
 const translateToSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) =>
-  _translateToSecurities.call(createContext(document), operationSecurities);
+  _translateToSecurities.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), operationSecurities);
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
@@ -29,6 +30,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             key: 'basic-security',
             type: 'http',
             description: 'a description',
@@ -57,6 +59,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             key: 'digest-security',
             type: 'http',
             description: 'a description',
@@ -86,6 +89,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             key: 'bearer-security',
             type: 'http',
             description: 'a description',
@@ -115,6 +119,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             key: 'openIdConnect-security',
             type: 'openIdConnect',
             description: 'a description',
@@ -144,6 +149,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             name: 'a name',
             type: 'apiKey',
             in: 'header',
@@ -173,6 +179,7 @@ describe('securities', () => {
       ).toEqual([
         [
           {
+            id: expect.any(String),
             key: 'basic-security',
             type: 'http',
             description: 'a description',
@@ -207,6 +214,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-flow-security',
@@ -240,6 +248,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'password-flow-security',
@@ -273,6 +282,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'clientCredentials-flow-security',
@@ -307,6 +317,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: {
                 authorizationCode: {
@@ -371,6 +382,7 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               type: 'http',
               description: 'a description',
               key: 'http-security',
@@ -378,6 +390,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
@@ -386,6 +399,7 @@ describe('securities', () => {
           ],
           [
             {
+              id: expect.any(String),
               name: 'a name',
               type: 'apiKey',
               in: 'query',
@@ -404,17 +418,20 @@ describe('securities', () => {
         ).toEqual([
           [
             {
+              id: expect.any(String),
               type: 'http',
               description: 'a description',
               key: 'http-security',
             },
             {
+              id: expect.any(String),
               description: 'a description',
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
             },
             {
+              id: expect.any(String),
               name: 'a name',
               type: 'apiKey',
               in: 'query',

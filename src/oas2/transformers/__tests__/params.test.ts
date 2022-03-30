@@ -1,7 +1,8 @@
 import { DeepPartial, HttpParamStyles } from '@stoplight/types';
 import { FormDataParameter, QueryParameter, Spec } from 'swagger-schema-official';
 
-import { createContext } from '../../../context';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import {
   translateFromFormDataParameters as _translateFromFormDataParameters,
   translateToBodyParameter as _translateToBodyParameter,
@@ -14,28 +15,28 @@ import {
 const translateFromFormDataParameters = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateFromFormDataParameters>
-) => _translateFromFormDataParameters.call(createContext(document), ...params);
+) => _translateFromFormDataParameters.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToBodyParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToBodyParameter>
-) => _translateToBodyParameter.call(createContext(document), ...params);
+) => _translateToBodyParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToHeaderParam = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParam>) =>
-  _translateToHeaderParam.call(createContext(document), ...params);
+  _translateToHeaderParam.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToHeaderParams = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParams>) =>
-  _translateToHeaderParams.call(createContext(document), ...params);
+  _translateToHeaderParams.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToPathParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToPathParameter>
-) => _translateToPathParameter.call(createContext(document), ...params);
+) => _translateToPathParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 const translateToQueryParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToQueryParameter>
-) => _translateToQueryParameter.call(createContext(document), ...params);
+) => _translateToQueryParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
 
 describe('params.translator', () => {
   let consumes = ['*'];
@@ -54,7 +55,12 @@ describe('params.translator', () => {
             description: 'desc',
           },
         ),
-      ).toMatchSnapshot();
+      ).toMatchSnapshot({
+        id: expect.any(String),
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
+      });
     });
   });
 
@@ -112,7 +118,17 @@ describe('params.translator', () => {
           },
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toMatchSnapshot({
+        id: expect.any(String),
+        contents: [
+          {
+            id: expect.any(String),
+            schema: {
+              'x-stoplight-id': expect.any(String),
+            },
+          },
+        ],
+      });
     });
 
     it('should preserve readOnly flag in schema', () => {
@@ -133,7 +149,13 @@ describe('params.translator', () => {
       ).toEqual(
         expect.objectContaining({
           contents: expect.arrayContaining([
-            expect.objectContaining({ schema: { $schema: 'http://json-schema.org/draft-07/schema#', readOnly: true } }),
+            expect.objectContaining({
+              schema: {
+                'x-stoplight-id': expect.any(String),
+                $schema: 'http://json-schema.org/draft-07/schema#',
+                readOnly: true,
+              },
+            }),
           ]),
         }),
       );
@@ -163,7 +185,25 @@ describe('params.translator', () => {
           },
           consumes,
         ),
-      ).toMatchSnapshot();
+      ).toMatchSnapshot({
+        id: expect.any(String),
+        contents: [
+          {
+            id: expect.any(String),
+            examples: [
+              {
+                id: expect.any(String),
+              },
+              {
+                id: expect.any(String),
+              },
+            ],
+            schema: {
+              'x-stoplight-id': expect.any(String),
+            },
+          },
+        ],
+      });
     });
 
     describe('schema examples', () => {
@@ -194,8 +234,8 @@ describe('params.translator', () => {
               contents: expect.arrayContaining([
                 expect.objectContaining({
                   examples: [
-                    { key: 'example-1', value: { hello: 'world' } },
-                    { key: 'example-2', value: { foo: 'bar' } },
+                    { id: expect.any(String), key: 'example-1', value: { hello: 'world' } },
+                    { id: expect.any(String), key: 'example-2', value: { foo: 'bar' } },
                   ],
                 }),
               ]),
@@ -232,7 +272,7 @@ describe('params.translator', () => {
             expect.objectContaining({
               contents: expect.arrayContaining([
                 expect.objectContaining({
-                  examples: [{ key: 'example-2', value: { foo: 'bar' } }],
+                  examples: [{ id: expect.any(String), key: 'example-2', value: { foo: 'bar' } }],
                 }),
               ]),
             }),
@@ -284,6 +324,7 @@ describe('params.translator', () => {
 
     it('converts parameters into schema', () => {
       const expectedContent = {
+        id: expect.any(String),
         encodings: [
           {
             explode: true,
@@ -292,9 +333,11 @@ describe('params.translator', () => {
           },
         ],
         schema: {
+          'x-stoplight-id': expect.any(String),
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             arr: {
+              'x-stoplight-id': expect.any(String),
               description: 'desc',
               items: {
                 type: 'number',
@@ -304,12 +347,14 @@ describe('params.translator', () => {
               type: 'array',
             },
             int: {
+              'x-stoplight-id': expect.any(String),
               description: 'desc',
               maximum: 3,
               minimum: 0,
               type: 'integer',
             },
             str: {
+              'x-stoplight-id': expect.any(String),
               minLength: 1,
               default: '25-07-2019',
               description: 'desc',
@@ -329,6 +374,7 @@ describe('params.translator', () => {
           consumes,
         ),
       ).toEqual({
+        id: expect.any(String),
         contents: [
           Object.assign({}, expectedContent, { mediaType: 'application/x-www-form-urlencoded' }),
           Object.assign({}, expectedContent, { mediaType: 'multipart/form-data' }),
@@ -378,7 +424,12 @@ describe('params.translator', () => {
             type: 'string',
           },
         ),
-      ).toMatchSnapshot();
+      ).toMatchSnapshot({
+        id: expect.any(String),
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
+      });
     });
   });
 });

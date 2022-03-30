@@ -23,11 +23,14 @@ describe('transformResponse()', () => {
           }),
         ),
       ).toEqual({
+        id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
         code: '200',
         contents: [
           {
+            id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
             examples: [
               {
+                id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
                 key: 'default',
                 value: {
                   "I'm a JSON": 'Jieeeet!',
@@ -51,8 +54,10 @@ describe('transformResponse()', () => {
         ],
         headers: [
           {
+            id: expect.any(String),
             examples: [
               {
+                id: expect.any(String),
                 key: 'default',
                 value: 'application/json',
               },
@@ -65,8 +70,10 @@ describe('transformResponse()', () => {
             style: 'simple',
           },
           {
+            id: expect.any(String),
             examples: [
               {
+                id: expect.any(String),
                 key: 'default',
                 value: 'eat=functions; Domain=.example.com; Path=/',
               },
@@ -90,6 +97,7 @@ describe('transformResponse()', () => {
           }),
         ),
       ).toEqual({
+        id: expect.any(String),
         code: '200',
         headers: [],
       });
@@ -108,6 +116,7 @@ describe('transformResponse()', () => {
           }),
         ),
       ).toEqual({
+        id: expect.any(String),
         code: '200',
         description: 'Test',
         headers: [],
@@ -138,11 +147,14 @@ describe('transformResponse()', () => {
             }),
           ),
         ).toEqual({
+          id: expect.any(String),
           code: '200',
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value:
                     'eat=functions; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=300; Domain=example.com; Path=/; Secure; HttpOnly',
@@ -174,11 +186,14 @@ describe('transformResponse()', () => {
             }),
           ),
         ).toEqual({
+          id: expect.any(String),
           code: '200',
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: 'eat=functions; Domain=example.com; Path=/',
                 },
@@ -207,11 +222,14 @@ describe('transformResponse()', () => {
             }),
           ),
         ).toEqual({
+          id: expect.any(String),
           code: '200',
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: '=; Domain=example.com; Path=/',
                 },
@@ -246,11 +264,14 @@ describe('transformResponse()', () => {
             }),
           ),
         ).toEqual({
+          id: expect.any(String),
           code: '200',
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: 'eat=functions; Domain=example.com; Path=/; a=p; u=d',
                 },
@@ -282,11 +303,14 @@ describe('transformResponse()', () => {
             }),
           ),
         ).toEqual({
+          id: expect.any(String),
           code: '200',
           headers: [
             {
+              id: expect.any(String),
               examples: [
                 {
+                  id: expect.any(String),
                   key: 'default',
                   value: 'eat=functions; Expires=Fri, 11 Aug 2017 09:04:08 GMT; Domain=example.com; Path=/',
                 },

@@ -1,20 +1,22 @@
 import { isPlainObject } from '@stoplight/json';
-import type { Optional } from '@stoplight/types';
+import type { HttpSecurityScheme, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import { createContext } from '../context';
+
+import { createContext, DEFAULT_ID_GENERATOR, withContext } from '../context';
 import { isNonNullable } from '../guards';
+import { resolveRef } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
 import type { Oas3HttpServiceTransformer } from '../oas/types';
 import { ArrayCallbackParameters } from '../types';
 import { entries } from '../utils';
-import { SecurityWithKey } from './accessors';
 import { isSecurityScheme } from './guards';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
 
-export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) => {
-  const ctx = createContext(document);
+export const transformOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
+  const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);
+  const { document } = ctx;
   const httpService = transformOasService.call(ctx);
 
   if (typeof document.info?.summary === 'string') {
@@ -84,16 +86,10 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({ document }) =
   return httpService;
 };
 
-const translateSecurityScheme: Oas3TranslateFunction<
-  ArrayCallbackParameters<[name: string, scheme: unknown]>,
-  Optional<SecurityWithKey>
-> = function ([key, definition]) {
+const translateSecurityScheme = withContext<
+  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<HttpSecurityScheme>>
+>(function ([key, definition]) {
   if (!isSecurityScheme(definition)) return;
 
-  const transformed = translateToSingleSecurity.call(this, definition);
-  if (transformed && 'key' in transformed) {
-    transformed.key = key;
-  }
-
-  return transformed;
-};
+  return translateToSingleSecurity.call(this, [key, definition]);
+});
