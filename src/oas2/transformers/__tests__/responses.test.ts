@@ -1,22 +1,15 @@
-import { DeepPartial, HttpParamStyles, IHttpHeaderParam } from '@stoplight/types';
+import { DeepPartial } from '@stoplight/types';
 import { Operation, Schema, Spec } from 'swagger-schema-official';
 
-import { createContext } from '../../../context';
-import { translateToHeaderParams } from '../params';
+import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
+import { resolveRef } from '../../../oas/resolver';
 import { translateToResponses as _translateToResponses } from '../responses';
 
-jest.mock('../params');
-
 const translateToResponses = (document: DeepPartial<Spec>, responses: DeepPartial<Operation['responses']>) =>
-  _translateToResponses.call(createContext(document), { responses });
+  _translateToResponses.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), { responses });
 
 describe('responses', () => {
-  const fakeHeaderParams: IHttpHeaderParam[] = [{ name: 'fake-header', style: HttpParamStyles.Simple }];
   const produces = ['application/json', 'application/xml'];
-
-  beforeEach(() => {
-    (translateToHeaderParams as jest.Mock).mockReturnValue(fakeHeaderParams);
-  });
 
   it('should translate to multiple responses', () => {
     const responses = translateToResponses(
@@ -41,38 +34,122 @@ describe('responses', () => {
       },
     );
 
-    expect(responses).toMatchSnapshot();
+    expect(responses).toHaveLength(2);
+    expect(responses[0]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+          examples: [],
+        },
+      ],
+    });
+    expect(responses[1]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+        },
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+      ],
+    });
   });
 
   it('should translate to response w/o headers', () => {
-    expect(
-      translateToResponses(
-        { produces },
+    const responses = translateToResponses(
+      { produces },
+      {
+        r1: {
+          description: 'd1',
+          examples: {
+            'application/xml': {},
+          },
+          schema: {},
+        },
+      },
+    );
+
+    expect(responses).toHaveLength(1);
+    expect(responses[0]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
         {
-          r1: {
-            description: 'd1',
-            examples: {
-              'application/xml': {},
-            },
-            schema: {},
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
           },
         },
-      ),
-    ).toMatchSnapshot();
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+          examples: [
+            {
+              id: expect.any(String),
+            },
+          ],
+        },
+      ],
+    });
   });
 
   it('should translate to response w/o examples', () => {
-    expect(
-      translateToResponses(
-        { produces },
+    const responses = translateToResponses(
+      { produces },
+      {
+        r1: {
+          description: 'd1',
+          schema: {},
+        },
+      },
+    );
+
+    expect(responses).toHaveLength(1);
+    expect(responses[0]).toMatchSnapshot({
+      id: expect.any(String),
+      contents: [
         {
-          r1: {
-            description: 'd1',
-            schema: {},
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
           },
         },
-      ),
-    ).toMatchSnapshot();
+        {
+          id: expect.any(String),
+          schema: {
+            'x-stoplight-id': expect.any(String),
+          },
+        },
+      ],
+    });
   });
 
   describe('should keep foreign examples', () => {
@@ -117,7 +194,9 @@ describe('responses', () => {
             },
           },
         );
-        expect(responses[0].contents![0]).toHaveProperty('examples', [{ key: 'default', value: { name: 'value' } }]);
+        expect(responses[0].contents![0]).toHaveProperty('examples', [
+          { id: expect.any(String), key: 'default', value: { name: 'value' } },
+        ]);
       });
     });
 
@@ -143,8 +222,8 @@ describe('responses', () => {
           },
         );
         expect(responses[0].contents![0]).toHaveProperty('examples', [
-          { key: 'application/json', value: { name: 'examples value' } },
-          { key: 'default', value: { name: 'example value' } },
+          { id: expect.any(String), key: 'application/json', value: { name: 'examples value' } },
+          { id: expect.any(String), key: 'default', value: { name: 'example value' } },
         ]);
       });
     });
@@ -171,8 +250,8 @@ describe('responses', () => {
         );
         expect(responses[0].contents![0].examples).toHaveLength(2);
         expect(responses[0].contents![0].examples).toEqual([
-          { key: 'application/json', value: {} },
-          { key: 'application/i-have-no-clue', value: {} },
+          { id: expect.any(String), key: 'application/json', value: {} },
+          { id: expect.any(String), key: 'application/i-have-no-clue', value: {} },
         ]);
       });
     });

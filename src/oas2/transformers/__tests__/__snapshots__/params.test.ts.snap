@@ -6,26 +6,31 @@ Object {
     Object {
       "examples": Array [
         Object {
+          "id": Any<String>,
           "key": "example-1",
           "value": Object {
             "hello": "world",
           },
         },
         Object {
+          "id": Any<String>,
           "key": "example-2",
           "value": Object {
             "foo": "bar",
           },
         },
       ],
+      "id": Any<String>,
       "mediaType": "*",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "format": "e-mail",
+        "x-stoplight-id": Any<String>,
       },
     },
   ],
   "description": "descr",
+  "id": Any<String>,
   "required": true,
 }
 `;
@@ -35,14 +40,17 @@ Object {
   "contents": Array [
     Object {
       "examples": Array [],
+      "id": Any<String>,
       "mediaType": "*",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "format": "e-mail",
+        "x-stoplight-id": Any<String>,
       },
     },
   ],
   "description": "descr",
+  "id": Any<String>,
   "required": true,
 }
 `;
@@ -50,12 +58,14 @@ Object {
 exports[`params.translator translateToHeaderParam should translate header param 1`] = `
 Object {
   "description": "desc",
+  "id": Any<String>,
   "name": "name",
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "minimum": 12,
     "type": "integer",
+    "x-stoplight-id": Any<String>,
   },
   "style": "simple",
 }
@@ -67,19 +77,23 @@ exports[`params.translator translateToHeaderParams should translate to multiple 
 Array [
   Object {
     "description": "a description",
+    "id": "117996bbb6f45",
     "name": "header-name",
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
+      "x-stoplight-id": "9259b14a1615b",
     },
     "style": "simple",
   },
   Object {
     "description": "another description",
+    "id": "dce8b374eb7d6",
     "name": "plain-tex",
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
+      "x-stoplight-id": "31f792c907f10",
     },
     "style": "simple",
   },
@@ -90,10 +104,12 @@ exports[`params.translator translateToHeaderParams should translate to simple he
 Array [
   Object {
     "description": "a description",
+    "id": "117996bbb6f45",
     "name": "header-name",
     "schema": Object {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "type": "string",
+      "x-stoplight-id": "9259b14a1615b",
     },
     "style": "simple",
   },
@@ -103,11 +119,13 @@ Array [
 exports[`params.translator translateToPathParameter should translate 1`] = `
 Object {
   "description": "descr",
+  "id": Any<String>,
   "name": "name",
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "string",
+    "x-stoplight-id": Any<String>,
   },
   "style": "simple",
 }
