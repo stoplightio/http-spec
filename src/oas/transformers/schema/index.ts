@@ -5,7 +5,7 @@ import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
-import type { TranslateFunction } from '../../../types';
+import type { Fragment, TranslateFunction } from '../../../types';
 import { getSharedKey } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
@@ -27,7 +27,6 @@ export const translateSchemaObject = withContext<
     JSONSchema7
   >
 >(function (schema) {
-  const document = this.document;
   const resolvedSchema = this.maybeResolveLocalRef(schema);
   if (!isPlainObject(resolvedSchema)) return {};
   let cached = CACHE.get(resolvedSchema);
@@ -38,24 +37,23 @@ export const translateSchemaObject = withContext<
   const actualKey = this.context === 'service' ? getSharedKey(resolvedSchema) : '';
   const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
 
-  if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
-    cached = {
-      $schema: document.jsonSchemaDialect,
-      // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
-      // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
-      ...(resolvedSchema as JSONSchema7),
-      'x-stoplight-id': id,
-    };
-  } else {
-    cached = convertSchema(resolvedSchema);
-    cached['x-stoplight-id'] = id;
-  }
+  cached = convertSchema(this.document, resolvedSchema);
+  cached['x-stoplight-id'] = id;
 
   CACHE.set(resolvedSchema, cached);
   return cached;
 });
 
-export function convertSchema(schema: OASSchemaObject): JSONSchema7 {
+export function convertSchema(document: Fragment, schema: OASSchemaObject) {
+  if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
+    return {
+      $schema: document.jsonSchemaDialect,
+      // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
+      // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
+      ...(schema as JSONSchema7),
+    };
+  }
+
   const clonedSchema = _convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
   });
