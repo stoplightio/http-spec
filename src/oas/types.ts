@@ -17,7 +17,7 @@ export enum OasVersion {
 /**
  * Service
  */
-export type Oas2TransformServiceOpts = ITransformServiceOpts<DeepPartial<Spec>>;
+export type Oas2TransformServiceOpts = ITransformServiceOpts<DeepPartial<Spec & { 'x-stoplight-id': string }>>;
 export type Oas3TransformServiceOpts = ITransformServiceOpts<DeepPartial<OpenAPIObject>>;
 export type Oas2HttpServiceTransformer = HttpServiceTransformer<Oas2TransformServiceOpts>;
 export type Oas3HttpServiceTransformer = HttpServiceTransformer<Oas3TransformServiceOpts>;
