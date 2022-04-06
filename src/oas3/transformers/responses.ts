@@ -22,7 +22,7 @@ const translateToResponse = withContext<
   const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
 
   return {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`, 'long'),
+    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
     headers: entries(resolvedResponse.headers).map(translateHeaderObject, this).filter(isNonNullable),
     contents: entries(resolvedResponse.content).map(translateMediaTypeObject, this).filter(isNonNullable),

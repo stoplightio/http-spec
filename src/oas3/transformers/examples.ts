@@ -18,7 +18,7 @@ export const translateToExample = withContext<
   const actualKey = this.context === 'service' ? getSharedKey(resolvedExample) : key;
 
   return {
-    id: this.generateId(`example-${this.parentId}-${actualKey}`, 'long'),
+    id: this.generateId(`example-${this.parentId}-${actualKey}`),
     value: resolvedExample.value,
     key,
 

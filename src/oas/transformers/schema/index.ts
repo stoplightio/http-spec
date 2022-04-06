@@ -35,7 +35,7 @@ export const translateSchemaObject = withContext<
   }
 
   const actualKey = this.context === 'service' ? getSharedKey(resolvedSchema) : '';
-  const id = this.generateId(`schema-${this.parentId}-${actualKey}`, 'short');
+  const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
 
   cached = convertSchema(this.document, resolvedSchema);
   cached['x-stoplight-id'] = id;

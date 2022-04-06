@@ -76,7 +76,7 @@ export const translateHeaderObject = withContext<
   const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
   if (!isPlainObject(headerObject)) return;
 
-  const id = this.generateId(`http_header-${this.parentId}-${name}`, 'long');
+  const id = this.generateId(`http_header-${this.parentId}-${name}`);
 
   if (!isHeaderObject(headerObject)) {
     return {
@@ -165,7 +165,7 @@ export const translateMediaTypeObject = withContext<
 >(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 
-  const id = this.generateId(`http_media-${this.parentId}-${mediaType}`, 'long');
+  const id = this.generateId(`http_media-${this.parentId}-${mediaType}`);
   const { schema, encoding, examples } = mediaObject;
   const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
 

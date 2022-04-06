@@ -2,7 +2,7 @@ import type { IHttpOperation, IHttpService } from '@stoplight/types';
 
 export type Fragment = Record<string, unknown>;
 
-export type IdGenerator = (value: string, length: 'short' | 'long') => string;
+export type IdGenerator = (value: string) => string;
 
 export type RefResolver<T extends Fragment = Fragment> = (
   this: TransformerContext<T>,
@@ -32,7 +32,7 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   context: AvailableContext;
   parentId: string;
   readonly ids: Record<AvailableContext, string>;
-  generateId(template: string, length: 'short' | 'long'): string;
+  generateId(template: string): string;
   maybeResolveLocalRef(target: unknown): unknown;
 };
 

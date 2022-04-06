@@ -37,8 +37,8 @@ export function createContext<T extends Record<string, unknown>>(
 
       return target;
     },
-    generateId(value, length) {
-      this.parentId = generateId(value, length);
+    generateId(value) {
+      this.parentId = generateId(value);
       return this.parentId;
     },
     ids: {
