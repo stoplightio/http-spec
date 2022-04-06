@@ -56,7 +56,7 @@ export default [
     // for pathWithParamNamesEmpty, remove all characters between {} segments
     // closest parent with an id is the service, so ends up being...
     // hash('http_operation-service_abc-get-/users/{}')
-    id: '96043a63b6901',
+    id: 'c24e2e86',
     iid: 'get-user',
     description: 'Retrieve the information of the user with the matching user ID.',
     method: 'get',
@@ -66,8 +66,8 @@ export default [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_response-96043a63b6901-200')
-        id: 'f387e16c7d39d',
+        // hash('http_response-c24e2e86-200')
+        id: 'fc891cd1bbbdf',
         code: '200',
         description: 'User Found',
         headers: [],
@@ -75,12 +75,12 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-f387e16c7d39d-application/json')
-            id: 'fce50f391bf57',
+            // hash('http_media-fc891cd1bbbdf-application/json')
+            id: '6637b0dfae0b6',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight-id': 'a0f1de5d',
               title: 'User',
               type: 'object',
               properties: {
@@ -102,12 +102,12 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-f387e16c7d39d-application/xml')
-            id: '48eeb3ee2a049',
+            // hash('http_media-fc891cd1bbbdf-application/xml')
+            id: '6a2fbe4117a1b',
             mediaType: 'application/xml',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': '069dfbb6c6315',
+              'x-stoplight-id': 'ee496835',
               type: 'string',
             },
             examples: [],
@@ -133,7 +133,7 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': '2691eb0db9efc',
+              'x-stoplight-id': '17073560',
               type: 'object',
               properties: {
                 error: {
@@ -161,7 +161,7 @@ export default [
     request: {
       // Request doesn't need an id
       body: {
-        id: 'd5027559477f8',
+        id: '8d5d36a312e0b',
         // Really this doesn't even need to be here... there is no request body for this op
         contents: [],
       },
@@ -177,7 +177,7 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'be6b513de1b69',
+            'x-stoplight-id': 'e63cb8d3',
             type: 'string',
           },
           examples: [],
@@ -188,14 +188,14 @@ export default [
           // hash(`http_query-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_query-96043a63b6901-summaryOnly')
-          id: 'efe9534d001fc',
+          // hash('http_query-c24e2e86-summaryOnly')
+          id: '3aa5eef831992',
           name: 'summaryOnly',
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
-            'x-stoplight-id': 'aca62504578bd',
+            'x-stoplight-id': '3ce59430',
           },
           examples: [],
         },
@@ -216,7 +216,7 @@ export default [
           description: 'Id of an existing user.',
           style: 'simple',
           schema: {
-            'x-stoplight-id': '13ad531bed72e',
+            'x-stoplight-id': '00c76c99',
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'integer',
           },
@@ -242,7 +242,7 @@ export default [
    */
   {
     // Same process as first time... and yes, I know "POST" doesn't make sense on this path lol
-    id: 'b16a96d287951',
+    id: '094973c6',
     iid: 'post-users-userId',
     method: 'post',
     path: '/users/{userId}',
@@ -251,8 +251,8 @@ export default [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_response-b16a96d287951-201')
-        id: 'd8ca38606ee5d',
+        // hash('http_response-094973c6-201')
+        id: '4674a70ecdb22',
         code: '201',
         description: 'User Created',
         headers: [],
@@ -260,12 +260,12 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-d8ca38606ee5d-application/json')
-            id: '88460a8f1a612',
+            // hash('http_media-4674a70ecdb22-application/json')
+            id: 'a24d55e70a7e0',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight-id': 'a0f1de5d',
               title: 'User',
               type: 'object',
               properties: {
@@ -310,7 +310,7 @@ export default [
               // This schema was defined in shared components originally.. the closest parent with an
               // id is the service, and the key was ErrorResponse so ends up being...
               // hash('schema-4d98be34f341a-ErrorResponse')
-              'x-stoplight-id': '2691eb0db9efc',
+              'x-stoplight-id': '17073560',
               type: 'object',
               properties: {
                 error: {
@@ -340,18 +340,18 @@ export default [
       body: {
         // hash(`http_request_body-${parentId}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_request_body-b16a96d287951')
-        id: '07267ec331fc9',
+        // hash('http_request_body-094973c6')
+        id: 'a2eb76591cd0b',
         contents: [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the request body, so ends up being...
-            // hash('http_media-07267ec331fc9-application/json')
-            id: '00db77c676e1a',
+            // hash('http_media-a2eb76591cd0b-application/json')
+            id: 'decdc26c02ba0',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight-id': 'a0f1de5d',
               title: 'User',
               type: 'object',
               properties: {
@@ -392,13 +392,13 @@ export default [
           // hash(`http_header-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_header-b16a96d287951-Post-Specific-Header')
-          id: '1ead595922478',
+          // hash('http_header-094973c6-Post-Specific-Header')
+          id: 'b243ae7ed997e',
           name: 'Post-Specific-Header',
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'de5897f178a5d',
+            'x-stoplight-id': '2b422fe7',
             type: 'integer',
           },
           examples: [],
@@ -414,7 +414,7 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'be6b513de1b69',
+            'x-stoplight-id': 'e63cb8d3',
             type: 'string',
           },
           examples: [],
@@ -436,7 +436,7 @@ export default [
             // hash(`http_media-${parentId}-${key}`)
             // closest parent with an id is the response, so ends up being...
             // hash('http_media-437771f63f179-application/json')
-            'x-stoplight-id': '13ad531bed72e',
+            'x-stoplight-id': '00c76c99',
             type: 'integer',
           },
           examples: [],

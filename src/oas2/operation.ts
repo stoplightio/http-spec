@@ -1,9 +1,8 @@
 import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import type { Spec } from 'swagger-schema-official';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../context';
+import { createContext } from '../oas/context';
 import { transformOasOperation, transformOasOperations } from '../oas/operation';
-import { resolveRef } from '../oas/resolver';
 import { Oas2HttpOperationTransformer } from '../oas/types';
 import type { Fragment } from '../types';
 import { translateToRequest } from './transformers/request';
@@ -16,7 +15,7 @@ export function transformOas2Operations(document: DeepPartial<Spec>): IHttpOpera
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document: _document, path, method }) => {
-  const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);
+  const ctx = createContext(_document);
   const httpOperation = transformOasOperation.call(ctx, path, method);
   const pathObj = ctx.maybeResolveLocalRef(ctx.document.paths![path]) as Fragment;
   const operation = ctx.maybeResolveLocalRef(pathObj[method]) as Fragment;

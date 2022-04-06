@@ -1,9 +1,8 @@
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../oas/context';
 import { translateToRequest as _translateToRequest } from '../request';
 
 const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) =>
-  _translateToRequest.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), path, operation);
+  _translateToRequest.call(createContext({}), path, operation);
 
 describe('translateOas3ToRequest', () => {
   it('given no request body should translate parameters', () => {

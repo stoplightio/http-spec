@@ -2,10 +2,9 @@ import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../context';
 import { isNonNullable } from '../guards';
 import { transformOasOperation, transformOasOperations } from '../oas';
-import { resolveRef } from '../oas/resolver';
+import { createContext } from '../oas/context';
 import type { Oas3HttpOperationTransformer } from '../oas/types';
 import { Fragment } from '../types';
 import { translateToCallbacks } from './transformers/callbacks';
@@ -19,7 +18,7 @@ export function transformOas3Operations(document: DeepPartial<OpenAPIObject>): I
 }
 
 export const transformOas3Operation: Oas3HttpOperationTransformer = ({ document: _document, path, method }) => {
-  const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);
+  const ctx = createContext(_document);
   const httpOperation = transformOasOperation.call(ctx, path, method);
   const pathObj = ctx.maybeResolveLocalRef(ctx.document.paths![path]) as Fragment;
   const operation = ctx.maybeResolveLocalRef(pathObj[method]) as Fragment;

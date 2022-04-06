@@ -1,16 +1,11 @@
-import { createContext, DEFAULT_ID_GENERATOR } from '../../context';
 import { Fragment } from '../../types';
 import { createOasParamsIterator } from '../accessors';
-import { resolveRef } from '../resolver';
+import { createContext } from '../context';
 import { OasVersion } from '../types';
 
 const getValidOasParameters = (document: { paths: { '/': { get: Fragment } } }, spec: OasVersion) =>
   Array.from(
-    createOasParamsIterator(spec as any).call(
-      createContext(document, resolveRef, DEFAULT_ID_GENERATOR),
-      document.paths['/'],
-      document.paths['/'].get,
-    ),
+    createOasParamsIterator(spec as any).call(createContext(document), document.paths['/'], document.paths['/'].get),
   );
 
 describe('createOasParamsIterator', () => {
