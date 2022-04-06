@@ -69,7 +69,7 @@ export const translateToHeaderParam = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_header-${this.parentId}-${name}`),
+    id: this.generateId(`http_header-${this.parentId}-${name}`, 'long'),
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),
@@ -107,12 +107,12 @@ export const translateToBodyParameter = withContext<
   );
 
   return {
-    id: this.generateId(`http_request_body-${this.parentId}`),
+    id: this.generateId(`http_request_body-${this.parentId}`, 'long'),
 
     contents: consumes.map(
       withContext(mediaType => {
         return {
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          id: this.generateId(`http_media-${this.parentId}-${mediaType}`, 'long'),
           mediaType,
           schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
           examples,
@@ -144,10 +144,10 @@ export const translateFromFormDataParameters = withContext<
   >
 >(function (parameters, consumes) {
   const finalBody: IHttpOperationRequestBody = {
-    id: this.generateId(`http_request_body-${this.parentId}`),
+    id: this.generateId(`http_request_body-${this.parentId}`, 'long'),
     contents: consumes.map(
       withContext(mediaType => ({
-        id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+        id: this.generateId(`http_media-${this.parentId}-${mediaType}`, 'long'),
         mediaType,
         schema: translateSchemaObject.call(this, { type: 'object' }),
       })),
@@ -220,7 +220,7 @@ export const translateToQueryParameter = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_query-${this.parentId}-${name}`),
+    id: this.generateId(`http_query-${this.parentId}-${name}`, 'long'),
     name,
     style: chooseQueryParameterStyle(param),
 
@@ -242,7 +242,7 @@ export const translateToPathParameter = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_path_param-${this.parentId}-${name}`),
+    id: this.generateId(`http_path_param-${this.parentId}-${name}`, 'long'),
     name,
     style: HttpParamStyles.Simple,
 

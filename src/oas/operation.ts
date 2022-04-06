@@ -59,8 +59,11 @@ export const transformOasOperation: TranslateFunction<
 
   const reducedPath = wipePathParams(path);
   const serviceId = (this.ids.service = String(this.document['x-stoplight-id']));
-  this.ids.path = this.generateId(`http_path-${this.ids.service}-${reducedPath}`);
-  const operationId = (this.ids.operation = this.generateId(`http_operation-${serviceId}-${method}-${reducedPath}`));
+  this.ids.path = this.generateId(`http_path-${this.ids.service}-${reducedPath}`, 'long');
+  const operationId = (this.ids.operation = this.generateId(
+    `http_operation-${serviceId}-${method}-${reducedPath}`,
+    'short',
+  ));
 
   this.context = 'operation';
 

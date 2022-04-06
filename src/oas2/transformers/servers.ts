@@ -49,7 +49,7 @@ export const translateToServer = withContext<
   const url = uri.toString().replace(/\/$/, ''); // Remove trailing slash
 
   return {
-    id: this.generateId(`http_server-${this.parentId}-${url}`),
+    id: this.generateId(`http_server-${this.parentId}-${url}`, 'long'),
     url,
 
     ...pickBy(

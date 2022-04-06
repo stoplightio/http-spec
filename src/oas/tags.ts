@@ -13,7 +13,7 @@ const translateTag = withContext<TranslateFunction<Fragment, ArrayCallbackParame
     const name = String(tag);
 
     return {
-      id: this.generateId(`tag-${this.ids.service}-${name}`),
+      id: this.generateId(`tag-${this.ids.service}-${name}`, 'long'),
       name,
     };
   },

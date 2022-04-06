@@ -30,7 +30,7 @@ const translateToResponse = withContext<
   const contents = produces
     .map<IMediaTypeContent & { examples: NonNullable<IMediaTypeContent['examples']> }>(
       withContext(produceElement => ({
-        id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
+        id: this.generateId(`http_media-${this.parentId}-${produceElement}`, 'long'),
         mediaType: produceElement,
         examples: objectifiedExamples.filter(example => example.key === produceElement),
         ...pickBy(
@@ -47,7 +47,7 @@ const translateToResponse = withContext<
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
+    id: this.generateId(`http_response-${this.parentId}-${actualKey}`, 'long'),
     code: statusCode,
     description: resolvedResponse.description,
     headers,
@@ -58,7 +58,7 @@ const translateToResponse = withContext<
   if (foreignExamples.length > 0) {
     if (translatedResponses.contents.length === 0)
       translatedResponses.contents[0] = {
-        id: this.generateId(`http_media-${this.parentId}-`),
+        id: this.generateId(`http_media-${this.parentId}-`, 'long'),
         mediaType: '',
         schema: {},
         examples: [],
