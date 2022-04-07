@@ -2,9 +2,9 @@ import { isPlainObject } from '@stoplight/json';
 import type { HttpSecurityScheme, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
-import { createContext, DEFAULT_ID_GENERATOR, withContext } from '../context';
+import { withContext } from '../context';
 import { isNonNullable } from '../guards';
-import { resolveRef } from '../oas/resolver';
+import { createContext } from '../oas/context';
 import { transformOasService } from '../oas/service';
 import type { Oas3HttpServiceTransformer } from '../oas/types';
 import { ArrayCallbackParameters } from '../types';
@@ -15,7 +15,7 @@ import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
 
 export const transformOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
-  const ctx = createContext(_document, resolveRef, DEFAULT_ID_GENERATOR);
+  const ctx = createContext(_document);
   const { document } = ctx;
   const httpService = transformOasService.call(ctx);
 

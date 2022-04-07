@@ -6,8 +6,7 @@ import {
   QueryParameter,
 } from 'swagger-schema-official';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../oas/context';
 import {
   translateFromFormDataParameters,
   translateToBodyParameter,
@@ -20,7 +19,7 @@ import { translateToRequest as _translateToRequest } from '../request';
 jest.mock('../params');
 
 const translateToRequest = (path: Record<string, unknown>, parameters: any[]) => {
-  const ctx = createContext({ consumes: ['*'], paths: { '/api': { parameters } } }, resolveRef, DEFAULT_ID_GENERATOR);
+  const ctx = createContext({ consumes: ['*'], paths: { '/api': { parameters } } });
   return _translateToRequest.call(ctx, path, { parameters });
 };
 

@@ -1,9 +1,8 @@
 import { isPlainObject } from '@stoplight/json';
 import pickBy = require('lodash.pickby');
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../context';
 import { isNonNullable, isString } from '../guards';
-import { resolveRef } from '../oas/resolver';
+import { createContext } from '../oas/context';
 import { transformOasService } from '../oas/service';
 import { Oas2HttpServiceTransformer } from '../oas/types';
 import { entries } from '../utils';
@@ -11,7 +10,7 @@ import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 
 export const transformOas2Service: Oas2HttpServiceTransformer = ({ document }) => {
-  const ctx = createContext(document, resolveRef, DEFAULT_ID_GENERATOR);
+  const ctx = createContext(document);
   const httpService = transformOasService.call(ctx);
 
   if (document.info?.license) {

@@ -1,6 +1,4 @@
 import { hasRef, isLocalRef } from '@stoplight/json';
-// @ts-ignore
-import * as fnv from 'fnv-plus';
 
 import type {
   AvailableContext,
@@ -10,8 +8,6 @@ import type {
   TransformerContext,
   TranslateFunction,
 } from './types';
-
-export const DEFAULT_ID_GENERATOR: IdGenerator = input => fnv.fast1a52hex(input);
 
 export function createContext<T extends Record<string, unknown>>(
   document: T,
