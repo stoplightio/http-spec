@@ -114,8 +114,14 @@ export const translateToBodyParameter = withContext<
         return {
           id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
           mediaType,
-          schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
           examples,
+
+          ...pickBy(
+            {
+              schema: isPlainObject(body.schema) ? translateSchemaObject.call(this, body.schema) : void 0,
+            },
+            isNonNullable,
+          ),
         };
       }),
       this,
@@ -157,10 +163,11 @@ export const translateFromFormDataParameters = withContext<
 
   return parameters.reduce((body, parameter) => {
     const { schema, description } = buildSchemaForParameter.call(this, parameter);
-    (body.contents || []).forEach(content => {
+    for (const content of Array.isArray(body.contents) ? body.contents : []) {
       delete schema.$schema;
+      delete schema['x-stoplight-id'];
 
-      if (description) {
+      if (typeof description === 'string') {
         schema.description = description;
       }
 
@@ -173,13 +180,17 @@ export const translateFromFormDataParameters = withContext<
       }
 
       if (parameter.collectionFormat) {
-        content.encodings = content.encodings || [];
+        if (!Array.isArray(content.encodings)) {
+          content.encodings = [];
+        }
+
         const encoding = buildEncoding(parameter);
         if (encoding) {
           content.encodings.push(encoding);
         }
       }
-    });
+    }
+
     return body;
   }, finalBody);
 });
