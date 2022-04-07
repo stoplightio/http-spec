@@ -1,8 +1,7 @@
 import { DeepPartial, HttpParamStyles } from '@stoplight/types';
 import { FormDataParameter, QueryParameter, Spec } from 'swagger-schema-official';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../oas/context';
 import {
   translateFromFormDataParameters as _translateFromFormDataParameters,
   translateToBodyParameter as _translateToBodyParameter,
@@ -15,28 +14,28 @@ import {
 const translateFromFormDataParameters = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateFromFormDataParameters>
-) => _translateFromFormDataParameters.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+) => _translateFromFormDataParameters.call(createContext(document), ...params);
 
 const translateToBodyParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToBodyParameter>
-) => _translateToBodyParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+) => _translateToBodyParameter.call(createContext(document), ...params);
 
 const translateToHeaderParam = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParam>) =>
-  _translateToHeaderParam.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+  _translateToHeaderParam.call(createContext(document), ...params);
 
 const translateToHeaderParams = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToHeaderParams>) =>
-  _translateToHeaderParams.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+  _translateToHeaderParams.call(createContext(document), ...params);
 
 const translateToPathParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToPathParameter>
-) => _translateToPathParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+) => _translateToPathParameter.call(createContext(document), ...params);
 
 const translateToQueryParameter = (
   document: DeepPartial<Spec>,
   ...params: Parameters<typeof _translateToQueryParameter>
-) => _translateToQueryParameter.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), ...params);
+) => _translateToQueryParameter.call(createContext(document), ...params);
 
 describe('params.translator', () => {
   let consumes = ['*'];
@@ -70,35 +69,50 @@ describe('params.translator', () => {
     });
 
     it('should translate to simple header param', () => {
-      expect(
-        translateToHeaderParams(
-          {},
-          {
-            'header-name': {
-              description: 'a description',
-              type: 'string',
-            },
+      const params = translateToHeaderParams(
+        {},
+        {
+          'header-name': {
+            description: 'a description',
+            type: 'string',
           },
-        ),
-      ).toMatchSnapshot();
+        },
+      );
+
+      expect(params).toHaveLength(1);
+      expect(params[0]).toMatchSnapshot({
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
+      });
     });
 
     it('should translate to multiple header params', () => {
-      expect(
-        translateToHeaderParams(
-          {},
-          {
-            'header-name': {
-              description: 'a description',
-              type: 'string',
-            },
-            'plain-tex': {
-              description: 'another description',
-              type: 'string',
-            },
+      const params = translateToHeaderParams(
+        {},
+        {
+          'header-name': {
+            description: 'a description',
+            type: 'string',
           },
-        ),
-      ).toMatchSnapshot();
+          'plain-tex': {
+            description: 'another description',
+            type: 'string',
+          },
+        },
+      );
+
+      expect(params).toHaveLength(2);
+      expect(params[0]).toMatchSnapshot({
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
+      });
+      expect(params[1]).toMatchSnapshot({
+        schema: {
+          'x-stoplight-id': expect.any(String),
+        },
+      });
     });
   });
 

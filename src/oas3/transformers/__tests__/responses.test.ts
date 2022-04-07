@@ -1,12 +1,11 @@
 import type { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../oas/context';
 import { translateToResponses as _translateToResponses } from '../responses';
 
 const translateToResponses = (document: DeepPartial<OpenAPIObject>, responses: unknown) =>
-  _translateToResponses.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), responses);
+  _translateToResponses.call(createContext(document), responses);
 
 describe('translateToOas3Responses', () => {
   it('given empty dictionary should return empty array', () => {

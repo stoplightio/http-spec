@@ -1,9 +1,7 @@
-import { createContext, DEFAULT_ID_GENERATOR } from '../../context';
-import { resolveRef } from '../resolver';
+import { createContext } from '../context';
 import { translateToTags as _translateToTags } from '../tags';
 
-const translateToTags = (tags: unknown) =>
-  _translateToTags.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), tags);
+const translateToTags = (tags: unknown) => _translateToTags.call(createContext({}), tags);
 
 describe('translateToTags', () => {
   describe.each([2, null, {}, '', 0])('when tags property is not an array', tags => {

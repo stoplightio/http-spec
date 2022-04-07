@@ -1,17 +1,16 @@
 import type { SchemaObject } from 'openapi3-ts';
 
-import { createContext, DEFAULT_ID_GENERATOR } from '../../../context';
-import { resolveRef } from '../../../oas/resolver';
+import { createContext } from '../../../oas/context';
 import {
   translateHeaderObject as _translateHeaderObject,
   translateMediaTypeObject as _translateMediaTypeObject,
 } from '../content';
 
 const translateMediaTypeObject = (document: any, object: unknown, key: string) =>
-  _translateMediaTypeObject.call(createContext(document, resolveRef, DEFAULT_ID_GENERATOR), [key, object], 0, []);
+  _translateMediaTypeObject.call(createContext(document), [key, object], 0, []);
 
 const translateHeaderObject = (object: unknown, key: string) =>
-  _translateHeaderObject.call(createContext({}, resolveRef, DEFAULT_ID_GENERATOR), [key, object], 0, []);
+  _translateHeaderObject.call(createContext({}), [key, object], 0, []);
 
 describe('translateMediaTypeObject', () => {
   afterEach(() => {
