@@ -1,7 +1,7 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial } from '@stoplight/types';
+import pickBy from 'lodash.pickby';
 import type { Operation, Security, Spec } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
 
 import { isNonNullable, isString } from '../guards';
 import { isSecurityScheme } from './guards';

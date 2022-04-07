@@ -8,8 +8,8 @@ import type {
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
+import pickBy from 'lodash.pickby';
 import type { ParameterObject } from 'openapi3-ts';
-import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';

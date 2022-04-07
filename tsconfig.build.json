@@ -11,7 +11,6 @@
   ],
   "compilerOptions": {
     "outDir": "dist",
-    "moduleResolution": "node",
-    "target": "ES2019"
+    "moduleResolution": "node"
   }
 }

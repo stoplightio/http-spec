@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import { INodeExample, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import pickBy from 'lodash.pickby';
 
 import { withContext } from '../../context';
 import { isString } from '../../guards';
