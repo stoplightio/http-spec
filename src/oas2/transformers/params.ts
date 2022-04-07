@@ -149,45 +149,45 @@ export const translateFromFormDataParameters = withContext<
     IHttpOperationRequestBody
   >
 >(function (parameters, consumes) {
-  const finalBody: IHttpOperationRequestBody = {
-    id: this.generateId(`http_request_body-${this.parentId}`),
-    contents: consumes.map(
-      withContext(mediaType => ({
-        id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
-        mediaType,
-        schema: translateSchemaObject.call(this, { type: 'object' }),
-      })),
-      this,
-    ),
-  };
+  const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
+    {
+      id: this.generateId(`http_request_body-${this.parentId}`),
+      contents: consumes.map(
+        withContext(mediaType => ({
+          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          mediaType,
+
+          ...pickBy(
+            {
+              schema:
+                parameters.length > 0 ? translateSchemaObject.call(this, { type: 'object', properties: {} }) : void 0,
+            },
+            isNonNullable,
+          ),
+        })),
+        this,
+      ),
+    };
 
   return parameters.reduce((body, parameter) => {
-    const { schema, description } = buildSchemaForParameter.call(this, parameter);
-    for (const content of Array.isArray(body.contents) ? body.contents : []) {
-      delete schema.$schema;
-      delete schema['x-stoplight-id'];
+    const { schema = {}, description } = buildSchemaForParameter.call(this, parameter);
+    delete schema.$schema;
+    delete schema['x-stoplight-id'];
 
-      if (typeof description === 'string') {
+    for (const content of body.contents) {
+      if (typeof description === 'string' && description.length > 0) {
         schema.description = description;
       }
 
-      content.schema ||= {};
-      content.schema.properties ||= {};
-      content.schema.properties[parameter.name] = schema;
+      content.schema!.properties![parameter.name] = schema;
 
       if (parameter.required) {
-        (content.schema.required ||= []).push(parameter.name);
+        (content.schema!.required ??= []).push(parameter.name);
       }
 
-      if (parameter.collectionFormat) {
-        if (!Array.isArray(content.encodings)) {
-          content.encodings = [];
-        }
-
-        const encoding = buildEncoding(parameter);
-        if (encoding) {
-          content.encodings.push(encoding);
-        }
+      const encoding = buildEncoding(parameter);
+      if (encoding) {
+        (content.encodings ??= []).push(encoding);
       }
     }
 
@@ -270,7 +270,7 @@ export const translateToPathParameter = withContext<
 
 const buildSchemaForParameter: Oas2TranslateFunction<
   [param: DeepPartial<QueryParameter | PathParameter | HeaderParameter | FormDataParameter | Header>],
-  { schema: JSONSchema7; description?: string; deprecated?: boolean }
+  { schema?: JSONSchema7; description?: string; deprecated?: boolean }
 > = function (param) {
   const schema = pick(
     param,
@@ -298,7 +298,12 @@ const buildSchemaForParameter: Oas2TranslateFunction<
   }
 
   return {
-    schema: translateSchemaObject.call(this, schema),
+    ...pickBy(
+      {
+        schema: Object.keys(schema).length > 0 ? translateSchemaObject.call(this, schema) : void 0,
+      },
+      isNonNullable,
+    ),
 
     ...pickBy(
       {

@@ -54,10 +54,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -75,10 +71,6 @@ Object {
       "id": Any<String>,
       "name": "param",
       "required": true,
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -95,10 +87,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "form",
     },
   ],
@@ -112,10 +100,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -133,10 +117,6 @@ Object {
       "id": Any<String>,
       "name": "param",
       "required": true,
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -153,10 +133,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "form",
     },
   ],
@@ -180,10 +156,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -192,10 +164,6 @@ Object {
       "id": Any<String>,
       "name": "param",
       "required": true,
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "simple",
     },
   ],
@@ -203,10 +171,6 @@ Object {
     Object {
       "id": Any<String>,
       "name": "param",
-      "schema": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
-      },
       "style": "form",
     },
   ],

@@ -56,9 +56,6 @@ describe('request', () => {
       path: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -69,9 +66,6 @@ describe('request', () => {
       query: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -82,9 +76,6 @@ describe('request', () => {
       headers: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -95,9 +86,6 @@ describe('request', () => {
       query: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -108,9 +96,6 @@ describe('request', () => {
       headers: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -121,9 +106,6 @@ describe('request', () => {
       path: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
@@ -150,25 +132,16 @@ describe('request', () => {
       headers: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
       path: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
       query: [
         {
           id: expect.any(String),
-          schema: {
-            'x-stoplight-id': expect.any(String),
-          },
         },
       ],
     });
