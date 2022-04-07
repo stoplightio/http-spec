@@ -351,7 +351,6 @@ describe('params.translator', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             arr: {
-              'x-stoplight-id': expect.any(String),
               description: 'desc',
               items: {
                 type: 'number',
@@ -361,14 +360,12 @@ describe('params.translator', () => {
               type: 'array',
             },
             int: {
-              'x-stoplight-id': expect.any(String),
               description: 'desc',
               maximum: 3,
               minimum: 0,
               type: 'integer',
             },
             str: {
-              'x-stoplight-id': expect.any(String),
               minLength: 1,
               default: '25-07-2019',
               description: 'desc',
