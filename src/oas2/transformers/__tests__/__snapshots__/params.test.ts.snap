@@ -74,46 +74,45 @@ Object {
 exports[`params.translator translateToHeaderParams should translate empty dictionary to empty array 1`] = `Array []`;
 
 exports[`params.translator translateToHeaderParams should translate to multiple header params 1`] = `
-Array [
-  Object {
-    "description": "a description",
-    "id": "117996bbb6f45",
-    "name": "header-name",
-    "schema": Object {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "type": "string",
-      "x-stoplight-id": "9259b14a1615b",
-    },
-    "style": "simple",
+Object {
+  "description": "a description",
+  "id": "117996bbb6f45",
+  "name": "header-name",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "string",
+    "x-stoplight-id": Any<String>,
   },
-  Object {
-    "description": "another description",
-    "id": "dce8b374eb7d6",
-    "name": "plain-tex",
-    "schema": Object {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "type": "string",
-      "x-stoplight-id": "31f792c907f10",
-    },
-    "style": "simple",
+  "style": "simple",
+}
+`;
+
+exports[`params.translator translateToHeaderParams should translate to multiple header params 2`] = `
+Object {
+  "description": "another description",
+  "id": "dce8b374eb7d6",
+  "name": "plain-tex",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "string",
+    "x-stoplight-id": Any<String>,
   },
-]
+  "style": "simple",
+}
 `;
 
 exports[`params.translator translateToHeaderParams should translate to simple header param 1`] = `
-Array [
-  Object {
-    "description": "a description",
-    "id": "117996bbb6f45",
-    "name": "header-name",
-    "schema": Object {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "type": "string",
-      "x-stoplight-id": "9259b14a1615b",
-    },
-    "style": "simple",
+Object {
+  "description": "a description",
+  "id": "117996bbb6f45",
+  "name": "header-name",
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "string",
+    "x-stoplight-id": Any<String>,
   },
-]
+  "style": "simple",
+}
 `;
 
 exports[`params.translator translateToPathParameter should translate 1`] = `
