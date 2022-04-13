@@ -62,7 +62,9 @@ Object {
         "maximum": 2147483647,
         "minimum": -2147483648,
         "type": "integer",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
       "style": "simple",
     },
@@ -85,7 +87,9 @@ Object {
         "maximum": 2147483647,
         "minimum": -2147483648,
         "type": "integer",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
       "style": "simple",
     },

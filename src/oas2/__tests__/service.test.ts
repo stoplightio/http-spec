@@ -7,7 +7,7 @@ import { transformOas2Service } from '../service';
 describe('oas2 service', () => {
   it('should handle non array schemes', () => {
     const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'def',
+      'x-stoplight': { id: 'def' },
       schemes: 2 as any,
     };
 
@@ -24,7 +24,7 @@ describe('oas2 service', () => {
 
   it('should accept empty title', () => {
     const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'abc',
+      'x-stoplight': { id: 'abc' },
       host: 'petstore.swagger.io',
       basePath: '/v2',
       info: {
@@ -59,7 +59,7 @@ describe('oas2 service', () => {
 
   it('should handle invalid document securities gracefully', () => {
     const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'abc',
+      'x-stoplight': { id: 'abc' },
       securityDefinitions: {},
       security: ['API-Key'] as any,
     };
@@ -73,7 +73,7 @@ describe('oas2 service', () => {
 
   it('filters out scopes', () => {
     const document: Partial<Spec> & Fragment = {
-      'x-stoplight-id': 'def',
+      'x-stoplight': { id: 'def' },
       swagger: '2.0',
       securityDefinitions: {
         'API Key': {
@@ -95,7 +95,7 @@ describe('oas2 service', () => {
   describe('x-logo support', () => {
     it('should support x-logo', () => {
       const document: Partial<OpenAPIObject> = {
-        'x-stoplight-id': 'abc',
+        'x-stoplight': { id: 'abc' },
         info: {
           title: 'no-title',
           version: '1.0.0',
@@ -122,7 +122,7 @@ describe('oas2 service', () => {
     });
     it('should provide default values for href and altText', () => {
       const document: Partial<OpenAPIObject> = {
-        'x-stoplight-id': 'abc',
+        'x-stoplight': { id: 'abc' },
         info: {
           title: 'no-title',
           version: '1.0.0',

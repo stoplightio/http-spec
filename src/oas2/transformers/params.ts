@@ -172,7 +172,7 @@ export const translateFromFormDataParameters = withContext<
   return parameters.reduce((body, parameter) => {
     const { schema = {}, description } = buildSchemaForParameter.call(this, parameter);
     delete schema.$schema;
-    delete schema['x-stoplight-id'];
+    delete schema['x-stoplight'];
 
     for (const content of body.contents) {
       if (typeof description === 'string' && description.length > 0) {

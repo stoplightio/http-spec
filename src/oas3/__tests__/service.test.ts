@@ -5,7 +5,7 @@ import { transformOas3Service as _transformOas3Service } from '../service';
 const transformOas3Service: typeof _transformOas3Service = ({ document, ...opts }) =>
   _transformOas3Service({
     document: {
-      'x-stoplight-id': 'abc',
+      'x-stoplight': { id: 'abc' },
       ...document,
     },
     ...opts,

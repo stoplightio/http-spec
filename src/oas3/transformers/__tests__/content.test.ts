@@ -62,7 +62,9 @@ describe('translateMediaTypeObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });
@@ -86,7 +88,9 @@ describe('translateMediaTypeObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });
@@ -151,7 +155,9 @@ describe('translateMediaTypeObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });
@@ -209,7 +215,9 @@ describe('translateMediaTypeObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });
@@ -241,7 +249,9 @@ describe('translateMediaTypeObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });
@@ -466,7 +476,9 @@ describe('translateHeaderObject', () => {
         },
       ],
       schema: {
-        'x-stoplight-id': expect.any(String),
+        'x-stoplight': {
+          id: expect.any(String),
+        },
       },
     });
   });

@@ -38,7 +38,10 @@ export const translateSchemaObject = withContext<
   const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
 
   cached = convertSchema(this.document, resolvedSchema);
-  cached['x-stoplight-id'] = id;
+  cached['x-stoplight'] = {
+    ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
+    id,
+  };
 
   CACHE.set(resolvedSchema, cached);
   return cached;

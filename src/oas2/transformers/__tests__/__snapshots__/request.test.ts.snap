@@ -34,7 +34,9 @@ Object {
             },
           },
           "type": "object",
-          "x-stoplight-id": Any<String>,
+          "x-stoplight": Object {
+            "id": Any<String>,
+          },
         },
       },
     ],

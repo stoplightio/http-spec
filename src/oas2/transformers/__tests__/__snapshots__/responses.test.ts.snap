@@ -16,7 +16,9 @@ Object {
       "mediaType": "application/json",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
     Object {
@@ -25,7 +27,9 @@ Object {
       "mediaType": "application/xml",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
   ],
@@ -45,7 +49,9 @@ Object {
       "mediaType": "application/json",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
     Object {
@@ -60,7 +66,9 @@ Object {
       "mediaType": "application/xml",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
   ],
@@ -80,7 +88,9 @@ Object {
       "mediaType": "application/json",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
     Object {
@@ -89,7 +99,9 @@ Object {
       "mediaType": "application/xml",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
   ],
@@ -109,7 +121,9 @@ Object {
       "mediaType": "application/json",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
     Object {
@@ -124,7 +138,9 @@ Object {
       "mediaType": "application/xml",
       "schema": Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
-        "x-stoplight-id": Any<String>,
+        "x-stoplight": Object {
+          "id": Any<String>,
+        },
       },
     },
   ],
