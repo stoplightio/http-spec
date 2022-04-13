@@ -12,7 +12,9 @@ Object {
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
           "deprecated": true,
-          "x-stoplight-id": Any<String>,
+          "x-stoplight": Object {
+            "id": Any<String>,
+          },
         },
       },
     ],

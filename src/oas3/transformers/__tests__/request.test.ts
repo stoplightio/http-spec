@@ -94,7 +94,9 @@ describe('translateOas3ToRequest', () => {
           {
             id: expect.any(String),
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
             },
           },
         ],

@@ -80,7 +80,7 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight': { id: 'de4f083463b7c' },
               title: 'User',
               type: 'object',
               properties: {
@@ -107,7 +107,7 @@ export default [
             mediaType: 'application/xml',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': '069dfbb6c6315',
+              'x-stoplight': { id: '069dfbb6c6315' },
               type: 'string',
             },
             examples: [],
@@ -133,7 +133,7 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': '2691eb0db9efc',
+              'x-stoplight': { id: '2691eb0db9efc' },
               type: 'object',
               properties: {
                 error: {
@@ -177,7 +177,7 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'be6b513de1b69',
+            'x-stoplight': { id: 'be6b513de1b69' },
             type: 'string',
           },
           examples: [],
@@ -195,7 +195,7 @@ export default [
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
-            'x-stoplight-id': 'aca62504578bd',
+            'x-stoplight': { id: 'aca62504578bd' },
           },
           examples: [],
         },
@@ -216,7 +216,7 @@ export default [
           description: 'Id of an existing user.',
           style: 'simple',
           schema: {
-            'x-stoplight-id': '13ad531bed72e',
+            'x-stoplight': { id: '13ad531bed72e' },
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'integer',
           },
@@ -265,7 +265,7 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight': { id: 'de4f083463b7c' },
               title: 'User',
               type: 'object',
               properties: {
@@ -310,7 +310,7 @@ export default [
               // This schema was defined in shared components originally.. the closest parent with an
               // id is the service, and the key was ErrorResponse so ends up being...
               // hash('schema-4d98be34f341a-ErrorResponse')
-              'x-stoplight-id': '2691eb0db9efc',
+              'x-stoplight': { id: '2691eb0db9efc' },
               type: 'object',
               properties: {
                 error: {
@@ -351,7 +351,7 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight-id': 'de4f083463b7c',
+              'x-stoplight': { id: 'de4f083463b7c' },
               title: 'User',
               type: 'object',
               properties: {
@@ -398,7 +398,7 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'de5897f178a5d',
+            'x-stoplight': { id: 'de5897f178a5d' },
             type: 'integer',
           },
           examples: [],
@@ -414,7 +414,7 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight-id': 'be6b513de1b69',
+            'x-stoplight': { id: 'be6b513de1b69' },
             type: 'string',
           },
           examples: [],
@@ -436,7 +436,7 @@ export default [
             // hash(`http_media-${parentId}-${key}`)
             // closest parent with an id is the response, so ends up being...
             // hash('http_media-437771f63f179-application/json')
-            'x-stoplight-id': '13ad531bed72e',
+            'x-stoplight': { id: '13ad531bed72e' },
             type: 'integer',
           },
           examples: [],

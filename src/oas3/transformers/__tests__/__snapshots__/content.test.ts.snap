@@ -27,7 +27,9 @@ Object {
   "required": true,
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
   "style": "simple",
 }
@@ -74,7 +76,9 @@ Object {
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
 }
 `;
@@ -127,7 +131,9 @@ Object {
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
 }
 `;
@@ -147,7 +153,9 @@ Object {
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
 }
 `;
@@ -166,7 +174,9 @@ Object {
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
 }
 `;
@@ -193,7 +203,9 @@ Object {
   "mediaType": "mediaType",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "x-stoplight-id": Any<String>,
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
   },
 }
 `;

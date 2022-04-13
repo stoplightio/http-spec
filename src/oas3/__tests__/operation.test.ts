@@ -664,7 +664,9 @@ describe('transformOas3Operation', () => {
             {
               id: expect.any(String),
               schema: {
-                'x-stoplight-id': expect.any(String),
+                'x-stoplight': {
+                  id: expect.any(String),
+                },
               },
             },
           ],
@@ -739,7 +741,9 @@ describe('transformOas3Operation', () => {
             name: 'name',
             style: 'simple',
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               format: 'int32',
@@ -821,7 +825,9 @@ describe('transformOas3Operation', () => {
             style: 'simple',
             name: 'name',
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               format: 'int32',
@@ -1022,7 +1028,9 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                'x-stoplight-id': expect.any(String),
+                'x-stoplight': {
+                  id: expect.any(String),
+                },
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
@@ -1067,7 +1075,9 @@ describe('transformOas3Operation', () => {
               ],
               mediaType: 'application/json',
               schema: {
-                'x-stoplight-id': expect.any(String),
+                'x-stoplight': {
+                  id: expect.any(String),
+                },
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'object',
                 properties: {},
@@ -1133,7 +1143,9 @@ describe('transformOas3Operation', () => {
           examples: [],
           mediaType: 'application/json',
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
@@ -1198,7 +1210,9 @@ describe('transformOas3Operation', () => {
           examples: [],
           mediaType: 'application/json',
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'object',
             properties: {
@@ -1332,7 +1346,9 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': expect.any(String),
+                    'x-stoplight': {
+                      id: expect.any(String),
+                    },
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1358,7 +1374,9 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': expect.any(String),
+                    'x-stoplight': {
+                      id: expect.any(String),
+                    },
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1370,7 +1388,9 @@ describe('transformOas3Operation', () => {
             headers: [
               expect.objectContaining({
                 schema: {
-                  'x-stoplight-id': expect.any(String),
+                  'x-stoplight': {
+                    id: expect.any(String),
+                  },
                   $schema: 'https://json-schema.org/draft/2020-12/schema',
                   type: 'string',
                   format: 'email',
@@ -1387,7 +1407,9 @@ describe('transformOas3Operation', () => {
               contents: [
                 expect.objectContaining({
                   schema: {
-                    'x-stoplight-id': expect.any(String),
+                    'x-stoplight': {
+                      id: expect.any(String),
+                    },
                     $schema: 'https://json-schema.org/draft/2020-12/schema',
                     type: 'object',
                     properties: {},
@@ -1448,7 +1470,7 @@ describe('transformOas3Operation', () => {
 
     it('should support requestBodies on any method', () => {
       const document: Partial<OpenAPIObject> = {
-        'x-stoplight-id': 'abc-def',
+        'x-stoplight': { id: 'abc-def' },
         openapi: '3.1.0',
         paths: {
           '/subscribe': {
@@ -1489,7 +1511,9 @@ describe('transformOas3Operation', () => {
             examples: [],
             mediaType: 'application/json',
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'object',
               properties: {

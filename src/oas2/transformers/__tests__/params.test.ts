@@ -57,7 +57,9 @@ describe('params.translator', () => {
       ).toMatchSnapshot({
         id: expect.any(String),
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
         },
       });
     });
@@ -82,7 +84,9 @@ describe('params.translator', () => {
       expect(params).toHaveLength(1);
       expect(params[0]).toMatchSnapshot({
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
         },
       });
     });
@@ -105,12 +109,16 @@ describe('params.translator', () => {
       expect(params).toHaveLength(2);
       expect(params[0]).toMatchSnapshot({
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
         },
       });
       expect(params[1]).toMatchSnapshot({
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
         },
       });
     });
@@ -138,7 +146,9 @@ describe('params.translator', () => {
           {
             id: expect.any(String),
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
             },
           },
         ],
@@ -165,7 +175,9 @@ describe('params.translator', () => {
           contents: expect.arrayContaining([
             expect.objectContaining({
               schema: {
-                'x-stoplight-id': expect.any(String),
+                'x-stoplight': {
+                  id: expect.any(String),
+                },
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 readOnly: true,
               },
@@ -213,7 +225,9 @@ describe('params.translator', () => {
               },
             ],
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
             },
           },
         ],
@@ -347,7 +361,9 @@ describe('params.translator', () => {
           },
         ],
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             arr: {
@@ -438,7 +454,9 @@ describe('params.translator', () => {
       ).toMatchSnapshot({
         id: expect.any(String),
         schema: {
-          'x-stoplight-id': expect.any(String),
+          'x-stoplight': {
+            id: expect.any(String),
+          },
         },
       });
     });

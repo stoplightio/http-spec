@@ -90,7 +90,9 @@ describe('translateToOas3Responses', () => {
             },
           ],
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
         {
@@ -101,7 +103,9 @@ describe('translateToOas3Responses', () => {
             },
           ],
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
       ],
@@ -218,7 +222,9 @@ describe('translateToOas3Responses', () => {
             ],
             mediaType: 'application/json',
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 id: {
@@ -273,7 +279,9 @@ describe('translateToOas3Responses', () => {
             id: expect.any(String),
             name: 'X-Page',
             schema: {
-              'x-stoplight-id': expect.any(String),
+              'x-stoplight': {
+                id: expect.any(String),
+              },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
             },

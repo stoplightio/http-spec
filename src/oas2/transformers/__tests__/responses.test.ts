@@ -40,7 +40,9 @@ describe('responses', () => {
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
           examples: [
             {
@@ -51,7 +53,9 @@ describe('responses', () => {
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
           examples: [],
         },
@@ -63,13 +67,17 @@ describe('responses', () => {
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
           examples: [
             {
@@ -102,13 +110,17 @@ describe('responses', () => {
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
           examples: [
             {
@@ -138,13 +150,17 @@ describe('responses', () => {
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
         {
           id: expect.any(String),
           schema: {
-            'x-stoplight-id': expect.any(String),
+            'x-stoplight': {
+              id: expect.any(String),
+            },
           },
         },
       ],

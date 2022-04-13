@@ -87,7 +87,9 @@ describe('transformOas2Operation', () => {
             {
               id: expect.any(String),
               schema: {
-                'x-stoplight-id': expect.any(String),
+                'x-stoplight': {
+                  id: expect.any(String),
+                },
               },
             },
           ],

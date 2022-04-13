@@ -64,7 +64,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "2b4cfd51fbcde",
+              "x-stoplight": Object {
+                "id": "2b4cfd51fbcde",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -117,7 +119,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "2b4cfd51fbcde",
+              "x-stoplight": Object {
+                "id": "2b4cfd51fbcde",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -194,7 +198,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "9360fa7dc92ab",
+            "x-stoplight": Object {
+              "id": "9360fa7dc92ab",
+            },
           },
           "style": "simple",
         },
@@ -207,7 +213,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "828c85d6a2307",
+            "x-stoplight": Object {
+              "id": "828c85d6a2307",
+            },
           },
           "style": "form",
         },
@@ -217,7 +225,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "cdfdf74babd0b",
+            "x-stoplight": Object {
+              "id": "cdfdf74babd0b",
+            },
           },
           "style": "form",
         },
@@ -262,7 +272,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "9360fa7dc92ab",
+            "x-stoplight": Object {
+              "id": "9360fa7dc92ab",
+            },
           },
           "style": "simple",
         },
@@ -275,7 +287,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "828c85d6a2307",
+            "x-stoplight": Object {
+              "id": "828c85d6a2307",
+            },
           },
           "style": "form",
         },
@@ -285,7 +299,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "cdfdf74babd0b",
+            "x-stoplight": Object {
+              "id": "cdfdf74babd0b",
+            },
           },
           "style": "form",
         },
@@ -304,7 +320,9 @@ Array [
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
-              "x-stoplight-id": "b5186fbb4fdf5",
+              "x-stoplight": Object {
+                "id": "b5186fbb4fdf5",
+              },
             },
             "style": "simple",
           },
@@ -318,7 +336,9 @@ Array [
               "maximum": 9223372036854776000,
               "minimum": -9223372036854776000,
               "type": "number",
-              "x-stoplight-id": "a07f1d06408fd",
+              "x-stoplight": Object {
+                "id": "a07f1d06408fd",
+              },
             },
             "style": "simple",
           },
@@ -443,7 +463,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "2b4cfd51fbcde",
+              "x-stoplight": Object {
+                "id": "2b4cfd51fbcde",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -496,7 +518,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "2b4cfd51fbcde",
+              "x-stoplight": Object {
+                "id": "2b4cfd51fbcde",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -517,7 +541,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "3c1327003ffa9",
+            "x-stoplight": Object {
+              "id": "3c1327003ffa9",
+            },
           },
           "style": "simple",
         },
@@ -553,7 +579,9 @@ Array [
                 "code",
               ],
               "type": "object",
-              "x-stoplight-id": "b3c54fc227df9",
+              "x-stoplight": Object {
+                "id": "b3c54fc227df9",
+              },
             },
           },
           Object {
@@ -574,7 +602,9 @@ Array [
                 "code",
               ],
               "type": "object",
-              "x-stoplight-id": "b3c54fc227df9",
+              "x-stoplight": Object {
+                "id": "b3c54fc227df9",
+              },
             },
           },
         ],
@@ -696,7 +726,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "849b52cd05782",
+              "x-stoplight": Object {
+                "id": "849b52cd05782",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -750,7 +782,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "849b52cd05782",
+              "x-stoplight": Object {
+                "id": "849b52cd05782",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -834,7 +868,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "828c85d6a2307",
+            "x-stoplight": Object {
+              "id": "828c85d6a2307",
+            },
           },
           "style": "simple",
         },
@@ -845,7 +881,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "cdfdf74babd0b",
+            "x-stoplight": Object {
+              "id": "cdfdf74babd0b",
+            },
           },
           "style": "simple",
         },
@@ -864,7 +902,9 @@ Array [
               "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {},
               "type": "object",
-              "x-stoplight-id": "8ea4aec4c2854",
+              "x-stoplight": Object {
+                "id": "8ea4aec4c2854",
+              },
             },
           },
         ],
@@ -947,7 +987,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "849b52cd05782",
+              "x-stoplight": Object {
+                "id": "849b52cd05782",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -1001,7 +1043,9 @@ Array [
                 "photoUrls",
               ],
               "type": "object",
-              "x-stoplight-id": "849b52cd05782",
+              "x-stoplight": Object {
+                "id": "849b52cd05782",
+              },
               "xml": Object {
                 "name": "Pet",
               },
@@ -1023,7 +1067,9 @@ Array [
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
-            "x-stoplight-id": "3c1327003ffa9",
+            "x-stoplight": Object {
+              "id": "3c1327003ffa9",
+            },
           },
           "style": "simple",
         },
@@ -1060,7 +1106,9 @@ Array [
                 "code",
               ],
               "type": "object",
-              "x-stoplight-id": "b9501a9ded2c5",
+              "x-stoplight": Object {
+                "id": "b9501a9ded2c5",
+              },
             },
           },
         ],
