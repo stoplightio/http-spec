@@ -74,7 +74,7 @@
     "@types/swagger-schema-official": "~2.0.21",
     "@types/type-is": "^1.6.3",
     "fnv-plus": "^1.3.1",
-    "json-schema-generator": "^2.0.6",
+    "genson-js": "^0.0.8",
     "lodash.isequalwith": "^4.4.0",
     "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
