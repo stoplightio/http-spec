@@ -4,21 +4,16 @@ import type { Spec } from 'swagger-schema-official';
 import { createContext } from '../../../oas/context';
 import { translateToServers as _translateToServers } from '../servers';
 
-type GlobalWithLocation = typeof global & { location?: Partial<Location> & { href: string } };
-
 const translateToServers = (document: DeepPartial<Spec>, ...params: Parameters<typeof _translateToServers>) =>
   _translateToServers.call(createContext(document), ...params);
 
 describe('translateToServers', () => {
-  afterAll(() => {
-    delete (global as GlobalWithLocation).location;
-  });
+  //@ts-ignore
+  afterAll(() => delete global.location);
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-976
   it('given executed in a browser context and a query in location.href should not inherit that query', () => {
-    (global as GlobalWithLocation).location = {
-      href: 'https://www.someotherdomain.com?query=123',
-    };
+    global.location = { ...global.location, href: 'https://www.someotherdomain.com?query=123' };
     expect(translateToServers({ host: 'stoplight.io' }, { schemes: ['http'] })).toEqual([
       { id: expect.any(String), url: 'http://stoplight.io' },
     ]);
