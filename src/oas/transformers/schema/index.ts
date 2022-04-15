@@ -47,7 +47,7 @@ export const translateSchemaObject = withContext<
   return cached;
 });
 
-export function convertSchema(document: Fragment, schema: OASSchemaObject) {
+export function convertSchema(document: Fragment, schema: OASSchemaObject | JSONSchema7): JSONSchema7 {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,
@@ -62,11 +62,11 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
-  return clonedSchema as JSONSchema7;
+  return clonedSchema;
 }
 
-function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
-  const clonedSchema: OASSchemaObject | JSONSchema7 = { ...schema };
+function _convertSchema(schema: OASSchemaObject | JSONSchema7, options: InternalOptions): JSONSchema7 {
+  const clonedSchema = { ...schema };
 
   for (const struct of options.structs) {
     if (Array.isArray(clonedSchema[struct])) {
@@ -98,7 +98,7 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSON
   return clonedSchema as JSONSchema7;
 }
 
-function convertProperties(schema: OASSchemaObject, options: InternalOptions): void {
+function convertProperties(schema: OASSchemaObject | JSONSchema7, options: InternalOptions): void {
   const props = { ...schema.properties };
   schema.properties = props;
 

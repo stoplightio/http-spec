@@ -106,10 +106,8 @@ describe('transformBody()', () => {
                   mediaType: 'application/nice+json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',
-                    description: '',
                     properties: {
                       a: {
-                        minLength: 1,
                         type: 'string',
                       },
                     },

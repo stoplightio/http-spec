@@ -6,8 +6,8 @@ import {
   IHttpQueryParam,
   IMediaTypeContent,
 } from '@stoplight/types';
-import type { JSONSchema7 } from 'json-schema';
 import { createSchema } from 'genson-js';
+import type { JSONSchema7 } from 'json-schema';
 import type { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
 
