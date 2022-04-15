@@ -1,3 +1,5 @@
+//@ts-ignore
+import * as jsonSchemaGenerator from '@stoplight/json-schema-generator';
 import {
   HttpParamStyles,
   IHttpHeaderParam,
@@ -7,8 +9,6 @@ import {
   IMediaTypeContent,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
-// @ts-ignore
-import * as jsonSchemaGenerator from 'json-schema-generator';
 import type { FormParam, Header, PropertyList, QueryParam, RequestBody } from 'postman-collection';
 import * as typeIs from 'type-is';
 
