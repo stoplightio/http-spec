@@ -872,7 +872,7 @@ Array [
               "id": "828c85d6a2307",
             },
           },
-          "style": "simple",
+          "style": "form",
         },
         Object {
           "examples": Array [],
@@ -885,7 +885,7 @@ Array [
               "id": "cdfdf74babd0b",
             },
           },
-          "style": "simple",
+          "style": "form",
         },
       ],
     },
