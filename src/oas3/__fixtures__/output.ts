@@ -191,7 +191,7 @@ export default [
           // hash('http_query-96043a63b6901-summaryOnly')
           id: 'efe9534d001fc',
           name: 'summaryOnly',
-          style: 'simple',
+          style: 'form',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
