@@ -62,7 +62,7 @@ Object {
       "examples": Array [],
       "id": Any<String>,
       "name": "param-name-2",
-      "style": "simple",
+      "style": "form",
     },
     Object {
       "content": Object {
@@ -75,7 +75,7 @@ Object {
       "examples": Array [],
       "id": Any<String>,
       "name": "param-name-1",
-      "style": "simple",
+      "style": "form",
     },
   ],
 }

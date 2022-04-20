@@ -9,7 +9,6 @@ import type {
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import type { ParameterObject } from 'openapi3-ts';
-import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
@@ -23,6 +22,7 @@ import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
 import { translateToExample } from './examples';
+import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
   Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
@@ -79,7 +79,12 @@ export const translateParameterObject = withContext<
   return {
     id,
     name,
-    style: isValidParamStyle(parameterObject.style) ? parameterObject.style : HttpParamStyles.Simple,
+    style: isValidParamStyle(parameterObject.style)
+      ? parameterObject.style
+      : // https://spec.openapis.org/oas/v3.0.3#parameterStyle, https://spec.openapis.org/oas/v3.1.0#parameterStyle
+      parameterObject.in === 'query' || parameterObject.in === 'cookie'
+      ? HttpParamStyles.Form
+      : HttpParamStyles.Simple,
     examples: [
       !hasDefaultExample && parameterObject.example !== undefined
         ? translateToDefaultExample.call(this, 'default', parameterObject.example)
