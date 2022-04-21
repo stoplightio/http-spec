@@ -9,7 +9,7 @@ function createRangeConverter(
   return schema => {
     if (!(keyword in schema)) return;
     const { [keyword]: value } = schema;
-    if (typeof value !== 'boolean' || typeof schema[valueKeyword] !== 'number') {
+    if (value !== true || typeof schema[valueKeyword] !== 'number') {
       delete schema[keyword];
     } else {
       schema[keyword] = schema[valueKeyword];
