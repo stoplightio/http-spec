@@ -32,20 +32,64 @@ describe('translateSchemaObject', () => {
   it('should translate exclusiveMinimum/exclusiveMaximum', () => {
     expect(
       translate({
-        type: 'integer',
-        minimum: 2,
-        maximum: 10,
-        exclusiveMinimum: true,
-        exclusiveMaximum: true,
+        anyOf: [
+          {
+            type: 'integer',
+            minimum: 2,
+            maximum: 10,
+            exclusiveMinimum: true,
+            exclusiveMaximum: true,
+          },
+          {
+            type: 'integer',
+            minimum: 2,
+            maximum: 10,
+            exclusiveMinimum: false,
+            exclusiveMaximum: true,
+          },
+          {
+            type: 'integer',
+            minimum: 2,
+            maximum: 10,
+            exclusiveMinimum: true,
+            exclusiveMaximum: false,
+          },
+          {
+            type: 'integer',
+            minimum: 2,
+            maximum: 10,
+            exclusiveMinimum: false,
+            exclusiveMaximum: false,
+          },
+        ],
       }),
     ).toStrictEqual({
       'x-stoplight': {
         id: expect.any(String),
       },
       $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'integer',
-      exclusiveMinimum: 2,
-      exclusiveMaximum: 10,
+      anyOf: [
+        {
+          type: 'integer',
+          exclusiveMinimum: 2,
+          exclusiveMaximum: 10,
+        },
+        {
+          type: 'integer',
+          minimum: 2,
+          exclusiveMaximum: 10,
+        },
+        {
+          type: 'integer',
+          exclusiveMinimum: 2,
+          maximum: 10,
+        },
+        {
+          type: 'integer',
+          minimum: 2,
+          maximum: 10,
+        },
+      ],
     });
   });
 
