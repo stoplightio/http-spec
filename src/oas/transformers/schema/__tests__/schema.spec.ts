@@ -200,6 +200,29 @@ describe('translateSchemaObject', () => {
     });
   });
 
+  it('should handle circular references', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+        },
+        address: {
+          type: 'object',
+          properties: {
+            city: {},
+          },
+        },
+        location: {},
+      },
+    };
+
+    schema.properties.location = schema.properties.address;
+    schema.properties.address.properties.city = schema.properties.location;
+
+    expect(translate.bind(null, schema as OASSchemaObject)).not.toThrow();
+  });
+
   describe('OAS2 Schema Object', () => {
     it('should translate x-nullable', () => {
       expect(

@@ -16,7 +16,7 @@ type InternalOptions = {
   structs: string[];
 };
 
-const CACHE = new WeakMap();
+const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
 
 // Convert from OpenAPI 2.0, OpenAPI 3.0 `SchemaObject` or JSON Schema Draft4/6 to JSON Schema Draft 7
 // This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.
@@ -29,7 +29,7 @@ export const translateSchemaObject = withContext<
 >(function (schema) {
   const resolvedSchema = this.maybeResolveLocalRef(schema);
   if (!isPlainObject(resolvedSchema)) return {};
-  let cached = CACHE.get(resolvedSchema);
+  let cached = PROCESSED_SCHEMAS.get(resolvedSchema);
   if (cached) {
     return { ...cached };
   }
@@ -43,7 +43,7 @@ export const translateSchemaObject = withContext<
     id,
   };
 
-  CACHE.set(resolvedSchema, cached);
+  PROCESSED_SCHEMAS.set(resolvedSchema, cached);
   return cached;
 });
 
@@ -66,7 +66,14 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
 }
 
 function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
+  let processedSchema = PROCESSED_SCHEMAS.get(schema);
+
+  if (processedSchema) {
+    return { ...processedSchema };
+  }
+
   const clonedSchema: OASSchemaObject | JSONSchema7 = { ...schema };
+  PROCESSED_SCHEMAS.set(schema, clonedSchema as JSONSchema7);
 
   for (const struct of options.structs) {
     if (Array.isArray(clonedSchema[struct])) {
