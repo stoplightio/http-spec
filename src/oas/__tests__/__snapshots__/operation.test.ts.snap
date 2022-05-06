@@ -680,7 +680,23 @@ Array [
         "contents": Array [
           Object {
             "encodings": Array [],
-            "examples": Array [],
+            "examples": Array [
+              Object {
+                "id": "97acd8b5018d8",
+                "key": "Dog",
+                "summary": "A dog example",
+                "value": Object {
+                  "name": "Leo",
+                  "photoUrls": Array [],
+                },
+              },
+              Object {
+                "externalValue": "https://stoplight.io/pets/cat",
+                "id": "97acd8b5018d8",
+                "key": "Cat",
+                "summary": "A cat example",
+              },
+            ],
             "id": "954d8d8652606",
             "mediaType": "application/json",
             "schema": Object {
@@ -941,7 +957,23 @@ Array [
         "contents": Array [
           Object {
             "encodings": Array [],
-            "examples": Array [],
+            "examples": Array [
+              Object {
+                "id": "97acd8b5018d8",
+                "key": "Dog",
+                "summary": "A dog example",
+                "value": Object {
+                  "name": "Leo",
+                  "photoUrls": Array [],
+                },
+              },
+              Object {
+                "externalValue": "https://stoplight.io/pets/cat",
+                "id": "97acd8b5018d8",
+                "key": "Cat",
+                "summary": "A cat example",
+              },
+            ],
             "id": "954d8d8652606",
             "mediaType": "application/json",
             "schema": Object {

@@ -173,6 +173,9 @@ describe('translateToOas3Responses', () => {
                       'my-example': {
                         $ref: '#/components/examples/Joe',
                       },
+                      Bear: {
+                        externalValue: 'https://stoplight.io/bear',
+                      },
                     },
                   },
                 },
@@ -218,6 +221,11 @@ describe('translateToOas3Responses', () => {
                 value: {
                   id: 1,
                 },
+              },
+              {
+                id: expect.any(String),
+                key: 'Bear',
+                externalValue: 'https://stoplight.io/bear',
               },
             ],
             mediaType: 'application/json',

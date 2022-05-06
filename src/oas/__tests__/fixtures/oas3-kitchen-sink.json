@@ -189,6 +189,19 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/Pet"
+            },
+            "examples": {
+              "Dog": {
+                "summary": "A dog example",
+                "value": {
+                  "name": "Leo",
+                  "photoUrls": []
+                }
+              },
+              "Cat": {
+                "summary": "A cat example",
+                "externalValue": "https://stoplight.io/pets/cat"
+              }
             }
           },
           "application/xml": {

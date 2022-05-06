@@ -5,6 +5,7 @@ import {
   IHttpHeaderParam,
   IMediaTypeContent,
   INodeExample,
+  INodeExternalExample,
   Optional,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
@@ -124,7 +125,7 @@ export const translateHeaderObject = withContext<
     ),
   };
 
-  const examples: INodeExample[] = [];
+  const examples: (INodeExample | INodeExternalExample)[] = [];
   const encodings: IHttpEncoding[] = [];
 
   if (isPlainObject(contentValue)) {
