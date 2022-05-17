@@ -459,6 +459,10 @@ describe('translateHeaderObject', () => {
               summary: 'example summary',
               value: 'hey',
             },
+            b: {
+              summary: 'example summary',
+              externalValue: 'https://stoplight.io/b',
+            },
           },
           example: {},
           content: {},
@@ -468,6 +472,9 @@ describe('translateHeaderObject', () => {
     ).toMatchSnapshot({
       id: expect.any(String),
       examples: [
+        {
+          id: expect.any(String),
+        },
         {
           id: expect.any(String),
         },

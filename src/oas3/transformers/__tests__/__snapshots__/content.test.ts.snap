@@ -16,6 +16,12 @@ Object {
       "value": "hey",
     },
     Object {
+      "externalValue": "https://stoplight.io/b",
+      "id": Any<String>,
+      "key": "b",
+      "summary": "example summary",
+    },
+    Object {
       "id": Any<String>,
       "key": "__default",
       "value": Object {},
