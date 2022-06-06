@@ -35,7 +35,30 @@ export default [
         id: 'c73bfcb376d49',
         code: '403',
         description: 'Forbidden',
-        headers: [],
+        headers: [
+          {
+            // hash(`http_header-${parentId}-${header key}`)
+            // it's a shared header, so the closest parent is the service.
+            // hash('http_header-service_abc-X-Rate-Limit')
+            id: '96620a275464f',
+            name: 'X-Rate-Limit',
+            style: 'simple',
+            encodings: [],
+            examples: [],
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              // hash(`http_header-${parentId}-${header key}`)
+              // it's a shared header, so the closest parent is the service.
+              // hash('schema-service_abc-rate-limit')
+              'x-stoplight': {
+                id: '72da152ada960',
+              },
+              type: 'integer',
+              description: 'The number of allowed requests in the current period',
+              title: 'Rate Limit',
+            },
+          },
+        ],
         contents: [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
