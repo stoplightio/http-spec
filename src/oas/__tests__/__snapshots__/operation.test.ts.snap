@@ -580,7 +580,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "b3c54fc227df9",
+                "id": "d1d03adc8237d",
               },
             },
           },
@@ -603,7 +603,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "b3c54fc227df9",
+                "id": "d1d03adc8237d",
               },
             },
           },
@@ -743,7 +743,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "849b52cd05782",
+                "id": "2b4cfd51fbcde",
               },
               "xml": Object {
                 "name": "Pet",
@@ -799,7 +799,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "849b52cd05782",
+                "id": "2b4cfd51fbcde",
               },
               "xml": Object {
                 "name": "Pet",
@@ -1020,7 +1020,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "849b52cd05782",
+                "id": "2b4cfd51fbcde",
               },
               "xml": Object {
                 "name": "Pet",
@@ -1076,7 +1076,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "849b52cd05782",
+                "id": "2b4cfd51fbcde",
               },
               "xml": Object {
                 "name": "Pet",
@@ -1139,7 +1139,7 @@ Array [
               ],
               "type": "object",
               "x-stoplight": Object {
-                "id": "b9501a9ded2c5",
+                "id": "d1d03adc8237d",
               },
             },
           },

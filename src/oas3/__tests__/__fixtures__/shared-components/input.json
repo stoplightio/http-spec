@@ -1,0 +1,66 @@
+{
+  "x-stoplight": {
+    "id": "service_abc"
+  },
+  "openapi": "3.0.3",
+  "info": {
+    "version": "0.0.3",
+    "title": "GitHub v3 REST API",
+    "description": "GitHub's v3 REST API."
+  },
+  "paths": {
+    "/orgs/{org}/repos": {
+      "get": {
+        "summary": "Get a organization repository",
+        "responses": {
+          "403": {
+            "$ref": "#/components/responses/forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "basic-error": {
+        "title": "Basic Error",
+        "description": "Basic Error",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "rate-limit": {
+        "title": "Rate Limit",
+        "description": "The number of allowed requests in the current period",
+        "type": "integer"
+      }
+    },
+    "headers": {
+      "X-Rate-Limit": {
+        "schema": {
+          "$ref": "#/components/schemas/rate-limit"
+        }
+      }
+    },
+    "responses": {
+      "forbidden": {
+        "headers": {
+          "X-Rate-Limit": {
+            "$ref": "#/components/headers/X-Rate-Limit"
+          }
+        },
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/basic-error"
+            }
+          }
+        }
+      }
+    }
+  }
+}
