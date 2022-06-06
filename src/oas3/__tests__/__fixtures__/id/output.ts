@@ -1,5 +1,5 @@
 /**
- NOTE that if any object anywhere ever has an `x-stoplight-id` on it, prefer that
+ NOTE that if any object anywhere ever has an `x-stoplight.id` on it, prefer that
  over calling the generate function.
 
  Used https://md5calc.com/hash/fnv1a32 to hash the ids.
