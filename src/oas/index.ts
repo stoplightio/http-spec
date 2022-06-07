@@ -1,3 +1,14 @@
 export * from './operation';
+export { resolveRef as defaultRefResolver } from './resolver';
 export { convertSchema as convertToJsonSchema } from './transformers/index';
-export * from './types';
+export type {
+  Oas2HttpOperationTransformer,
+  Oas2HttpServiceTransformer,
+  Oas2TransformOperationOpts,
+  Oas2TransformServiceOpts,
+  Oas3HttpOperationTransformer,
+  Oas3HttpServiceTransformer,
+  Oas3TransformOperationOpts,
+  Oas3TransformServiceOpts,
+} from './types';
+export { OasVersion } from './types';

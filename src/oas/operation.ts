@@ -1,13 +1,14 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import type { OpenAPIObject, OperationObject, PathsObject } from 'openapi3-ts';
+import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { isBoolean, isString } from '../guards';
 import type { HttpOperationTransformer } from '../types';
 import { TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
+import { isOperationObject, isPathItemObject } from './guards';
 import { translateToTags } from './tags';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
@@ -47,13 +48,13 @@ export const transformOasOperation: TranslateFunction<
   [path: string, method: string],
   Omit<IHttpOperation, 'responses' | 'request' | 'servers' | 'security' | 'callbacks'>
 > = function (path: string, method: string) {
-  const pathObj = this.maybeResolveLocalRef(this.document?.paths?.[path]) as PathsObject;
-  if (typeof pathObj !== 'object' || pathObj === null) {
+  const maybePathItemObject = this.maybeResolveLocalRef(this.document?.paths?.[path]);
+  if (!isPathItemObject(maybePathItemObject)) {
     throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
   }
 
-  const operation = this.maybeResolveLocalRef(pathObj[method]) as OperationObject;
-  if (!operation) {
+  const maybeOperationObject = this.maybeResolveLocalRef(maybePathItemObject[method]);
+  if (!isOperationObject(maybeOperationObject)) {
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
 
@@ -70,22 +71,22 @@ export const transformOasOperation: TranslateFunction<
     method,
     path,
 
-    tags: translateToTags.call(this, operation.tags),
-    extensions: getExtensions(operation),
+    tags: translateToTags.call(this, maybeOperationObject.tags),
+    extensions: getExtensions(maybeOperationObject),
 
     ...pickBy(
       {
-        deprecated: operation.deprecated,
-        internal: operation['x-internal'],
+        deprecated: maybeOperationObject.deprecated,
+        internal: maybeOperationObject['x-internal'],
       },
       isBoolean,
     ),
 
     ...pickBy(
       {
-        iid: operation.operationId,
-        description: operation.description,
-        summary: operation.summary,
+        iid: maybeOperationObject.operationId,
+        description: maybeOperationObject.description,
+        summary: maybeOperationObject.summary,
       },
       isString,
     ),

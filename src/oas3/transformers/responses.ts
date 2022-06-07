@@ -1,8 +1,9 @@
-import type { IHttpOperationResponse, Optional } from '@stoplight/types';
+import type { IHttpOperationResponse, Optional, Reference } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
+import { isReferenceObject } from '../../oas/guards';
 import { getSharedKey } from '../../oas/resolver';
 import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
@@ -13,31 +14,35 @@ import { translateHeaderObject, translateMediaTypeObject } from './content';
 const translateToResponse = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[statusCode: string, response: unknown]>,
-    Optional<IHttpOperationResponse>
+    Optional<IHttpOperationResponse | Reference>
   >
 >(function ([statusCode, response]) {
-  const resolvedResponse = this.maybeResolveLocalRef(response);
-  if (!isResponseObject(resolvedResponse)) return;
+  const maybeResponseObject = this.maybeResolveLocalRef(response);
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
+  if (isReferenceObject(maybeResponseObject)) {
+    return maybeResponseObject;
+  }
+
+  if (!isResponseObject(maybeResponseObject)) return;
+
+  const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
 
   return {
     id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
-    headers: entries(resolvedResponse.headers).map(translateHeaderObject, this).filter(isNonNullable),
-    contents: entries(resolvedResponse.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+    headers: entries(maybeResponseObject.headers).map(translateHeaderObject, this).filter(isNonNullable),
+    contents: entries(maybeResponseObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
 
     ...pickBy(
       {
-        description: resolvedResponse.description,
+        description: maybeResponseObject.description,
       },
       isString,
     ),
   };
 });
 
-export const translateToResponses: Oas3TranslateFunction<[responses: unknown], IHttpOperationResponse[]> = function (
-  responses,
-) {
-  return entries(responses).map(translateToResponse, this).filter(isNonNullable);
-};
+export const translateToResponses: Oas3TranslateFunction<[responses: unknown], (IHttpOperationResponse | Reference)[]> =
+  function (responses) {
+    return entries(responses).map(translateToResponse, this).filter(isNonNullable);
+  };

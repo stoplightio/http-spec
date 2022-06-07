@@ -1,4 +1,4 @@
-import {
+import type {
   IHttpOperation,
   IHttpOperationRequestBody,
   IHttpParam,
@@ -6,10 +6,19 @@ import {
   INodeExample,
   INodeExternalExample,
   IServer,
+  Reference,
 } from '@stoplight/types';
 import type { JSONSchema7 as JSONSchema } from 'json-schema';
 
 import { isEqual } from './utils';
+
+type ResolvedObject<T> = T extends Reference
+  ? never
+  : T extends unknown[]
+  ? ResolvedObject<T[number]>[]
+  : T extends object
+  ? { [key in keyof T]: ResolvedObject<T[key]> }
+  : T;
 
 function isExclusivelyAnyOfSchema(schema: JSONSchema): schema is { anyOf: JSONSchema[] } {
   return !!(schema.anyOf && Object.keys(schema).length === 1);
@@ -82,7 +91,7 @@ function mergeContentExamples(exampleLists: Array<IMediaTypeContent['examples']>
 
     const arr = (Array.isArray(examples) ? examples : [examples]).filter(
       ex => !(merged || []).find(me => isEqual(me, ex)),
-    );
+    ) as Array<INodeExample | INodeExternalExample>;
 
     return merged ? merged.concat(arr) : arr;
   }, undefined);
@@ -98,7 +107,7 @@ function mergeContentEncodings(encodingLists: Array<IMediaTypeContent['encodings
   }, undefined);
 }
 
-export const mergeResponses = mergeLists<IHttpOperation['responses']>(
+export const mergeResponses = mergeLists<ResolvedObject<IHttpOperation['responses']>>(
   (r1, r2) => r1.code === r2.code,
   (r1, r2) => ({
     ...r1,
@@ -107,7 +116,10 @@ export const mergeResponses = mergeLists<IHttpOperation['responses']>(
   }),
 );
 
-function mergeRequestBodies(b1: IHttpOperationRequestBody, b2: IHttpOperationRequestBody): IHttpOperationRequestBody {
+function mergeRequestBodies(
+  b1: IHttpOperationRequestBody,
+  b2: IHttpOperationRequestBody,
+): ResolvedObject<IHttpOperationRequestBody> {
   return {
     id: b1.id,
     description: [b1.description, b2.description].filter(Boolean).join('; ') || undefined,
@@ -121,7 +133,7 @@ const mergeServers = mergeLists<IServer[]>(
   s1 => s1, // ignore server #2 is url is equal
 );
 
-export const mergeOperations = mergeLists<IHttpOperation[]>(
+export const mergeOperations = mergeLists<ResolvedObject<IHttpOperation[]>>(
   (o1, o2) => o1.path === o2.path && o1.method.toLowerCase() === o2.method.toLowerCase(),
   (o1, o2) => ({
     ...o1,
@@ -132,7 +144,7 @@ export const mergeOperations = mergeLists<IHttpOperation[]>(
       body: mergeTwo(mergeRequestBodies, o1.request?.body, o2.request?.body),
       headers: mergeTwo(mergeParams, o1.request?.headers, o2.request?.headers),
     },
-    responses: mergeResponses(o1.responses, o2.responses) as IHttpOperation['responses'],
+    responses: mergeResponses(o1.responses, o2.responses),
     servers: mergeServers(o1.servers || [], o2.servers || []),
   }),
 );

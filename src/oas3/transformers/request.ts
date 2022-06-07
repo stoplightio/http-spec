@@ -8,13 +8,13 @@ import type {
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
-import type { ParameterObject } from 'openapi3-ts';
+import type { ParameterObject, ReferenceObject } from 'openapi3-ts';
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
-import { isValidParamStyle } from '../../oas/guards';
+import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
@@ -25,26 +25,30 @@ import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
+  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody | ReferenceObject>
 >(function (requestBodyObject) {
-  const resolvedRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  if (isReferenceObject(maybeRequestBodyObject)) {
+    return maybeRequestBodyObject;
+  }
+
   const id = this.generateId(`http_request_body-${this.parentId}`);
 
-  if (isRequestBodyObject(resolvedRequestBodyObject)) {
+  if (isRequestBodyObject(maybeRequestBodyObject)) {
     return {
       id,
-      contents: entries(resolvedRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+      contents: entries(maybeRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
 
       ...pickBy(
         {
-          required: resolvedRequestBodyObject.required,
+          required: maybeRequestBodyObject.required,
         },
         isBoolean,
       ),
 
       ...pickBy(
         {
-          description: resolvedRequestBodyObject.description,
+          description: maybeRequestBodyObject.description,
         },
         isString,
       ),
@@ -74,7 +78,7 @@ export const translateParameterObject = withContext<
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
-  const hasDefaultExample = examples.some(({ key }) => key.includes('default'));
+  const hasDefaultExample = examples.some(example => !isReferenceObject(example) && example.key.includes('default'));
 
   return {
     id,

@@ -31,7 +31,7 @@ export function createContext<T extends Record<string, unknown>>(
         try {
           return resolveRef.call(this, target);
         } catch {
-          return target;
+          return;
         } finally {
           this.parentId = this.ids[context];
         }

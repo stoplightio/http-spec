@@ -8,7 +8,6 @@ import type {
   SecuritySchemeObject,
   ServerObject,
   ServerVariableObject,
-  TagObject,
 } from 'openapi3-ts';
 
 export const isSecurityScheme = (maybeSecurityScheme: unknown): maybeSecurityScheme is SecuritySchemeObject =>
@@ -39,14 +38,6 @@ export const isServerVariableObject = (
   if (!isPlainObject(maybeServerVariableObject)) return false;
   const typeofDefault = typeof maybeServerVariableObject.default;
   return typeofDefault === 'string' || typeofDefault === 'boolean' || typeofDefault === 'number';
-};
-
-export const isTagObject = (maybeTagObject: unknown): maybeTagObject is TagObject => {
-  if (isPlainObject(maybeTagObject) && 'name' in maybeTagObject) {
-    return typeof maybeTagObject.name === 'string';
-  }
-
-  return false;
 };
 
 export const isResponseObject = (maybeResponseObject: unknown): maybeResponseObject is ResponseObject =>

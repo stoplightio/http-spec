@@ -7,18 +7,21 @@ import {
   INodeExample,
   INodeExternalExample,
   Optional,
+  Reference,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
+import { isReferenceObject } from '../../oas/guards';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
+import type { ReferenceObject } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
 import { isHeaderObject } from '../guards';
-import { Oas3TranslateFunction } from '../types';
+import type { Oas3TranslateFunction } from '../types';
 import { translateToExample } from './examples';
 
 const ACCEPTABLE_STYLES: (string | undefined)[] = [
@@ -72,14 +75,19 @@ const translateEncodingPropertyObject = withContext<
 });
 
 export const translateHeaderObject = withContext<
-  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, headerObject: unknown]>, Optional<IHttpHeaderParam>>
+  Oas3TranslateFunction<
+    ArrayCallbackParameters<[name: string, headerObject: unknown]>,
+    Optional<IHttpHeaderParam | ReferenceObject>
+  >
 >(function ([name, unresolvedHeaderObject]) {
-  const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
-  if (!isPlainObject(headerObject)) return;
+  const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
+
+  if (!isPlainObject(maybeHeaderObject)) return;
+  if (isReferenceObject(maybeHeaderObject)) return maybeHeaderObject;
 
   const id = this.generateId(`http_header-${this.parentId}-${name}`);
 
-  if (!isHeaderObject(headerObject)) {
+  if (!isHeaderObject(maybeHeaderObject)) {
     return {
       id,
       encodings: [],
@@ -89,7 +97,7 @@ export const translateHeaderObject = withContext<
     };
   }
 
-  const { content: contentObject } = headerObject;
+  const { content: contentObject } = maybeHeaderObject;
 
   const contentValue = isPlainObject(contentObject) ? Object.values(contentObject)[0] : null;
 
@@ -100,32 +108,34 @@ export const translateHeaderObject = withContext<
 
     ...pickBy(
       {
-        schema: isPlainObject(headerObject.schema) ? translateSchemaObject.call(this, headerObject.schema) : null,
-        content: headerObject.content,
+        schema: isPlainObject(maybeHeaderObject.schema)
+          ? translateSchemaObject.call(this, maybeHeaderObject.schema)
+          : null,
+        content: maybeHeaderObject.content,
       },
       isNonNullable,
     ),
 
     ...pickBy(
       {
-        description: headerObject.description,
+        description: maybeHeaderObject.description,
       },
       isString,
     ),
 
     ...pickBy(
       {
-        allowEmptyValue: headerObject.allowEmptyValue,
-        allowReserved: headerObject.allowReserved,
-        explode: headerObject.explode,
-        required: headerObject.required,
-        deprecated: headerObject.deprecated,
+        allowEmptyValue: maybeHeaderObject.allowEmptyValue,
+        allowReserved: maybeHeaderObject.allowReserved,
+        explode: maybeHeaderObject.explode,
+        required: maybeHeaderObject.required,
+        deprecated: maybeHeaderObject.deprecated,
       },
       isBoolean,
     ),
   };
 
-  const examples: (INodeExample | INodeExternalExample)[] = [];
+  const examples: (INodeExample | INodeExternalExample | Reference)[] = [];
   const encodings: IHttpEncoding[] = [];
 
   if (isPlainObject(contentValue)) {
@@ -140,10 +150,10 @@ export const translateHeaderObject = withContext<
     }
   }
 
-  examples.push(...entries(headerObject.examples).map(translateToExample, this).filter(isNonNullable));
+  examples.push(...entries(maybeHeaderObject.examples).map(translateToExample, this).filter(isNonNullable));
 
-  if ('example' in headerObject) {
-    examples.push(translateToDefaultExample.call(this, '__default', headerObject.example));
+  if ('example' in maybeHeaderObject) {
+    examples.push(translateToDefaultExample.call(this, '__default', maybeHeaderObject.example));
   }
 
   return {

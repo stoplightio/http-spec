@@ -6,6 +6,7 @@ import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
 import type { Fragment, TranslateFunction } from '../../../types';
+import { isReferenceObject } from '../../guards';
 import { getSharedKey } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
@@ -27,23 +28,26 @@ export const translateSchemaObject = withContext<
     JSONSchema7
   >
 >(function (schema) {
-  const resolvedSchema = this.maybeResolveLocalRef(schema);
-  if (!isPlainObject(resolvedSchema)) return {};
-  let cached = PROCESSED_SCHEMAS.get(resolvedSchema);
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+
+  if (!isPlainObject(maybeSchemaObject)) return {};
+  if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
+
+  let cached = PROCESSED_SCHEMAS.get(maybeSchemaObject);
   if (cached) {
     return { ...cached };
   }
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedSchema) : '';
+  const actualKey = this.context === 'service' ? getSharedKey(maybeSchemaObject) : '';
   const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
 
-  cached = convertSchema(this.document, resolvedSchema);
+  cached = convertSchema(this.document, maybeSchemaObject);
   cached['x-stoplight'] = {
     ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
     id,
   };
 
-  PROCESSED_SCHEMAS.set(resolvedSchema, cached);
+  PROCESSED_SCHEMAS.set(maybeSchemaObject, cached);
   return cached;
 });
 
@@ -97,7 +101,7 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSON
   }
 
   for (const keyword of keywordsKeys) {
-    if (keyword in schema) {
+    if (keyword in clonedSchema) {
       keywords[keyword](clonedSchema);
     }
   }

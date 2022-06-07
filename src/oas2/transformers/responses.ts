@@ -1,10 +1,11 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import type { Operation } from 'swagger-schema-official';
+import type { Operation, Reference } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
+import { isReferenceObject } from '../../oas/guards';
 import { getSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
@@ -15,17 +16,22 @@ import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
 
 const translateToResponse = withContext<
-  Oas2TranslateFunction<[produces: string[], statusCode: string, response: unknown], Optional<IHttpOperationResponse>>
+  Oas2TranslateFunction<
+    [produces: string[], statusCode: string, response: unknown],
+    Optional<IHttpOperationResponse | Reference>
+  >
 >(function (produces, statusCode, response) {
-  const resolvedResponse = this.maybeResolveLocalRef(response);
-  if (!isResponseObject(resolvedResponse)) return;
+  const maybeResponseObject = this.maybeResolveLocalRef(response);
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedResponse) : statusCode;
+  if (isReferenceObject(maybeResponseObject)) return maybeResponseObject;
+  if (!isResponseObject(maybeResponseObject)) return;
 
-  const headers = translateToHeaderParams.call(this, resolvedResponse.headers);
-  const objectifiedExamples = entries(resolvedResponse.examples || getExamplesFromSchema(resolvedResponse.schema)).map(
-    ([key, value]) => translateToDefaultExample.call(this, key, value),
-  );
+  const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
+
+  const headers = translateToHeaderParams.call(this, maybeResponseObject.headers);
+  const objectifiedExamples = entries(
+    maybeResponseObject.examples || getExamplesFromSchema(maybeResponseObject.schema),
+  ).map(([key, value]) => translateToDefaultExample.call(this, key, value));
 
   const contents = produces
     .map<IMediaTypeContent & { examples: NonNullable<IMediaTypeContent['examples']> }>(
@@ -35,8 +41,8 @@ const translateToResponse = withContext<
         examples: objectifiedExamples.filter(example => example.key === produceElement),
         ...pickBy(
           {
-            schema: isPlainObject(resolvedResponse.schema)
-              ? translateSchemaObject.call(this, resolvedResponse.schema)
+            schema: isPlainObject(maybeResponseObject.schema)
+              ? translateSchemaObject.call(this, maybeResponseObject.schema)
               : undefined,
           },
           isNonNullable,
@@ -49,7 +55,7 @@ const translateToResponse = withContext<
   const translatedResponses = {
     id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
     code: statusCode,
-    description: resolvedResponse.description,
+    description: maybeResponseObject.description,
     headers,
     contents,
   };
@@ -72,7 +78,7 @@ const translateToResponse = withContext<
 
 export const translateToResponses: Oas2TranslateFunction<
   [operation: DeepPartial<Operation>],
-  IHttpOperationResponse[]
+  (IHttpOperationResponse | Reference)[]
 > = function (operation) {
   const produces = getProduces(this.document, operation);
   return entries(operation.responses)
