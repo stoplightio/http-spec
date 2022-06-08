@@ -15,6 +15,10 @@ export function getSharedKey(value: object) {
   return SHARED_COMPONENTS_KEYS.get(value);
 }
 
+export function setSharedKey(value: object, key: string) {
+  return SHARED_COMPONENTS_KEYS.set(value, key);
+}
+
 export const resolveRef: RefResolver = function (target) {
   const { value: resolved, location } = resolveInlineRefWithLocation(this.document, target.$ref);
 

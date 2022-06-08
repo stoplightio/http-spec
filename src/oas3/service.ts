@@ -5,7 +5,7 @@ import pickBy = require('lodash.pickby');
 import { withContext } from '../context';
 import { isNonNullable } from '../guards';
 import { createContext } from '../oas/context';
-import { bundleResolveRef } from '../oas/resolver';
+import { bundleResolveRef, setSharedKey } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
 import { translateSchemaObject } from '../oas/transformers';
 import { translateToComponents } from '../oas/transformers/components';
@@ -25,20 +25,27 @@ export const bundleOas3Service: Oas3HttpServiceTransformer = ({ document: _docum
   const ctx = createContext(_document, bundleResolveRef);
   const { document } = ctx;
   const { securitySchemes, ...service } = transformOas3Service({ document, ctx });
+  const operations = transformOas3Operations(document, ctx);
+  ctx.context = 'service';
 
   return {
     ...service,
-    operations: transformOas3Operations(document, ctx),
+    operations,
     components: translateToComponents.call(ctx, document.components, {
       response: translateToResponse,
       requestBody: translateRequestBody,
       securityScheme: translateSecurityScheme,
       example: translateToExample,
-      schema(this: typeof ctx, [, value]) {
+      schema(this: typeof ctx, [key, value]) {
+        if (isPlainObject(value)) {
+          setSharedKey(value, key);
+        }
         return translateSchemaObject.call(this, value);
       },
-      parameter(this: typeof ctx, [, value]) {
-        // todo: any
+      parameter(this: typeof ctx, [key, value]) {
+        if (isPlainObject(value)) {
+          setSharedKey(value, key);
+        }
         return translateParameterObject.call(this, value as any);
       },
     }),

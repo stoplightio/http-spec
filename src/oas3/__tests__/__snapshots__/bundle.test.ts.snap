@@ -5,7 +5,7 @@ Object {
   "components": Object {
     "examples": Object {
       "A-Shared-Example": Object {
-        "id": "0f9f1fcfc67d3",
+        "id": "5a69041e065b0",
         "key": "A-Shared-Example",
         "value": Object {
           "address": Object {
@@ -18,14 +18,14 @@ Object {
     "parameters": Object {
       "Some-Header": Object {
         "examples": Array [],
-        "id": "0c538650d4f74",
+        "id": "21b1f96bd26ee",
         "name": "A-Shared-Header",
         "required": false,
         "schema": Object {
           "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "string",
           "x-stoplight": Object {
-            "id": "7f5ebd47b1207",
+            "id": "be6b513de1b69",
           },
         },
         "style": "simple",
@@ -39,7 +39,7 @@ Object {
           Object {
             "encodings": Array [],
             "examples": Array [],
-            "id": "03ab56cba103e",
+            "id": "4d98be34f341a",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -50,14 +50,14 @@ Object {
               },
               "type": "object",
               "x-stoplight": Object {
-                "id": "018510ab9050b",
+                "id": "2691eb0db9efc",
               },
             },
           },
         ],
         "description": "A generic error response.",
         "headers": Array [],
-        "id": "e28ad0b661a13",
+        "id": "437771f63f179",
       },
     },
     "schemas": Object {
@@ -76,7 +76,7 @@ Object {
         "title": "Address",
         "type": "object",
         "x-stoplight": Object {
-          "id": "b89da81825037",
+          "id": "8b1562dcd786e",
         },
       },
       "Error": Object {
@@ -96,7 +96,7 @@ Object {
         "title": "Error",
         "type": "object",
         "x-stoplight": Object {
-          "id": "b89da81825037",
+          "id": "da49423a5a9e7",
         },
       },
       "User": Object {
@@ -117,7 +117,7 @@ Object {
         "title": "User",
         "type": "object",
         "x-stoplight": Object {
-          "id": "b89da81825037",
+          "id": "de4f083463b7c",
         },
       },
       "UserId": Object {
@@ -126,7 +126,7 @@ Object {
         "title": "UserId",
         "type": "number",
         "x-stoplight": Object {
-          "id": "b89da81825037",
+          "id": "a8978c71e4d00",
         },
       },
     },
