@@ -46,7 +46,7 @@ function hasAcceptableStyle<T extends Fragment = Fragment>(
 const translateEncodingPropertyObject = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
-    Optional<IHttpEncoding>
+    Optional<IHttpEncoding<true>>
   >
 >(function ([property, encodingPropertyObject]) {
   if (!isPlainObject(encodingPropertyObject)) return;
@@ -77,7 +77,7 @@ const translateEncodingPropertyObject = withContext<
 export const translateHeaderObject = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[name: string, headerObject: unknown]>,
-    Optional<IHttpHeaderParam | ReferenceObject>
+    Optional<IHttpHeaderParam<true> | ReferenceObject>
   >
 >(function ([name, unresolvedHeaderObject]) {
   const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
@@ -136,13 +136,13 @@ export const translateHeaderObject = withContext<
   };
 
   const examples: (INodeExample | INodeExternalExample | Reference)[] = [];
-  const encodings: IHttpEncoding[] = [];
+  const encodings: IHttpEncoding<true>[] = [];
 
   if (isPlainObject(contentValue)) {
     examples.push(...entries(contentValue.examples).map(translateToExample, this).filter(isNonNullable));
 
     if (isPlainObject(contentValue.encoding)) {
-      encodings.push(...(Object.values(contentValue.encoding) as IHttpEncoding[]));
+      encodings.push(...(Object.values(contentValue.encoding) as IHttpEncoding<true>[]));
     }
 
     if ('example' in contentValue) {
@@ -172,7 +172,10 @@ const translateSchemaMediaTypeObject = withContext<Oas3TranslateFunction<[schema
 );
 
 export const translateMediaTypeObject = withContext<
-  Oas3TranslateFunction<ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>, Optional<IMediaTypeContent>>
+  Oas3TranslateFunction<
+    ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>,
+    Optional<IMediaTypeContent<true>>
+  >
 >(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 

@@ -5,6 +5,7 @@ import type {
   IHttpOperationRequestBody,
   IHttpParam,
   Optional,
+  Reference,
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
@@ -25,7 +26,7 @@ import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody | ReferenceObject>
+  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody<true> | ReferenceObject>
 >(function (requestBodyObject) {
   const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
   if (isReferenceObject(maybeRequestBodyObject)) {
@@ -70,7 +71,7 @@ const translateParameterObjectSchema = withContext<
 });
 
 export const translateParameterObject = withContext<
-  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam>
+  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
 >(function (parameterObject) {
   const kind = parameterObject.in === 'path' ? 'path_param' : parameterObject.in;
   const name = parameterObject.name;
@@ -125,9 +126,12 @@ export const translateParameterObject = withContext<
 const iterateOasParams = createOasParamsIterator(OasVersion.OAS3);
 
 export const translateToRequest = withContext<
-  Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IHttpOperationRequest>
+  Oas3TranslateFunction<
+    [path: Record<string, unknown>, operation: Record<string, unknown>],
+    IHttpOperationRequest<true>
+  >
 >(function (path, operation) {
-  const params: Omit<IHttpOperationRequest, 'header'> & { header: IHttpHeaderParam[] } = {
+  const params: Omit<IHttpOperationRequest<true>, 'header'> & { header: (IHttpHeaderParam<true> | Reference)[] } = {
     header: [],
     query: [],
     cookie: [],
@@ -136,10 +140,14 @@ export const translateToRequest = withContext<
 
   for (const param of iterateOasParams.call(this, path, operation)) {
     const { in: key } = param;
-    const target = params[key];
+    const target = params[key!];
     if (!Array.isArray(target)) continue;
 
-    target.push(translateParameterObject.call(this, param) as any);
+    if (isReferenceObject(param)) {
+      target.push({ $ref: param.$ref });
+    } else {
+      target.push(translateParameterObject.call(this, param) as any);
+    }
   }
 
   return {

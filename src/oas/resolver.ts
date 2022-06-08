@@ -1,4 +1,4 @@
-import { resolveInlineRefWithLocation } from '@stoplight/json';
+import { isPlainObject, resolveInlineRefWithLocation } from '@stoplight/json';
 import type { JsonPath } from '@stoplight/types';
 
 import type { AvailableContext, RefResolver } from '../types';
@@ -28,4 +28,17 @@ export const resolveRef: RefResolver = function (target) {
   }
 
   return resolved;
+};
+
+export const bundleResolveRef: RefResolver = function (target) {
+  const output = resolveRef.call(this, target);
+  if (isPlainObject(output) && 'in' in output) {
+    // for params :/
+    return {
+      ...target,
+      in: output.in,
+    };
+  }
+
+  return target;
 };

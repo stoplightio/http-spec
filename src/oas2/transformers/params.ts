@@ -8,6 +8,7 @@ import {
   IHttpPathParam,
   IHttpQueryParam,
   Optional,
+  Reference,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import type {
@@ -23,9 +24,9 @@ import pick = require('lodash.pick');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
-import { Oas2ParamBase } from '../../oas/guards';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
+import type { Oas2ParamBase } from '../../oas/types';
 import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { getExamplesFromSchema } from '../accessors';
@@ -64,7 +65,10 @@ function chooseQueryParameterStyle(
 }
 
 export const translateToHeaderParam = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }], IHttpHeaderParam>
+  Oas2TranslateFunction<
+    [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
+    IHttpHeaderParam<true>
+  >
 >(function (param) {
   const name = param.name;
 
@@ -85,7 +89,7 @@ export const translateToHeaderParam = withContext<
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
-  Optional<IHttpHeaderParam>
+  Optional<IHttpHeaderParam<true>>
 > = function ([name, value]) {
   if (!isPlainObject(value)) return;
   const param = { name, in: 'header', ...value };
@@ -93,9 +97,10 @@ const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   return translateToHeaderParam.call(this, param);
 };
 
-export const translateToHeaderParams: Oas2TranslateFunction<[headers: unknown], IHttpHeaderParam[]> = function (
-  headers,
-) {
+export const translateToHeaderParams: Oas2TranslateFunction<
+  [headers: unknown],
+  (IHttpHeaderParam<true> | Reference)[]
+> = function (headers) {
   return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
 };
 
@@ -226,7 +231,7 @@ function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): I
 }
 
 export const translateToQueryParameter = withContext<
-  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam>
+  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam<true>>
 >(function (param) {
   const name = param.name;
 
@@ -248,7 +253,7 @@ export const translateToQueryParameter = withContext<
 });
 
 export const translateToPathParameter = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam>
+  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam<true>>
 >(function (param) {
   const name = param.name;
 

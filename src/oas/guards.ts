@@ -3,7 +3,14 @@ import { DeepPartial, HttpParamStyles } from '@stoplight/types';
 import type * as OAS3 from 'openapi3-ts';
 import type * as OAS2 from 'swagger-schema-official';
 
-import type { OperationObject, PathItemObject, ReferenceObject } from './types';
+import type {
+  Oas2ParamBase,
+  Oas3ParamBase,
+  OperationObject,
+  ParamBase,
+  PathItemObject,
+  ReferenceObject,
+} from './types';
 
 const HTTP_VERBS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -17,10 +24,6 @@ const VALID_OAS3_PARAM_LOCATION: OAS3.ParameterLocation[] = ['query', 'header', 
 const VALID_OAS2_PARAM_LOCATION: OAS2.BaseParameter['in'][] = ['query', 'header', 'path', 'body', 'formData'];
 
 const VALID_PARAM_STYLES: HttpParamStyles[] = Object.values(HttpParamStyles);
-
-export type Oas3ParamBase = { name: string; in: OAS3.ParameterLocation };
-export type Oas2ParamBase = { name: string; in: OAS2.BaseParameter['in'] };
-export type ParamBase = { name: string; in: string };
 
 export const isValidParameterObject = (param: unknown): param is ParamBase =>
   isPlainObject(param) && typeof param.name === 'string' && typeof param.in === 'string';

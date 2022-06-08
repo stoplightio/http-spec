@@ -27,5 +27,5 @@ export const transformOas2Operation: Oas2HttpOperationTransformer = ({ document:
     servers: translateToServers.call(ctx, operation),
     request: translateToRequest.call(ctx, pathObj, operation),
     security: translateToSecurities.call(ctx, operation.security),
-  };
+  } as any;
 };

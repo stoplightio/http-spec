@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@stoplight/types": {
-      "signature": "d2436a77d61551fb3c51e49353997708",
+      "signature": "7dd53c0f6cd0fa550fc0ed26f5e42e94",
       "file": true,
       "replaced": "^13.0.0"
     }

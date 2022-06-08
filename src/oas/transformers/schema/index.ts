@@ -24,7 +24,7 @@ const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
 export const translateSchemaObject = withContext<
   TranslateFunction<
     DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6 | JSONSchema7>,
-    [schema: OASSchemaObject],
+    [schema: unknown],
     JSONSchema7
   >
 >(function (schema) {

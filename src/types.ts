@@ -11,6 +11,7 @@ export type RefResolver<T extends Fragment = Fragment> = (
 
 export interface ITransformServiceOpts<T extends Fragment> {
   document: T;
+  ctx?: TransformerContext<T>;
 }
 
 export type HttpServiceTransformer<T> = (opts: T) => IHttpService;
@@ -19,6 +20,7 @@ export interface ITransformOperationOpts<T extends Fragment> {
   document: T;
   path: string;
   method: string;
+  ctx?: TransformerContext<T>;
 }
 
 export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;

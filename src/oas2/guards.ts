@@ -1,7 +1,8 @@
 import { isPlainObject } from '@stoplight/json';
 import type { Response, Security } from 'swagger-schema-official';
 
-import { isValidOas2ParameterObject, Oas2ParamBase } from '../oas/guards';
+import { isValidOas2ParameterObject } from '../oas/guards';
+import type { Oas2ParamBase } from '../oas/types';
 
 export function isSecurityScheme(maybeSecurityScheme: unknown): maybeSecurityScheme is Security {
   return isPlainObject(maybeSecurityScheme) && typeof maybeSecurityScheme.type === 'string';

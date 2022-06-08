@@ -3,15 +3,8 @@ import type { ReferenceObject } from 'openapi3-ts';
 
 import { Fragment, TransformerContext } from '../types';
 import { entries } from '../utils';
-import {
-  isReferenceObject,
-  isValidOas2ParameterObject,
-  isValidOas3ParameterObject,
-  Oas2ParamBase,
-  Oas3ParamBase,
-  ParamBase,
-} from './guards';
-import { OasVersion } from './types';
+import { isReferenceObject, isValidOas2ParameterObject, isValidOas3ParameterObject } from './guards';
+import { Oas2ParamBase, Oas3ParamBase, OasVersion, ParamBase } from './types';
 
 const ROOT_EXTENSIONS = ['x-internal'];
 
@@ -19,11 +12,20 @@ const getIdForParameter = (param: ParamBase) => `${param.name}-${param.in}`;
 
 type OasParamsIterator<N> = (this: TransformerContext, path: Fragment, operation: Fragment) => Iterable<N>;
 
-export function createOasParamsIterator(spec: OasVersion.OAS2): OasParamsIterator<Oas2ParamBase | ReferenceObject>;
-export function createOasParamsIterator(spec: OasVersion.OAS3): OasParamsIterator<Oas3ParamBase | ReferenceObject>;
+export function createOasParamsIterator(
+  spec: OasVersion.OAS2,
+): OasParamsIterator<Oas2ParamBase | (ReferenceObject & { in?: Oas2ParamBase['in'] })>;
+export function createOasParamsIterator(
+  spec: OasVersion.OAS3,
+): OasParamsIterator<Oas3ParamBase | (ReferenceObject & { in?: Oas3ParamBase['in'] })>;
 export function createOasParamsIterator(
   spec: OasVersion,
-): OasParamsIterator<Oas2ParamBase | Oas3ParamBase | ReferenceObject> {
+): OasParamsIterator<
+  | Oas2ParamBase
+  | Oas3ParamBase
+  | (ReferenceObject & { in?: Oas2ParamBase['in'] })
+  | (ReferenceObject & { in?: Oas3ParamBase['in'] })
+> {
   return function* (path, operation) {
     const seenParams = new Set();
     const { parentId, context } = this;

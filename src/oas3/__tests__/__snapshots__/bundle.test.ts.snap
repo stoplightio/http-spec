@@ -1,0 +1,375 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works 1`] = `
+Object {
+  "components": Object {
+    "examples": Object {
+      "A-Shared-Example": Object {
+        "id": "0f9f1fcfc67d3",
+        "key": "A-Shared-Example",
+        "value": Object {
+          "address": Object {
+            "street": "string",
+          },
+          "id": 0,
+        },
+      },
+    },
+    "parameters": Object {
+      "Some-Header": Object {
+        "examples": Array [],
+        "id": "0c538650d4f74",
+        "name": "A-Shared-Header",
+        "required": false,
+        "schema": Object {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "string",
+          "x-stoplight": Object {
+            "id": "7f5ebd47b1207",
+          },
+        },
+        "style": "simple",
+      },
+    },
+    "requestBodies": Object {},
+    "responses": Object {
+      "ErrorResponse": Object {
+        "code": "ErrorResponse",
+        "contents": Array [
+          Object {
+            "encodings": Array [],
+            "examples": Array [],
+            "id": "03ab56cba103e",
+            "mediaType": "application/json",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "error": Object {
+                  "$ref": "#/components/schemas/Error",
+                },
+              },
+              "type": "object",
+              "x-stoplight": Object {
+                "id": "018510ab9050b",
+              },
+            },
+          },
+        ],
+        "description": "A generic error response.",
+        "headers": Array [],
+        "id": "e28ad0b661a13",
+      },
+    },
+    "schemas": Object {
+      "Address": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "examples": Array [
+          Object {
+            "street": "422 W Riverside Drive",
+          },
+        ],
+        "properties": Object {
+          "street": Object {
+            "type": "string",
+          },
+        },
+        "title": "Address",
+        "type": "object",
+        "x-stoplight": Object {
+          "id": "b89da81825037",
+        },
+      },
+      "Error": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": Object {
+          "code": Object {
+            "type": "number",
+          },
+          "msg": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "code",
+          "msg",
+        ],
+        "title": "Error",
+        "type": "object",
+        "x-stoplight": Object {
+          "id": "b89da81825037",
+        },
+      },
+      "User": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "examples": Array [],
+        "properties": Object {
+          "address": Object {
+            "$ref": "#/components/schemas/Address",
+          },
+          "id": Object {
+            "readOnly": true,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "id",
+        ],
+        "title": "User",
+        "type": "object",
+        "x-stoplight": Object {
+          "id": "b89da81825037",
+        },
+      },
+      "UserId": Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "minimum": 0,
+        "title": "UserId",
+        "type": "number",
+        "x-stoplight": Object {
+          "id": "b89da81825037",
+        },
+      },
+    },
+    "securitySchemes": Object {
+      "api-key": Object {
+        "id": "202a905f9dff6",
+        "in": "query",
+        "key": "api-key",
+        "name": "API Key",
+        "type": "apiKey",
+      },
+    },
+  },
+  "id": "service_abc",
+  "name": "Users API",
+  "operations": Array [
+    Object {
+      "description": "Retrieve the information of the user with the matching user ID.",
+      "extensions": Object {},
+      "id": "96043a63b6901",
+      "iid": "get-user",
+      "method": "get",
+      "path": "/users/{userId}",
+      "request": Object {
+        "body": Object {
+          "contents": Array [],
+          "id": "d5027559477f8",
+        },
+        "cookie": Array [],
+        "headers": Array [
+          Object {
+            "$ref": "#/components/parameters/Some-Header",
+          },
+        ],
+        "path": Array [
+          Object {
+            "description": "Id of an existing user.",
+            "examples": Array [],
+            "id": "fe171ec8cfd0b",
+            "name": "userId",
+            "required": true,
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "integer",
+              "x-stoplight": Object {
+                "id": "13ad531bed72e",
+              },
+            },
+            "style": "simple",
+          },
+        ],
+        "query": Array [
+          Object {
+            "examples": Array [],
+            "id": "efe9534d001fc",
+            "name": "summaryOnly",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "boolean",
+              "x-stoplight": Object {
+                "id": "aca62504578bd",
+              },
+            },
+            "style": "form",
+          },
+        ],
+      },
+      "responses": Array [
+        Object {
+          "code": "200",
+          "contents": Array [
+            Object {
+              "encodings": Array [],
+              "examples": Array [],
+              "id": "fce50f391bf57",
+              "mediaType": "application/json",
+              "schema": Object {
+                "$ref": "#/components/schemas/User",
+              },
+            },
+            Object {
+              "encodings": Array [],
+              "examples": Array [],
+              "id": "48eeb3ee2a049",
+              "mediaType": "application/xml",
+              "schema": Object {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "string",
+                "x-stoplight": Object {
+                  "id": "069dfbb6c6315",
+                },
+              },
+            },
+          ],
+          "description": "User Found",
+          "headers": Array [],
+          "id": "f387e16c7d39d",
+        },
+        Object {
+          "$ref": "#/components/responses/ErrorResponse",
+        },
+      ],
+      "security": Array [],
+      "servers": Array [
+        Object {
+          "id": "98ddf8a4b5bdc",
+          "name": "Users API",
+          "url": "http://localhost:3000",
+        },
+      ],
+      "summary": "Get User Info by User ID",
+      "tags": Array [
+        Object {
+          "id": "9862017e672e6",
+          "name": "tag-without-root-def",
+        },
+      ],
+    },
+    Object {
+      "extensions": Object {},
+      "id": "b16a96d287951",
+      "iid": "post-users-userId",
+      "method": "post",
+      "path": "/users/{userId}",
+      "request": Object {
+        "body": Object {
+          "contents": Array [
+            Object {
+              "encodings": Array [],
+              "examples": Array [
+                Object {
+                  "$ref": "#/components/examples/A-Shared-Example",
+                },
+              ],
+              "id": "00db77c676e1a",
+              "mediaType": "application/json",
+              "schema": Object {
+                "$ref": "#/components/schemas/User",
+              },
+            },
+          ],
+          "id": "07267ec331fc9",
+        },
+        "cookie": Array [],
+        "headers": Array [
+          Object {
+            "examples": Array [],
+            "id": "1ead595922478",
+            "name": "Post-Specific-Header",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "integer",
+              "x-stoplight": Object {
+                "id": "de5897f178a5d",
+              },
+            },
+            "style": "simple",
+          },
+          Object {
+            "$ref": "#/components/parameters/Some-Header",
+          },
+        ],
+        "path": Array [
+          Object {
+            "description": "Id of an existing user.",
+            "examples": Array [],
+            "id": "fe171ec8cfd0b",
+            "name": "userId",
+            "required": true,
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "integer",
+              "x-stoplight": Object {
+                "id": "13ad531bed72e",
+              },
+            },
+            "style": "simple",
+          },
+        ],
+        "query": Array [],
+      },
+      "responses": Array [
+        Object {
+          "code": "201",
+          "contents": Array [
+            Object {
+              "encodings": Array [],
+              "examples": Array [],
+              "id": "88460a8f1a612",
+              "mediaType": "application/json",
+              "schema": Object {
+                "$ref": "#/components/schemas/User",
+              },
+            },
+          ],
+          "description": "User Created",
+          "headers": Array [],
+          "id": "d8ca38606ee5d",
+        },
+        Object {
+          "$ref": "#/components/responses/ErrorResponse",
+        },
+      ],
+      "security": Array [
+        Array [
+          Object {
+            "id": "202a905f9dff6",
+            "in": "query",
+            "key": "api-key",
+            "name": "API Key",
+            "type": "apiKey",
+          },
+        ],
+      ],
+      "servers": Array [
+        Object {
+          "id": "98ddf8a4b5bdc",
+          "name": "Users API",
+          "url": "http://localhost:3000",
+        },
+      ],
+      "summary": "Create user",
+      "tags": Array [
+        Object {
+          "id": "936737e88c6fa",
+          "name": "mutates",
+        },
+      ],
+    },
+  ],
+  "servers": Array [
+    Object {
+      "id": "98ddf8a4b5bdc",
+      "name": "Users API",
+      "url": "http://localhost:3000",
+    },
+  ],
+  "tags": Array [
+    Object {
+      "id": "936737e88c6fa",
+      "name": "mutates",
+    },
+  ],
+  "version": "1.0",
+}
+`;

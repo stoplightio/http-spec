@@ -5,18 +5,19 @@ import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { isBoolean, isString } from '../guards';
-import type { HttpOperationTransformer } from '../types';
-import { TranslateFunction } from '../types';
+import type { Fragment, HttpOperationTransformer } from '../types';
+import { TransformerContext, TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
 import { isOperationObject, isPathItemObject } from './guards';
 import { translateToTags } from './tags';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
-export function transformOasOperations(
-  document: DeepPartial<Spec | OpenAPIObject>,
+export function transformOasOperations<T extends Fragment & DeepPartial<Spec | OpenAPIObject>>(
+  document: T,
   transformer: HttpOperationTransformer<any>,
   methods: string[] | null = DEFAULT_METHODS,
+  ctx?: TransformerContext<T>,
 ): IHttpOperation[] {
   const paths = isPlainObject(document.paths) ? Object.keys(document.paths) : [];
 
@@ -34,6 +35,7 @@ export function transformOasOperations(
         document,
         path,
         method,
+        ctx,
       }),
     );
   });

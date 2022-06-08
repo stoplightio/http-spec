@@ -32,6 +32,10 @@ export type Oas3TransformOperationOpts = ITransformOperationOpts<DeepPartial<OAS
 export type Oas2HttpOperationTransformer = HttpOperationTransformer<Oas2TransformOperationOpts>;
 export type Oas3HttpOperationTransformer = HttpOperationTransformer<Oas3TransformOperationOpts>;
 
+export type Oas3ParamBase = { name: string; in: OAS3.ParameterLocation };
+export type Oas2ParamBase = { name: string; in: OAS2.BaseParameter['in'] };
+export type ParamBase = { name: string; in: string };
+
 export type PathItemObject = Omit<OAS2.Path, '$ref'> | Omit<OAS3.PathItemObject, '$ref'>;
 export type ReferenceObject = OAS2.Reference | OAS3.ReferenceObject;
 export type OperationObject = OAS2.Operation | OAS3.OperationObject;

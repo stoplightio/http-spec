@@ -18,7 +18,7 @@ import { translateToHeaderParams } from './params';
 const translateToResponse = withContext<
   Oas2TranslateFunction<
     [produces: string[], statusCode: string, response: unknown],
-    Optional<IHttpOperationResponse | Reference>
+    Optional<IHttpOperationResponse<true> | Reference>
   >
 >(function (produces, statusCode, response) {
   const maybeResponseObject = this.maybeResolveLocalRef(response);
@@ -34,7 +34,7 @@ const translateToResponse = withContext<
   ).map(([key, value]) => translateToDefaultExample.call(this, key, value));
 
   const contents = produces
-    .map<IMediaTypeContent & { examples: NonNullable<IMediaTypeContent['examples']> }>(
+    .map<IMediaTypeContent<true> & { examples: NonNullable<IMediaTypeContent<true>['examples']> }>(
       withContext(produceElement => ({
         id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
         mediaType: produceElement,
@@ -78,7 +78,7 @@ const translateToResponse = withContext<
 
 export const translateToResponses: Oas2TranslateFunction<
   [operation: DeepPartial<Operation>],
-  (IHttpOperationResponse | Reference)[]
+  (IHttpOperationResponse<true> | Reference)[]
 > = function (operation) {
   const produces = getProduces(this.document, operation);
   return entries(operation.responses)

@@ -11,10 +11,10 @@ import { isResponseObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateHeaderObject, translateMediaTypeObject } from './content';
 
-const translateToResponse = withContext<
+export const translateToResponse = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[statusCode: string, response: unknown]>,
-    Optional<IHttpOperationResponse | Reference>
+    Optional<IHttpOperationResponse<true> | Reference>
   >
 >(function ([statusCode, response]) {
   const maybeResponseObject = this.maybeResolveLocalRef(response);
@@ -42,7 +42,9 @@ const translateToResponse = withContext<
   };
 });
 
-export const translateToResponses: Oas3TranslateFunction<[responses: unknown], (IHttpOperationResponse | Reference)[]> =
-  function (responses) {
-    return entries(responses).map(translateToResponse, this).filter(isNonNullable);
-  };
+export const translateToResponses: Oas3TranslateFunction<
+  [responses: unknown],
+  (IHttpOperationResponse<true> | Reference)[]
+> = function (responses) {
+  return entries(responses).map(translateToResponse, this).filter(isNonNullable);
+};

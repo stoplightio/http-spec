@@ -5,17 +5,50 @@ import pickBy = require('lodash.pickby');
 import { withContext } from '../context';
 import { isNonNullable } from '../guards';
 import { createContext } from '../oas/context';
+import { bundleResolveRef } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
+import { translateSchemaObject } from '../oas/transformers';
+import { translateToComponents } from '../oas/transformers/components';
 import type { Oas3HttpServiceTransformer } from '../oas/types';
 import { ArrayCallbackParameters } from '../types';
 import { entries } from '../utils';
 import { isSecurityScheme } from './guards';
+import { transformOas3Operations } from './operation';
+import { translateToExample } from './transformers/examples';
+import { translateParameterObject, translateRequestBody } from './transformers/request';
+import { translateToResponse } from './transformers/responses';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas3TranslateFunction } from './types';
 
-export const transformOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
-  const ctx = createContext(_document);
+export const bundleOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
+  const ctx = createContext(_document, bundleResolveRef);
+  const { document } = ctx;
+  const { securitySchemes, ...service } = transformOas3Service({ document, ctx });
+
+  return {
+    ...service,
+    operations: transformOas3Operations(document, ctx),
+    components: translateToComponents.call(ctx, document.components, {
+      response: translateToResponse,
+      requestBody: translateRequestBody,
+      securityScheme: translateSecurityScheme,
+      example: translateToExample,
+      schema(this: typeof ctx, [, value]) {
+        return translateSchemaObject.call(this, value);
+      },
+      parameter(this: typeof ctx, [, value]) {
+        // todo: any
+        return translateParameterObject.call(this, value as any);
+      },
+    }),
+  };
+};
+
+export const transformOas3Service: Oas3HttpServiceTransformer = ({
+  document: _document,
+  ctx = createContext(_document),
+}) => {
   const { document } = ctx;
   const httpService = transformOasService.call(ctx);
 
