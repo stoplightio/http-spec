@@ -1,11 +1,11 @@
-import { DeepPartial } from '@stoplight/types';
+import { DeepPartial, IHttpOperationResponse } from '@stoplight/types';
 import { Operation, Schema, Spec } from 'swagger-schema-official';
 
 import { createContext } from '../../../oas/context';
 import { translateToResponses as _translateToResponses } from '../responses';
 
 const translateToResponses = (document: DeepPartial<Spec>, responses: DeepPartial<Operation['responses']>) =>
-  _translateToResponses.call(createContext(document), { responses });
+  _translateToResponses.call(createContext(document), { responses }) as unknown as IHttpOperationResponse[];
 
 describe('responses', () => {
   const produces = ['application/json', 'application/xml'];

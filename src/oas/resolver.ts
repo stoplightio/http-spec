@@ -1,9 +1,9 @@
-import { isPlainObject, resolveInlineRefWithLocation } from '@stoplight/json';
+import { resolveInlineRefWithLocation } from '@stoplight/json';
 import type { JsonPath } from '@stoplight/types';
 
 import type { AvailableContext, RefResolver } from '../types';
 
-function inferContext(path: JsonPath): AvailableContext {
+export function inferContext(path: JsonPath): AvailableContext {
   if (path.length < 2 || path[0] !== 'paths') return 'service';
   if (path.length === 2 || path[3] === 'parameters' || path[3] === 'servers') return 'path';
   return 'operation';
@@ -15,8 +15,16 @@ export function getSharedKey(value: object) {
   return SHARED_COMPONENTS_KEYS.get(value);
 }
 
-export function setSharedKey(value: object, key: string) {
-  return SHARED_COMPONENTS_KEYS.set(value, key);
+export function setSharedKey(value: unknown, key: string) {
+  if (typeof value === 'object' && value !== null) {
+    return SHARED_COMPONENTS_KEYS.set(value, key);
+  }
+
+  return false;
+}
+
+export function getComponentName($ref: string) {
+  return $ref.match(/^#\/components\/([A-Za-z]+)\//)?.[1];
 }
 
 export const resolveRef: RefResolver = function (target) {
@@ -35,12 +43,12 @@ export const resolveRef: RefResolver = function (target) {
 };
 
 export const bundleResolveRef: RefResolver = function (target) {
-  const output = resolveRef.call(this, target);
-  if (isPlainObject(output) && 'in' in output) {
-    // for params :/
+  resolveRef.call(this, target);
+
+  if (target.$ref in this.$refs) {
     return {
       ...target,
-      in: output.in,
+      $ref: this.$refs[target.$ref],
     };
   }
 

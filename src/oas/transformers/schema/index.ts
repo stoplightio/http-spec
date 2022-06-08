@@ -15,6 +15,7 @@ const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
   structs: string[];
+  $refs: Record<string, string>;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -29,19 +30,31 @@ export const translateSchemaObject = withContext<
   >
 >(function (schema) {
   const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+  if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
+  const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject)) : '';
+  return translateSchemaObjectFromPair.call(this, [actualKey, maybeSchemaObject]);
+});
+
+export const translateSchemaObjectFromPair = withContext<
+  TranslateFunction<
+    DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6 | JSONSchema7>,
+    [[key: string, schema: unknown]],
+    JSONSchema7
+  >
+>(function ([key, schema]) {
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
 
   if (!isPlainObject(maybeSchemaObject)) return {};
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
 
   let cached = PROCESSED_SCHEMAS.get(maybeSchemaObject);
   if (cached) {
-    return { ...cached };
+    return cached;
   }
 
-  const actualKey = this.context === 'service' ? getSharedKey(maybeSchemaObject) : '';
-  const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
+  const id = this.generateId(`schema-${this.parentId}-${key}`);
 
-  cached = convertSchema(this.document, maybeSchemaObject);
+  cached = convertSchema(this.document, maybeSchemaObject, this.$refs);
   cached['x-stoplight'] = {
     ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
     id,
@@ -51,7 +64,7 @@ export const translateSchemaObject = withContext<
   return cached;
 });
 
-export function convertSchema(document: Fragment, schema: OASSchemaObject) {
+export function convertSchema(document: Fragment, schema: OASSchemaObject, $refs: Record<string, string> = {}) {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,
@@ -63,6 +76,7 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
 
   const clonedSchema = _convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
+    $refs,
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
@@ -70,10 +84,22 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
 }
 
 function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
+  if (isReferenceObject(schema)) {
+    return new Proxy(schema, {
+      get(target, key) {
+        if (key === '$ref') {
+          return options.$refs[schema.$ref] ?? schema.$ref;
+        }
+
+        return target[key];
+      },
+    });
+  }
+
   let processedSchema = PROCESSED_SCHEMAS.get(schema);
 
   if (processedSchema) {
-    return { ...processedSchema };
+    return processedSchema;
   }
 
   const clonedSchema: OASSchemaObject | JSONSchema7 = { ...schema };

@@ -35,7 +35,7 @@ export function createOasParamsIterator(
     for (let i = 0; i < params.length; i++) {
       const maybeParameterObject = this.maybeResolveLocalRef(params[i]);
       if (isReferenceObject(maybeParameterObject)) {
-        yield maybeParameterObject;
+        yield params[i];
         continue;
       }
 

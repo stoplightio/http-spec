@@ -2,6 +2,7 @@ import { isPlainObject } from '@stoplight/json';
 import {
   DeepPartial,
   HttpParamStyles,
+  IBundledHttpService,
   IHttpEncoding,
   IHttpHeaderParam,
   IHttpOperationRequestBody,
@@ -24,13 +25,15 @@ import pick = require('lodash.pick');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
+import { isValidOas2ParameterObject } from '../../oas/guards';
+import { setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
-import { ArrayCallbackParameters } from '../../types';
+import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
 import { getExamplesFromSchema } from '../accessors';
-import { isHeaderParam } from '../guards';
+import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
 function chooseQueryParameterStyle(
@@ -324,3 +327,43 @@ const buildSchemaForParameter: Oas2TranslateFunction<
     ),
   };
 };
+
+type ParameterComponents = Pick<IBundledHttpService['components'], 'query' | 'header' | 'path' | 'cookie'>;
+
+export const translateToSharedParameters = withContext<Oas2TranslateFunction<[root: Fragment], ParameterComponents>>(
+  function (root) {
+    const sharedParameters: ParameterComponents = {
+      header: [],
+      query: [],
+      cookie: [],
+      path: [],
+    };
+
+    for (const [key, value] of entries(root.parameters)) {
+      setSharedKey(value, key);
+
+      if (!isValidOas2ParameterObject(value)) continue;
+
+      this.$refs[`#/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
+
+      if (isQueryParam(value)) {
+        sharedParameters.query.push({
+          key,
+          ...translateToQueryParameter.call(this, value),
+        });
+      } else if (isPathParam(value)) {
+        sharedParameters.path.push({
+          key,
+          ...(translateToPathParameter.call(this, value) as any),
+        });
+      } else if (isHeaderParam(value)) {
+        sharedParameters.header.push({
+          key,
+          ...translateToHeaderParam.call(this, value),
+        });
+      }
+    }
+
+    return sharedParameters;
+  },
+);

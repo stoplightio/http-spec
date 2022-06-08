@@ -1,42 +1,76 @@
 import { isPlainObject } from '@stoplight/json';
 import type { IBundledHttpService, Optional } from '@stoplight/types';
 
-import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
-import type { ArrayCallbackParameters, Fragment, TranslateFunction } from '../../types';
+import type { ArrayCallbackParameters, Fragment, TransformerContext } from '../../types';
 import { entries } from '../../utils';
+import { setSharedKey } from '../resolver';
+import { OasVersion } from '../types';
 
-function fromNonNullableEntries<T>(entries: [key: string, value: T][]) {
-  return Object.fromEntries(entries.filter(([, value]) => isNonNullable(value))) as any;
+interface Components {
+  responses: IBundledHttpService['components']['responses'];
+  definitions: IBundledHttpService['components']['schemas'];
+  schemas: IBundledHttpService['components']['schemas'];
+  requestBodies: IBundledHttpService['components']['requestBodies'];
+  examples: IBundledHttpService['components']['examples'];
+  securitySchemes: IBundledHttpService['components']['securitySchemes'];
 }
 
-const invokeTranslator = withContext(function (input: unknown, translator: any) {
-  return fromNonNullableEntries(entries(input).map((...args) => [args[0][0], translator.call(this, ...args)]));
-});
-
-type Translator<K extends keyof IBundledHttpService['components']> = (
+type Translator<K extends keyof Components> = (
   ...params: ArrayCallbackParameters<[key: string, response: unknown]>
-) => Optional<IBundledHttpService['components'][K][string]>;
+) => Optional<Omit<Components[K][number], 'key'>>;
 
 type Translators = {
-  response: Translator<'responses'>;
-  schema: Translator<'schemas'>;
-  parameter: Translator<'parameters'>;
-  requestBody: Translator<'requestBodies'>;
-  example: Translator<'examples'>;
-  securityScheme: Translator<'securitySchemes'>;
+  responses: Translator<'responses'>;
+  definitions?: Translator<'schemas'>;
+  schemas?: Translator<'schemas'>;
+  requestBodies?: Translator<'requestBodies'>;
+  examples?: Translator<'examples'>;
+  securitySchemes?: Translator<'securitySchemes'>;
 };
 
-export const translateToComponents = withContext<
-  TranslateFunction<Fragment, [root: unknown, translators: Translators], IBundledHttpService['components']>
->(function (_root, translators) {
-  const root = isPlainObject(_root) ? _root : {};
+function invokeTranslator<K extends keyof Components = keyof Components>(
+  ctx: TransformerContext<Fragment>,
+  root: '#/components' | '#',
+  translators: Translators,
+  kind: K,
+): Components[K] {
+  const translator = translators[kind];
+  const input = root === '#/components' ? ctx.document.components : ctx.document;
+  if (translator === void 0 || !isPlainObject(input)) return [];
+
+  const objects: Components[K] = [];
+  const items = entries(input[kind]);
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const [key, value] = item;
+    setSharedKey(value, key);
+
+    const translated = translator.call(ctx, items[i], i, items);
+    if (!isNonNullable(translated)) continue;
+
+    ctx.$refs[`${root}/${kind}/${key}`] = `#/components/${kind === 'definitions' ? 'schemas' : kind}/${objects.length}`;
+    (translated as Components[K][number]).key = key;
+    objects.push(translated as any);
+  }
+
+  return objects;
+}
+
+export const translateToComponents = function (
+  this: TransformerContext<Fragment>,
+  spec: OasVersion,
+  translators: Translators,
+): Pick<IBundledHttpService['components'], 'responses' | 'schemas' | 'requestBodies' | 'examples' | 'securitySchemes'> {
+  const root = spec === OasVersion.OAS3 ? '#/components' : '#';
+
   return {
-    responses: invokeTranslator.call(this, root.responses, translators.response),
-    schemas: invokeTranslator.call(this, root.schemas, translators.schema),
-    parameters: invokeTranslator.call(this, root.parameters, translators.parameter),
-    requestBodies: invokeTranslator.call(this, root.requestBodies, translators.requestBody),
-    examples: invokeTranslator.call(this, root.examples, translators.example),
-    securitySchemes: invokeTranslator.call(this, root.securitySchemes, translators.securityScheme),
+    // TS doesn't seem to like .call(this) here
+    responses: invokeTranslator(this, root, translators, 'responses'),
+    schemas: invokeTranslator(this, root, translators, spec === OasVersion.OAS3 ? 'schemas' : 'definitions'),
+    requestBodies: invokeTranslator(this, root, translators, 'requestBodies'),
+    examples: invokeTranslator(this, root, translators, 'examples'),
+    securitySchemes: invokeTranslator(this, root, translators, 'securitySchemes'),
   };
-});
+};

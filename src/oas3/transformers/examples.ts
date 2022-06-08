@@ -1,7 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
-import { INodeExample, INodeExternalExample, Optional } from '@stoplight/types';
+import type { INodeExample, INodeExternalExample, Optional, Reference } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import { ReferenceObject } from 'openapi3-ts';
 
 import { withContext } from '../../context';
 import { isString } from '../../guards';
@@ -13,7 +12,7 @@ import type { Oas3TranslateFunction } from '../types';
 export const translateToExample = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[key: string, example: unknown]>,
-    Optional<INodeExample | INodeExternalExample | ReferenceObject>
+    Optional<INodeExample | INodeExternalExample | Reference>
   >
 >(function ([key, example]) {
   const maybeExample = this.maybeResolveLocalRef(example);

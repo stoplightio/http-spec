@@ -48,6 +48,7 @@ export function createContext<T extends Record<string, unknown>>(
       path: '',
       operation: '',
     },
+    $refs: {},
     parentId: '',
   };
 }

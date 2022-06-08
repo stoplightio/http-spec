@@ -1,54 +1,50 @@
 import { isPlainObject } from '@stoplight/json';
-import type { HttpSecurityScheme, Optional } from '@stoplight/types';
+import type { HttpSecurityScheme, IHttpOperation, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../context';
 import { isNonNullable } from '../guards';
 import { createContext } from '../oas/context';
-import { bundleResolveRef, setSharedKey } from '../oas/resolver';
+import { bundleResolveRef } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
-import { translateSchemaObject } from '../oas/transformers';
 import { translateToComponents } from '../oas/transformers/components';
-import type { Oas3HttpServiceTransformer } from '../oas/types';
-import { ArrayCallbackParameters } from '../types';
+import { translateSchemaObjectFromPair } from '../oas/transformers/schema';
+import type { Oas3HttpServiceBundle, Oas3HttpServiceTransformer } from '../oas/types';
+import { OasVersion } from '../oas/types';
+import type { ArrayCallbackParameters } from '../types';
 import { entries } from '../utils';
 import { isSecurityScheme } from './guards';
 import { transformOas3Operations } from './operation';
 import { translateToExample } from './transformers/examples';
-import { translateParameterObject, translateRequestBody } from './transformers/request';
+import { translateToSharedParameters } from './transformers/parameters';
+import { translateRequestBody } from './transformers/request';
 import { translateToResponse } from './transformers/responses';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
-import { Oas3TranslateFunction } from './types';
+import type { Oas3TranslateFunction } from './types';
 
-export const bundleOas3Service: Oas3HttpServiceTransformer = ({ document: _document }) => {
+export const bundleOas3Service: Oas3HttpServiceBundle = ({ document: _document }) => {
   const ctx = createContext(_document, bundleResolveRef);
   const { document } = ctx;
+
   const { securitySchemes, ...service } = transformOas3Service({ document, ctx });
-  const operations = transformOas3Operations(document, ctx);
-  ctx.context = 'service';
+  const components = {
+    ...translateToComponents.call(ctx, OasVersion.OAS3, {
+      responses: translateToResponse,
+      requestBodies: translateRequestBody,
+      examples: translateToExample,
+      schemas: translateSchemaObjectFromPair,
+      securitySchemes: translateSecurityScheme,
+    }),
+    ...translateToSharedParameters.call(ctx, document.components),
+  };
+
+  const operations = transformOas3Operations(document, ctx) as unknown as IHttpOperation<true>[];
 
   return {
     ...service,
     operations,
-    components: translateToComponents.call(ctx, document.components, {
-      response: translateToResponse,
-      requestBody: translateRequestBody,
-      securityScheme: translateSecurityScheme,
-      example: translateToExample,
-      schema(this: typeof ctx, [key, value]) {
-        if (isPlainObject(value)) {
-          setSharedKey(value, key);
-        }
-        return translateSchemaObject.call(this, value);
-      },
-      parameter(this: typeof ctx, [key, value]) {
-        if (isPlainObject(value)) {
-          setSharedKey(value, key);
-        }
-        return translateParameterObject.call(this, value as any);
-      },
-    }),
+    components,
   };
 };
 

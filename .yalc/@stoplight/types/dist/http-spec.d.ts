@@ -1,6 +1,6 @@
 import { JSONSchema7 } from 'json-schema';
 import { Dictionary } from './basic';
-import { IShareableNode, INode, INodeExample, INodeExternalExample } from './graph';
+import { IShareableNode, INode, INodeExample, INodeExternalExample, IComponentNode } from './graph';
 import { IServer } from './servers';
 /**
  * HTTP Service
@@ -32,12 +32,15 @@ export interface IHttpService extends INode, IShareableNode {
 export interface IBundledHttpService extends Omit<IHttpService, 'securitySchemes'> {
     operations: IHttpOperation<true>[];
     components: {
-        schemas: Record<string, JSONSchema7>;
-        responses: Record<string, IHttpOperationResponse<true> | Reference>;
-        parameters: Record<string, IHttpPathParam<true> | IHttpQueryParam<true> | IHttpHeaderParam<true> | IHttpCookieParam<true> | Reference>;
-        examples: Record<string, INodeExample | INodeExternalExample | Reference>;
-        requestBodies: Record<string, IHttpOperationRequestBody<true> | Reference>;
-        securitySchemes: Record<string, HttpSecurityScheme | Reference>;
+        schemas: (IComponentNode & JSONSchema7)[];
+        responses: (IComponentNode & (IHttpOperationResponse<true> | Reference))[];
+        path: (IComponentNode & (IHttpHeaderParam<true> | Reference))[];
+        query: (IComponentNode & (IHttpQueryParam<true> | Reference))[];
+        header: (IComponentNode & (IHttpHeaderParam<true> | Reference))[];
+        cookie: (IComponentNode & (IHttpCookieParam<true> | Reference))[];
+        examples: (IComponentNode & (INodeExample | INodeExternalExample | Reference))[];
+        requestBodies: (IComponentNode & (IHttpOperationRequestBody<true> | Reference))[];
+        securitySchemes: (IComponentNode & (HttpSecurityScheme | Reference))[];
     };
 }
 /**

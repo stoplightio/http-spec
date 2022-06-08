@@ -9,13 +9,14 @@ import type {
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
-import type { ParameterObject, ReferenceObject } from 'openapi3-ts';
+import type { ParameterObject } from 'openapi3-ts';
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
 import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
+import { getComponentName } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
@@ -26,7 +27,7 @@ import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody<true> | ReferenceObject>
+  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody<true> | Reference>
 >(function (requestBodyObject) {
   const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
   if (isReferenceObject(maybeRequestBodyObject)) {
@@ -139,12 +140,18 @@ export const translateToRequest = withContext<
   };
 
   for (const param of iterateOasParams.call(this, path, operation)) {
-    const { in: key } = param;
-    const target = params[key!];
+    let kind;
+    if (isReferenceObject(param)) {
+      kind = (this.$refs[param.$ref] && getComponentName(this.$refs[param.$ref])) || param.$ref;
+    } else {
+      kind = param.in;
+    }
+
+    const target = params[kind];
     if (!Array.isArray(target)) continue;
 
     if (isReferenceObject(param)) {
-      target.push({ $ref: param.$ref });
+      target.push({ ...param, $ref: this.$refs[param.$ref] ?? param.$ref });
     } else {
       target.push(translateParameterObject.call(this, param) as any);
     }

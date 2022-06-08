@@ -1,4 +1,4 @@
-import type { IHttpOperation, IHttpService } from '@stoplight/types';
+import type { IBundledHttpService, IHttpOperation, IHttpService } from '@stoplight/types';
 
 export type Fragment = Record<string, unknown>;
 
@@ -15,6 +15,8 @@ export interface ITransformServiceOpts<T extends Fragment> {
 }
 
 export type HttpServiceTransformer<T> = (opts: T) => IHttpService;
+
+export type HttpServiceBundle<T> = (opts: T) => IBundledHttpService;
 
 export interface ITransformOperationOpts<T extends Fragment> {
   document: T;
@@ -34,6 +36,7 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   context: AvailableContext;
   parentId: string;
   readonly ids: Record<AvailableContext, string>;
+  readonly $refs: Record<string, string>;
   generateId(template: string): string;
   maybeResolveLocalRef(target: unknown): unknown;
 };

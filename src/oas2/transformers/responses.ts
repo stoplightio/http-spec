@@ -15,7 +15,7 @@ import { isResponseObject } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
 
-const translateToResponse = withContext<
+export const translateToResponse = withContext<
   Oas2TranslateFunction<
     [produces: string[], statusCode: string, response: unknown],
     Optional<IHttpOperationResponse<true> | Reference>

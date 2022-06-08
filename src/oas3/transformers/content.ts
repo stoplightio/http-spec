@@ -1,28 +1,17 @@
 import { isPlainObject } from '@stoplight/json';
-import {
-  HttpParamStyles,
-  IHttpEncoding,
-  IHttpHeaderParam,
-  IMediaTypeContent,
-  INodeExample,
-  INodeExternalExample,
-  Optional,
-  Reference,
-} from '@stoplight/types';
+import { HttpParamStyles, IHttpEncoding, IMediaTypeContent, Optional } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
-import { isReferenceObject } from '../../oas/guards';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import type { ReferenceObject } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { isHeaderObject } from '../guards';
 import type { Oas3TranslateFunction } from '../types';
 import { translateToExample } from './examples';
+import { translateHeaderObject } from './headers';
 
 const ACCEPTABLE_STYLES: (string | undefined)[] = [
   HttpParamStyles.Form,
@@ -71,95 +60,6 @@ const translateEncodingPropertyObject = withContext<
       },
       isString,
     ),
-  };
-});
-
-export const translateHeaderObject = withContext<
-  Oas3TranslateFunction<
-    ArrayCallbackParameters<[name: string, headerObject: unknown]>,
-    Optional<IHttpHeaderParam<true> | ReferenceObject>
-  >
->(function ([name, unresolvedHeaderObject]) {
-  const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
-
-  if (!isPlainObject(maybeHeaderObject)) return;
-  if (isReferenceObject(maybeHeaderObject)) return maybeHeaderObject;
-
-  const id = this.generateId(`http_header-${this.parentId}-${name}`);
-
-  if (!isHeaderObject(maybeHeaderObject)) {
-    return {
-      id,
-      encodings: [],
-      examples: [],
-      name,
-      style: HttpParamStyles.Simple,
-    };
-  }
-
-  const { content: contentObject } = maybeHeaderObject;
-
-  const contentValue = isPlainObject(contentObject) ? Object.values(contentObject)[0] : null;
-
-  const baseContent: IHttpHeaderParam = {
-    id,
-    name,
-    style: HttpParamStyles.Simple,
-
-    ...pickBy(
-      {
-        schema: isPlainObject(maybeHeaderObject.schema)
-          ? translateSchemaObject.call(this, maybeHeaderObject.schema)
-          : null,
-        content: maybeHeaderObject.content,
-      },
-      isNonNullable,
-    ),
-
-    ...pickBy(
-      {
-        description: maybeHeaderObject.description,
-      },
-      isString,
-    ),
-
-    ...pickBy(
-      {
-        allowEmptyValue: maybeHeaderObject.allowEmptyValue,
-        allowReserved: maybeHeaderObject.allowReserved,
-        explode: maybeHeaderObject.explode,
-        required: maybeHeaderObject.required,
-        deprecated: maybeHeaderObject.deprecated,
-      },
-      isBoolean,
-    ),
-  };
-
-  const examples: (INodeExample | INodeExternalExample | Reference)[] = [];
-  const encodings: IHttpEncoding<true>[] = [];
-
-  if (isPlainObject(contentValue)) {
-    examples.push(...entries(contentValue.examples).map(translateToExample, this).filter(isNonNullable));
-
-    if (isPlainObject(contentValue.encoding)) {
-      encodings.push(...(Object.values(contentValue.encoding) as IHttpEncoding<true>[]));
-    }
-
-    if ('example' in contentValue) {
-      examples.push(translateToDefaultExample.call(this, '__default_content', contentValue.example));
-    }
-  }
-
-  examples.push(...entries(maybeHeaderObject.examples).map(translateToExample, this).filter(isNonNullable));
-
-  if ('example' in maybeHeaderObject) {
-    examples.push(translateToDefaultExample.call(this, '__default', maybeHeaderObject.example));
-  }
-
-  return {
-    ...baseContent,
-    encodings,
-    examples,
   };
 });
 

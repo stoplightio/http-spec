@@ -55,17 +55,20 @@ function getSecurity(security: unknown, definitions: DeepPartial<Spec['securityD
   });
 }
 
+export function normalizeProducesOrConsumes(input: unknown): string[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  return input.flat().filter(isString);
+}
+
 function getProducesOrConsumes(
   which: 'produces' | 'consumes',
   spec: DeepPartial<Spec>,
   operation: DeepPartial<Operation>,
 ): string[] {
-  const mimeTypes = operation?.[which] || spec?.[which] || [];
-  if (!Array.isArray(mimeTypes)) {
-    return [];
-  }
-
-  return mimeTypes.flat().filter(isString);
+  return normalizeProducesOrConsumes(operation?.[which] || spec?.[which]);
 }
 
 export function getExamplesFromSchema(data: unknown): Record<string, unknown> {

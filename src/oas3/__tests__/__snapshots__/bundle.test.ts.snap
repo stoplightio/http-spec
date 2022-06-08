@@ -3,8 +3,9 @@
 exports[`works 1`] = `
 Object {
   "components": Object {
-    "examples": Object {
-      "A-Shared-Example": Object {
+    "cookie": Array [],
+    "examples": Array [
+      Object {
         "id": "5a69041e065b0",
         "key": "A-Shared-Example",
         "value": Object {
@@ -14,11 +15,12 @@ Object {
           "id": 0,
         },
       },
-    },
-    "parameters": Object {
-      "Some-Header": Object {
+    ],
+    "header": Array [
+      Object {
         "examples": Array [],
         "id": "21b1f96bd26ee",
+        "key": "Some-Header",
         "name": "A-Shared-Header",
         "required": false,
         "schema": Object {
@@ -30,10 +32,12 @@ Object {
         },
         "style": "simple",
       },
-    },
-    "requestBodies": Object {},
-    "responses": Object {
-      "ErrorResponse": Object {
+    ],
+    "path": Array [],
+    "query": Array [],
+    "requestBodies": Array [],
+    "responses": Array [
+      Object {
         "code": "ErrorResponse",
         "contents": Array [
           Object {
@@ -45,7 +49,7 @@ Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "properties": Object {
                 "error": Object {
-                  "$ref": "#/components/schemas/Error",
+                  "$ref": "#/components/schemas/3",
                 },
               },
               "type": "object",
@@ -58,16 +62,40 @@ Object {
         "description": "A generic error response.",
         "headers": Array [],
         "id": "437771f63f179",
+        "key": "ErrorResponse",
       },
-    },
-    "schemas": Object {
-      "Address": Object {
+    ],
+    "schemas": Array [
+      Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "examples": Array [],
+        "key": "User",
+        "properties": Object {
+          "address": Object {
+            "$ref": "#/components/schemas/1",
+          },
+          "id": Object {
+            "readOnly": true,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "id",
+        ],
+        "title": "User",
+        "type": "object",
+        "x-stoplight": Object {
+          "id": "de4f083463b7c",
+        },
+      },
+      Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "examples": Array [
           Object {
             "street": "422 W Riverside Drive",
           },
         ],
+        "key": "Address",
         "properties": Object {
           "street": Object {
             "type": "string",
@@ -79,8 +107,19 @@ Object {
           "id": "8b1562dcd786e",
         },
       },
-      "Error": Object {
+      Object {
         "$schema": "http://json-schema.org/draft-07/schema#",
+        "key": "UserId",
+        "minimum": 0,
+        "title": "UserId",
+        "type": "number",
+        "x-stoplight": Object {
+          "id": "a8978c71e4d00",
+        },
+      },
+      Object {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "key": "Error",
         "properties": Object {
           "code": Object {
             "type": "number",
@@ -99,46 +138,16 @@ Object {
           "id": "da49423a5a9e7",
         },
       },
-      "User": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "examples": Array [],
-        "properties": Object {
-          "address": Object {
-            "$ref": "#/components/schemas/Address",
-          },
-          "id": Object {
-            "readOnly": true,
-            "type": "integer",
-          },
-        },
-        "required": Array [
-          "id",
-        ],
-        "title": "User",
-        "type": "object",
-        "x-stoplight": Object {
-          "id": "de4f083463b7c",
-        },
-      },
-      "UserId": Object {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "minimum": 0,
-        "title": "UserId",
-        "type": "number",
-        "x-stoplight": Object {
-          "id": "a8978c71e4d00",
-        },
-      },
-    },
-    "securitySchemes": Object {
-      "api-key": Object {
+    ],
+    "securitySchemes": Array [
+      Object {
         "id": "202a905f9dff6",
         "in": "query",
         "key": "api-key",
         "name": "API Key",
         "type": "apiKey",
       },
-    },
+    ],
   },
   "id": "service_abc",
   "name": "Users API",
@@ -158,7 +167,7 @@ Object {
         "cookie": Array [],
         "headers": Array [
           Object {
-            "$ref": "#/components/parameters/Some-Header",
+            "$ref": "#/components/header/0",
           },
         ],
         "path": Array [
@@ -204,7 +213,7 @@ Object {
               "id": "fce50f391bf57",
               "mediaType": "application/json",
               "schema": Object {
-                "$ref": "#/components/schemas/User",
+                "$ref": "#/components/schemas/0",
               },
             },
             Object {
@@ -226,7 +235,7 @@ Object {
           "id": "f387e16c7d39d",
         },
         Object {
-          "$ref": "#/components/responses/ErrorResponse",
+          "$ref": "#/components/responses/0",
         },
       ],
       "security": Array [],
@@ -258,13 +267,13 @@ Object {
               "encodings": Array [],
               "examples": Array [
                 Object {
-                  "$ref": "#/components/examples/A-Shared-Example",
+                  "$ref": "#/components/examples/0",
                 },
               ],
               "id": "00db77c676e1a",
               "mediaType": "application/json",
               "schema": Object {
-                "$ref": "#/components/schemas/User",
+                "$ref": "#/components/schemas/0",
               },
             },
           ],
@@ -286,7 +295,7 @@ Object {
             "style": "simple",
           },
           Object {
-            "$ref": "#/components/parameters/Some-Header",
+            "$ref": "#/components/header/0",
           },
         ],
         "path": Array [
@@ -318,7 +327,7 @@ Object {
               "id": "88460a8f1a612",
               "mediaType": "application/json",
               "schema": Object {
-                "$ref": "#/components/schemas/User",
+                "$ref": "#/components/schemas/0",
               },
             },
           ],
@@ -327,7 +336,7 @@ Object {
           "id": "d8ca38606ee5d",
         },
         Object {
-          "$ref": "#/components/responses/ErrorResponse",
+          "$ref": "#/components/responses/0",
         },
       ],
       "security": Array [

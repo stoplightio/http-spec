@@ -9,7 +9,8 @@ import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isResponseObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
-import { translateHeaderObject, translateMediaTypeObject } from './content';
+import { translateMediaTypeObject } from './content';
+import { translateHeaderObject } from './headers';
 
 export const translateToResponse = withContext<
   Oas3TranslateFunction<

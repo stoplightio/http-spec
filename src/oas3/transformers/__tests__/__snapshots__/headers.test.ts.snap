@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateHeaderObject should translate to IHttpHeaderParam 1`] = `
+Object {
+  "allowEmptyValue": true,
+  "allowReserved": true,
+  "content": Object {},
+  "deprecated": true,
+  "description": "descr",
+  "encodings": Array [],
+  "examples": Array [
+    Object {
+      "id": Any<String>,
+      "key": "a",
+      "summary": "example summary",
+      "value": "hey",
+    },
+    Object {
+      "externalValue": "https://stoplight.io/b",
+      "id": Any<String>,
+      "key": "b",
+      "summary": "example summary",
+    },
+    Object {
+      "id": Any<String>,
+      "key": "__default",
+      "value": Object {},
+    },
+  ],
+  "explode": true,
+  "id": Any<String>,
+  "name": "header-name",
+  "required": true,
+  "schema": Object {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "x-stoplight": Object {
+      "id": Any<String>,
+    },
+  },
+  "style": "simple",
+}
+`;

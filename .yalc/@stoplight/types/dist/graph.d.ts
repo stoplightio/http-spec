@@ -2,6 +2,9 @@ import { Extensions } from './http-spec';
 export interface IShareableNode {
     id: string;
 }
+export interface IComponentNode {
+    key: string;
+}
 export interface INode extends IShareableNode {
     /** An internal identifier. For example, the operationId property in OAS. */
     iid?: string;
