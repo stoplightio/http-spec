@@ -7,7 +7,7 @@ import type { Spec } from 'swagger-schema-official';
 import { withContext } from '../../../context';
 import type { Fragment, TranslateFunction } from '../../../types';
 import { isReferenceObject } from '../../guards';
-import { getSharedKey } from '../../resolver';
+import { getSharedKey, syncReferenceObject } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
 
@@ -15,7 +15,7 @@ const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
   structs: string[];
-  $refs: Record<string, string>;
+  references: Record<string, string>;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -54,7 +54,7 @@ export const translateSchemaObjectFromPair = withContext<
 
   const id = this.generateId(`schema-${this.parentId}-${key}`);
 
-  cached = convertSchema(this.document, maybeSchemaObject, this.$refs);
+  cached = convertSchema(this.document, maybeSchemaObject, this.references);
   cached['x-stoplight'] = {
     ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
     id,
@@ -64,7 +64,7 @@ export const translateSchemaObjectFromPair = withContext<
   return cached;
 });
 
-export function convertSchema(document: Fragment, schema: OASSchemaObject, $refs: Record<string, string> = {}) {
+export function convertSchema(document: Fragment, schema: OASSchemaObject, references: Record<string, string> = {}) {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,
@@ -76,7 +76,7 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject, $refs
 
   const clonedSchema = _convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
-    $refs,
+    references,
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
@@ -85,15 +85,7 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject, $refs
 
 function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
   if (isReferenceObject(schema)) {
-    return new Proxy(schema, {
-      get(target, key) {
-        if (key === '$ref') {
-          return options.$refs[schema.$ref] ?? schema.$ref;
-        }
-
-        return target[key];
-      },
-    });
+    return syncReferenceObject(schema, options.references);
   }
 
   let processedSchema = PROCESSED_SCHEMAS.get(schema);

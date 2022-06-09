@@ -1,5 +1,5 @@
 import { resolveInlineRefWithLocation } from '@stoplight/json';
-import type { JsonPath } from '@stoplight/types';
+import type { JsonPath, Reference } from '@stoplight/types';
 
 import type { AvailableContext, RefResolver } from '../types';
 
@@ -44,15 +44,17 @@ export const resolveRef: RefResolver = function (target) {
 
 export const bundleResolveRef: RefResolver = function (target) {
   resolveRef.call(this, target);
-  const { $refs } = this;
+  return syncReferenceObject(target, this.references);
+};
 
+export function syncReferenceObject<K extends Reference>(target: K, references: Record<string, string>): K {
   return new Proxy(target, {
     get(target, key: string) {
       if (key === '$ref') {
-        return $refs[target.$ref] ?? target.$ref;
+        return references[target.$ref] ?? target.$ref;
       }
 
       return target[key];
     },
   });
-};
+}

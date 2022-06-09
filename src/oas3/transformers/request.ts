@@ -16,7 +16,7 @@ import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
 import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
-import { getComponentName } from '../../oas/resolver';
+import { getComponentName, syncReferenceObject } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
@@ -142,7 +142,7 @@ export const translateToRequest = withContext<
   for (const param of iterateOasParams.call(this, path, operation)) {
     let kind;
     if (isReferenceObject(param)) {
-      kind = (this.$refs[param.$ref] && getComponentName(this.$refs[param.$ref])) || param.$ref;
+      kind = (this.references[param.$ref] && getComponentName(this.references[param.$ref])) || param.$ref;
     } else {
       kind = param.in;
     }
@@ -151,7 +151,7 @@ export const translateToRequest = withContext<
     if (!Array.isArray(target)) continue;
 
     if (isReferenceObject(param)) {
-      target.push({ ...param, $ref: this.$refs[param.$ref] ?? param.$ref });
+      target.push(syncReferenceObject(param, this.references));
     } else {
       target.push(translateParameterObject.call(this, param) as any);
     }

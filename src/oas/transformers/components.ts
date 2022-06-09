@@ -71,16 +71,16 @@ function createInvokeTranslator(
       const translated = translator.call(this, items[i], i, items);
       if (!isNonNullable(translated)) continue;
 
-      this.$refs[`${root}/${kind}/${key}`] = `#/components/${component}/${objects.length}`;
+      this.references[`${root}/${kind}/${key}`] = `#/components/${component}/${objects.length}`;
       (translated as Components[K][number]).key = key;
       objects.push(translated as any);
     }
 
     for (const resolvable of resolvables) {
-      const mapped = this.$refs[resolvable.$ref];
+      const mapped = this.references[resolvable.$ref];
       if (mapped === void 0) continue;
 
-      this.$refs[resolvable.$ref] = mapped;
+      this.references[resolvable.$ref] = mapped;
       resolvable.$ref = mapped;
     }
 

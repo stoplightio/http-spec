@@ -27,7 +27,7 @@ export const translateToSharedParameters = withContext<
   for (const [key, value] of entries(components.headers)) {
     setSharedKey(value, key);
 
-    this.$refs[`#/components/headers/${key}`] = `#/components/header/${sharedParameters.header.length}`;
+    this.references[`#/components/headers/${key}`] = `#/components/header/${sharedParameters.header.length}`;
     const header = translateHeaderObject.call(this, [key, value]);
     if (isNonNullable(header)) {
       sharedParameters.header.push({
@@ -50,7 +50,7 @@ export const translateToSharedParameters = withContext<
     if (!isValidOas3ParameterObject(value)) continue;
     const parameter = translateParameterObject.call(this, value);
 
-    this.$refs[`#/components/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
+    this.references[`#/components/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
     sharedParameters[value.in].push({
       ...(parameter as any),
       key,
@@ -58,11 +58,11 @@ export const translateToSharedParameters = withContext<
   }
 
   for (const [key, value] of resolvables) {
-    const mapped = this.$refs[value.$ref];
+    const mapped = this.references[value.$ref];
     if (mapped === void 0) continue;
     const kind = getComponentName(mapped) as keyof ParameterComponents;
 
-    this.$refs[`#/components/parameters/${key}`] = `#/components/${kind}/${sharedParameters[kind].length}`;
+    this.references[`#/components/parameters/${key}`] = `#/components/${kind}/${sharedParameters[kind].length}`;
     sharedParameters[kind].push({
       ...value,
       key,

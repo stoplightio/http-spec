@@ -36,7 +36,7 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   context: AvailableContext;
   parentId: string;
   readonly ids: Record<AvailableContext, string>;
-  readonly $refs: Record<string, string>;
+  readonly references: Record<string, string>;
   generateId(template: string): string;
   maybeResolveLocalRef(target: unknown): unknown;
 };
