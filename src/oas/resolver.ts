@@ -44,13 +44,15 @@ export const resolveRef: RefResolver = function (target) {
 
 export const bundleResolveRef: RefResolver = function (target) {
   resolveRef.call(this, target);
+  const { $refs } = this;
 
-  if (target.$ref in this.$refs) {
-    return {
-      ...target,
-      $ref: this.$refs[target.$ref],
-    };
-  }
+  return new Proxy(target, {
+    get(target, key: string) {
+      if (key === '$ref') {
+        return $refs[target.$ref] ?? target.$ref;
+      }
 
-  return target;
+      return target[key];
+    },
+  });
 };

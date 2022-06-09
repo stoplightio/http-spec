@@ -302,7 +302,6 @@ describe('bundleOas3Service', () => {
               id: '64592aa729862',
             },
             $schema: 'http://json-schema.org/draft-07/schema#',
-            examples: [],
             key: 'User',
             properties: {
               address: {
