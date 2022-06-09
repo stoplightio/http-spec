@@ -12,6 +12,11 @@
     "/orgs/{org}/repos": {
       "get": {
         "summary": "Get a organization repository",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Some-Header"
+          }
+        ],
         "responses": {
           "403": {
             "$ref": "#/components/responses/forbidden"
@@ -45,6 +50,26 @@
         }
       }
     },
+    "parameters": {
+      "Some-Header": {
+        "name": "A-Shared-Header",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {
+      "A-Shared-Example": {
+        "value": {
+          "id": 0,
+          "address": {
+            "street": "string"
+          }
+        }
+      }
+    },
     "responses": {
       "forbidden": {
         "headers": {
@@ -57,6 +82,11 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/basic-error"
+            },
+            "examples": {
+              "error": {
+                "$ref": "#/components/examples/A-Shared-Example"
+              }
             }
           }
         }

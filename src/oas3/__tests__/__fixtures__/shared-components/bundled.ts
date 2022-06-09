@@ -16,7 +16,11 @@ export default {
           id: '913ab62a764b4',
         },
         cookie: [],
-        headers: [],
+        headers: [
+          {
+            $ref: '#/components/header/1',
+          },
+        ],
         path: [],
         query: [],
       },
@@ -34,7 +38,19 @@ export default {
   ],
   components: {
     cookie: [],
-    examples: [],
+    examples: [
+      {
+        // fast1a52hex('example-service_abc-A-Shared-Example')
+        id: '5a69041e065b0',
+        key: 'A-Shared-Example',
+        value: {
+          address: {
+            street: 'string',
+          },
+          id: 0,
+        },
+      },
+    ],
     header: [
       {
         // hash('http_header-service_abc-X-Rate-Limit')
@@ -46,6 +62,22 @@ export default {
         encodings: [],
         schema: {
           $ref: '#/components/schemas/1',
+        },
+      },
+      {
+        // hash('http_header-service_abc-A-Shared-Header')
+        id: '21b1f96bd26ee',
+        key: 'Some-Header',
+        name: 'A-Shared-Header',
+        style: 'simple',
+        required: false,
+        examples: [],
+        schema: {
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          type: 'string',
+          'x-stoplight': {
+            id: 'be6b513de1b69',
+          },
         },
       },
     ],
@@ -60,12 +92,17 @@ export default {
         code: 'forbidden',
         contents: [
           {
-            encodings: [],
-            examples: [],
             // hash('http_media-{parentId}-application/json')
             // hash('http_media-c73bfcb376d49-application/json')
             id: '4143bd61bfef9',
             mediaType: 'application/json',
+            encodings: [],
+            examples: [
+              {
+                $ref: '#/components/examples/0',
+                key: 'error',
+              },
+            ],
             schema: {
               $ref: '#/components/schemas/0',
             },
