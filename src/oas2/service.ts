@@ -34,7 +34,7 @@ export const bundleOas2Service: Oas2HttpServiceBundle = ({ document: _document }
         return translateToResponse.call(ctx, produces, key, value);
       },
       definitions: translateSchemaObjectFromPair,
-      securitySchemes: translateSecurityScheme,
+      securityDefinitions: translateSecurityScheme,
     }),
     ...translateToSharedParameters.call(ctx, document),
   };

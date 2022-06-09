@@ -16,6 +16,7 @@ interface Components {
   requestBodies: IBundledHttpService['components']['requestBodies'];
   examples: IBundledHttpService['components']['examples'];
   securitySchemes: IBundledHttpService['components']['securitySchemes'];
+  securityDefinitions: IBundledHttpService['components']['securitySchemes'];
 }
 
 type Translator<K extends keyof Components> = (
@@ -29,56 +30,62 @@ type Translators = {
   requestBodies?: Translator<'requestBodies'>;
   examples?: Translator<'examples'>;
   securitySchemes?: Translator<'securitySchemes'>;
+  securityDefinitions?: Translator<'securitySchemes'>;
 };
 
-function invokeTranslator<K extends keyof Components = keyof Components>(
-  ctx: TransformerContext<Fragment>,
+function createInvokeTranslator(
+  this: TransformerContext<Fragment>,
   root: '#/components' | '#',
   translators: Translators,
-  kind: K,
-): Components[K] {
-  const translator = translators[kind];
-  const input = root === '#/components' ? ctx.document.components : ctx.document;
-  if (translator === void 0 || !isPlainObject(input)) return [];
+) {
+  const input = root === '#/components' ? this.document.components : this.document;
 
-  const objects: Components[K] = [];
-  const items = entries(input[kind]);
+  return <K extends keyof Components = keyof Components>(
+    kind: K,
+    component: keyof IBundledHttpService['components'],
+  ): Components[K] => {
+    const translator = translators[kind];
+    if (translator === void 0 || !isPlainObject(input)) return [];
 
-  const resolvables: (Reference & IComponentNode)[] = [];
+    const objects: Components[K] = [];
+    const items = entries(input[kind]);
 
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    const [key, value] = item;
-    setSharedKey(value, key);
+    const resolvables: (Reference & IComponentNode)[] = [];
 
-    if (isReferenceObject(value)) {
-      const resolvableComponent = {
-        ...value,
-        key,
-      };
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const [key, value] = item;
+      setSharedKey(value, key);
 
-      objects.push(resolvableComponent);
-      resolvables.push(resolvableComponent);
-      continue;
+      if (isReferenceObject(value)) {
+        const resolvableComponent = {
+          ...value,
+          key,
+        };
+
+        objects.push(resolvableComponent);
+        resolvables.push(resolvableComponent);
+        continue;
+      }
+
+      const translated = translator.call(this, items[i], i, items);
+      if (!isNonNullable(translated)) continue;
+
+      this.$refs[`${root}/${kind}/${key}`] = `#/components/${component}/${objects.length}`;
+      (translated as Components[K][number]).key = key;
+      objects.push(translated as any);
     }
 
-    const translated = translator.call(ctx, items[i], i, items);
-    if (!isNonNullable(translated)) continue;
+    for (const resolvable of resolvables) {
+      const mapped = this.$refs[resolvable.$ref];
+      if (mapped === void 0) continue;
 
-    ctx.$refs[`${root}/${kind}/${key}`] = `#/components/${kind === 'definitions' ? 'schemas' : kind}/${objects.length}`;
-    (translated as Components[K][number]).key = key;
-    objects.push(translated as any);
-  }
+      this.$refs[resolvable.$ref] = mapped;
+      resolvable.$ref = mapped;
+    }
 
-  for (const resolvable of resolvables) {
-    const mapped = ctx.$refs[resolvable.$ref];
-    if (mapped === void 0) continue;
-
-    ctx.$refs[resolvable.$ref] = mapped;
-    resolvable.$ref = mapped;
-  }
-
-  return objects;
+    return objects;
+  };
 }
 
 export const translateToComponents = function (
@@ -88,12 +95,16 @@ export const translateToComponents = function (
 ): Pick<IBundledHttpService['components'], 'responses' | 'schemas' | 'requestBodies' | 'examples' | 'securitySchemes'> {
   const root = spec === OasVersion.OAS3 ? '#/components' : '#';
 
+  const invokeTranslator = createInvokeTranslator.call(this, root, translators);
+
   return {
-    // TS doesn't seem to like .call(this) here
-    responses: invokeTranslator(this, root, translators, 'responses'),
-    schemas: invokeTranslator(this, root, translators, spec === OasVersion.OAS3 ? 'schemas' : 'definitions'),
-    requestBodies: invokeTranslator(this, root, translators, 'requestBodies'),
-    examples: invokeTranslator(this, root, translators, 'examples'),
-    securitySchemes: invokeTranslator(this, root, translators, 'securitySchemes'),
+    responses: invokeTranslator('responses', 'responses'),
+    schemas: invokeTranslator(spec === OasVersion.OAS3 ? 'schemas' : 'definitions', 'schemas'),
+    requestBodies: invokeTranslator('requestBodies', 'requestBodies'),
+    examples: invokeTranslator('examples', 'examples'),
+    securitySchemes: invokeTranslator(
+      spec === OasVersion.OAS3 ? 'securitySchemes' : 'securityDefinitions',
+      'securitySchemes',
+    ),
   };
 };
