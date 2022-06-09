@@ -247,6 +247,7 @@ export default {
           id: 'f387e16c7d39d',
         },
         {
+          code: '404',
           $ref: '#/components/responses/0',
         },
       ],
@@ -279,6 +280,7 @@ export default {
               encodings: [],
               examples: [
                 {
+                  key: 'basic-example',
                   $ref: '#/components/examples/0',
                 },
               ],
@@ -348,6 +350,7 @@ export default {
           id: 'd8ca38606ee5d',
         },
         {
+          code: '400',
           $ref: '#/components/responses/0',
         },
       ],

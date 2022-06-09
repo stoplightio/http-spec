@@ -12,13 +12,16 @@ import type { Oas3TranslateFunction } from '../types';
 export const translateToExample = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[key: string, example: unknown]>,
-    Optional<INodeExample | INodeExternalExample | Reference>
+    Optional<INodeExample | INodeExternalExample | ({ key: string } & Reference)>
   >
 >(function ([key, example]) {
   const maybeExample = this.maybeResolveLocalRef(example);
 
   if (!isPlainObject(maybeExample)) return;
-  if (isReferenceObject(maybeExample)) return maybeExample;
+  if (isReferenceObject(maybeExample)) {
+    maybeExample.key = key;
+    return maybeExample as { key: string } & Reference;
+  }
 
   const actualKey = this.context === 'service' ? getSharedKey(maybeExample) : key;
 

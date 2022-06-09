@@ -28,7 +28,9 @@ export const bundleOas2Service: Oas2HttpServiceBundle = ({ document: _document }
   const produces = normalizeProducesOrConsumes(ctx.document.produces);
   const components = {
     ...translateToComponents.call(ctx, OasVersion.OAS2, {
-      responses([key, value]): Optional<IHttpOperationResponse<true> | Reference> {
+      responses([key, value]): Optional<
+        IHttpOperationResponse<true> | (Pick<IHttpOperationResponse<true>, 'code'> & Reference)
+      > {
         return translateToResponse.call(ctx, produces, key, value);
       },
       definitions: translateSchemaObjectFromPair,

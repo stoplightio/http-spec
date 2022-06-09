@@ -15,13 +15,14 @@ import { translateHeaderObject } from './headers';
 export const translateToResponse = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[statusCode: string, response: unknown]>,
-    Optional<IHttpOperationResponse<true> | Reference>
+    Optional<IHttpOperationResponse<true> | (Pick<IHttpOperationResponse, 'code'> & Reference)>
   >
 >(function ([statusCode, response]) {
   const maybeResponseObject = this.maybeResolveLocalRef(response);
 
   if (isReferenceObject(maybeResponseObject)) {
-    return maybeResponseObject;
+    (maybeResponseObject as Pick<IHttpOperationResponse, 'code'> & Reference).code = statusCode;
+    return maybeResponseObject as Pick<IHttpOperationResponse, 'code'> & Reference;
   }
 
   if (!isResponseObject(maybeResponseObject)) return;
@@ -45,7 +46,7 @@ export const translateToResponse = withContext<
 
 export const translateToResponses: Oas3TranslateFunction<
   [responses: unknown],
-  (IHttpOperationResponse<true> | Reference)[]
+  NonNullable<ReturnType<typeof translateToResponse>>[]
 > = function (responses) {
   return entries(responses).map(translateToResponse, this).filter(isNonNullable);
 };

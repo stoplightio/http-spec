@@ -25,11 +25,12 @@ import pick = require('lodash.pick');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
-import { isValidOas2ParameterObject } from '../../oas/guards';
+import { isReferenceObject, isValidOas2ParameterObject } from '../../oas/guards';
 import { setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
+import { ReferenceObject } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
 import { getExamplesFromSchema } from '../accessors';
@@ -92,8 +93,13 @@ export const translateToHeaderParam = withContext<
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
-  Optional<IHttpHeaderParam<true>>
+  Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject)>
 > = function ([name, value]) {
+  if (isReferenceObject(value)) {
+    (value as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject).name = name;
+    return value as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject;
+  }
+
   if (!isPlainObject(value)) return;
   const param = { name, in: 'header', ...value };
   if (!isHeaderParam(param)) return;

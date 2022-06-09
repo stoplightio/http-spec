@@ -18,12 +18,16 @@ import { translateToHeaderParams } from './params';
 export const translateToResponse = withContext<
   Oas2TranslateFunction<
     [produces: string[], statusCode: string, response: unknown],
-    Optional<IHttpOperationResponse<true> | Reference>
+    Optional<IHttpOperationResponse<true> | (Pick<IHttpOperationResponse<true>, 'code'> & Reference)>
   >
 >(function (produces, statusCode, response) {
   const maybeResponseObject = this.maybeResolveLocalRef(response);
 
-  if (isReferenceObject(maybeResponseObject)) return maybeResponseObject;
+  if (isReferenceObject(maybeResponseObject)) {
+    (maybeResponseObject as Pick<IHttpOperationResponse, 'code'> & Reference).code = statusCode;
+    return maybeResponseObject as Pick<IHttpOperationResponse, 'code'> & Reference;
+  }
+
   if (!isResponseObject(maybeResponseObject)) return;
 
   const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
@@ -78,7 +82,7 @@ export const translateToResponse = withContext<
 
 export const translateToResponses: Oas2TranslateFunction<
   [operation: DeepPartial<Operation>],
-  (IHttpOperationResponse<true> | Reference)[]
+  NonNullable<ReturnType<typeof translateToResponse>>[]
 > = function (operation) {
   const produces = getProduces(this.document, operation);
   return entries(operation.responses)

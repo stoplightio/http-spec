@@ -22,12 +22,19 @@ import { Oas3TranslateFunction } from '../types';
 import { translateToExample } from './examples';
 
 export const translateHeaderObject = withContext<
-  Oas3TranslateFunction<[[name: string, headerObject: unknown]], Optional<IHttpHeaderParam<true> | ReferenceObject>>
+  Oas3TranslateFunction<
+    [[name: string, headerObject: unknown]],
+    Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject)>
+  >
 >(function ([name, unresolvedHeaderObject]) {
   const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
 
+  if (isReferenceObject(maybeHeaderObject)) {
+    (maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject).name = name;
+    return maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject;
+  }
+
   if (!isPlainObject(maybeHeaderObject)) return;
-  if (isReferenceObject(maybeHeaderObject)) return maybeHeaderObject;
 
   const id = this.generateId(`http_header-${this.parentId}-${name}`);
 

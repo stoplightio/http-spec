@@ -22,6 +22,7 @@ export default {
       },
       responses: [
         {
+          code: '403',
           $ref: '#/components/responses/0',
         },
       ],
@@ -73,6 +74,7 @@ export default {
         description: 'Forbidden',
         headers: [
           {
+            name: 'X-Rate-Limit',
             $ref: '#/components/header/0',
           },
         ],
