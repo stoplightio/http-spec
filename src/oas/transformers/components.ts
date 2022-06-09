@@ -1,9 +1,11 @@
 import { isPlainObject } from '@stoplight/json';
-import type { IBundledHttpService, Optional } from '@stoplight/types';
+import type { IBundledHttpService, IComponentNode, Optional } from '@stoplight/types';
+import { Reference } from '@stoplight/types';
 
 import { isNonNullable } from '../../guards';
 import type { ArrayCallbackParameters, Fragment, TransformerContext } from '../../types';
 import { entries } from '../../utils';
+import { isReferenceObject } from '../guards';
 import { setSharedKey } from '../resolver';
 import { OasVersion } from '../types';
 
@@ -42,10 +44,23 @@ function invokeTranslator<K extends keyof Components = keyof Components>(
   const objects: Components[K] = [];
   const items = entries(input[kind]);
 
+  const resolvables: (Reference & IComponentNode)[] = [];
+
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const [key, value] = item;
     setSharedKey(value, key);
+
+    if (isReferenceObject(value)) {
+      const resolvableComponent = {
+        ...value,
+        key,
+      };
+
+      objects.push(resolvableComponent);
+      resolvables.push(resolvableComponent);
+      continue;
+    }
 
     const translated = translator.call(ctx, items[i], i, items);
     if (!isNonNullable(translated)) continue;
@@ -53,6 +68,14 @@ function invokeTranslator<K extends keyof Components = keyof Components>(
     ctx.$refs[`${root}/${kind}/${key}`] = `#/components/${kind === 'definitions' ? 'schemas' : kind}/${objects.length}`;
     (translated as Components[K][number]).key = key;
     objects.push(translated as any);
+  }
+
+  for (const resolvable of resolvables) {
+    const mapped = ctx.$refs[resolvable.$ref];
+    if (mapped === void 0) continue;
+
+    ctx.$refs[resolvable.$ref] = mapped;
+    resolvable.$ref = mapped;
   }
 
   return objects;

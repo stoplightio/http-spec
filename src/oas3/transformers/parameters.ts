@@ -31,8 +31,8 @@ export const translateToSharedParameters = withContext<
     const header = translateHeaderObject.call(this, [key, value]);
     if (isNonNullable(header)) {
       sharedParameters.header.push({
-        key,
         ...header,
+        key,
       });
     }
   }
@@ -52,8 +52,8 @@ export const translateToSharedParameters = withContext<
 
     this.$refs[`#/components/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
     sharedParameters[value.in].push({
-      key,
       ...(parameter as any),
+      key,
     });
   }
 
@@ -64,8 +64,8 @@ export const translateToSharedParameters = withContext<
 
     this.$refs[`#/components/parameters/${key}`] = `#/components/${kind}/${sharedParameters[kind].length}`;
     sharedParameters[kind].push({
-      key,
       ...value,
+      key,
     });
   }
 
