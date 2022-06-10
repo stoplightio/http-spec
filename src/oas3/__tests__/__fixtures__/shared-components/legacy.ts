@@ -81,7 +81,19 @@ export default [
                 },
               },
             },
-            examples: [],
+            examples: [
+              {
+                // fast1a52hex('example-service_abc-A-Shared-Example')
+                id: '5a69041e065b0',
+                key: 'error',
+                value: {
+                  address: {
+                    street: 'string',
+                  },
+                  id: 0,
+                },
+              },
+            ],
             encodings: [],
           },
         ],
@@ -89,11 +101,24 @@ export default [
     ],
     servers: [],
     request: {
-      body: {
-        id: '913ab62a764b4',
-        contents: [],
-      },
-      headers: [],
+      headers: [
+        {
+          // hash('http_header-service_abc-A-Shared-Header')
+          id: '21b1f96bd26ee',
+          name: 'A-Shared-Header',
+          required: false,
+          schema: {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            type: 'string',
+            'x-stoplight': {
+              // hash('schema-21b1f96bd26ee-')
+              id: 'a9c9a05d9cb2d',
+            },
+          },
+          examples: [],
+          style: 'simple',
+        },
+      ],
       query: [],
       cookie: [],
       path: [],

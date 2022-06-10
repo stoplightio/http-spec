@@ -19,7 +19,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "becbc0ed96d9d",
+            "id": "beb02d1ff7b23",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -74,7 +74,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "7e79049c5af23",
+            "id": "531dc73646a3e",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -129,7 +129,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "62e6080a56c45",
+        "id": "7de2e97c373c6",
         "required": true,
       },
       "cookie": Array [],
@@ -143,7 +143,7 @@ Array [
         "contents": Array [],
         "description": "Invalid input",
         "headers": Array [],
-        "id": "029110671da4a",
+        "id": "2e992aee1674b",
       },
     ],
     "security": Array [
@@ -199,7 +199,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "9360fa7dc92ab",
+              "id": "fe1cb482692b9",
             },
           },
           "style": "simple",
@@ -214,7 +214,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "828c85d6a2307",
+              "id": "4d759db2d11d8",
             },
           },
           "style": "form",
@@ -226,7 +226,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "cdfdf74babd0b",
+              "id": "839da3326f66b",
             },
           },
           "style": "form",
@@ -239,7 +239,7 @@ Array [
         "contents": Array [],
         "description": "",
         "headers": Array [],
-        "id": "6ae68ec4738b2",
+        "id": "75d497d0ca810",
       },
     ],
     "security": Array [],
@@ -273,7 +273,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "9360fa7dc92ab",
+              "id": "fe1cb482692b9",
             },
           },
           "style": "simple",
@@ -288,7 +288,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "828c85d6a2307",
+              "id": "4d759db2d11d8",
             },
           },
           "style": "form",
@@ -300,7 +300,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "cdfdf74babd0b",
+              "id": "839da3326f66b",
             },
           },
           "style": "form",
@@ -315,20 +315,20 @@ Array [
         "headers": Array [
           Object {
             "description": "Allowed clients",
-            "id": "0b9c41debc794",
+            "id": "b1cba0180c7df",
             "name": "Allow",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
               "x-stoplight": Object {
-                "id": "b5186fbb4fdf5",
+                "id": "96fc94cefd7d2",
               },
             },
             "style": "simple",
           },
           Object {
             "description": "Remaining requests",
-            "id": "bbf28e682b54b",
+            "id": "32d8a9b2021a7",
             "name": "X-Rate-Limit",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -337,13 +337,13 @@ Array [
               "minimum": -9223372036854776000,
               "type": "number",
               "x-stoplight": Object {
-                "id": "a07f1d06408fd",
+                "id": "3c572d09f18de",
               },
             },
             "style": "simple",
           },
         ],
-        "id": "ee11fabc87ff7",
+        "id": "ae2d0e59a4075",
       },
     ],
     "security": Array [],
@@ -380,14 +380,14 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
-        "id": "5dfa6d9892b22",
+        "id": "24183a40dad2f",
       },
       Object {
         "code": "404",
         "contents": Array [],
         "description": "Pet not found",
         "headers": Array [],
-        "id": "5dba6d9892c7e",
+        "id": "4a183a402036c",
       },
     ],
     "security": Array [],
@@ -418,7 +418,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "954d8d8652606",
+            "id": "04c11541cf13f",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -473,7 +473,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "1043a7cddde88",
+            "id": "3be1a46e035af",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -528,7 +528,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "9b5d65cfbc4fd",
+        "id": "46cce04bfdb01",
         "required": true,
       },
       "cookie": Array [],
@@ -542,7 +542,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "3c1327003ffa9",
+              "id": "116103c617597",
             },
           },
           "style": "simple",
@@ -556,14 +556,14 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
-        "id": "c12ebf63598e3",
+        "id": "9161bca4d6ce5",
       },
       Object {
         "code": "404",
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "3d04477dddecb",
+            "id": "78ade5a6a574a",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -586,7 +586,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "d1be05066ac36",
+            "id": "e4c3ee9ac9603",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -610,14 +610,14 @@ Array [
         ],
         "description": "Our shared 404 response.",
         "headers": Array [],
-        "id": "e1deb92ee1e73",
+        "id": "53fa597d5f695",
       },
       Object {
         "code": "405",
         "contents": Array [],
         "description": "Validation exception",
         "headers": Array [],
-        "id": "c15ebf6359d8c",
+        "id": "3b7b1912287ef",
       },
     ],
     "security": Array [
@@ -869,10 +869,6 @@ Array [
     "method": "get",
     "path": "/pets",
     "request": Object {
-      "body": Object {
-        "contents": Array [],
-        "id": "ccf0943cc3b92",
-      },
       "cookie": Array [],
       "headers": Array [],
       "path": Array [],
@@ -885,7 +881,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "828c85d6a2307",
+              "id": "4d759db2d11d8",
             },
           },
           "style": "form",
@@ -898,7 +894,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "cdfdf74babd0b",
+              "id": "839da3326f66b",
             },
           },
           "style": "form",
@@ -1100,7 +1096,7 @@ Array [
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "3c1327003ffa9",
+              "id": "116103c617597",
             },
           },
           "style": "simple",

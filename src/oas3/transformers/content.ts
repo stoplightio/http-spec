@@ -1,13 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import {
-  HttpParamStyles,
-  IHttpEncoding,
-  IHttpHeaderParam,
-  IMediaTypeContent,
-  INodeExample,
-  INodeExternalExample,
-  Optional,
-} from '@stoplight/types';
+import { HttpParamStyles, IHttpEncoding, IMediaTypeContent, Optional } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import pickBy = require('lodash.pickby');
 
@@ -17,9 +9,9 @@ import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { isHeaderObject } from '../guards';
-import { Oas3TranslateFunction } from '../types';
+import type { Oas3TranslateFunction } from '../types';
 import { translateToExample } from './examples';
+import { translateHeaderObject } from './headers';
 
 const ACCEPTABLE_STYLES: (string | undefined)[] = [
   HttpParamStyles.Form,
@@ -43,7 +35,7 @@ function hasAcceptableStyle<T extends Fragment = Fragment>(
 const translateEncodingPropertyObject = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[property: string, encodingPropertyObject: unknown]>,
-    Optional<IHttpEncoding>
+    Optional<IHttpEncoding<true>>
   >
 >(function ([property, encodingPropertyObject]) {
   if (!isPlainObject(encodingPropertyObject)) return;
@@ -71,88 +63,6 @@ const translateEncodingPropertyObject = withContext<
   };
 });
 
-export const translateHeaderObject = withContext<
-  Oas3TranslateFunction<ArrayCallbackParameters<[name: string, headerObject: unknown]>, Optional<IHttpHeaderParam>>
->(function ([name, unresolvedHeaderObject]) {
-  const headerObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
-  if (!isPlainObject(headerObject)) return;
-
-  const id = this.generateId(`http_header-${this.parentId}-${name}`);
-
-  if (!isHeaderObject(headerObject)) {
-    return {
-      id,
-      encodings: [],
-      examples: [],
-      name,
-      style: HttpParamStyles.Simple,
-    };
-  }
-
-  const { content: contentObject } = headerObject;
-
-  const contentValue = isPlainObject(contentObject) ? Object.values(contentObject)[0] : null;
-
-  const baseContent: IHttpHeaderParam = {
-    id,
-    name,
-    style: HttpParamStyles.Simple,
-
-    ...pickBy(
-      {
-        schema: isPlainObject(headerObject.schema) ? translateSchemaObject.call(this, headerObject.schema) : null,
-        content: headerObject.content,
-      },
-      isNonNullable,
-    ),
-
-    ...pickBy(
-      {
-        description: headerObject.description,
-      },
-      isString,
-    ),
-
-    ...pickBy(
-      {
-        allowEmptyValue: headerObject.allowEmptyValue,
-        allowReserved: headerObject.allowReserved,
-        explode: headerObject.explode,
-        required: headerObject.required,
-        deprecated: headerObject.deprecated,
-      },
-      isBoolean,
-    ),
-  };
-
-  const examples: (INodeExample | INodeExternalExample)[] = [];
-  const encodings: IHttpEncoding[] = [];
-
-  if (isPlainObject(contentValue)) {
-    examples.push(...entries(contentValue.examples).map(translateToExample, this).filter(isNonNullable));
-
-    if (isPlainObject(contentValue.encoding)) {
-      encodings.push(...(Object.values(contentValue.encoding) as IHttpEncoding[]));
-    }
-
-    if ('example' in contentValue) {
-      examples.push(translateToDefaultExample.call(this, '__default_content', contentValue.example));
-    }
-  }
-
-  examples.push(...entries(headerObject.examples).map(translateToExample, this).filter(isNonNullable));
-
-  if ('example' in headerObject) {
-    examples.push(translateToDefaultExample.call(this, '__default', headerObject.example));
-  }
-
-  return {
-    ...baseContent,
-    encodings,
-    examples,
-  };
-});
-
 const translateSchemaMediaTypeObject = withContext<Oas3TranslateFunction<[schema: unknown], Optional<JSONSchema7>>>(
   function (schema) {
     if (!isPlainObject(schema)) return;
@@ -162,7 +72,10 @@ const translateSchemaMediaTypeObject = withContext<Oas3TranslateFunction<[schema
 );
 
 export const translateMediaTypeObject = withContext<
-  Oas3TranslateFunction<ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>, Optional<IMediaTypeContent>>
+  Oas3TranslateFunction<
+    ArrayCallbackParameters<[mediaType: string, mediaObject: unknown]>,
+    Optional<IMediaTypeContent<true>>
+  >
 >(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 

@@ -2,12 +2,14 @@ import { isPlainObject } from '@stoplight/json';
 import {
   DeepPartial,
   HttpParamStyles,
+  IBundledHttpService,
   IHttpEncoding,
   IHttpHeaderParam,
   IHttpOperationRequestBody,
   IHttpPathParam,
   IHttpQueryParam,
   Optional,
+  Reference,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import type {
@@ -23,13 +25,15 @@ import pick = require('lodash.pick');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
-import { Oas2ParamBase } from '../../oas/guards';
+import { isReferenceObject, isValidOas2ParameterObject } from '../../oas/guards';
+import { setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
-import { ArrayCallbackParameters } from '../../types';
+import type { Oas2ParamBase } from '../../oas/types';
+import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { getExamplesFromSchema } from '../accessors';
-import { isHeaderParam } from '../guards';
+import { getExamplesFromSchema, sortProducesOrConsumes } from '../accessors';
+import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
 function chooseQueryParameterStyle(
@@ -64,7 +68,10 @@ function chooseQueryParameterStyle(
 }
 
 export const translateToHeaderParam = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }], IHttpHeaderParam>
+  Oas2TranslateFunction<
+    [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
+    IHttpHeaderParam<true>
+  >
 >(function (param) {
   const name = param.name;
 
@@ -85,29 +92,37 @@ export const translateToHeaderParam = withContext<
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
-  Optional<IHttpHeaderParam>
+  Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference)>
 > = function ([name, value]) {
+  if (isReferenceObject(value)) {
+    (value as Pick<IHttpHeaderParam<true>, 'name'> & Reference).name = name;
+    return value as Pick<IHttpHeaderParam<true>, 'name'> & Reference;
+  }
+
   if (!isPlainObject(value)) return;
   const param = { name, in: 'header', ...value };
   if (!isHeaderParam(param)) return;
   return translateToHeaderParam.call(this, param);
 };
 
-export const translateToHeaderParams: Oas2TranslateFunction<[headers: unknown], IHttpHeaderParam[]> = function (
-  headers,
-) {
+export const translateToHeaderParams: Oas2TranslateFunction<
+  [headers: unknown],
+  (IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference))[]
+> = function (headers) {
   return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
 };
 
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
+  const id = this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`);
+
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),
   );
 
   return {
-    id: this.generateId(`http_request_body-${this.parentId}`),
+    id,
 
     contents: consumes.map(
       withContext(mediaType => {
@@ -151,7 +166,7 @@ export const translateFromFormDataParameters = withContext<
 >(function (parameters, consumes) {
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId(`http_request_body-${this.parentId}`),
+      id: this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`),
       contents: consumes.map(
         withContext(mediaType => ({
           id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
@@ -226,7 +241,7 @@ function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): I
 }
 
 export const translateToQueryParameter = withContext<
-  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam>
+  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam<true>>
 >(function (param) {
   const name = param.name;
 
@@ -248,7 +263,7 @@ export const translateToQueryParameter = withContext<
 });
 
 export const translateToPathParameter = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam>
+  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam<true>>
 >(function (param) {
   const name = param.name;
 
@@ -319,3 +334,43 @@ const buildSchemaForParameter: Oas2TranslateFunction<
     ),
   };
 };
+
+type ParameterComponents = Pick<IBundledHttpService['components'], 'query' | 'header' | 'path' | 'cookie'>;
+
+export const translateToSharedParameters = withContext<Oas2TranslateFunction<[root: Fragment], ParameterComponents>>(
+  function (root) {
+    const sharedParameters: ParameterComponents = {
+      header: [],
+      query: [],
+      cookie: [],
+      path: [],
+    };
+
+    for (const [key, value] of entries(root.parameters)) {
+      setSharedKey(value, key);
+
+      if (!isValidOas2ParameterObject(value)) continue;
+
+      this.references[`#/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
+
+      if (isQueryParam(value)) {
+        sharedParameters.query.push({
+          key,
+          ...translateToQueryParameter.call(this, value),
+        });
+      } else if (isPathParam(value)) {
+        sharedParameters.path.push({
+          key,
+          ...(translateToPathParameter.call(this, value) as any),
+        });
+      } else if (isHeaderParam(value)) {
+        sharedParameters.header.push({
+          key,
+          ...translateToHeaderParam.call(this, value),
+        });
+      }
+    }
+
+    return sharedParameters;
+  },
+);

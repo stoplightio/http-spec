@@ -49,9 +49,6 @@ describe('translateOas3ToRequest', () => {
     };
 
     expect(translateToRequest(path, operation)).toMatchSnapshot({
-      body: {
-        id: expect.any(String),
-      },
       headers: [
         {
           id: expect.any(String),

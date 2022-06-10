@@ -5,6 +5,7 @@ import type {
   IHttpOperationRequestBody,
   IHttpParam,
   Optional,
+  Reference,
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
@@ -14,7 +15,8 @@ import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
-import { isValidParamStyle } from '../../oas/guards';
+import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
+import { getComponentName, syncReferenceObject } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
@@ -25,33 +27,35 @@ import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody>
+  Oas3TranslateFunction<[requestBodyObject: unknown], Optional<IHttpOperationRequestBody<true> | Reference>>
 >(function (requestBodyObject) {
-  const resolvedRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
-  const id = this.generateId(`http_request_body-${this.parentId}`);
-
-  if (isRequestBodyObject(resolvedRequestBodyObject)) {
-    return {
-      id,
-      contents: entries(resolvedRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
-
-      ...pickBy(
-        {
-          required: resolvedRequestBodyObject.required,
-        },
-        isBoolean,
-      ),
-
-      ...pickBy(
-        {
-          description: resolvedRequestBodyObject.description,
-        },
-        isString,
-      ),
-    };
+  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  if (isReferenceObject(maybeRequestBodyObject)) {
+    return maybeRequestBodyObject;
   }
 
-  return { id, contents: [] };
+  if (!isRequestBodyObject(maybeRequestBodyObject)) return;
+
+  const id = this.generateId(`http_request_body-${this.parentId}`);
+
+  return {
+    id,
+    contents: entries(maybeRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+
+    ...pickBy(
+      {
+        required: maybeRequestBodyObject.required,
+      },
+      isBoolean,
+    ),
+
+    ...pickBy(
+      {
+        description: maybeRequestBodyObject.description,
+      },
+      isString,
+    ),
+  };
 });
 
 const translateParameterObjectSchema = withContext<
@@ -66,7 +70,7 @@ const translateParameterObjectSchema = withContext<
 });
 
 export const translateParameterObject = withContext<
-  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam>
+  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
 >(function (parameterObject) {
   const kind = parameterObject.in === 'path' ? 'path_param' : parameterObject.in;
   const name = parameterObject.name;
@@ -74,7 +78,7 @@ export const translateParameterObject = withContext<
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
-  const hasDefaultExample = examples.some(({ key }) => key.includes('default'));
+  const hasDefaultExample = examples.some(example => !isReferenceObject(example) && example.key.includes('default'));
 
   return {
     id,
@@ -121,9 +125,12 @@ export const translateParameterObject = withContext<
 const iterateOasParams = createOasParamsIterator(OasVersion.OAS3);
 
 export const translateToRequest = withContext<
-  Oas3TranslateFunction<[path: Record<string, unknown>, operation: Record<string, unknown>], IHttpOperationRequest>
+  Oas3TranslateFunction<
+    [path: Record<string, unknown>, operation: Record<string, unknown>],
+    IHttpOperationRequest<true>
+  >
 >(function (path, operation) {
-  const params: Omit<IHttpOperationRequest, 'header'> & { header: IHttpHeaderParam[] } = {
+  const params: Omit<IHttpOperationRequest<true>, 'header'> & { header: (IHttpHeaderParam<true> | Reference)[] } = {
     header: [],
     query: [],
     cookie: [],
@@ -131,15 +138,31 @@ export const translateToRequest = withContext<
   };
 
   for (const param of iterateOasParams.call(this, path, operation)) {
-    const { in: key } = param;
-    const target = params[key];
+    let kind: string;
+    if (isReferenceObject(param)) {
+      kind = (this.references[param.$ref] && getComponentName(this.references[param.$ref])) || param.$ref;
+    } else {
+      kind = param.in;
+    }
+
+    const target = params[kind];
     if (!Array.isArray(target)) continue;
 
-    target.push(translateParameterObject.call(this, param) as any);
+    if (isReferenceObject(param)) {
+      target.push(syncReferenceObject(param, this.references));
+    } else {
+      target.push(translateParameterObject.call(this, param) as any);
+    }
   }
 
   return {
-    body: translateRequestBody.call(this, operation?.requestBody),
+    ...pickBy(
+      {
+        body: translateRequestBody.call(this, operation?.requestBody),
+      },
+      isNonNullable,
+    ),
+
     headers: params.header,
     query: params.query,
     cookie: params.cookie,

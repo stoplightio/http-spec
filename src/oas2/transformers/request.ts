@@ -3,6 +3,9 @@ import type { IHttpOperationRequest } from '@stoplight/types';
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
+import { isReferenceObject } from '../../oas/guards';
+import { getComponentName, syncReferenceObject } from '../../oas/resolver';
+import type { Oas2ParamBase } from '../../oas/types';
 import { getConsumes } from '../accessors';
 import { isBodyParam, isFormDataParam, isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
@@ -14,18 +17,17 @@ import {
   translateToQueryParameter,
 } from './params';
 import pickBy = require('lodash.pickby');
-import { Oas2ParamBase } from '../../oas/guards';
 
 const iterateOasParams = createOasParamsIterator(OasVersion.OAS2);
 
 export const translateToRequest: Oas2TranslateFunction<
   [path: Record<string, unknown>, operation: Record<string, unknown>],
-  IHttpOperationRequest
+  IHttpOperationRequest<true>
 > = function (path, operation) {
   const consumes = getConsumes(this.document, operation);
-  const parameters = iterateOasParams.call(this, operation, path);
+  const parameters = iterateOasParams.call(this, path, operation);
 
-  const params: Omit<Required<IHttpOperationRequest>, 'body'> = {
+  const params: Omit<Required<IHttpOperationRequest<true>>, 'body'> = {
     headers: [],
     query: [],
     cookie: [],
@@ -36,6 +38,17 @@ export const translateToRequest: Oas2TranslateFunction<
   const formDataParameters: (Oas2ParamBase & { in: 'formData' })[] = [];
 
   for (const param of parameters) {
+    if (isReferenceObject(param)) {
+      const kind = (this.references[param.$ref] && getComponentName(this.references[param.$ref])) || param.$ref;
+      const target = params[kind === 'header' ? 'headers' : kind];
+
+      if (Array.isArray(target)) {
+        target.push(syncReferenceObject(param, this.references));
+      }
+
+      continue;
+    }
+
     if (isQueryParam(param)) {
       params.query.push(translateToQueryParameter.call(this, param));
     } else if (isPathParam(param)) {

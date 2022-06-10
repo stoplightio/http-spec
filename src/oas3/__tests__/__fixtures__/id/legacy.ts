@@ -133,7 +133,10 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight': { id: '2691eb0db9efc' },
+              'x-stoplight': {
+                // hash('schema-4d98be34f341a-')
+                id: '89c00c1a4aeb9',
+              },
               type: 'object',
               properties: {
                 error: {
@@ -160,11 +163,6 @@ export default [
     ],
     request: {
       // Request doesn't need an id
-      body: {
-        id: 'd5027559477f8',
-        // Really this doesn't even need to be here... there is no request body for this op
-        contents: [],
-      },
       headers: [
         {
           // hash(`http_header-${parentId}-${param.name}`)
@@ -177,7 +175,10 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight': { id: 'be6b513de1b69' },
+            'x-stoplight': {
+              // hash('schema-21b1f96bd26ee-')
+              id: 'a9c9a05d9cb2d',
+            },
             type: 'string',
           },
           examples: [],
@@ -306,11 +307,10 @@ export default [
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              // hash(`schema-${parentId}-${key}`)
-              // This schema was defined in shared components originally.. the closest parent with an
-              // id is the service, and the key was ErrorResponse so ends up being...
-              // hash('schema-4d98be34f341a-ErrorResponse')
-              'x-stoplight': { id: '2691eb0db9efc' },
+              'x-stoplight': {
+                // hash('schema-4d98be34f341a-')
+                id: '89c00c1a4aeb9',
+              },
               type: 'object',
               properties: {
                 error: {
@@ -414,7 +414,10 @@ export default [
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight': { id: 'be6b513de1b69' },
+            'x-stoplight': {
+              // hash('schema-21b1f96bd26ee-')
+              id: 'a9c9a05d9cb2d',
+            },
             type: 'string',
           },
           examples: [],

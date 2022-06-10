@@ -1,9 +1,10 @@
 import { isPlainObject } from '@stoplight/json';
-import { INodeExample, INodeExternalExample, Optional } from '@stoplight/types';
+import type { INodeExample, INodeExternalExample, Optional, Reference } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isString } from '../../guards';
+import { isReferenceObject } from '../../oas/guards';
 import { getSharedKey } from '../../oas/resolver';
 import type { ArrayCallbackParameters } from '../../types';
 import type { Oas3TranslateFunction } from '../types';
@@ -11,27 +12,31 @@ import type { Oas3TranslateFunction } from '../types';
 export const translateToExample = withContext<
   Oas3TranslateFunction<
     ArrayCallbackParameters<[key: string, example: unknown]>,
-    Optional<INodeExample | INodeExternalExample>
+    Optional<INodeExample | INodeExternalExample | ({ key: string } & Reference)>
   >
 >(function ([key, example]) {
-  const resolvedExample = this.maybeResolveLocalRef(example);
+  const maybeExample = this.maybeResolveLocalRef(example);
 
-  if (!isPlainObject(resolvedExample)) return;
+  if (!isPlainObject(maybeExample)) return;
+  if (isReferenceObject(maybeExample)) {
+    (maybeExample as { key: string } & Reference).key = key;
+    return maybeExample as { key: string } & Reference;
+  }
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedExample) : key;
+  const actualKey = this.context === 'service' ? getSharedKey(maybeExample) : key;
 
   return {
     id: this.generateId(`example-${this.parentId}-${actualKey}`),
     key,
 
-    ...(typeof resolvedExample.externalValue === 'string'
-      ? { externalValue: resolvedExample.externalValue }
-      : { value: resolvedExample.value }),
+    ...(typeof maybeExample.externalValue === 'string'
+      ? { externalValue: maybeExample.externalValue }
+      : { value: maybeExample.value }),
 
     ...pickBy(
       {
-        summary: resolvedExample.summary,
-        description: resolvedExample.description,
+        summary: maybeExample.summary,
+        description: maybeExample.description,
       },
       isString,
     ),

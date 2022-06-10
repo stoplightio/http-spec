@@ -1,12 +1,13 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial } from '@stoplight/types';
+import type { DeepPartial, Optional } from '@stoplight/types';
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
 import type { Fragment, TranslateFunction } from '../../../types';
-import { getSharedKey } from '../../resolver';
+import { isReferenceObject } from '../../guards';
+import { getSharedKey, syncReferenceObject } from '../../resolver';
 import keywords from './keywords';
 import type { OASSchemaObject } from './types';
 
@@ -14,6 +15,7 @@ const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
   structs: string[];
+  references: Record<string, string>;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -23,31 +25,56 @@ const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
 export const translateSchemaObject = withContext<
   TranslateFunction<
     DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6 | JSONSchema7>,
-    [schema: OASSchemaObject],
+    [schema: unknown],
     JSONSchema7
   >
 >(function (schema) {
-  const resolvedSchema = this.maybeResolveLocalRef(schema);
-  if (!isPlainObject(resolvedSchema)) return {};
-  let cached = PROCESSED_SCHEMAS.get(resolvedSchema);
-  if (cached) {
-    return { ...cached };
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+  if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
+  const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject)) : '';
+  return translateSchemaObjectFromPair.call(this, [actualKey, schema]);
+});
+
+export const translateSchemaObjectFromPair = withContext<
+  TranslateFunction<
+    DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6 | JSONSchema7>,
+    [[key: Optional<string>, schema: unknown]],
+    JSONSchema7
+  >
+>(function ([key, schema]) {
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+
+  if (!isPlainObject(maybeSchemaObject)) {
+    return isReferenceObject(schema)
+      ? {
+          ...convertSchema(this.document, schema, {}),
+          'x-stoplight': {
+            id: this.generateId(`schema-${this.parentId}-${key ?? ''}`),
+          },
+        }
+      : {};
   }
 
-  const actualKey = this.context === 'service' ? getSharedKey(resolvedSchema) : '';
-  const id = this.generateId(`schema-${this.parentId}-${actualKey}`);
+  if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
 
-  cached = convertSchema(this.document, resolvedSchema);
+  let cached = PROCESSED_SCHEMAS.get(maybeSchemaObject);
+  if (cached) {
+    return cached;
+  }
+
+  const id = this.generateId(`schema-${this.parentId}-${key ?? ''}`);
+
+  cached = convertSchema(this.document, maybeSchemaObject, this.references);
   cached['x-stoplight'] = {
     ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
     id,
   };
 
-  PROCESSED_SCHEMAS.set(resolvedSchema, cached);
+  PROCESSED_SCHEMAS.set(maybeSchemaObject, cached);
   return cached;
 });
 
-export function convertSchema(document: Fragment, schema: OASSchemaObject) {
+export function convertSchema(document: Fragment, schema: OASSchemaObject, references: Record<string, string> = {}) {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,
@@ -59,6 +86,7 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
 
   const clonedSchema = _convertSchema(schema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
+    references,
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
@@ -66,10 +94,14 @@ export function convertSchema(document: Fragment, schema: OASSchemaObject) {
 }
 
 function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
+  if (isReferenceObject(schema)) {
+    return syncReferenceObject(schema, options.references);
+  }
+
   let processedSchema = PROCESSED_SCHEMAS.get(schema);
 
   if (processedSchema) {
-    return { ...processedSchema };
+    return processedSchema;
   }
 
   const clonedSchema: OASSchemaObject | JSONSchema7 = { ...schema };
@@ -97,7 +129,7 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSON
   }
 
   for (const keyword of keywordsKeys) {
-    if (keyword in schema) {
+    if (keyword in clonedSchema) {
       keywords[keyword](clonedSchema);
     }
   }

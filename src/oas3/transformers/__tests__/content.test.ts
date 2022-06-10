@@ -1,16 +1,10 @@
 import type { SchemaObject } from 'openapi3-ts';
 
 import { createContext } from '../../../oas/context';
-import {
-  translateHeaderObject as _translateHeaderObject,
-  translateMediaTypeObject as _translateMediaTypeObject,
-} from '../content';
+import { translateMediaTypeObject as _translateMediaTypeObject } from '../content';
 
 const translateMediaTypeObject = (document: any, object: unknown, key: string) =>
   _translateMediaTypeObject.call(createContext(document), [key, object], 0, []);
-
-const translateHeaderObject = (object: unknown, key: string) =>
-  _translateHeaderObject.call(createContext({}), [key, object], 0, []);
 
 describe('translateMediaTypeObject', () => {
   it('should gracefully handle invalid data', () => {
@@ -438,59 +432,5 @@ describe('schema invalid', () => {
         'mediaType',
       ),
     ).not.toThrow();
-  });
-});
-
-describe('translateHeaderObject', () => {
-  it('should translate to IHttpHeaderParam', () => {
-    expect(
-      translateHeaderObject(
-        {
-          description: 'descr',
-          required: true,
-          deprecated: true,
-          allowEmptyValue: true,
-          style: 'matrix',
-          explode: true,
-          allowReserved: true,
-          schema: {},
-          examples: {
-            a: {
-              summary: 'example summary',
-              value: 'hey',
-            },
-            b: {
-              summary: 'example summary',
-              externalValue: 'https://stoplight.io/b',
-            },
-          },
-          example: {},
-          content: {},
-        },
-        'header-name',
-      ),
-    ).toMatchSnapshot({
-      id: expect.any(String),
-      examples: [
-        {
-          id: expect.any(String),
-        },
-        {
-          id: expect.any(String),
-        },
-        {
-          id: expect.any(String),
-        },
-      ],
-      schema: {
-        'x-stoplight': {
-          id: expect.any(String),
-        },
-      },
-    });
-  });
-
-  it('should handle nullish value gracefully', () => {
-    expect(translateHeaderObject(null, 'header')).toBeUndefined();
   });
 });
