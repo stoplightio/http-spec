@@ -19,7 +19,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "becbc0ed96d9d",
+            "id": "1f6ea10247ff0",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -74,7 +74,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "7e79049c5af23",
+            "id": "c9abf75a2a734",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -129,7 +129,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "62e6080a56c45",
+        "id": "bebc616bf0361",
         "required": true,
       },
       "cookie": Array [],
@@ -143,7 +143,7 @@ Array [
         "contents": Array [],
         "description": "Invalid input",
         "headers": Array [],
-        "id": "029110671da4a",
+        "id": "2e992aee1674b",
       },
     ],
     "security": Array [
@@ -239,7 +239,7 @@ Array [
         "contents": Array [],
         "description": "",
         "headers": Array [],
-        "id": "6ae68ec4738b2",
+        "id": "75d497d0ca810",
       },
     ],
     "security": Array [],
@@ -343,7 +343,7 @@ Array [
             "style": "simple",
           },
         ],
-        "id": "ee11fabc87ff7",
+        "id": "ae2d0e59a4075",
       },
     ],
     "security": Array [],
@@ -380,14 +380,14 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
-        "id": "5dfa6d9892b22",
+        "id": "24183a40dad2f",
       },
       Object {
         "code": "404",
         "contents": Array [],
         "description": "Pet not found",
         "headers": Array [],
-        "id": "5dba6d9892c7e",
+        "id": "4a183a402036c",
       },
     ],
     "security": Array [],
@@ -418,7 +418,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "954d8d8652606",
+            "id": "0b4c03fabc304",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -473,7 +473,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "1043a7cddde88",
+            "id": "349f7613ff102",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -528,7 +528,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "9b5d65cfbc4fd",
+        "id": "f8b995c86690a",
         "required": true,
       },
       "cookie": Array [],
@@ -556,34 +556,11 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
-        "id": "c12ebf63598e3",
+        "id": "9161bca4d6ce5",
       },
       Object {
         "code": "404",
         "contents": Array [
-          Object {
-            "examples": Array [],
-            "id": "3d04477dddecb",
-            "mediaType": "application/xml",
-            "schema": Object {
-              "$schema": "http://json-schema.org/draft-07/schema#",
-              "properties": Object {
-                "code": Object {
-                  "type": "string",
-                },
-                "message": Object {
-                  "type": "string",
-                },
-              },
-              "required": Array [
-                "code",
-              ],
-              "type": "object",
-              "x-stoplight": Object {
-                "id": "d1d03adc8237d",
-              },
-            },
-          },
           Object {
             "examples": Array [],
             "id": "d1be05066ac36",
@@ -607,17 +584,40 @@ Array [
               },
             },
           },
+          Object {
+            "examples": Array [],
+            "id": "3d04477dddecb",
+            "mediaType": "application/xml",
+            "schema": Object {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "properties": Object {
+                "code": Object {
+                  "type": "string",
+                },
+                "message": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "code",
+              ],
+              "type": "object",
+              "x-stoplight": Object {
+                "id": "d1d03adc8237d",
+              },
+            },
+          },
         ],
         "description": "Our shared 404 response.",
         "headers": Array [],
-        "id": "e1deb92ee1e73",
+        "id": "53fa597d5f695",
       },
       Object {
         "code": "405",
         "contents": Array [],
         "description": "Validation exception",
         "headers": Array [],
-        "id": "c15ebf6359d8c",
+        "id": "3b7b1912287ef",
       },
     ],
     "security": Array [

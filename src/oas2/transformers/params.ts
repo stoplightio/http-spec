@@ -121,7 +121,7 @@ export const translateToBodyParameter = withContext<
   );
 
   return {
-    id: this.generateId(`http_request_body-${this.parentId}`),
+    id: this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`),
 
     contents: consumes.map(
       withContext(mediaType => {
@@ -165,7 +165,7 @@ export const translateFromFormDataParameters = withContext<
 >(function (parameters, consumes) {
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId(`http_request_body-${this.parentId}`),
+      id: this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`),
       contents: consumes.map(
         withContext(mediaType => ({
           id: this.generateId(`http_media-${this.parentId}-${mediaType}`),

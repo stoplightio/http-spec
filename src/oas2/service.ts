@@ -1,38 +1,44 @@
 import { isPlainObject } from '@stoplight/json';
-import { HttpSecurityScheme, IHttpOperation, IHttpOperationResponse, Optional, Reference } from '@stoplight/types';
+import { HttpSecurityScheme, IHttpOperation, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../context';
 import { isNonNullable, isString } from '../guards';
 import { createContext } from '../oas/context';
-import { bundleResolveRef } from '../oas/resolver';
+import { isValidOas2ParameterObject } from '../oas/guards';
+import { resolveRef, syncReferenceObject } from '../oas/resolver';
 import { transformOasService } from '../oas/service';
 import { translateToComponents } from '../oas/transformers/components';
 import { translateSchemaObjectFromPair } from '../oas/transformers/schema';
 import { Oas2HttpServiceBundle, Oas2HttpServiceTransformer, OasVersion } from '../oas/types';
-import { ArrayCallbackParameters } from '../types';
+import { ArrayCallbackParameters, RefResolver } from '../types';
 import { entries } from '../utils';
-import { normalizeProducesOrConsumes } from './accessors';
 import { transformOas2Operations } from './operation';
 import { translateToSharedParameters } from './transformers/params';
-import { translateToResponse } from './transformers/responses';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
 import { Oas2TranslateFunction } from './types';
 
+const oas2BundleResolveRef: RefResolver = function (target) {
+  const output = resolveRef.call(this, target);
+  if (target.$ref.startsWith('#/responses/')) {
+    return output;
+  }
+
+  if (isValidOas2ParameterObject(output) && (output.in === 'formData' || output.in === 'body')) {
+    return output;
+  }
+
+  return syncReferenceObject(target, this.references);
+};
+
 export const bundleOas2Service: Oas2HttpServiceBundle = ({ document: _document }) => {
-  const ctx = createContext(_document, bundleResolveRef);
+  const ctx = createContext(_document, oas2BundleResolveRef);
   const { document } = ctx;
 
   const { securitySchemes, ...service } = transformOas2Service({ document, ctx });
-  const produces = normalizeProducesOrConsumes(ctx.document.produces);
   const components = {
     ...translateToComponents.call(ctx, OasVersion.OAS2, {
-      responses([key, value]): Optional<
-        IHttpOperationResponse<true> | (Pick<IHttpOperationResponse<true>, 'code'> & Reference)
-      > {
-        return translateToResponse.call(ctx, produces, key, value);
-      },
       definitions: translateSchemaObjectFromPair,
       securityDefinitions: translateSecurityScheme,
     }),

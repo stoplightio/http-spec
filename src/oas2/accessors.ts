@@ -60,7 +60,10 @@ export function normalizeProducesOrConsumes(input: unknown): string[] {
     return [];
   }
 
-  return input.flat().filter(isString);
+  return input
+    .flat()
+    .filter(isString)
+    .sort((a, b) => a.localeCompare(b));
 }
 
 function getProducesOrConsumes(

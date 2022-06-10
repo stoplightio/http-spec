@@ -57,7 +57,7 @@ export const translateToResponse = withContext<
     .filter(({ schema, examples }) => !!schema || examples.length > 0);
 
   const translatedResponses = {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
+    id: this.generateId(`http_response-${this.parentId}-${actualKey}-${produces.join('-')}`),
     code: statusCode,
     description: maybeResponseObject.description,
     headers,

@@ -24,7 +24,7 @@ type Translator<K extends keyof Components> = (
 ) => Optional<Omit<Components[K][number], 'key'>>;
 
 type Translators = {
-  responses: Translator<'responses'>;
+  responses?: Translator<'responses'>;
   definitions?: Translator<'schemas'>;
   schemas?: Translator<'schemas'>;
   requestBodies?: Translator<'requestBodies'>;
