@@ -27,37 +27,35 @@ import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], IHttpOperationRequestBody<true> | Reference>
+  Oas3TranslateFunction<[requestBodyObject: unknown], Optional<IHttpOperationRequestBody<true> | Reference>>
 >(function (requestBodyObject) {
   const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
   if (isReferenceObject(maybeRequestBodyObject)) {
     return maybeRequestBodyObject;
   }
 
+  if (!isRequestBodyObject(maybeRequestBodyObject)) return;
+
   const id = this.generateId(`http_request_body-${this.parentId}`);
 
-  if (isRequestBodyObject(maybeRequestBodyObject)) {
-    return {
-      id,
-      contents: entries(maybeRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
+  return {
+    id,
+    contents: entries(maybeRequestBodyObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),
 
-      ...pickBy(
-        {
-          required: maybeRequestBodyObject.required,
-        },
-        isBoolean,
-      ),
+    ...pickBy(
+      {
+        required: maybeRequestBodyObject.required,
+      },
+      isBoolean,
+    ),
 
-      ...pickBy(
-        {
-          description: maybeRequestBodyObject.description,
-        },
-        isString,
-      ),
-    };
-  }
-
-  return { id, contents: [] };
+    ...pickBy(
+      {
+        description: maybeRequestBodyObject.description,
+      },
+      isString,
+    ),
+  };
 });
 
 const translateParameterObjectSchema = withContext<
@@ -158,7 +156,13 @@ export const translateToRequest = withContext<
   }
 
   return {
-    body: translateRequestBody.call(this, operation?.requestBody),
+    ...pickBy(
+      {
+        body: translateRequestBody.call(this, operation?.requestBody),
+      },
+      isNonNullable,
+    ),
+
     headers: params.header,
     query: params.query,
     cookie: params.cookie,

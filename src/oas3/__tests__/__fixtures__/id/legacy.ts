@@ -160,11 +160,6 @@ export default [
     ],
     request: {
       // Request doesn't need an id
-      body: {
-        id: 'd5027559477f8',
-        // Really this doesn't even need to be here... there is no request body for this op
-        contents: [],
-      },
       headers: [
         {
           // hash(`http_header-${parentId}-${param.name}`)

@@ -101,10 +101,6 @@ export default [
     ],
     servers: [],
     request: {
-      body: {
-        id: '913ab62a764b4',
-        contents: [],
-      },
       headers: [
         {
           // hash('http_header-service_abc-A-Shared-Header')

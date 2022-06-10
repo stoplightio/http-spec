@@ -31,10 +31,6 @@ Object {
 
 exports[`translateOas3ToRequest given no request body should translate parameters 1`] = `
 Object {
-  "body": Object {
-    "contents": Array [],
-    "id": Any<String>,
-  },
   "cookie": Array [],
   "headers": Array [
     Object {

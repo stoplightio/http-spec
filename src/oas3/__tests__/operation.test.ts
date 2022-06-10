@@ -146,11 +146,6 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
-      request: {
-        body: {
-          id: expect.any(String),
-        },
-      },
     });
   });
 
@@ -189,11 +184,6 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
-      request: {
-        body: {
-          id: expect.any(String),
-        },
-      },
       tags: [
         {
           id: expect.any(String),
@@ -304,11 +294,6 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
-      request: {
-        body: {
-          id: expect.any(String),
-        },
-      },
       servers: [
         {
           id: expect.any(String),
@@ -415,11 +400,6 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
-      request: {
-        body: {
-          id: expect.any(String),
-        },
-      },
       servers: [
         {
           id: expect.any(String),
@@ -526,11 +506,6 @@ describe('transformOas3Operation', () => {
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
-      request: {
-        body: {
-          id: expect.any(String),
-        },
-      },
       servers: [
         {
           id: expect.any(String),
@@ -675,11 +650,6 @@ describe('transformOas3Operation', () => {
       callbacks: [
         {
           id: expect.any(String),
-          request: {
-            body: {
-              id: expect.any(String),
-            },
-          },
         },
       ],
     });
@@ -723,10 +693,6 @@ describe('transformOas3Operation', () => {
       method: 'get',
       path: '/users/{userId}',
       request: {
-        body: {
-          id: expect.any(String),
-          contents: [],
-        },
         cookie: [],
         headers: [
           {
@@ -807,10 +773,6 @@ describe('transformOas3Operation', () => {
       method: 'get',
       path: '/users/{userId}',
       request: {
-        body: {
-          id: expect.any(String),
-          contents: [],
-        },
         cookie: [],
         headers: [
           {
@@ -1250,17 +1212,12 @@ describe('transformOas3Operation', () => {
     };
 
     expect(
-      transformOas3Operation({
+      transformOas3Operation.bind(null, {
         path: '/pets',
         method: 'post',
         document,
       }),
-    ).toHaveProperty(
-      'request.body',
-      expect.objectContaining({
-        contents: [],
-      }),
-    );
+    ).not.toThrow();
   });
 
   describe('OAS 3.1 support', () => {

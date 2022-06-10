@@ -172,10 +172,6 @@ export default {
       method: 'get',
       path: '/users/{userId}',
       request: {
-        body: {
-          contents: [],
-          id: 'd5027559477f8',
-        },
         cookie: [],
         headers: [
           {

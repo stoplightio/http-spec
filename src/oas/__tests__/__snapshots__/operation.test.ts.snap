@@ -869,10 +869,6 @@ Array [
     "method": "get",
     "path": "/pets",
     "request": Object {
-      "body": Object {
-        "contents": Array [],
-        "id": "ccf0943cc3b92",
-      },
       "cookie": Array [],
       "headers": Array [],
       "path": Array [],

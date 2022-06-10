@@ -11,10 +11,6 @@ export default {
       method: 'get',
       path: '/orgs/{org}/repos',
       request: {
-        body: {
-          contents: [],
-          id: '913ab62a764b4',
-        },
         cookie: [],
         headers: [
           {
