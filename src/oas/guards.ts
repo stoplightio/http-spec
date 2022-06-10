@@ -1,18 +1,9 @@
 import { hasRef, isPlainObject } from '@stoplight/json';
-import { DeepPartial, HttpParamStyles } from '@stoplight/types';
+import { DeepPartial, HttpParamStyles, Reference } from '@stoplight/types';
 import type * as OAS3 from 'openapi3-ts';
 import type * as OAS2 from 'swagger-schema-official';
 
-import type {
-  Oas2ParamBase,
-  Oas3ParamBase,
-  OperationObject,
-  ParamBase,
-  PathItemObject,
-  ReferenceObject,
-} from './types';
-
-const HTTP_VERBS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
+import type { Oas2ParamBase, Oas3ParamBase, ParamBase } from './types';
 
 export function hasXLogo(
   info: DeepPartial<OAS2.Info | OAS3.InfoObject>,
@@ -37,29 +28,6 @@ export const isValidOas3ParameterObject = (param: unknown): param is Oas3ParamBa
 export const isValidParamStyle = (style: unknown): style is HttpParamStyles =>
   VALID_PARAM_STYLES.includes(style as HttpParamStyles);
 
-export function isHttpVerb(maybeHttpVerb: unknown): maybeHttpVerb is typeof HTTP_VERBS[number] {
-  return typeof maybeHttpVerb === 'string' && HTTP_VERBS.includes(maybeHttpVerb);
-}
-
-export function isPathItemObject(maybePathItemObject: unknown): maybePathItemObject is PathItemObject {
-  // lax check for backwards compatibility
-  return (
-    isPlainObject(maybePathItemObject) &&
-    // oas2 & oas3
-    ('parameters' in maybePathItemObject ||
-      // oas3
-      'servers' in maybePathItemObject ||
-      'summary' in maybePathItemObject ||
-      'description' in maybePathItemObject ||
-      // oas2 & oas3
-      Object.keys(maybePathItemObject).some(isHttpVerb))
-  );
-}
-
-export function isOperationObject(maybeOperationObject: unknown): maybeOperationObject is OperationObject {
-  return isPlainObject(maybeOperationObject) && 'responses' in maybeOperationObject;
-}
-
-export function isReferenceObject(maybeReferenceObject: unknown): maybeReferenceObject is ReferenceObject {
+export function isReferenceObject(maybeReferenceObject: unknown): maybeReferenceObject is Reference {
   return hasRef(maybeReferenceObject);
 }

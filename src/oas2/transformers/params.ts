@@ -30,7 +30,6 @@ import { setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
-import { ReferenceObject } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
 import { getExamplesFromSchema } from '../accessors';
@@ -93,11 +92,11 @@ export const translateToHeaderParam = withContext<
 
 const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   ArrayCallbackParameters<[name: string, value: unknown]>,
-  Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject)>
+  Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference)>
 > = function ([name, value]) {
   if (isReferenceObject(value)) {
-    (value as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject).name = name;
-    return value as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject;
+    (value as Pick<IHttpHeaderParam<true>, 'name'> & Reference).name = name;
+    return value as Pick<IHttpHeaderParam<true>, 'name'> & Reference;
   }
 
   if (!isPlainObject(value)) return;
@@ -108,7 +107,7 @@ const translateToHeaderParamsFromPair: Oas2TranslateFunction<
 
 export const translateToHeaderParams: Oas2TranslateFunction<
   [headers: unknown],
-  (IHttpHeaderParam<true> | Reference)[]
+  (IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference))[]
 > = function (headers) {
   return entries(headers).map(translateToHeaderParamsFromPair, this).filter(isNonNullable);
 };

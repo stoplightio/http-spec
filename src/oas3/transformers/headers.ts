@@ -1,13 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import {
-  HttpParamStyles,
-  IHttpEncoding,
-  IHttpHeaderParam,
-  INodeExample,
-  INodeExternalExample,
-  Optional,
-  Reference,
-} from '@stoplight/types';
+import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, Optional, Reference } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
@@ -15,7 +7,6 @@ import { isBoolean, isNonNullable, isString } from '../../guards';
 import { isReferenceObject } from '../../oas/guards';
 import { translateSchemaObject } from '../../oas/transformers';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
-import { ReferenceObject } from '../../oas/types';
 import { entries } from '../../utils';
 import { isHeaderObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
@@ -24,14 +15,14 @@ import { translateToExample } from './examples';
 export const translateHeaderObject = withContext<
   Oas3TranslateFunction<
     [[name: string, headerObject: unknown]],
-    Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject)>
+    Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference)>
   >
 >(function ([name, unresolvedHeaderObject]) {
   const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
 
   if (isReferenceObject(maybeHeaderObject)) {
-    (maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject).name = name;
-    return maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & ReferenceObject;
+    (maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & Reference).name = name;
+    return maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & Reference;
   }
 
   if (!isPlainObject(maybeHeaderObject)) return;
@@ -86,7 +77,7 @@ export const translateHeaderObject = withContext<
     ),
   };
 
-  const examples: (INodeExample | INodeExternalExample | Reference)[] = [];
+  const examples: IHttpHeaderParam<true>['examples'] = [];
   const encodings: IHttpEncoding<true>[] = [];
 
   if (isPlainObject(contentValue)) {

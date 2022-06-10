@@ -40,5 +40,4 @@ export type Oas2ParamBase = ParamBase & { in: OAS2.BaseParameter['in'] };
 export type ParamBase = { name: string; in: string } & Record<string, unknown>;
 
 export type PathItemObject = Omit<OAS2.Path, '$ref'> | Omit<OAS3.PathItemObject, '$ref'>;
-export type ReferenceObject = OAS2.Reference | OAS3.ReferenceObject;
 export type OperationObject = OAS2.Operation | OAS3.OperationObject;

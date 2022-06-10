@@ -138,7 +138,7 @@ export const translateToRequest = withContext<
   };
 
   for (const param of iterateOasParams.call(this, path, operation)) {
-    let kind;
+    let kind: string;
     if (isReferenceObject(param)) {
       kind = (this.references[param.$ref] && getComponentName(this.references[param.$ref])) || param.$ref;
     } else {

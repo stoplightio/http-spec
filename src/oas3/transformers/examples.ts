@@ -19,7 +19,7 @@ export const translateToExample = withContext<
 
   if (!isPlainObject(maybeExample)) return;
   if (isReferenceObject(maybeExample)) {
-    maybeExample.key = key;
+    (maybeExample as { key: string } & Reference).key = key;
     return maybeExample as { key: string } & Reference;
   }
 

@@ -1,5 +1,5 @@
 import type { Extensions } from '@stoplight/types';
-import type { ReferenceObject } from 'openapi3-ts';
+import { Reference } from '@stoplight/types';
 
 import { Fragment, TransformerContext } from '../types';
 import { entries } from '../utils';
@@ -12,20 +12,11 @@ const getIdForParameter = (param: ParamBase) => `${param.name}-${param.in}`;
 
 type OasParamsIterator<N> = (this: TransformerContext, path: Fragment, operation: Fragment) => Iterable<N>;
 
-export function createOasParamsIterator(
-  spec: OasVersion.OAS2,
-): OasParamsIterator<Oas2ParamBase | (ReferenceObject & { in?: Oas2ParamBase['in'] })>;
-export function createOasParamsIterator(
-  spec: OasVersion.OAS3,
-): OasParamsIterator<Oas3ParamBase | (ReferenceObject & { in?: Oas3ParamBase['in'] })>;
+export function createOasParamsIterator(spec: OasVersion.OAS2): OasParamsIterator<Oas2ParamBase | Reference>;
+export function createOasParamsIterator(spec: OasVersion.OAS3): OasParamsIterator<Oas3ParamBase | Reference>;
 export function createOasParamsIterator(
   spec: OasVersion,
-): OasParamsIterator<
-  | Oas2ParamBase
-  | Oas3ParamBase
-  | (ReferenceObject & { in?: Oas2ParamBase['in'] })
-  | (ReferenceObject & { in?: Oas3ParamBase['in'] })
-> {
+): OasParamsIterator<Oas2ParamBase | Oas3ParamBase | Reference> {
   return function* (path, operation) {
     const seenParams = new Set();
     const { parentId, context } = this;
