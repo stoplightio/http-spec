@@ -52,7 +52,7 @@ export const translateSchemaObjectFromPair = withContext<
     return cached;
   }
 
-  const id = this.generateId(`schema-${this.parentId}-${key}`);
+  const id = this.generateId(`schema-${this.parentId}-${key ?? ''}`);
 
   cached = convertSchema(this.document, maybeSchemaObject, this.references);
   cached['x-stoplight'] = {

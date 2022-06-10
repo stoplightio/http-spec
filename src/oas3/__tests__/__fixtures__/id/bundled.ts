@@ -44,7 +44,8 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            id: 'be6b513de1b69',
+            // hash('schema-21b1f96bd26ee-')
+            id: 'a9c9a05d9cb2d',
           },
         },
       },
@@ -67,7 +68,8 @@ export default {
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                id: '2691eb0db9efc',
+                // hash('schema-4d98be34f341a-')
+                id: '89c00c1a4aeb9',
               },
               type: 'object',
               properties: {

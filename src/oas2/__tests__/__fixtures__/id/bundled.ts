@@ -31,7 +31,8 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            id: 'be6b513de1b69',
+            // hash('schema-21b1f96bd26ee-')
+            id: 'a9c9a05d9cb2d',
           },
         },
       },
@@ -197,17 +198,15 @@ export default {
           headers: [],
           contents: [
             {
-              // hash('http_media-{parentId}-application/json');
-              // hash('http_media-dc24f01b0f5bd-application/json');
+              // hash('http_media-{parentId}-application/json')
+              // hash('http_media-dc24f01b0f5bd-application/json')
               id: '15a9987a80e2c',
               mediaType: 'application/json',
-              examples: [],
               schema: {
                 $schema: 'http://json-schema.org/draft-07/schema#',
+                // hash('schema-15a9987a80e2c-')
                 'x-stoplight': {
-                  // hash('schema-{parentId}-')
-                  // hash('schema-service_abc--')
-                  id: '069dfbb6c6315',
+                  id: '06ee54ffb4236',
                 },
                 type: 'object',
                 properties: {
@@ -216,6 +215,7 @@ export default {
                   },
                 },
               },
+              examples: [],
             },
           ],
         },
@@ -245,11 +245,15 @@ export default {
       extensions: {},
       request: {
         body: {
-          id: '07267ec331fc9',
+          // hash('http_request_body-{parentId}-{consumes.join('-')}')
+          // hash('http_request_body-b16a96d287951-application/json')
+          id: 'dc29cc7417d84',
           required: true,
           contents: [
             {
-              id: '00db77c676e1a',
+              // hash('http_media-{parentId}-{mediaType}')
+              // hash('http_media-dc29cc7417d84-application/json')
+              id: '3abc90129b043',
               mediaType: 'application/json',
               examples: [],
               schema: {
@@ -334,14 +338,14 @@ export default {
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 // hash('schema-15a9987a80e2c-')
                 'x-stoplight': {
-                  id: 'c5b34ef4d54df',
+                  id: '06ee54ffb4236',
                 },
+                type: 'object',
                 properties: {
                   error: {
                     $ref: '#/components/schemas/3',
                   },
                 },
-                type: 'object',
               },
               examples: [],
             },

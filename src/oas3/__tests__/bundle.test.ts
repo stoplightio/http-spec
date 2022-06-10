@@ -108,7 +108,7 @@ describe('bundleOas3Service', () => {
                   },
                   type: 'object',
                   'x-stoplight': {
-                    id: '2ac446be3ae04',
+                    id: '42ac2d350285a',
                   },
                 },
               },
@@ -268,7 +268,7 @@ describe('bundleOas3Service', () => {
                 examples: [],
                 schema: {
                   'x-stoplight': {
-                    id: '2ac446be3ae04',
+                    id: '42ac2d350285a',
                   },
                   $schema: 'http://json-schema.org/draft-07/schema#',
                   properties: {
