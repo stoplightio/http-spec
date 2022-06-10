@@ -19,7 +19,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "1f6ea10247ff0",
+            "id": "beb02d1ff7b23",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -74,7 +74,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "c9abf75a2a734",
+            "id": "531dc73646a3e",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -129,7 +129,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "bebc616bf0361",
+        "id": "7de2e97c373c6",
         "required": true,
       },
       "cookie": Array [],
@@ -315,20 +315,20 @@ Array [
         "headers": Array [
           Object {
             "description": "Allowed clients",
-            "id": "0b9c41debc794",
+            "id": "b1cba0180c7df",
             "name": "Allow",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
               "x-stoplight": Object {
-                "id": "b5186fbb4fdf5",
+                "id": "96fc94cefd7d2",
               },
             },
             "style": "simple",
           },
           Object {
             "description": "Remaining requests",
-            "id": "bbf28e682b54b",
+            "id": "32d8a9b2021a7",
             "name": "X-Rate-Limit",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -337,7 +337,7 @@ Array [
               "minimum": -9223372036854776000,
               "type": "number",
               "x-stoplight": Object {
-                "id": "a07f1d06408fd",
+                "id": "3c572d09f18de",
               },
             },
             "style": "simple",
@@ -418,7 +418,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "0b4c03fabc304",
+            "id": "04c11541cf13f",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -473,7 +473,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "349f7613ff102",
+            "id": "3be1a46e035af",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -528,7 +528,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "f8b995c86690a",
+        "id": "46cce04bfdb01",
         "required": true,
       },
       "cookie": Array [],
@@ -563,7 +563,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "d1be05066ac36",
+            "id": "e4c3ee9ac9603",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -586,7 +586,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "3d04477dddecb",
+            "id": "78ade5a6a574a",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",

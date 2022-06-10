@@ -116,12 +116,14 @@ export const translateToHeaderParams: Oas2TranslateFunction<
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
+  const id = this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`);
+
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),
   );
 
   return {
-    id: this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`),
+    id,
 
     contents: consumes.map(
       withContext(mediaType => {

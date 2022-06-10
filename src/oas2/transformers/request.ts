@@ -25,7 +25,7 @@ export const translateToRequest: Oas2TranslateFunction<
   IHttpOperationRequest<true>
 > = function (path, operation) {
   const consumes = getConsumes(this.document, operation);
-  const parameters = iterateOasParams.call(this, operation, path);
+  const parameters = iterateOasParams.call(this, path, operation);
 
   const params: Omit<Required<IHttpOperationRequest<true>>, 'body'> = {
     headers: [],

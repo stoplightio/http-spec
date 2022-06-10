@@ -132,18 +132,19 @@ export default {
         ],
         path: [
           {
-            // hash('http_path_param-parentId-userId')
-            // hash('http_path_param-96043a63b6901-userId')
-            id: '12e4ecaea25e7',
+            // hash('http_path_param-{parentId}-{name}')
+            // this one is placed under PATH, so its parentId is hash('http_path-service_abc-/users/{}') which equals 85d8dbab8a3d5
+            // hash('http_path_param-85d8dbab8a3d5-userId')
+            id: 'fe171ec8cfd0b',
             description: 'Id of an existing user.',
             name: 'userId',
             required: true,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                // hash('schema-parentId-')
-                // hash('schema-12e4ecaea25e7-')
-                id: '9ae1fe9558406',
+                // hash('schema-{parentId}-')
+                // hash('schema-fe171ec8cfd0b-')
+                id: '13ad531bed72e',
               },
               type: 'integer',
             },
@@ -196,12 +197,16 @@ export default {
           headers: [],
           contents: [
             {
-              id: '48eeb3ee2a049',
+              // hash('http_media-{parentId}-application/json');
+              // hash('http_media-dc24f01b0f5bd-application/json');
+              id: '15a9987a80e2c',
               mediaType: 'application/json',
               examples: [],
               schema: {
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 'x-stoplight': {
+                  // hash('schema-{parentId}-')
+                  // hash('schema-service_abc--')
                   id: '069dfbb6c6315',
                 },
                 type: 'object',
@@ -256,9 +261,6 @@ export default {
         cookie: [],
         headers: [
           {
-            $ref: '#/components/header/0',
-          },
-          {
             id: '1ead595922478',
             name: 'Post-Specific-Header',
             schema: {
@@ -270,11 +272,16 @@ export default {
             },
             style: 'simple',
           },
+          {
+            $ref: '#/components/header/0',
+          },
         ],
         path: [
           {
-            // hash('http_path_param-b16a96d287951-userId')
-            id: '6c9394a75ccec',
+            // hash('http_path_param-{parentId}-{name}')
+            // this one is placed under PATH, so its parentId is hash('http_path-service_abc-/users/{}') which equals 85d8dbab8a3d5
+            // hash('http_path_param-85d8dbab8a3d5-userId')
+            id: 'fe171ec8cfd0b',
             description: 'Id of an existing user.',
             name: 'userId',
             required: true,
@@ -292,13 +299,15 @@ export default {
       },
       responses: [
         {
-          // hash('http_response-{parentId}-201')
-          // hash('http_response-b16a96d287951-201')
-          id: 'd8ca38606ee5d',
+          // hash(`http_response-{parentId}-201-${produces.join('-')}`)
+          // hash('http_response-b16a96d287951-201-application/json')
+          id: 'cd74179d497cc',
           code: '201',
           contents: [
             {
-              id: '88460a8f1a612',
+              // hash('http_media-{parentId}-{mediaType}')
+              // hash('http_media-cd74179d497cc-application/json')
+              id: '7ad7eaa03f1d8',
               examples: [],
               mediaType: 'application/json',
               schema: {
@@ -310,19 +319,20 @@ export default {
           headers: [],
         },
         {
-          // hash('http_response-service_abc-ErrorResponse')
-          id: '437771f63f179',
+          // hash(`http_response-service_abc-ErrorResponse-${produces.join('-')}`)
+          id: 'dc24f01b0f5bd',
           code: '400',
           description: 'A generic error response.',
           headers: [],
           contents: [
             {
               // hash('http_media-{parentId}-application/json')
-              // hash('http_media-service_abc-ErrorResponse')
-              id: '4d98be34f341a',
+              // hash('http_media-dc24f01b0f5bd-application/json')
+              id: '15a9987a80e2c',
               mediaType: 'application/json',
               schema: {
                 $schema: 'http://json-schema.org/draft-07/schema#',
+                // hash('schema-15a9987a80e2c-')
                 'x-stoplight': {
                   id: 'c5b34ef4d54df',
                 },
