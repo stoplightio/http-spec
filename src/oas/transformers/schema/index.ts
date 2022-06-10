@@ -29,7 +29,7 @@ export const translateSchemaObject = withContext<
     JSONSchema7
   >
 >(function (schema) {
-  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema) ?? schema;
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
   const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject)) : '';
   return translateSchemaObjectFromPair.call(this, [actualKey, maybeSchemaObject]);
@@ -42,7 +42,7 @@ export const translateSchemaObjectFromPair = withContext<
     JSONSchema7
   >
 >(function ([key, schema]) {
-  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema) ?? schema;
 
   if (!isPlainObject(maybeSchemaObject)) return {};
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;

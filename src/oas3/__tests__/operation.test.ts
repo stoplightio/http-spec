@@ -1220,6 +1220,65 @@ describe('transformOas3Operation', () => {
     ).not.toThrow();
   });
 
+  it('should keep schemas with broken $refs', () => {
+    const document = {
+      openapi: '3.1.0',
+      paths: {
+        '/hello/test': {
+          get: {
+            operationId: 'get-test',
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/broken/ref',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(transformOas3Operation({ document, path: '/hello/test', method: 'get' })).toStrictEqual({
+      id: '87ba69c1b59cb',
+      iid: 'get-test',
+      method: 'get',
+      path: '/hello/test',
+      responses: [
+        {
+          id: '727c28d8a760f',
+          code: '200',
+          headers: [],
+          contents: [
+            {
+              id: 'dbb4352dafa27',
+              mediaType: 'application/json',
+              schema: {
+                $ref: '#/broken/ref',
+              },
+              examples: [],
+              encodings: [],
+            },
+          ],
+        },
+      ],
+      servers: [],
+      request: {
+        headers: [],
+        query: [],
+        cookie: [],
+        path: [],
+      },
+      tags: [],
+      security: [],
+      extensions: {},
+    });
+  });
+
   describe('OAS 3.1 support', () => {
     it('should respect jsonSchemaDialect', () => {
       const document: Partial<OpenAPIObject> = {
