@@ -1,0 +1,187 @@
+{
+  "swagger": "2.0",
+  "x-stoplight": {
+    "id": "service_abc"
+  },
+  "info": {
+    "title": "Users API",
+    "version": "1.0"
+  },
+  "host": "localhost:3000",
+  "schemes": [
+    "http"
+  ],
+  "tags": [
+    {
+      "name": "mutates"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user.",
+          "type": "integer"
+        },
+        {
+          "$ref": "#/parameters/Some-Header"
+        }
+      ],
+      "get": {
+        "operationId": "get-user",
+        "summary": "Get User Info by User ID",
+        "description": "Retrieve the information of the user with the matching user ID.",
+        "tags": [
+          "tag-without-root-def"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "summaryOnly",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "operationId": "post-users-userId",
+        "summary": "Create user",
+        "tags": [
+          "mutates"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Post-Specific-Header",
+            "in": "header",
+            "type": "integer"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User Created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "title": "User",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "Address": {
+      "title": "Address",
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        }
+      }
+    },
+    "UserId": {
+      "type": "number",
+      "title": "UserId",
+      "minimum": 0
+    },
+    "Error": {
+      "title": "Error",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "number"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "msg"
+      ]
+    }
+  },
+  "parameters": {
+    "Some-Header": {
+      "name": "A-Shared-Header",
+      "in": "header",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "securityDefinitions": {
+    "api-key": {
+      "name": "API Key",
+      "type": "apiKey",
+      "in": "query"
+    }
+  },
+  "responses": {
+    "ErrorResponse": {
+      "description": "A generic error response.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      }
+    }
+  }
+}
