@@ -55,15 +55,16 @@ function getSecurity(security: unknown, definitions: DeepPartial<Spec['securityD
   });
 }
 
+export function sortProducesOrConsumes(input: string[]) {
+  return input.slice().sort((a, b) => a.localeCompare(b));
+}
+
 export function normalizeProducesOrConsumes(input: unknown): string[] {
   if (!Array.isArray(input)) {
     return [];
   }
 
-  return input
-    .flat()
-    .filter(isString)
-    .sort((a, b) => a.localeCompare(b));
+  return input.flat().filter(isString);
 }
 
 function getProducesOrConsumes(

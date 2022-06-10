@@ -10,7 +10,7 @@ import { getSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
-import { getExamplesFromSchema, getProduces } from '../accessors';
+import { getExamplesFromSchema, getProduces, sortProducesOrConsumes } from '../accessors';
 import { isResponseObject } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
@@ -31,7 +31,9 @@ export const translateToResponse = withContext<
   if (!isResponseObject(maybeResponseObject)) return;
 
   const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
-  const id = this.generateId(`http_response-${this.parentId}-${actualKey}-${produces.join('-')}`);
+  const id = this.generateId(
+    `http_response-${this.parentId}-${actualKey}-${sortProducesOrConsumes(produces).join('-')}`,
+  );
 
   const headers = translateToHeaderParams.call(this, maybeResponseObject.headers);
   const objectifiedExamples = entries(

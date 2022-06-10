@@ -32,7 +32,7 @@ import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { getExamplesFromSchema } from '../accessors';
+import { getExamplesFromSchema, sortProducesOrConsumes } from '../accessors';
 import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
@@ -115,7 +115,7 @@ export const translateToHeaderParams: Oas2TranslateFunction<
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
-  const id = this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`);
+  const id = this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`);
 
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),
@@ -166,7 +166,7 @@ export const translateFromFormDataParameters = withContext<
 >(function (parameters, consumes) {
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId(`http_request_body-${this.parentId}-${consumes.join('-')}`),
+      id: this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`),
       contents: consumes.map(
         withContext(mediaType => ({
           id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
