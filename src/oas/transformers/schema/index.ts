@@ -1,5 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial } from '@stoplight/types';
+import type { DeepPartial, Optional } from '@stoplight/types';
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import type { OpenAPIObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
@@ -29,22 +29,32 @@ export const translateSchemaObject = withContext<
     JSONSchema7
   >
 >(function (schema) {
-  const maybeSchemaObject = this.maybeResolveLocalRef(schema) ?? schema;
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
   const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject)) : '';
-  return translateSchemaObjectFromPair.call(this, [actualKey, maybeSchemaObject]);
+  return translateSchemaObjectFromPair.call(this, [actualKey, schema]);
 });
 
 export const translateSchemaObjectFromPair = withContext<
   TranslateFunction<
     DeepPartial<Spec | OpenAPIObject | JSONSchema4 | JSONSchema6 | JSONSchema7>,
-    [[key: string, schema: unknown]],
+    [[key: Optional<string>, schema: unknown]],
     JSONSchema7
   >
 >(function ([key, schema]) {
-  const maybeSchemaObject = this.maybeResolveLocalRef(schema) ?? schema;
+  const maybeSchemaObject = this.maybeResolveLocalRef(schema);
 
-  if (!isPlainObject(maybeSchemaObject)) return {};
+  if (!isPlainObject(maybeSchemaObject)) {
+    return isReferenceObject(schema)
+      ? {
+          ...convertSchema(this.document, schema, {}),
+          'x-stoplight': {
+            id: this.generateId(`schema-${this.parentId}-${key ?? ''}`),
+          },
+        }
+      : {};
+  }
+
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
 
   let cached = PROCESSED_SCHEMAS.get(maybeSchemaObject);

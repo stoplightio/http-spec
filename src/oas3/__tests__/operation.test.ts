@@ -1259,6 +1259,10 @@ describe('transformOas3Operation', () => {
               mediaType: 'application/json',
               schema: {
                 $ref: '#/broken/ref',
+                $schema: 'http://json-schema.org/draft-07/schema#',
+                'x-stoplight': {
+                  id: 'e073d9f2029c1',
+                },
               },
               examples: [],
               encodings: [],
