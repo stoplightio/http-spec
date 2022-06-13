@@ -48,13 +48,11 @@ export const bundleResolveRef: RefResolver = function (target) {
 };
 
 export function syncReferenceObject<K extends Reference>(target: K, references: Record<string, string>): K {
-  return new Proxy(target, {
-    get(target, key: string) {
-      if (key === '$ref') {
-        return references[target.$ref] ?? target.$ref;
-      }
-
-      return target[key];
+  const { $ref } = target;
+  return Object.defineProperty({ ...target }, '$ref', {
+    enumerable: true,
+    get() {
+      return references[$ref] ?? $ref;
     },
   });
 }
