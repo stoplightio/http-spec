@@ -36,7 +36,6 @@ describe('bundleOas3Service', () => {
                   },
                 },
               },
-
               Error: {
                 title: 'Error',
                 type: 'object',
@@ -52,6 +51,9 @@ describe('bundleOas3Service', () => {
               },
             },
             responses: {
+              CustomNotFoundError: {
+                $ref: '#/components/responses/NotFoundError',
+              },
               NotFoundError: {
                 $ref: '#/components/responses/Error',
               },
@@ -75,6 +77,22 @@ describe('bundleOas3Service', () => {
                 description: 'Forbidden Error',
               },
             },
+            parameters: {
+              'X-Rate-Limit': {
+                $ref: '#/components/parameters/Some-Header',
+              },
+              'X-Rate-Limit2': {
+                $ref: '#/components/parameters/X-Rate-Limit',
+              },
+              'Some-Header': {
+                name: 'A-Shared-Header',
+                in: 'header',
+                required: false,
+                schema: {
+                  type: 'string',
+                },
+              },
+            },
           },
         },
       }),
@@ -82,13 +100,41 @@ describe('bundleOas3Service', () => {
       components: {
         cookie: [],
         examples: [],
-        header: [],
+        header: [
+          {
+            examples: [],
+            id: '7f5897406783c',
+            key: 'Some-Header',
+            name: 'A-Shared-Header',
+            required: false,
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              type: 'string',
+              'x-stoplight': {
+                id: '7a6163aa3086e',
+              },
+            },
+            style: 'simple',
+          },
+          {
+            $ref: '#/components/header/0',
+            key: 'X-Rate-Limit',
+          },
+          {
+            $ref: '#/components/header/0',
+            key: 'X-Rate-Limit2',
+          },
+        ],
         path: [],
         query: [],
         requestBodies: [],
         responses: [
           {
-            $ref: '#/components/responses/1',
+            $ref: '#/components/responses/2',
+            key: 'CustomNotFoundError',
+          },
+          {
+            $ref: '#/components/responses/2',
             key: 'NotFoundError',
           },
           {
@@ -119,7 +165,7 @@ describe('bundleOas3Service', () => {
             key: 'Error',
           },
           {
-            $ref: '#/components/responses/1',
+            $ref: '#/components/responses/2',
             description: 'Forbidden Error',
             key: 'ForbiddenError',
           },

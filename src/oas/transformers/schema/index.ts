@@ -15,7 +15,7 @@ const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
   structs: string[];
-  references: Record<string, string>;
+  references: Record<string, { resolved: boolean; value: string }>;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -74,7 +74,11 @@ export const translateSchemaObjectFromPair = withContext<
   return cached;
 });
 
-export function convertSchema(document: Fragment, schema: OASSchemaObject, references: Record<string, string> = {}) {
+export function convertSchema(
+  document: Fragment,
+  schema: OASSchemaObject,
+  references: InternalOptions['references'] = {},
+) {
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,

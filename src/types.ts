@@ -31,12 +31,14 @@ export type ArrayCallbackParameters<T> = [T, number, T[]];
 
 export type AvailableContext = 'service' | 'path' | 'operation';
 
+export type References = Record<string, { resolved: boolean; value: string }>;
+
 export type TransformerContext<T extends Fragment = Fragment> = {
   document: T;
   context: AvailableContext;
   parentId: string;
   readonly ids: Record<AvailableContext, string>;
-  readonly references: Record<string, string>;
+  readonly references: References;
   generateId(template: string): string;
   maybeResolveLocalRef(target: unknown): unknown;
 };

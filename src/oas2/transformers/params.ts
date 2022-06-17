@@ -351,7 +351,10 @@ export const translateToSharedParameters = withContext<Oas2TranslateFunction<[ro
 
       if (!isValidOas2ParameterObject(value)) continue;
 
-      this.references[`#/parameters/${key}`] = `#/components/${value.in}/${sharedParameters[value.in].length}`;
+      this.references[`#/parameters/${key}`] = {
+        resolved: true,
+        value: `#/components/${value.in}/${sharedParameters[value.in].length}`,
+      };
 
       if (isQueryParam(value)) {
         sharedParameters.query.push({

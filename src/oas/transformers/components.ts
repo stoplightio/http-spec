@@ -1,12 +1,11 @@
 import { isPlainObject } from '@stoplight/json';
-import type { IBundledHttpService, IComponentNode, Optional } from '@stoplight/types';
-import { Reference } from '@stoplight/types';
+import type { IBundledHttpService, Optional } from '@stoplight/types';
 
 import { isNonNullable } from '../../guards';
 import type { ArrayCallbackParameters, Fragment, TransformerContext } from '../../types';
 import { entries } from '../../utils';
 import { isReferenceObject } from '../guards';
-import { setSharedKey } from '../resolver';
+import { setSharedKey, syncReferenceObject } from '../resolver';
 import { OasVersion } from '../types';
 
 interface Components {
@@ -50,38 +49,36 @@ function createInvokeTranslator(
     const objects: Components[K] = [];
     const items = entries(input[kind]);
 
-    const resolvables: (Reference & IComponentNode)[] = [];
-
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const [key, value] = item;
       setSharedKey(value, key);
 
       if (isReferenceObject(value)) {
+        this.references[`${root}/${kind}/${key}`] = {
+          resolved: false,
+          value: value.$ref,
+        };
+
         const resolvableComponent = {
           ...value,
           key,
         };
 
-        objects.push(resolvableComponent);
-        resolvables.push(resolvableComponent);
+        objects.push(syncReferenceObject(resolvableComponent, this.references));
         continue;
       }
 
       const translated = translator.call(this, items[i], i, items);
       if (!isNonNullable(translated)) continue;
 
-      this.references[`${root}/${kind}/${key}`] = `#/components/${component}/${objects.length}`;
+      this.references[`${root}/${kind}/${key}`] = {
+        resolved: true,
+        value: `#/components/${component}/${objects.length}`,
+      };
+
       (translated as Components[K][number]).key = key;
       objects.push(translated as any);
-    }
-
-    for (const resolvable of resolvables) {
-      const mapped = this.references[resolvable.$ref];
-      if (mapped === void 0) continue;
-
-      this.references[resolvable.$ref] = mapped;
-      resolvable.$ref = mapped;
     }
 
     return objects;
