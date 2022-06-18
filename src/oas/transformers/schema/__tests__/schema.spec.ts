@@ -1,8 +1,8 @@
 import { createContext } from '../../../context';
-import { translateSchemaObject } from '..';
+import { convertSchema, translateSchemaObject } from '..';
 import type { OASSchemaObject } from '../types';
 
-const translate = (schemaObject: OASSchemaObject) => translateSchemaObject.call(createContext({}), schemaObject);
+const translate = (schemaObject: unknown) => translateSchemaObject.call(createContext({}), schemaObject);
 
 describe('translateSchemaObject', () => {
   it('should translate id', () => {
@@ -318,6 +318,14 @@ describe('translateSchemaObject', () => {
         type: 'string',
         contentMediaType: 'application/octet-stream',
       });
+    });
+  });
+});
+
+describe('convertSchema', () => {
+  it.each([null, 1, [], true])('should take any arbitrary value', value => {
+    expect(convertSchema({}, value)).toStrictEqual({
+      $schema: 'http://json-schema.org/draft-07/schema#',
     });
   });
 });
