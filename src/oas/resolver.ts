@@ -1,7 +1,7 @@
 import { resolveInlineRefWithLocation } from '@stoplight/json';
 import type { JsonPath, Reference } from '@stoplight/types';
 
-import type { AvailableContext, RefResolver } from '../types';
+import type { AvailableContext, References, RefResolver } from '../types';
 
 export function inferContext(path: JsonPath): AvailableContext {
   if (path.length < 2 || path[0] !== 'paths') return 'service';
@@ -23,8 +23,8 @@ export function setSharedKey(value: unknown, key: string) {
   return false;
 }
 
-export function getComponentName($ref: string) {
-  return $ref.match(/^#\/components\/([A-Za-z]+)\//)?.[1];
+export function getComponentName(references: References, $ref: string) {
+  return getResolved(references, $ref).match(/^#\/components\/([A-Za-z]+)\//)?.[1];
 }
 
 export const resolveRef: RefResolver = function (target) {
@@ -47,12 +47,30 @@ export const bundleResolveRef: RefResolver = function (target) {
   return syncReferenceObject(target, this.references);
 };
 
-export function syncReferenceObject<K extends Reference>(target: K, references: Record<string, string>): K {
+function getResolved(references: References, $ref: string) {
+  const seen = new Set();
+  let value = $ref;
+
+  while (value in references) {
+    if (seen.has(value)) return value;
+    seen.add(value);
+
+    const referenced = references[value];
+    ({ value } = referenced);
+    if (referenced.resolved) {
+      break;
+    }
+  }
+
+  return value;
+}
+
+export function syncReferenceObject<K extends Reference>(target: K, references: References): K {
   const { $ref } = target;
   return Object.defineProperty({ ...target }, '$ref', {
     enumerable: true,
     get() {
-      return references[$ref] ?? $ref;
+      return getResolved(references, $ref);
     },
   });
 }

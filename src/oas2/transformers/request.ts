@@ -39,7 +39,7 @@ export const translateToRequest: Oas2TranslateFunction<
 
   for (const param of parameters) {
     if (isReferenceObject(param)) {
-      const kind = (this.references[param.$ref] && getComponentName(this.references[param.$ref])) || param.$ref;
+      const kind = getComponentName(this.references, param.$ref) ?? '';
       const target = params[kind === 'header' ? 'headers' : kind];
 
       if (Array.isArray(target)) {

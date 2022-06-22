@@ -15,7 +15,7 @@ const keywordsKeys = Object.keys(keywords);
 
 type InternalOptions = {
   structs: string[];
-  references: Record<string, string>;
+  references: Record<string, { resolved: boolean; value: string }>;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
