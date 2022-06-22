@@ -179,7 +179,7 @@ Array [
     "summary": "Add a new pet to the store",
     "tags": Array [
       Object {
-        "id": "bfc2f4aa9bced",
+        "id": "ac2d20b0265f3",
         "name": "pet",
       },
     ],
@@ -239,7 +239,7 @@ Array [
         "contents": Array [],
         "description": "",
         "headers": Array [],
-        "id": "75d497d0ca810",
+        "id": "6ae68ec4738b2",
       },
     ],
     "security": Array [],
@@ -315,20 +315,20 @@ Array [
         "headers": Array [
           Object {
             "description": "Allowed clients",
-            "id": "b1cba0180c7df",
+            "id": "f06fd57e462c1",
             "name": "Allow",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
               "x-stoplight": Object {
-                "id": "96fc94cefd7d2",
+                "id": "b1880b575b921",
               },
             },
             "style": "simple",
           },
           Object {
             "description": "Remaining requests",
-            "id": "32d8a9b2021a7",
+            "id": "fbf9e2e554653",
             "name": "X-Rate-Limit",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -337,13 +337,13 @@ Array [
               "minimum": -9223372036854776000,
               "type": "number",
               "x-stoplight": Object {
-                "id": "3c572d09f18de",
+                "id": "8a951cfda4990",
               },
             },
             "style": "simple",
           },
         ],
-        "id": "ae2d0e59a4075",
+        "id": "ee11fabc87ff7",
       },
     ],
     "security": Array [],
@@ -380,14 +380,14 @@ Array [
         "contents": Array [],
         "description": "Invalid ID supplied",
         "headers": Array [],
-        "id": "24183a40dad2f",
+        "id": "5dfa6d9892b22",
       },
       Object {
         "code": "404",
         "contents": Array [],
         "description": "Pet not found",
         "headers": Array [],
-        "id": "4a183a402036c",
+        "id": "5dba6d9892c7e",
       },
     ],
     "security": Array [],
@@ -653,7 +653,7 @@ Array [
     "summary": "Update an existing pet",
     "tags": Array [
       Object {
-        "id": "bfc2f4aa9bced",
+        "id": "ac2d20b0265f3",
         "name": "pet",
       },
     ],
