@@ -50,17 +50,17 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
-      "id": "bfc2f4aa9bced",
+      "id": "ac2d20b0265f3",
       "name": "pet",
     },
     Object {
       "description": "Access to Petstore orders",
-      "id": "20c6cf86f6d6d",
+      "id": "66314b3831c69",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
-      "id": "10e73f5f26c07",
+      "id": "bea1229d23575",
       "name": "user",
     },
   ],
@@ -119,17 +119,17 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
-      "id": "bfc2f4aa9bced",
+      "id": "ac2d20b0265f3",
       "name": "pet",
     },
     Object {
       "description": "Access to Petstore orders",
-      "id": "20c6cf86f6d6d",
+      "id": "66314b3831c69",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
-      "id": "10e73f5f26c07",
+      "id": "bea1229d23575",
       "name": "user",
     },
   ],

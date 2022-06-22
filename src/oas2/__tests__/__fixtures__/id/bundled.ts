@@ -11,8 +11,8 @@ export default {
   ],
   tags: [
     {
-      // hash('tag-service-abc-mutates')
-      id: '936737e88c6fa',
+      // hash('tag-mutates')
+      id: '3d179d2f9363d',
       name: 'mutates',
     },
   ],
@@ -231,7 +231,7 @@ export default {
       summary: 'Get User Info by User ID',
       tags: [
         {
-          id: '9862017e672e6',
+          id: '1e29148da7966',
           name: 'tag-without-root-def',
         },
       ],
@@ -373,7 +373,8 @@ export default {
       summary: 'Create user',
       tags: [
         {
-          id: '936737e88c6fa',
+          // hash('tag-mutates')
+          id: '3d179d2f9363d',
           name: 'mutates',
         },
       ],

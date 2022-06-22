@@ -10,7 +10,7 @@ import { getSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
-import { getExamplesFromSchema, getProduces, sortProducesOrConsumes } from '../accessors';
+import { getExamplesFromSchema, getProduces } from '../accessors';
 import { isResponseObject } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 import { translateToHeaderParams } from './params';
@@ -30,10 +30,8 @@ export const translateToResponse = withContext<
 
   if (!isResponseObject(maybeResponseObject)) return;
 
-  const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
-  const id = this.generateId(
-    `http_response-${this.parentId}-${actualKey}-${sortProducesOrConsumes(produces).join('-')}`,
-  );
+  const codeOrKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
+  const id = this.generateId.httpResponse({ codeOrKey, produces });
 
   const headers = translateToHeaderParams.call(this, maybeResponseObject.headers);
   const objectifiedExamples = entries(
@@ -44,7 +42,7 @@ export const translateToResponse = withContext<
     .map<IMediaTypeContent<true> & { examples: NonNullable<IMediaTypeContent<true>['examples']> }>(
       withContext(produceElement => {
         return {
-          id: this.generateId(`http_media-${this.parentId}-${produceElement}`),
+          id: this.generateId.httpMedia({ mediaType: produceElement }),
           mediaType: produceElement,
           examples: objectifiedExamples.filter(example => example.key === produceElement),
           ...pickBy(
@@ -73,7 +71,7 @@ export const translateToResponse = withContext<
   if (foreignExamples.length > 0) {
     if (translatedResponse.contents.length === 0)
       translatedResponse.contents[0] = {
-        id: this.generateId(`http_media-${this.parentId}-`),
+        id: this.generateId.httpMedia({ mediaType: '' }),
         mediaType: '',
         schema: {},
         examples: [],

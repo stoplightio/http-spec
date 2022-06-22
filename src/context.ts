@@ -1,5 +1,6 @@
 import { hasRef, isLocalRef } from '@stoplight/json';
 
+import { idGenerators } from './generators';
 import type {
   AvailableContext,
   Fragment,
@@ -9,12 +10,31 @@ import type {
   TranslateFunction,
 } from './types';
 
+function wrapGenerateId<T extends Record<string, unknown>>(
+  this: TransformerContext<T>,
+  generateId: IdGenerator,
+): TransformerContext<T>['generateId'] {
+  const gn = (value: string) => {
+    this.parentId = generateId(value);
+    return this.parentId;
+  };
+
+  for (const [name, fn] of Object.entries(idGenerators)) {
+    gn[name] = (props: Parameters<typeof fn>[0]) => {
+      return gn(fn(Object.assign({ parentId: this.parentId }, props) as any));
+    };
+  }
+
+  return gn as TransformerContext<T>['generateId'];
+}
+
 export function createContext<T extends Record<string, unknown>>(
   document: T,
   resolveRef: RefResolver<T>,
   generateId: IdGenerator,
 ): TransformerContext<T> {
   let context: AvailableContext = 'service';
+  let wrappedGenerateId;
   return {
     document,
     get context() {
@@ -39,9 +59,8 @@ export function createContext<T extends Record<string, unknown>>(
 
       return target;
     },
-    generateId(value) {
-      this.parentId = generateId(value);
-      return this.parentId;
+    get generateId() {
+      return (wrappedGenerateId ??= wrapGenerateId.call(this, generateId));
     },
     ids: {
       service: '',

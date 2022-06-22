@@ -40,10 +40,6 @@ export function transformOasOperations<T extends Fragment & DeepPartial<Spec | O
   });
 }
 
-function wipePathParams(p: string) {
-  return p.replace(/({)[^}]+(?=})/g, '$1');
-}
-
 export const transformOasOperation: TranslateFunction<
   DeepPartial<OpenAPIObject> | DeepPartial<Spec>,
   [path: string, method: string],
@@ -59,10 +55,9 @@ export const transformOasOperation: TranslateFunction<
     throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
   }
 
-  const reducedPath = wipePathParams(path);
   const serviceId = (this.ids.service = String(this.document['x-stoplight']?.id));
-  this.ids.path = this.generateId(`http_path-${this.ids.service}-${reducedPath}`);
-  const operationId = (this.ids.operation = this.generateId(`http_operation-${serviceId}-${method}-${reducedPath}`));
+  this.ids.path = this.generateId.httpPath({ parentId: serviceId, path });
+  const operationId = (this.ids.operation = this.generateId.httpOperation({ parentId: serviceId, method, path }));
 
   this.context = 'operation';
 

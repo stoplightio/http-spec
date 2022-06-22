@@ -27,10 +27,10 @@ export const translateToResponse = withContext<
 
   if (!isResponseObject(maybeResponseObject)) return;
 
-  const actualKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
+  const codeOrKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
 
   return {
-    id: this.generateId(`http_response-${this.parentId}-${actualKey}`),
+    id: this.generateId.httpResponse({ codeOrKey }),
     code: statusCode,
     headers: entries(maybeResponseObject.headers).map(translateHeaderObject, this).filter(isNonNullable),
     contents: entries(maybeResponseObject.content).map(translateMediaTypeObject, this).filter(isNonNullable),

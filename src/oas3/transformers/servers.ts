@@ -35,7 +35,7 @@ export const translateToServer = withContext<
   const variables = translateServerVariables.call(this, server.variables);
 
   return {
-    id: this.generateId(`http_server-${this.parentId}-${server.url}`),
+    id: this.generateId.httpServer({ url: server.url }),
     url: server.url,
 
     ...pickBy(

@@ -39,10 +39,9 @@ export default [
     ],
     tags: [
       {
-        // hash(`tag-${serviceId}-${tag.name}`)
-        // always generate tags based on the serviceId, so ends up being...
-        // hash('tag-service_abc-mutates')
-        id: '936737e88c6fa',
+        // hash(`tag-${tag.name}`)
+        // hash('tag-mutates')
+        id: '3d179d2f9363d',
         name: 'mutates',
       },
     ],
@@ -227,10 +226,9 @@ export default [
     },
     tags: [
       {
-        // hash(`tag-${serviceId}-${tag.name}`)
-        // always generate tags based on the serviceId, so ends up being...
-        // hash('tag-service_abc-tag-without-root-def')
-        id: '9862017e672e6',
+        // hash(`tag-${tag.name}`)
+        // hash('tag-tag-without-root-def')
+        id: '1e29148da7966',
         name: 'tag-without-root-def',
       },
     ],
@@ -448,10 +446,9 @@ export default [
     },
     tags: [
       {
-        // hash(`tag-${serviceId}-${tag.name}`)
-        // always generate tags based on the serviceId, so ends up being...
-        // hash('tag-service_abc-mutates')
-        id: '936737e88c6fa',
+        // hash(`tag-${tag.name}`)
+        // hash('tag-mutates')
+        id: '3d179d2f9363d',
         name: 'mutates',
       },
     ],

@@ -682,7 +682,7 @@ Array [
             "encodings": Array [],
             "examples": Array [
               Object {
-                "id": "97acd8b5018d8",
+                "id": "52d6484776278",
                 "key": "Dog",
                 "summary": "A dog example",
                 "value": Object {
@@ -692,7 +692,7 @@ Array [
               },
               Object {
                 "externalValue": "https://stoplight.io/pets/cat",
-                "id": "97acd8b5018d8",
+                "id": "01164805ec233",
                 "key": "Cat",
                 "summary": "A cat example",
               },
@@ -858,7 +858,7 @@ Array [
     "summary": "Add a new pet to the store",
     "tags": Array [
       Object {
-        "id": "bfc2f4aa9bced",
+        "id": "ac2d20b0265f3",
         "name": "pet",
       },
     ],
@@ -955,7 +955,7 @@ Array [
             "encodings": Array [],
             "examples": Array [
               Object {
-                "id": "97acd8b5018d8",
+                "id": "52d6484776278",
                 "key": "Dog",
                 "summary": "A dog example",
                 "value": Object {
@@ -965,7 +965,7 @@ Array [
               },
               Object {
                 "externalValue": "https://stoplight.io/pets/cat",
-                "id": "97acd8b5018d8",
+                "id": "01164805ec233",
                 "key": "Cat",
                 "summary": "A cat example",
               },
@@ -1185,7 +1185,7 @@ Array [
     "summary": "Update an existing pet",
     "tags": Array [
       Object {
-        "id": "bfc2f4aa9bced",
+        "id": "ac2d20b0265f3",
         "name": "pet",
       },
     ],

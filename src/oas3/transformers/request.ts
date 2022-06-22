@@ -36,7 +36,7 @@ export const translateRequestBody = withContext<
 
   if (!isRequestBodyObject(maybeRequestBodyObject)) return;
 
-  const id = this.generateId(`http_request_body-${this.parentId}`);
+  const id = this.generateId.httpRequestBody({});
 
   return {
     id,
@@ -72,9 +72,9 @@ const translateParameterObjectSchema = withContext<
 export const translateParameterObject = withContext<
   Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
 >(function (parameterObject) {
-  const kind = parameterObject.in === 'path' ? 'path_param' : parameterObject.in;
+  const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
-  const id = this.generateId(`http_${kind}-${this.parentId}-${name}`);
+  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ nameOrKey: name });
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);

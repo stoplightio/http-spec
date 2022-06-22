@@ -55,10 +55,6 @@ function getSecurity(security: unknown, definitions: DeepPartial<Spec['securityD
   });
 }
 
-export function sortProducesOrConsumes(input: string[]) {
-  return input.slice().sort((a, b) => a.localeCompare(b));
-}
-
 export function normalizeProducesOrConsumes(input: unknown): string[] {
   if (!Array.isArray(input)) {
     return [];

@@ -32,7 +32,7 @@ import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { getExamplesFromSchema, sortProducesOrConsumes } from '../accessors';
+import { getExamplesFromSchema } from '../accessors';
 import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
@@ -76,7 +76,7 @@ export const translateToHeaderParam = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_header-${this.parentId}-${name}`),
+    id: this.generateId.httpHeader({ nameOrKey: name }),
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),
@@ -115,7 +115,7 @@ export const translateToHeaderParams: Oas2TranslateFunction<
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
-  const id = this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`);
+  const id = this.generateId.httpRequestBody({ consumes });
 
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),
@@ -127,7 +127,7 @@ export const translateToBodyParameter = withContext<
     contents: consumes.map(
       withContext(mediaType => {
         return {
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          id: this.generateId.httpMedia({ mediaType }),
           mediaType,
           examples,
 
@@ -166,10 +166,10 @@ export const translateFromFormDataParameters = withContext<
 >(function (parameters, consumes) {
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`),
+      id: this.generateId.httpRequestBody({ consumes }),
       contents: consumes.map(
         withContext(mediaType => ({
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          id: this.generateId.httpMedia({ mediaType }),
           mediaType,
 
           ...pickBy(
@@ -246,7 +246,7 @@ export const translateToQueryParameter = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_query-${this.parentId}-${name}`),
+    id: this.generateId.httpQuery({ nameOrKey: name }),
     name,
     style: chooseQueryParameterStyle(param),
 
@@ -268,7 +268,7 @@ export const translateToPathParameter = withContext<
   const name = param.name;
 
   return {
-    id: this.generateId(`http_path_param-${this.parentId}-${name}`),
+    id: this.generateId.httpPathParam({ nameOrKey: name }),
     name,
     style: HttpParamStyles.Simple,
 
