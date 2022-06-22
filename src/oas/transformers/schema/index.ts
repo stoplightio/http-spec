@@ -74,21 +74,19 @@ export const translateSchemaObjectFromPair = withContext<
   return cached;
 });
 
-export function convertSchema(
-  document: Fragment,
-  schema: OASSchemaObject,
-  references: InternalOptions['references'] = {},
-) {
+export function convertSchema(document: Fragment, schema: unknown, references: InternalOptions['references'] = {}) {
+  const actualSchema = isPlainObject(schema) ? schema : {};
+
   if ('jsonSchemaDialect' in document && typeof document.jsonSchemaDialect === 'string') {
     return {
       $schema: document.jsonSchemaDialect,
       // let's assume it's draft 7, albeit it might be draft 2020-12 or 2019-09.
       // it's a safe bet, because there was only _one_ relatively minor breaking change introduced between Draft 7 and 2020-12.
-      ...(schema as JSONSchema7),
+      ...(actualSchema as JSONSchema7),
     };
   }
 
-  const clonedSchema = _convertSchema(schema, {
+  const clonedSchema = _convertSchema(actualSchema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
     references,
   });
