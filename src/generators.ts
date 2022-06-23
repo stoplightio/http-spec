@@ -13,7 +13,7 @@ function sanitizePath(path: string) {
 }
 
 export const idGenerators = {
-  tag: (props: Context & { name: string }) => {
+  tag: (props: { name: string }) => {
     return join(['tag', props.name]);
   },
 
