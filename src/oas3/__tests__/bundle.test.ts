@@ -130,7 +130,7 @@ describe('bundleOas3Service', () => {
         requestBodies: [],
         responses: [
           {
-            $ref: '#/components/responses/2',
+            $ref: '#/components/responses/1',
             key: 'CustomNotFoundError',
           },
           {
@@ -364,6 +364,169 @@ describe('bundleOas3Service', () => {
         ],
         securitySchemes: [],
       },
+    });
+  });
+
+  it('should treat external $refs as resolved', () => {
+    expect(
+      bundleOas3Service({
+        document: {
+          openapi: '3.1.0',
+          paths: {
+            '/todo': {
+              post: {
+                requestBody: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        $ref: '#/components/schemas/RequestBody',
+                      },
+                    },
+                  },
+                },
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          $ref: '#/components/schemas/Request',
+                        },
+                      },
+                    },
+                  },
+                  '201': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          $ref: '#/components/schemas/Response',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              Request: {
+                $ref: './schemas/request.yaml',
+              },
+              Response: {
+                $ref: './schemas/response.yaml',
+              },
+              RequestBody: {
+                $ref: '#/components/schemas/Request',
+              },
+            },
+          },
+        },
+      }),
+    ).toStrictEqual({
+      id: 'undefined',
+      name: 'no-title',
+      version: '',
+      components: {
+        cookie: [],
+        examples: [],
+        header: [],
+        path: [],
+        query: [],
+        requestBodies: [],
+        responses: [],
+        schemas: [
+          {
+            $ref: './schemas/request.yaml',
+            key: 'Request',
+          },
+          {
+            $ref: './schemas/response.yaml',
+            key: 'Response',
+          },
+          {
+            $ref: '#/components/schemas/0',
+            key: 'RequestBody',
+          },
+        ],
+        securitySchemes: [],
+      },
+      operations: [
+        {
+          id: '76b4ee6eadc90',
+          method: 'post',
+          path: '/todo',
+          extensions: {},
+          request: {
+            body: {
+              id: '9c150f23174d8',
+              contents: [
+                {
+                  id: 'a7f2c8456c37f',
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/2',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+            },
+            cookie: [],
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [
+            {
+              id: '6a74b99c6956b',
+              code: '200',
+              contents: [
+                {
+                  id: 'a84c6be0c4ac3',
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/0',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+              headers: [],
+            },
+            {
+              id: '6a84b99c69b38',
+              code: '201',
+              contents: [
+                {
+                  id: '01161cd990e25',
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/1',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+          security: [],
+          servers: [],
+          tags: [],
+        },
+      ],
     });
   });
 
