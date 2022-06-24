@@ -367,6 +367,133 @@ describe('bundleOas3Service', () => {
     });
   });
 
+  it('should treat external $refs as resolved', () => {
+    expect(
+      bundleOas3Service({
+        document: {
+          openapi: '3.1.0',
+          paths: {
+            '/todo': {
+              post: {
+                requestBody: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        $ref: '#/components/schemas/Request',
+                      },
+                    },
+                  },
+                },
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          $ref: '#/components/schemas/Response',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          components: {
+            schemas: {
+              Request: {
+                $ref: './schemas/request.yaml',
+              },
+              Response: {
+                $ref: './schemas/response.yaml',
+              },
+            },
+          },
+        },
+      }),
+    ).toStrictEqual({
+      id: 'undefined',
+      name: 'no-title',
+      version: '',
+      components: {
+        cookie: [],
+        examples: [],
+        header: [],
+        path: [],
+        query: [],
+        requestBodies: [],
+        responses: [],
+        schemas: [
+          {
+            $ref: './schemas/request.yaml',
+            key: 'Request',
+          },
+          {
+            $ref: './schemas/response.yaml',
+            key: 'Response',
+          },
+        ],
+        securitySchemes: [],
+      },
+      operations: [
+        {
+          id: '76b4ee6eadc90',
+          method: 'post',
+          path: '/todo',
+          extensions: {},
+          request: {
+            body: {
+              id: '9c150f23174d8',
+              contents: [
+                {
+                  id: 'a7f2c8456c37f',
+                  encodings: [],
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/0',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+            },
+            cookie: [],
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [
+            {
+              id: '6a74b99c6956b',
+              code: '200',
+              contents: [
+                {
+                  encodings: [],
+                  examples: [],
+                  id: 'a84c6be0c4ac3',
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/1',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+              headers: [],
+            },
+          ],
+          security: [],
+          servers: [],
+          tags: [],
+        },
+      ],
+    });
+  });
+
   it.each(fs.readdirSync(path.join(__dirname, './__fixtures__')))(
     'given %s, should generate valid output',
     async name => {
