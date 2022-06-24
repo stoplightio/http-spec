@@ -130,7 +130,7 @@ describe('bundleOas3Service', () => {
         requestBodies: [],
         responses: [
           {
-            $ref: '#/components/responses/2',
+            $ref: '#/components/responses/1',
             key: 'CustomNotFoundError',
           },
           {
@@ -379,13 +379,22 @@ describe('bundleOas3Service', () => {
                   content: {
                     'application/json': {
                       schema: {
-                        $ref: '#/components/schemas/Request',
+                        $ref: '#/components/schemas/RequestBody',
                       },
                     },
                   },
                 },
                 responses: {
                   '200': {
+                    content: {
+                      'application/json': {
+                        schema: {
+                          $ref: '#/components/schemas/Request',
+                        },
+                      },
+                    },
+                  },
+                  '201': {
                     content: {
                       'application/json': {
                         schema: {
@@ -405,6 +414,9 @@ describe('bundleOas3Service', () => {
               },
               Response: {
                 $ref: './schemas/response.yaml',
+              },
+              RequestBody: {
+                $ref: '#/components/schemas/Request',
               },
             },
           },
@@ -431,6 +443,10 @@ describe('bundleOas3Service', () => {
             $ref: './schemas/response.yaml',
             key: 'Response',
           },
+          {
+            $ref: '#/components/schemas/0',
+            key: 'RequestBody',
+          },
         ],
         securitySchemes: [],
       },
@@ -451,7 +467,7 @@ describe('bundleOas3Service', () => {
                   mediaType: 'application/json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',
-                    $ref: '#/components/schemas/0',
+                    $ref: '#/components/schemas/2',
                     'x-stoplight': {
                       id: 'c25f41d54d86a',
                     },
@@ -470,9 +486,29 @@ describe('bundleOas3Service', () => {
               code: '200',
               contents: [
                 {
+                  id: 'a84c6be0c4ac3',
                   encodings: [],
                   examples: [],
-                  id: 'a84c6be0c4ac3',
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    $ref: '#/components/schemas/0',
+                    'x-stoplight': {
+                      id: 'c25f41d54d86a',
+                    },
+                  },
+                },
+              ],
+              headers: [],
+            },
+            {
+              id: '6a84b99c69b38',
+              code: '201',
+              contents: [
+                {
+                  id: '01161cd990e25',
+                  encodings: [],
+                  examples: [],
                   mediaType: 'application/json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',

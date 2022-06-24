@@ -1,4 +1,4 @@
-import { isLocalRef, isPlainObject } from '@stoplight/json';
+import { isPlainObject } from '@stoplight/json';
 import type { IBundledHttpService, Optional } from '@stoplight/types';
 
 import { isNonNullable } from '../../guards';
@@ -55,10 +55,9 @@ function createInvokeTranslator(
       setSharedKey(value, key);
 
       if (isReferenceObject(value)) {
-        const resolved = !isLocalRef(value.$ref);
         this.references[`${root}/${kind}/${key}`] = {
-          resolved,
-          value: resolved ? `#/components/${component}/${objects.length}` : value.$ref,
+          resolved: true,
+          value: `#/components/${component}/${objects.length}`,
         };
 
         const resolvableComponent = {
