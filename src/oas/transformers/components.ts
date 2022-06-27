@@ -56,8 +56,8 @@ function createInvokeTranslator(
 
       if (isReferenceObject(value)) {
         this.references[`${root}/${kind}/${key}`] = {
-          resolved: false,
-          value: value.$ref,
+          resolved: true,
+          value: `#/components/${component}/${objects.length}`,
         };
 
         const resolvableComponent = {

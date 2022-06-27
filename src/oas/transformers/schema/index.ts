@@ -45,14 +45,13 @@ export const translateSchemaObjectFromPair = withContext<
   const maybeSchemaObject = this.maybeResolveLocalRef(schema);
 
   if (!isPlainObject(maybeSchemaObject)) {
-    return isReferenceObject(schema)
-      ? {
-          ...convertSchema(this.document, schema, {}),
-          'x-stoplight': {
-            id: this.generateId.schema({ key: key ?? '' }),
-          },
-        }
-      : {};
+    if (!isReferenceObject(schema)) return {};
+
+    const converted = convertSchema(this.document, schema, this.references);
+    converted['x-stoplight'] = {
+      id: this.generateId.schema({ key: key ?? '' }),
+    };
+    return converted;
   }
 
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;

@@ -47,6 +47,8 @@ export const translateToSharedParameters = withContext<
     setSharedKey(value, key);
 
     if (isReferenceObject(value)) {
+      // note that unlike schemas, we don't handle proxy $refs here
+      // we need resolved content to be able to determine the kind of parameter to push it to the correct array
       this.references[`#/components/parameters/${key}`] = {
         resolved: false,
         value: value.$ref,
