@@ -12,6 +12,7 @@ import { Oas3TranslateFunction } from '../types';
 
 export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
   function (operationSecurities) {
+    this.context = 'service';
     const securities = getSecurities(this.document, operationSecurities);
 
     return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
@@ -28,7 +29,7 @@ export const translateToSingleSecurity = withContext<
   >
 >(function ([key, securityScheme]) {
   const baseObject: { id: string; key: string; description?: string } = {
-    id: this.generateId.httpSecurity({ parentId: this.ids.service, nameOrKey: key }),
+    id: this.generateId.httpSecurity({ nameOrKey: key }),
     key,
   };
 

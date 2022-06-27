@@ -65,7 +65,7 @@ export const translateToBasicSecurityScheme = withContext<
   const key = security.key;
 
   return {
-    id: this.generateId.httpSecurity({ parentId: this.ids.service, nameOrKey: key }),
+    id: this.generateId.httpSecurity({ nameOrKey: key }),
     type: 'http',
     scheme: 'basic',
     key,
@@ -88,7 +88,7 @@ export const translateToApiKeySecurityScheme = withContext<
     const key = security.key;
 
     return {
-      id: this.generateId.httpSecurity({ parentId: this.ids.service, nameOrKey: key }),
+      id: this.generateId.httpSecurity({ nameOrKey: key }),
       type: 'apiKey',
       in: security.in,
       name: isString(security.name) ? security.name : '',
@@ -122,7 +122,7 @@ export const translateToOauth2SecurityScheme = withContext<
   const key = security.key;
 
   return {
-    id: this.generateId.httpSecurity({ parentId: this.ids.service, nameOrKey: key }),
+    id: this.generateId.httpSecurity({ nameOrKey: key }),
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
     key,
@@ -154,9 +154,11 @@ export const translateToSingleSecurity: Oas2TranslateFunction<
   return;
 };
 
-export const translateToSecurities: Oas2TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
-  function (operationSecurities) {
-    const securities = getSecurities(this.document, operationSecurities);
+export const translateToSecurities = withContext<
+  Oas2TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]>
+>(function (operationSecurities) {
+  this.context = 'service';
+  const securities = getSecurities(this.document, operationSecurities);
 
-    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
-  };
+  return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
+});
