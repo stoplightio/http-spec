@@ -70,11 +70,13 @@ const translateParameterObjectSchema = withContext<
 });
 
 export const translateParameterObject = withContext<
-  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
->(function (parameterObject) {
+  Oas3TranslateFunction<[[parameterObject: ParameterObject, key?: string]], IHttpParam<true>>
+>(function ([parameterObject, key]) {
   const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
-  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ nameOrKey: name });
+  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({
+    nameOrKey: key || name,
+  });
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
@@ -151,7 +153,7 @@ export const translateToRequest = withContext<
     if (isReferenceObject(param)) {
       target.push(syncReferenceObject(param, this.references));
     } else {
-      target.push(translateParameterObject.call(this, param) as any);
+      target.push(translateParameterObject.call(this, [param]) as any);
     }
   }
 

@@ -67,7 +67,7 @@ export const translateToSharedParameters = withContext<
     }
 
     if (!isValidOas3ParameterObject(value)) continue;
-    const parameter = translateParameterObject.call(this, value);
+    const parameter = translateParameterObject.call(this, [value, key]);
 
     this.references[`#/components/parameters/${key}`] = {
       resolved: true,

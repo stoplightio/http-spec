@@ -69,14 +69,14 @@ function chooseQueryParameterStyle(
 
 export const translateToHeaderParam = withContext<
   Oas2TranslateFunction<
-    [param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }],
+    [[param: DeepPartial<HeaderParameter> & Oas2ParamBase & { in: 'header' }, key?: string]],
     IHttpHeaderParam<true>
   >
->(function (param) {
+>(function ([param, key]) {
   const name = param.name;
 
   return {
-    id: this.generateId.httpHeader({ nameOrKey: name }),
+    id: this.generateId.httpHeader({ nameOrKey: key || name }),
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),
@@ -102,7 +102,7 @@ const translateToHeaderParamsFromPair: Oas2TranslateFunction<
   if (!isPlainObject(value)) return;
   const param = { name, in: 'header', ...value };
   if (!isHeaderParam(param)) return;
-  return translateToHeaderParam.call(this, param);
+  return translateToHeaderParam.call(this, [param]);
 };
 
 export const translateToHeaderParams: Oas2TranslateFunction<
@@ -241,12 +241,12 @@ function buildEncoding(parameter: Oas2ParamBase & Partial<FormDataParameter>): I
 }
 
 export const translateToQueryParameter = withContext<
-  Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam<true>>
->(function (param) {
+  Oas2TranslateFunction<[[query: DeepPartial<QueryParameter> & Oas2ParamBase, key?: string]], IHttpQueryParam<true>>
+>(function ([param, key]) {
   const name = param.name;
 
   return {
-    id: this.generateId.httpQuery({ nameOrKey: name }),
+    id: this.generateId.httpQuery({ nameOrKey: key || name }),
     name,
     style: chooseQueryParameterStyle(param),
 
@@ -263,12 +263,12 @@ export const translateToQueryParameter = withContext<
 });
 
 export const translateToPathParameter = withContext<
-  Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam<true>>
->(function (param) {
+  Oas2TranslateFunction<[[param: DeepPartial<PathParameter> & Oas2ParamBase, key?: string]], IHttpPathParam<true>>
+>(function ([param, key]) {
   const name = param.name;
 
   return {
-    id: this.generateId.httpPathParam({ nameOrKey: name }),
+    id: this.generateId.httpPathParam({ nameOrKey: key || name }),
     name,
     style: HttpParamStyles.Simple,
 
@@ -359,17 +359,17 @@ export const translateToSharedParameters = withContext<Oas2TranslateFunction<[ro
       if (isQueryParam(value)) {
         sharedParameters.query.push({
           key,
-          ...translateToQueryParameter.call(this, value),
+          ...translateToQueryParameter.call(this, [value, key]),
         });
       } else if (isPathParam(value)) {
         sharedParameters.path.push({
           key,
-          ...(translateToPathParameter.call(this, value) as any),
+          ...(translateToPathParameter.call(this, [value, key]) as any),
         });
       } else if (isHeaderParam(value)) {
         sharedParameters.header.push({
           key,
-          ...translateToHeaderParam.call(this, value),
+          ...translateToHeaderParam.call(this, [value, key]),
         });
       }
     }
