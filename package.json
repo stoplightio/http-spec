@@ -26,6 +26,10 @@
       "types": "./index.d.ts",
       "default": "./index.js"
     },
+    "./generators": {
+      "types": "./generators.d.ts",
+      "default": "./generators.js"
+    },
     "./hash": {
       "types": "./hash.d.ts",
       "default": "./hash.js"

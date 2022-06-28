@@ -26,13 +26,13 @@ import pick = require('lodash.pick');
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { isReferenceObject, isValidOas2ParameterObject } from '../../oas/guards';
-import { setSharedKey } from '../../oas/resolver';
+import { getSharedKey, setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import type { Oas2ParamBase } from '../../oas/types';
 import { ArrayCallbackParameters, Fragment } from '../../types';
 import { entries } from '../../utils';
-import { getExamplesFromSchema, sortProducesOrConsumes } from '../accessors';
+import { getExamplesFromSchema } from '../accessors';
 import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
@@ -74,9 +74,10 @@ export const translateToHeaderParam = withContext<
   >
 >(function (param) {
   const name = param.name;
+  const keyOrName = getSharedKey(param) ?? name;
 
   return {
-    id: this.generateId(`http_header-${this.parentId}-${name}`),
+    id: this.generateId.httpHeader({ keyOrName }),
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),
@@ -115,7 +116,7 @@ export const translateToHeaderParams: Oas2TranslateFunction<
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
-  const id = this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`);
+  const id = this.generateId.httpRequestBody({ consumes });
 
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),
@@ -127,7 +128,7 @@ export const translateToBodyParameter = withContext<
     contents: consumes.map(
       withContext(mediaType => {
         return {
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          id: this.generateId.httpMedia({ mediaType }),
           mediaType,
           examples,
 
@@ -166,10 +167,10 @@ export const translateFromFormDataParameters = withContext<
 >(function (parameters, consumes) {
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId(`http_request_body-${this.parentId}-${sortProducesOrConsumes(consumes).join('-')}`),
+      id: this.generateId.httpRequestBody({ consumes }),
       contents: consumes.map(
         withContext(mediaType => ({
-          id: this.generateId(`http_media-${this.parentId}-${mediaType}`),
+          id: this.generateId.httpMedia({ mediaType }),
           mediaType,
 
           ...pickBy(
@@ -244,9 +245,10 @@ export const translateToQueryParameter = withContext<
   Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam<true>>
 >(function (param) {
   const name = param.name;
+  const keyOrName = getSharedKey(param) ?? name;
 
   return {
-    id: this.generateId(`http_query-${this.parentId}-${name}`),
+    id: this.generateId.httpQuery({ keyOrName }),
     name,
     style: chooseQueryParameterStyle(param),
 
@@ -266,9 +268,10 @@ export const translateToPathParameter = withContext<
   Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam<true>>
 >(function (param) {
   const name = param.name;
+  const keyOrName = getSharedKey(param) ?? name;
 
   return {
-    id: this.generateId(`http_path_param-${this.parentId}-${name}`),
+    id: this.generateId.httpPathParam({ keyOrName }),
     name,
     style: HttpParamStyles.Simple,
 

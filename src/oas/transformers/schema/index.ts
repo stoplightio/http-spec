@@ -49,7 +49,7 @@ export const translateSchemaObjectFromPair = withContext<
 
     const converted = convertSchema(this.document, schema, this.references);
     converted['x-stoplight'] = {
-      id: this.generateId(`schema-${this.parentId}-${key ?? ''}`),
+      id: this.generateId.schema({ key: key ?? '' }),
     };
     return converted;
   }
@@ -61,7 +61,7 @@ export const translateSchemaObjectFromPair = withContext<
     return cached;
   }
 
-  const id = this.generateId(`schema-${this.parentId}-${key ?? ''}`);
+  const id = this.generateId.schema({ key: key ?? '' });
 
   cached = convertSchema(this.document, maybeSchemaObject, this.references);
   cached['x-stoplight'] = {

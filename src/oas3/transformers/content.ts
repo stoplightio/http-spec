@@ -79,7 +79,7 @@ export const translateMediaTypeObject = withContext<
 >(function ([mediaType, mediaObject]) {
   if (!isPlainObject(mediaObject)) return;
 
-  const id = this.generateId(`http_media-${this.parentId}-${mediaType}`);
+  const id = this.generateId.httpMedia({ mediaType });
   const { schema, encoding, examples } = mediaObject;
   const jsonSchema = translateSchemaMediaTypeObject.call(this, schema);
 

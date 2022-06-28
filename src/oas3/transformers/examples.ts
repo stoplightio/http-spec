@@ -23,10 +23,10 @@ export const translateToExample = withContext<
     return maybeExample as { key: string } & Reference;
   }
 
-  const actualKey = this.context === 'service' ? getSharedKey(maybeExample) : key;
+  const keyOrName = (this.context === 'service' && getSharedKey(maybeExample)) ?? key;
 
   return {
-    id: this.generateId(`example-${this.parentId}-${actualKey}`),
+    id: this.generateId.example({ keyOrName }),
     key,
 
     ...(typeof maybeExample.externalValue === 'string'

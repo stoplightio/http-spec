@@ -103,7 +103,7 @@ describe('bundleOas3Service', () => {
         header: [
           {
             examples: [],
-            id: '7f5897406783c',
+            id: '8bb895b336918',
             key: 'Some-Header',
             name: 'A-Shared-Header',
             required: false,
@@ -111,7 +111,7 @@ describe('bundleOas3Service', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               'x-stoplight': {
-                id: '7a6163aa3086e',
+                id: '0f99c3bfafaac',
               },
             },
             style: 'simple',

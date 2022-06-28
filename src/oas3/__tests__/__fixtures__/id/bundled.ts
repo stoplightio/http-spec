@@ -11,8 +11,8 @@ export default {
   ],
   tags: [
     {
-      // hash('tag-service-abc-mutates')
-      id: '936737e88c6fa',
+      // hash('tag-mutates')
+      id: '3d179d2f9363d',
       name: 'mutates',
     },
   ],
@@ -33,8 +33,8 @@ export default {
     ],
     header: [
       {
-        // hash('http_header-service_abc-A-Shared-Header')
-        id: '21b1f96bd26ee',
+        // hash('http_header-service_abc-Some-Header')
+        id: 'd0b1db7d34de6',
         key: 'Some-Header',
         name: 'A-Shared-Header',
         style: 'simple',
@@ -44,8 +44,8 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            // hash('schema-21b1f96bd26ee-')
-            id: 'a9c9a05d9cb2d',
+            // hash('schema-d0b1db7d34de6')
+            id: '854607270d287',
           },
         },
       },
@@ -260,7 +260,7 @@ export default {
       summary: 'Get User Info by User ID',
       tags: [
         {
-          id: '9862017e672e6',
+          id: '1e29148da7966',
           name: 'tag-without-root-def',
         },
       ],
@@ -373,7 +373,8 @@ export default {
       summary: 'Create user',
       tags: [
         {
-          id: '936737e88c6fa',
+          // hash('tag-mutates')
+          id: '3d179d2f9363d',
           name: 'mutates',
         },
       ],

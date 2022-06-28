@@ -1,5 +1,7 @@
 import type { IBundledHttpService, IHttpOperation, IHttpService } from '@stoplight/types';
 
+import type { idGenerators } from './generators';
+
 export type Fragment = Record<string, unknown>;
 
 export type IdGenerator = (value: string) => string;
@@ -39,7 +41,11 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   parentId: string;
   readonly ids: Record<AvailableContext, string>;
   readonly references: References;
-  generateId(template: string): string;
+  generateId: ((template: string) => string) & {
+    [key in keyof typeof idGenerators]: (
+      props: Omit<Parameters<typeof idGenerators[key]>[0], 'parentId'> & { parentId?: string },
+    ) => string;
+  };
   maybeResolveLocalRef(target: unknown): unknown;
 };
 
