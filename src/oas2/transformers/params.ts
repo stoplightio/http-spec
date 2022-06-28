@@ -352,7 +352,7 @@ export const translateToSharedParameters = withContext<Oas2TranslateFunction<[ro
     for (const [key, value] of entries(root.parameters)) {
       setSharedKey(value, key);
 
-      if (!isValidOas2ParameterObject(value)) continue;
+      if (!isValidOas2ParameterObject(value) || value.in === 'formData' || value.in === 'body') continue;
 
       this.references[`#/parameters/${key}`] = {
         resolved: true,
