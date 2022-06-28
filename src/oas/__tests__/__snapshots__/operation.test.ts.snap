@@ -193,13 +193,13 @@ Array [
       "cookie": Array [],
       "headers": Array [
         Object {
-          "id": "b93f4ef60cf1d",
+          "id": "a3ecb43ee5c7c",
           "name": "Rate-Limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "fe1cb482692b9",
+              "id": "8403dee7ae800",
             },
           },
           "style": "simple",
@@ -267,13 +267,13 @@ Array [
       "cookie": Array [],
       "headers": Array [
         Object {
-          "id": "b93f4ef60cf1d",
+          "id": "a3ecb43ee5c7c",
           "name": "Rate-Limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "fe1cb482692b9",
+              "id": "8403dee7ae800",
             },
           },
           "style": "simple",
@@ -535,14 +535,14 @@ Array [
       "headers": Array [],
       "path": Array [
         Object {
-          "id": "1ee79143656f4",
+          "id": "5bcbca88956ad",
           "name": "petId",
           "required": true,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "116103c617597",
+              "id": "ca573ea7a9961",
             },
           },
           "style": "simple",

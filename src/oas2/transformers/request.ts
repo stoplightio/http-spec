@@ -50,11 +50,11 @@ export const translateToRequest: Oas2TranslateFunction<
     }
 
     if (isQueryParam(param)) {
-      params.query.push(translateToQueryParameter.call(this, [param]));
+      params.query.push(translateToQueryParameter.call(this, param));
     } else if (isPathParam(param)) {
-      params.path.push(translateToPathParameter.call(this, [param]));
+      params.path.push(translateToPathParameter.call(this, param));
     } else if (isHeaderParam(param)) {
-      params.headers.push(translateToHeaderParam.call(this, [param]));
+      params.headers.push(translateToHeaderParam.call(this, param));
     } else if (isBodyParam(param)) {
       bodyParameter = translateToBodyParameter.call(this, param, consumes);
     } else if (isFormDataParam(param)) {

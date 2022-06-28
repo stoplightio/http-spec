@@ -43,7 +43,8 @@ describe('params.translator', () => {
   describe('translateToHeaderParam', () => {
     it('should translate header param', () => {
       expect(
-        translateToHeaderParam({}, [
+        translateToHeaderParam(
+          {},
           {
             required: true,
             name: 'name',
@@ -52,7 +53,7 @@ describe('params.translator', () => {
             minimum: 12,
             description: 'desc',
           },
-        ]),
+        ),
       ).toMatchSnapshot({
         id: expect.any(String),
         schema: {
@@ -428,19 +429,20 @@ describe('params.translator', () => {
       { oasStyle: 'nasino', expectedStyle: HttpParamStyles.Form },
     ])('translate style: %s', ({ oasStyle, expectedStyle }) => {
       expect(
-        translateToQueryParameter({}, [{ ...parameter, collectionFormat: oasStyle } as QueryParameter]),
+        translateToQueryParameter({}, { ...parameter, collectionFormat: oasStyle } as QueryParameter),
       ).toHaveProperty('style', expectedStyle);
     });
 
     it('translate x-deprecated', () => {
-      expect(translateToQueryParameter({}, [parameter])).toHaveProperty('deprecated', true);
+      expect(translateToQueryParameter({}, parameter)).toHaveProperty('deprecated', true);
     });
   });
 
   describe('translateToPathParameter', () => {
     it('should translate', () => {
       expect(
-        translateToPathParameter({}, [
+        translateToPathParameter(
+          {},
           {
             required: true,
             description: 'descr',
@@ -448,7 +450,7 @@ describe('params.translator', () => {
             in: 'path',
             type: 'string',
           },
-        ]),
+        ),
       ).toMatchSnapshot({
         id: expect.any(String),
         schema: {
