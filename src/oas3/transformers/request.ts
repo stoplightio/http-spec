@@ -16,7 +16,7 @@ import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
 import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
-import { getComponentName, syncReferenceObject } from '../../oas/resolver';
+import { getComponentName, getSharedKey, syncReferenceObject } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { entries } from '../../utils';
@@ -70,13 +70,12 @@ const translateParameterObjectSchema = withContext<
 });
 
 export const translateParameterObject = withContext<
-  Oas3TranslateFunction<[[parameterObject: ParameterObject, key?: string]], IHttpParam<true>>
->(function ([parameterObject, key]) {
+  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
+>(function (parameterObject) {
   const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
-  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({
-    nameOrKey: key || name,
-  });
+  const nameOrKey = getSharedKey(parameterObject) ?? name;
+  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ nameOrKey });
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
@@ -153,7 +152,7 @@ export const translateToRequest = withContext<
     if (isReferenceObject(param)) {
       target.push(syncReferenceObject(param, this.references));
     } else {
-      target.push(translateParameterObject.call(this, [param]) as any);
+      target.push(translateParameterObject.call(this, param) as any);
     }
   }
 

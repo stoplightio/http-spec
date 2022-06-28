@@ -1089,14 +1089,14 @@ Array [
       "path": Array [
         Object {
           "examples": Array [],
-          "id": "1ee79143656f4",
+          "id": "5bcbca88956ad",
           "name": "petId",
           "required": true,
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "116103c617597",
+              "id": "ca573ea7a9961",
             },
           },
           "style": "simple",

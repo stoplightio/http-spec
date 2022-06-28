@@ -164,19 +164,19 @@ export default [
       // Request doesn't need an id
       headers: [
         {
-          // hash(`http_header-${parentId}-${param.name}`)
+          // hash(`http_header-${parentId}-${key ?? param.name}`)
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
-          // hash('http_header-service_abc-A-Shared-Header')
-          id: '21b1f96bd26ee',
+          // hash('http_header-service_abc-Some-Header')
+          id: 'd0b1db7d34de6',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              // hash('schema-21b1f96bd26ee-')
-              id: 'a9c9a05d9cb2d',
+              // hash('schema-d0b1db7d34de6-')
+              id: '854607270d287',
             },
             type: 'string',
           },
@@ -402,19 +402,19 @@ export default [
           examples: [],
         },
         {
-          // hash(`http_header-${parentId}-${param.name}`)
+          // hash(`http_header-${parentId}-${key ?? param.name}`)
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
-          // hash('http_header-service_abc-A-Shared-Header')
-          id: '21b1f96bd26ee',
+          // hash('http_header-service_abc-Some-Header')
+          id: 'd0b1db7d34de6',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              // hash('schema-21b1f96bd26ee-')
-              id: 'a9c9a05d9cb2d',
+              // hash('schema-d0b1db7d34de6-')
+              id: '854607270d287',
             },
             type: 'string',
           },
