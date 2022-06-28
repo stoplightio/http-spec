@@ -27,7 +27,7 @@ export const translateHeaderObject = withContext<
 
   if (!isPlainObject(maybeHeaderObject)) return;
 
-  const id = this.generateId.httpHeader({ nameOrKey: name });
+  const id = this.generateId.httpHeader({ keyOrName: name });
 
   if (!isHeaderObject(maybeHeaderObject)) {
     return {

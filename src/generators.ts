@@ -25,8 +25,8 @@ export const idGenerators = {
     return join(['schema_property', props.parentId, String(props.key)]);
   },
 
-  example: (props: Context & { nameOrKey: string }) => {
-    return join(['example', props.parentId, props.nameOrKey]);
+  example: (props: Context & { keyOrName: string }) => {
+    return join(['example', props.parentId, props.keyOrName]);
   },
 
   httpPath: (props: Context & { path: string }) => {
@@ -37,20 +37,20 @@ export const idGenerators = {
     return join(['http_operation', props.parentId, props.method, sanitizePath(props.path)]);
   },
 
-  httpPathParam: (props: Context & { nameOrKey: string }) => {
-    return join(['http_path_param', props.parentId, props.nameOrKey]);
+  httpPathParam: (props: Context & { keyOrName: string }) => {
+    return join(['http_path_param', props.parentId, props.keyOrName]);
   },
 
-  httpQuery: (props: Context & { nameOrKey: string }) => {
-    return join(['http_query', props.parentId, props.nameOrKey]);
+  httpQuery: (props: Context & { keyOrName: string }) => {
+    return join(['http_query', props.parentId, props.keyOrName]);
   },
 
-  httpCookie: (props: Context & { nameOrKey: string }) => {
-    return join(['http_cookie', props.parentId, props.nameOrKey]);
+  httpCookie: (props: Context & { keyOrName: string }) => {
+    return join(['http_cookie', props.parentId, props.keyOrName]);
   },
 
-  httpHeader: (props: Context & { nameOrKey: string }) => {
-    return join(['http_header', props.parentId, props.nameOrKey]);
+  httpHeader: (props: Context & { keyOrName: string }) => {
+    return join(['http_header', props.parentId, props.keyOrName]);
   },
 
   httpRequestBody: (props: { parentId: string; consumes?: string[] }) => {
@@ -65,8 +65,8 @@ export const idGenerators = {
     return join(['http_media', props.parentId, props.mediaType]);
   },
 
-  httpSecurity: (props: { parentId: string; nameOrKey?: string }) => {
-    return join(['http_security', props.parentId, props.nameOrKey]);
+  httpSecurity: (props: { parentId: string; keyOrName?: string }) => {
+    return join(['http_security', props.parentId, props.keyOrName]);
   },
 
   httpServer: (props: { parentId: string; url: string }) => {

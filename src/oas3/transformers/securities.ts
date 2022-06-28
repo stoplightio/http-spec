@@ -29,7 +29,7 @@ export const translateToSingleSecurity = withContext<
   >
 >(function ([key, securityScheme]) {
   const baseObject: { id: string; key: string; description?: string } = {
-    id: this.generateId.httpSecurity({ nameOrKey: key }),
+    id: this.generateId.httpSecurity({ keyOrName: key }),
     key,
   };
 

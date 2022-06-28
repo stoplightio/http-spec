@@ -11,7 +11,7 @@ export const translateToDefaultExample = withContext<
   const resolvedValue = this.maybeResolveLocalRef(value);
 
   return {
-    id: this.generateId.example({ nameOrKey: key }),
+    id: this.generateId.example({ keyOrName: key }),
     value: resolvedValue,
     key,
   };

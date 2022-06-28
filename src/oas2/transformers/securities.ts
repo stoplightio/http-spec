@@ -65,7 +65,7 @@ export const translateToBasicSecurityScheme = withContext<
   const key = security.key;
 
   return {
-    id: this.generateId.httpSecurity({ nameOrKey: key }),
+    id: this.generateId.httpSecurity({ keyOrName: key }),
     type: 'http',
     scheme: 'basic',
     key,
@@ -88,7 +88,7 @@ export const translateToApiKeySecurityScheme = withContext<
     const key = security.key;
 
     return {
-      id: this.generateId.httpSecurity({ nameOrKey: key }),
+      id: this.generateId.httpSecurity({ keyOrName: key }),
       type: 'apiKey',
       in: security.in,
       name: isString(security.name) ? security.name : '',
@@ -122,7 +122,7 @@ export const translateToOauth2SecurityScheme = withContext<
   const key = security.key;
 
   return {
-    id: this.generateId.httpSecurity({ nameOrKey: key }),
+    id: this.generateId.httpSecurity({ keyOrName: key }),
     type: 'oauth2',
     flows: translateToFlows.call(this, security),
     key,

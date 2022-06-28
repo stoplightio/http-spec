@@ -74,8 +74,8 @@ export const translateParameterObject = withContext<
 >(function (parameterObject) {
   const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
-  const nameOrKey = getSharedKey(parameterObject) ?? name;
-  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ nameOrKey });
+  const keyOrName = getSharedKey(parameterObject) ?? name;
+  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ keyOrName });
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
