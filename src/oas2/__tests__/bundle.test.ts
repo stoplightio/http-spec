@@ -15,6 +15,7 @@ describe('bundleOas2Service', () => {
           paths: {
             '/users/{userId}': {
               patch: {
+                consumes: ['application/json'],
                 parameters: [
                   {
                     $ref: '#/parameters/ids',
@@ -75,8 +76,21 @@ describe('bundleOas2Service', () => {
           extensions: {},
           request: {
             body: {
-              id: '9b5d65cfbc4fd',
-              contents: [],
+              id: '5331ff8ad9369',
+              contents: [
+                {
+                  id: 'cf10c8e681da1',
+                  examples: [],
+                  mediaType: 'application/json',
+                  schema: {
+                    $schema: 'http://json-schema.org/draft-07/schema#',
+                    'x-stoplight': {
+                      id: 'dbc0f9871a94e',
+                    },
+                    format: 'e-mail',
+                  },
+                },
+              ],
               required: true,
             },
             cookie: [],
