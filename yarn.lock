@@ -1491,8 +1491,10 @@
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
 
-"@stoplight/types@file:.yalc/@stoplight/types":
-  version "0.0.0"
+"@stoplight/types@^13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.5.0.tgz#a17990ab4ff3fc60325dc64d758c4670b872ac8b"
+  integrity sha512-8UFgYj4Y/vcc3a2ZuJJ+ltiJlFsXa7/huZkmjhaHq+jPHIR2Va+aFaExENV/cWtxUVTXE15KSzPOX/ikucUFbw==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
