@@ -136,6 +136,7 @@ export const translateToRequest = withContext<
     query: [],
     cookie: [],
     path: [],
+    unknown: [],
   };
 
   for (const param of iterateOasParams.call(this, path, operation)) {
@@ -146,7 +147,7 @@ export const translateToRequest = withContext<
       kind = param.in;
     }
 
-    const target = params[kind];
+    const target = params[kind || 'unknown'];
     if (!Array.isArray(target)) continue;
 
     if (isReferenceObject(param)) {
@@ -156,7 +157,7 @@ export const translateToRequest = withContext<
     }
   }
 
-  return {
+  const res = {
     ...pickBy(
       {
         body: translateRequestBody.call(this, operation?.requestBody),
@@ -168,5 +169,12 @@ export const translateToRequest = withContext<
     query: params.query,
     cookie: params.cookie,
     path: params.path,
+    unknown: params.unknown,
   };
+
+  if (res.unknown && !res.unknown.length) {
+    delete res.unknown;
+  }
+
+  return res;
 });

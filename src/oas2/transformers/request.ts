@@ -27,11 +27,13 @@ export const translateToRequest: Oas2TranslateFunction<
   const consumes = getConsumes(this.document, operation);
   const parameters = iterateOasParams.call(this, path, operation);
 
-  const params: Omit<Required<IHttpOperationRequest<true>>, 'body'> = {
+  const params: Omit<Required<IHttpOperationRequest<true>>, 'body' | 'unknown'> &
+    Pick<IHttpOperationRequest, 'unknown'> = {
     headers: [],
     query: [],
     cookie: [],
     path: [],
+    unknown: [],
   };
 
   let bodyParameter;
@@ -40,7 +42,7 @@ export const translateToRequest: Oas2TranslateFunction<
   for (const param of parameters) {
     if (isReferenceObject(param)) {
       const kind = getComponentName(this.references, param.$ref) ?? '';
-      const target = params[kind === 'header' ? 'headers' : kind];
+      const target = params[kind === 'header' ? 'headers' : kind || 'unknown'];
 
       if (Array.isArray(target)) {
         target.push(syncReferenceObject(param, this.references));
@@ -69,6 +71,10 @@ export const translateToRequest: Oas2TranslateFunction<
     body = bodyParameter;
   } else if (!!formDataParameters.length) {
     body = translateFromFormDataParameters.call(this, formDataParameters, consumes);
+  }
+
+  if (params.unknown && !params.unknown.length) {
+    delete params.unknown;
   }
 
   return {

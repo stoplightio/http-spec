@@ -530,6 +530,64 @@ describe('bundleOas3Service', () => {
     });
   });
 
+  it('should somehow handle parmas', () => {
+    expect(
+      bundleOas3Service({
+        document: {
+          openapi: '3.1.0',
+          paths: {
+            '/todos/{todoId}': {
+              parameters: [
+                {
+                  $ref: '../common/openapi.json#/components/parameters/userIdPathParameter',
+                },
+              ],
+              get: {},
+            },
+          },
+        },
+      }),
+    ).toStrictEqual({
+      id: 'undefined',
+      name: 'no-title',
+      version: '',
+      components: {
+        cookie: [],
+        examples: [],
+        header: [],
+        path: [],
+        query: [],
+        responses: [],
+        schemas: [],
+        securitySchemes: [],
+        requestBodies: [],
+      },
+      operations: [
+        {
+          id: 'a26b653a5e5ba',
+          method: 'get',
+          path: '/todos/{todoId}',
+          extensions: {},
+          request: {
+            cookie: [],
+            headers: [],
+            path: [],
+            query: [],
+            unknown: [
+              {
+                $ref: '../common/openapi.json#/components/parameters/userIdPathParameter',
+              },
+            ],
+          },
+          responses: [],
+          security: [],
+          servers: [],
+          tags: [],
+        },
+      ],
+    });
+  });
+
   it.each(fs.readdirSync(path.join(__dirname, './__fixtures__')))(
     'given %s, should generate valid output',
     async name => {
