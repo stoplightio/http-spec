@@ -122,7 +122,6 @@ export default [
       query: [],
       cookie: [],
       path: [],
-      unknown: [],
     },
     tags: [],
     security: [],

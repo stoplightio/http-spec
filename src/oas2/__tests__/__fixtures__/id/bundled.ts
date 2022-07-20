@@ -168,7 +168,6 @@ export default {
             },
           },
         ],
-        unknown: [],
       },
       responses: [
         {
@@ -301,7 +300,6 @@ export default {
           },
         ],
         query: [],
-        unknown: [],
       },
       responses: [
         {

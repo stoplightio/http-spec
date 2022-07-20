@@ -19,7 +19,6 @@ export default {
         ],
         path: [],
         query: [],
-        unknown: [],
       },
       responses: [
         {

@@ -157,7 +157,7 @@ export const translateToRequest = withContext<
     }
   }
 
-  return {
+  const res = {
     ...pickBy(
       {
         body: translateRequestBody.call(this, operation?.requestBody),
@@ -171,4 +171,10 @@ export const translateToRequest = withContext<
     path: params.path,
     unknown: params.unknown,
   };
+
+  if (res.unknown && !res.unknown.length) {
+    delete res.unknown;
+  }
+
+  return res;
 });

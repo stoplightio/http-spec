@@ -212,7 +212,6 @@ export default {
             style: 'form',
           },
         ],
-        unknown: [],
       },
       responses: [
         {
@@ -329,7 +328,6 @@ export default {
           },
         ],
         query: [],
-        unknown: [],
       },
       responses: [
         {

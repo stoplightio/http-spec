@@ -479,7 +479,6 @@ describe('bundleOas3Service', () => {
             headers: [],
             path: [],
             query: [],
-            unknown: [],
           },
           responses: [
             {

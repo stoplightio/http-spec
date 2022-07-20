@@ -26,7 +26,6 @@ Object {
   "headers": Array [],
   "path": Array [],
   "query": Array [],
-  "unknown": Array [],
 }
 `;
 
@@ -75,6 +74,5 @@ Object {
       "style": "form",
     },
   ],
-  "unknown": Array [],
 }
 `;
