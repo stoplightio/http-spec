@@ -223,6 +223,7 @@ export default [
           examples: [],
         },
       ],
+      unknown: [],
     },
     tags: [
       {
@@ -443,6 +444,7 @@ export default [
           examples: [],
         },
       ],
+      unknown: [],
     },
     tags: [
       {

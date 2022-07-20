@@ -16,6 +16,7 @@ Object {
   "headers": Array [],
   "path": Array [],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -46,6 +47,7 @@ Object {
   "headers": Array [],
   "path": Array [],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -61,6 +63,7 @@ Object {
   ],
   "path": Array [],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -77,6 +80,7 @@ Object {
     },
   ],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -92,6 +96,7 @@ Object {
       "style": "form",
     },
   ],
+  "unknown": Array [],
 }
 `;
 
@@ -107,6 +112,7 @@ Object {
   ],
   "path": Array [],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -123,6 +129,7 @@ Object {
     },
   ],
   "query": Array [],
+  "unknown": Array [],
 }
 `;
 
@@ -138,6 +145,7 @@ Object {
       "style": "form",
     },
   ],
+  "unknown": Array [],
 }
 `;
 
@@ -176,5 +184,6 @@ Object {
       "style": "form",
     },
   ],
+  "unknown": Array [],
 }
 `;

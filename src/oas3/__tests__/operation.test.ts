@@ -721,6 +721,7 @@ describe('transformOas3Operation', () => {
         ],
         path: [],
         query: [],
+        unknown: [],
       },
       responses: [],
       security: [],
@@ -801,6 +802,7 @@ describe('transformOas3Operation', () => {
         ],
         path: [],
         query: [],
+        unknown: [],
       },
       responses: [],
       security: [],
@@ -1004,6 +1006,7 @@ describe('transformOas3Operation', () => {
         headers: [],
         path: [],
         query: [],
+        unknown: [],
       },
       responses: [
         {
@@ -1274,6 +1277,7 @@ describe('transformOas3Operation', () => {
       request: {
         headers: [],
         query: [],
+        unknown: [],
         cookie: [],
         path: [],
       },
@@ -1420,6 +1424,7 @@ describe('transformOas3Operation', () => {
             ],
             path: [],
             query: [],
+            unknown: [],
           },
           responses: [
             expect.objectContaining({

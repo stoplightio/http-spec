@@ -136,6 +136,7 @@ Array [
       "headers": Array [],
       "path": Array [],
       "query": Array [],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -232,6 +233,7 @@ Array [
           "style": "form",
         },
       ],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -306,6 +308,7 @@ Array [
           "style": "form",
         },
       ],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -373,6 +376,7 @@ Array [
       "headers": Array [],
       "path": Array [],
       "query": Array [],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -549,6 +553,7 @@ Array [
         },
       ],
       "query": Array [],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -815,6 +820,7 @@ Array [
       "headers": Array [],
       "path": Array [],
       "query": Array [],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -900,6 +906,7 @@ Array [
           "style": "form",
         },
       ],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
@@ -1103,6 +1110,7 @@ Array [
         },
       ],
       "query": Array [],
+      "unknown": Array [],
     },
     "responses": Array [
       Object {
