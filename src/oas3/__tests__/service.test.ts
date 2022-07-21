@@ -216,6 +216,23 @@ describe('oas3 service', () => {
     });
   });
 
+  it('should handle x-internal property', () => {
+    const document: Partial<OpenAPIObject> & { 'x-internal': boolean } = {
+      info: {
+        title: '',
+        version: '1.0',
+      },
+      'x-internal': true,
+    };
+
+    expect(transformOas3Service({ document })).toStrictEqual({
+      id: 'abc',
+      internal: true,
+      name: '',
+      version: '1.0',
+    });
+  });
+
   it('should filter out scopes', () => {
     const document: Partial<OpenAPIObject> = {
       openapi: '3.0.0',

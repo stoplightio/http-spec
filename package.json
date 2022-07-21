@@ -75,7 +75,7 @@
   "dependencies": {
     "@stoplight/json": "^3.18.1",
     "@stoplight/json-schema-generator": "1.0.1",
-    "@stoplight/types": "^13.5.0",
+    "@stoplight/types": "^13.6.0",
     "@types/json-schema": "7.0.11",
     "@types/swagger-schema-official": "~2.0.22",
     "@types/type-is": "^1.6.3",
