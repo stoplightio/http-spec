@@ -92,6 +92,28 @@ describe('oas2 service', () => {
     const transformed = transformOas2Service({ document });
     expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
   });
+
+  it('should handle x-internal property', () => {
+    const document: Partial<Spec> & Fragment & { 'x-internal': boolean } = {
+      'x-stoplight': { id: 'abc' },
+      info: {
+        title: '',
+        version: '1.0',
+      },
+      'x-internal': true,
+    };
+
+    expect(
+      transformOas2Service({
+        document,
+      }),
+    ).toStrictEqual({
+      id: 'abc',
+      name: '',
+      version: '1.0',
+      internal: true,
+    });
+  });
   describe('x-logo support', () => {
     it('should support x-logo', () => {
       const document: Partial<OpenAPIObject> = {

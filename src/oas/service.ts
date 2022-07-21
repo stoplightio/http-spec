@@ -4,7 +4,7 @@ import pickBy = require('lodash.pickby');
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
-import { isNonNullable, isString } from '../guards';
+import { isBoolean, isNonNullable, isString } from '../guards';
 import { TranslateFunction } from '../types';
 import { hasXLogo } from './guards';
 import { translateTagDefinition } from './tags';
@@ -36,6 +36,13 @@ export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> |
           contact: document.info?.contact,
         },
         isPlainObject,
+      ),
+
+      ...pickBy(
+        {
+          internal: document['x-internal'],
+        },
+        isBoolean,
       ),
     };
 

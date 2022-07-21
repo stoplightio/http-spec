@@ -1491,10 +1491,10 @@
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
 
-"@stoplight/types@^13.5.0":
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.5.0.tgz#a17990ab4ff3fc60325dc64d758c4670b872ac8b"
-  integrity sha512-8UFgYj4Y/vcc3a2ZuJJ+ltiJlFsXa7/huZkmjhaHq+jPHIR2Va+aFaExENV/cWtxUVTXE15KSzPOX/ikucUFbw==
+"@stoplight/types@^13.6.0":
+  version "13.6.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.6.0.tgz#96c6aaae05858b36f589821cd52c95aa9b205ce7"
+  integrity sha512-dzyuzvUjv3m1wmhPfq82lCVYGcXG0xUYgqnWfCq3PCVR4BKFhjdkHrnJ+jIDoMKvXb05AZP/ObQF6+NpDo29IQ==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
