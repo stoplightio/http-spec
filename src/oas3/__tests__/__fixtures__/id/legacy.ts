@@ -19,7 +19,6 @@ export default [
       {
         // hash(`http_server-${parentId}-${server.url}`)
         // closest parent with an id is the service, so ends up being...
-        // hash('http_server-service_abc-http://localhost:3000')
         id: 'http_server-service_abc-http://localhost:3000',
         name: 'Users API',
         url: 'http://localhost:3000',
@@ -29,7 +28,6 @@ export default [
       {
         // hash(`http_security-${parentId}-${security.key || security.name}`)
         // closest parent with an id is the service, so ends up being...
-        // hash('http_security-service_abc-api-key')
         id: 'http_security-service_abc-api-key',
         key: 'api-key',
         type: 'apiKey',
@@ -40,7 +38,6 @@ export default [
     tags: [
       {
         // hash(`tag-${tag.name}`)
-        // hash('tag-mutates')
         id: 'tag-mutates',
         name: 'mutates',
       },
@@ -54,7 +51,6 @@ export default [
     // hash(`http_operation-${parentId}-${method}-${pathWithParamNamesEmpty}`)
     // for pathWithParamNamesEmpty, remove all characters between {} segments
     // closest parent with an id is the service, so ends up being...
-    // hash('http_operation-service_abc-get-/users/{}')
     id: 'http_operation-service_abc-get-/users/{}',
     iid: 'get-user',
     description: 'Retrieve the information of the user with the matching user ID.',
@@ -189,7 +185,6 @@ export default [
           // hash(`http_query-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_query-http_operation-service_abc-get-/users/{}-summaryOnly')
           id: 'http_query-http_operation-service_abc-get-/users/{}-summaryOnly',
           name: 'summaryOnly',
           style: 'form',
@@ -274,7 +269,6 @@ export default [
                   readOnly: true,
                 },
                 address: {
-                  // @TODO
                   $ref: '#/components/schemas/Address',
                 },
               },

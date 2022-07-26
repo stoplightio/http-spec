@@ -17,7 +17,10 @@ describe('bundleOas3Service', () => {
           '/repos': {
             get: {
               parameters: [
-                // This is the key bit - a $ref'd param before the inline sort param below
+                // This is the key bit - a $ref'd params before the inline sort param below
+                {
+                  $ref: '../shared-openapi.json#/components/parameters/per_page',
+                },
                 {
                   $ref: '#/components/parameters/org',
                 },
@@ -80,7 +83,7 @@ describe('bundleOas3Service', () => {
             ],
             query: [
               {
-                id: 'http_query-service_id-sort',
+                id: 'http_query-http_operation-service_id-get-/repos-sort',
                 name: 'sort',
                 style: 'form',
                 examples: [],
@@ -90,13 +93,18 @@ describe('bundleOas3Service', () => {
                   type: 'string',
                   $schema: 'http://json-schema.org/draft-07/schema#',
                   'x-stoplight': {
-                    id: 'schema-http_query-service_id-sort-',
+                    id: 'schema-http_query-http_operation-service_id-get-/repos-sort-',
                   },
                 },
               },
             ],
             cookie: [],
             path: [],
+            unknown: [
+              {
+                $ref: '../shared-openapi.json#/components/parameters/per_page',
+              },
+            ],
           },
           security: [],
           servers: [],
@@ -675,7 +683,7 @@ describe('bundleOas3Service', () => {
     });
   });
 
-  it('should somehow handle parmas', () => {
+  it('should put $ref params that cannot be resolved into unknown bucket', () => {
     expect(
       bundleOas3Service({
         document: {

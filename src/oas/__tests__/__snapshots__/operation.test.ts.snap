@@ -19,7 +19,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "http_media-http_request_body-http_operation-abc-post-/pets-application/json-application/xml-application/json",
+            "id": "http_media-http_request_body-http_operation-abc-post-/pets-application/json",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -74,7 +74,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "http_media-http_request_body-http_operation-abc-post-/pets-application/json-application/xml-application/xml",
+            "id": "http_media-http_request_body-http_operation-abc-post-/pets-application/xml",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -129,7 +129,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "http_request_body-http_operation-abc-post-/pets-application/json-application/xml",
+        "id": "http_request_body-http_operation-abc-post-/pets",
         "required": true,
       },
       "cookie": Array [],
@@ -418,7 +418,7 @@ Array [
         "contents": Array [
           Object {
             "examples": Array [],
-            "id": "http_media-http_request_body-http_operation-abc-put-/pet/{}-application/json-application/xml-application/json",
+            "id": "http_media-http_request_body-http_operation-abc-put-/pet/{}-application/json",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -473,7 +473,7 @@ Array [
           },
           Object {
             "examples": Array [],
-            "id": "http_media-http_request_body-http_operation-abc-put-/pet/{}-application/json-application/xml-application/xml",
+            "id": "http_media-http_request_body-http_operation-abc-put-/pet/{}-application/xml",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -528,7 +528,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "http_request_body-http_operation-abc-put-/pet/{}-application/json-application/xml",
+        "id": "http_request_body-http_operation-abc-put-/pet/{}",
         "required": true,
       },
       "cookie": Array [],
