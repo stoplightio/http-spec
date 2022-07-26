@@ -4,7 +4,7 @@ import * as path from 'path';
 import { bundleOas3Service } from '../service';
 
 describe('bundleOas3Service', () => {
-  it.only('should handle $ref parameter followed by parameter that has same name as shared component', () => {
+  it('should handle $ref parameter followed by parameter that has same name as shared component', () => {
     const res = bundleOas3Service({
       document: {
         'x-stoplight': {
@@ -14,8 +14,7 @@ describe('bundleOas3Service', () => {
           '/repos': {
             get: {
               parameters: [
-                // If comment this out or even just move it move after the sort query param below it,
-                // we get the expected result and the test will pass
+                // This is the key bit - a $ref'd param before the inline sort param below
                 {
                   $ref: '#/components/parameters/org',
                 },
@@ -43,6 +42,8 @@ describe('bundleOas3Service', () => {
               },
             },
             sort: {
+              // A shared query param with the same name as the inline one defined in the operation
+              // The resulting bundled http service should treat these as two separate query params (one inline, one shared), each with their own unique ids
               name: 'sort',
               description: 'The sort parameter from shared components.',
               in: 'query',
@@ -56,15 +57,13 @@ describe('bundleOas3Service', () => {
       },
     });
 
-    // console.log(JSON.stringify(res, null, 4));
-
     expect(res).toStrictEqual({
       id: 'service_id',
       version: '',
       name: 'no-title',
       operations: [
         {
-          id: 'http_operation-service_id-get-/repos',
+          id: 'ca842400ceb89',
           method: 'get',
           path: '/repos',
           tags: [],
@@ -78,7 +77,7 @@ describe('bundleOas3Service', () => {
             ],
             query: [
               {
-                id: 'http_query-http_operation-service_id-get-/repos-sort',
+                id: '2b96b0c068f0b',
                 name: 'sort',
                 style: 'form',
                 examples: [],
@@ -88,7 +87,7 @@ describe('bundleOas3Service', () => {
                   type: 'string',
                   $schema: 'http://json-schema.org/draft-07/schema#',
                   'x-stoplight': {
-                    id: 'schema-http_query-http_operation-service_id-get-/repos-sort-',
+                    id: '402ee5eeb3cfe',
                   },
                 },
               },
@@ -108,7 +107,7 @@ describe('bundleOas3Service', () => {
         securitySchemes: [],
         header: [
           {
-            id: 'http_header-service_id-org',
+            id: '54efded787c69',
             name: 'org',
             style: 'simple',
             examples: [],
@@ -117,7 +116,7 @@ describe('bundleOas3Service', () => {
               type: 'string',
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                id: 'schema-http_header-service_id-org-',
+                id: '32e99f6029601',
               },
             },
             key: 'org',
@@ -125,7 +124,7 @@ describe('bundleOas3Service', () => {
         ],
         query: [
           {
-            id: 'http_query-service_id-sort',
+            id: 'd86f92e6ebf08',
             name: 'sort',
             style: 'form',
             examples: [],
@@ -135,7 +134,7 @@ describe('bundleOas3Service', () => {
               type: 'string',
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                id: 'schema-http_query-service_id-sort-',
+                id: '73649f70399f2',
               },
             },
             key: 'sort',

@@ -48,12 +48,14 @@ export function createContext<T extends Record<string, unknown>>(
     },
     maybeResolveLocalRef(target: unknown) {
       if (hasRef(target) && isLocalRef(target.$ref)) {
+        const prevContext = context;
         try {
           return resolveRef.call(this, target);
         } catch {
           return;
         } finally {
-          this.parentId = this.ids[context];
+          this.context = prevContext;
+          this.parentId = this.ids[prevContext];
         }
       }
 
