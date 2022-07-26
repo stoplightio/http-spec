@@ -7,6 +7,148 @@ import { bundleOas3Service } from '../service';
 setSkipHashing(true);
 
 describe('bundleOas3Service', () => {
+  it('should handle $ref parameter followed by parameter that has same name as shared component', () => {
+    const res = bundleOas3Service({
+      document: {
+        'x-stoplight': {
+          id: 'service_id',
+        },
+        paths: {
+          '/repos': {
+            get: {
+              parameters: [
+                // This is the key bit - a $ref'd param before the inline sort param below
+                {
+                  $ref: '#/components/parameters/org',
+                },
+                {
+                  name: 'sort',
+                  in: 'query',
+                  description: 'The sort parameter defined directly in the list repos operation.',
+                  required: false,
+                  schema: {
+                    type: 'string',
+                  },
+                },
+              ],
+            },
+          },
+        },
+        components: {
+          parameters: {
+            org: {
+              name: 'org',
+              in: 'header',
+              required: true,
+              schema: {
+                type: 'string',
+              },
+            },
+            sort: {
+              // A shared query param with the same name as the inline one defined in the operation
+              // The resulting bundled http service should treat these as two separate query params (one inline, one shared), each with their own unique ids
+              name: 'sort',
+              description: 'The sort parameter from shared components.',
+              in: 'query',
+              required: false,
+              schema: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(res).toStrictEqual({
+      id: 'service_id',
+      version: '',
+      name: 'no-title',
+      operations: [
+        {
+          id: 'http_operation-service_id-get-/repos',
+          method: 'get',
+          path: '/repos',
+          tags: [],
+          extensions: {},
+          responses: [],
+          request: {
+            headers: [
+              {
+                $ref: '#/components/header/0',
+              },
+            ],
+            query: [
+              {
+                id: 'http_query-service_id-sort',
+                name: 'sort',
+                style: 'form',
+                examples: [],
+                description: 'The sort parameter defined directly in the list repos operation.',
+                required: false,
+                schema: {
+                  type: 'string',
+                  $schema: 'http://json-schema.org/draft-07/schema#',
+                  'x-stoplight': {
+                    id: 'schema-http_query-service_id-sort-',
+                  },
+                },
+              },
+            ],
+            cookie: [],
+            path: [],
+          },
+          security: [],
+          servers: [],
+        },
+      ],
+      components: {
+        responses: [],
+        schemas: [],
+        requestBodies: [],
+        examples: [],
+        securitySchemes: [],
+        header: [
+          {
+            id: 'http_header-service_id-org',
+            name: 'org',
+            style: 'simple',
+            examples: [],
+            required: true,
+            schema: {
+              type: 'string',
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-http_header-service_id-org-',
+              },
+            },
+            key: 'org',
+          },
+        ],
+        query: [
+          {
+            id: 'http_query-service_id-sort',
+            name: 'sort',
+            style: 'form',
+            examples: [],
+            description: 'The sort parameter from shared components.',
+            required: false,
+            schema: {
+              type: 'string',
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-http_query-service_id-sort-',
+              },
+            },
+            key: 'sort',
+          },
+        ],
+        cookie: [],
+        path: [],
+      },
+    });
+  });
+
   it('should rewrite $refs in shared components', () => {
     expect(
       bundleOas3Service({
