@@ -683,7 +683,7 @@ describe('bundleOas3Service', () => {
     });
   });
 
-  it('should somehow handle parmas', () => {
+  it('should put $ref params that cannot be resolved into unknown bucket', () => {
     expect(
       bundleOas3Service({
         document: {

@@ -27,16 +27,24 @@ export function createOasParamsIterator(
       const maybeParameterObject = this.maybeResolveLocalRef(params[i]);
       if (isReferenceObject(maybeParameterObject)) {
         yield params[i];
+        this.context = context;
+        this.parentId = parentId;
         continue;
       }
 
       if (!(spec === OasVersion.OAS2 ? isValidOas2ParameterObject : isValidOas3ParameterObject)(maybeParameterObject)) {
+        this.context = context;
+        this.parentId = parentId;
         continue;
       }
 
       const key = getIdForParameter(maybeParameterObject);
 
-      if (seenParams.has(key)) continue;
+      if (seenParams.has(key)) {
+        this.context = context;
+        this.parentId = parentId;
+        continue;
+      }
       seenParams.add(key);
 
       if (this.context !== 'service') {

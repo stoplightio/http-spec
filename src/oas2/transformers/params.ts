@@ -116,7 +116,7 @@ export const translateToHeaderParams: Oas2TranslateFunction<
 export const translateToBodyParameter = withContext<
   Oas2TranslateFunction<[body: BodyParameter, consumes: string[]], IHttpOperationRequestBody>
 >(function (body, consumes) {
-  const id = this.generateId.httpRequestBody({ consumes });
+  const id = this.generateId.httpRequestBody({});
 
   const examples = entries(body['x-examples'] || getExamplesFromSchema(body.schema)).map(([key, value]) =>
     translateToDefaultExample.call(this, key, value),

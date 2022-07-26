@@ -246,14 +246,12 @@ export default {
       request: {
         body: {
           // hash('http_request_body-{parentId}-{consumes.join('-')}')
-          // hash('http_request_body-http_operation-service_abc-post-/users/{}-application/json')
-          id: 'http_request_body-http_operation-service_abc-post-/users/{}-application/json',
+          id: 'http_request_body-http_operation-service_abc-post-/users/{}',
           required: true,
           contents: [
             {
               // hash('http_media-{parentId}-{mediaType}')
-              // hash('http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json-application/json')
-              id: 'http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json-application/json',
+              id: 'http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json',
               mediaType: 'application/json',
               examples: [],
               schema: {

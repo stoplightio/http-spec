@@ -79,16 +79,16 @@ describe('bundleOas2Service', () => {
           extensions: {},
           request: {
             body: {
-              id: 'http_request_body-abc-application/json',
+              id: 'http_request_body-abc',
               contents: [
                 {
-                  id: 'http_media-http_request_body-abc-application/json-application/json',
+                  id: 'http_media-http_request_body-abc-application/json',
                   examples: [],
                   mediaType: 'application/json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',
                     'x-stoplight': {
-                      id: 'schema-http_media-http_request_body-abc-application/json-application/json-',
+                      id: 'schema-http_media-http_request_body-abc-application/json-',
                     },
                     format: 'e-mail',
                   },
