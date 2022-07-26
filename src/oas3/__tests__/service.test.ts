@@ -1,6 +1,9 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
+import { setSkipHashing } from '../../hash';
 import { transformOas3Service as _transformOas3Service } from '../service';
+
+setSkipHashing(true);
 
 const transformOas3Service: typeof _transformOas3Service = ({ document, ...opts }) =>
   _transformOas3Service({

@@ -1,7 +1,10 @@
 import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 
+import { setSkipHashing } from '../../hash';
 import { getSecurities as _getSecurities, OperationSecurities } from '../accessors';
+
+setSkipHashing(true);
 
 const getSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities?: OperationSecurities) =>
   _getSecurities(document, operationSecurities);

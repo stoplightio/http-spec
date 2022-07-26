@@ -4,7 +4,7 @@ export default {
   version: '1.0',
   servers: [
     {
-      id: '98ddf8a4b5bdc',
+      id: 'http_server-service_abc-http://localhost:3000',
       name: 'Users API',
       url: 'http://localhost:3000',
     },
@@ -12,7 +12,7 @@ export default {
   tags: [
     {
       // hash('tag-mutates')
-      id: '3d179d2f9363d',
+      id: 'tag-mutates',
       name: 'mutates',
     },
   ],
@@ -21,7 +21,7 @@ export default {
     examples: [
       {
         // hash('example-service_abc-A-Shared-Example')
-        id: '5a69041e065b0',
+        id: 'example-service_abc-A-Shared-Example',
         key: 'A-Shared-Example',
         value: {
           address: {
@@ -34,7 +34,7 @@ export default {
     header: [
       {
         // hash('http_header-service_abc-Some-Header')
-        id: 'd0b1db7d34de6',
+        id: 'http_header-service_abc-Some-Header',
         key: 'Some-Header',
         name: 'A-Shared-Header',
         style: 'simple',
@@ -44,8 +44,8 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            // hash('schema-d0b1db7d34de6')
-            id: '854607270d287',
+            // hash('schema-http_header-service_abc-Some-Header')
+            id: 'schema-http_header-service_abc-Some-Header-',
           },
         },
       },
@@ -56,20 +56,20 @@ export default {
     responses: [
       {
         // hash('http_response-service_abc-ErrorResponse')
-        id: '437771f63f179',
+        id: 'http_response-service_abc-ErrorResponse',
         key: 'ErrorResponse',
         code: 'ErrorResponse',
         contents: [
           {
             // hash('http_media-{parentId}-application/json')
-            // hash('http_media-437771f63f179-application/json')
-            id: '4d98be34f341a',
+            // hash('http_media-http_response-service_abc-ErrorResponse-application/json')
+            id: 'http_media-http_response-service_abc-ErrorResponse-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                // hash('schema-4d98be34f341a-')
-                id: '89c00c1a4aeb9',
+                // hash('schema-http_media-http_response-service_abc-ErrorResponse-application/json-')
+                id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/json-',
               },
               type: 'object',
               properties: {
@@ -90,7 +90,7 @@ export default {
       {
         $schema: 'http://json-schema.org/draft-07/schema#',
         'x-stoplight': {
-          id: 'de4f083463b7c',
+          id: 'schema-service_abc-User',
         },
         key: 'User',
         type: 'object',
@@ -123,7 +123,7 @@ export default {
         title: 'Address',
         type: 'object',
         'x-stoplight': {
-          id: '8b1562dcd786e',
+          id: 'schema-service_abc-Address',
         },
       },
       {
@@ -133,7 +133,7 @@ export default {
         title: 'UserId',
         type: 'number',
         'x-stoplight': {
-          id: 'a8978c71e4d00',
+          id: 'schema-service_abc-UserId',
         },
       },
       {
@@ -151,13 +151,13 @@ export default {
         title: 'Error',
         type: 'object',
         'x-stoplight': {
-          id: 'da49423a5a9e7',
+          id: 'schema-service_abc-Error',
         },
       },
     ],
     securitySchemes: [
       {
-        id: '202a905f9dff6',
+        id: 'http_security-service_abc-api-key',
         in: 'query',
         key: 'api-key',
         name: 'API Key',
@@ -169,7 +169,7 @@ export default {
     {
       description: 'Retrieve the information of the user with the matching user ID.',
       extensions: {},
-      id: '96043a63b6901',
+      id: 'http_operation-service_abc-get-/users/{}',
       iid: 'get-user',
       method: 'get',
       path: '/users/{userId}',
@@ -184,14 +184,14 @@ export default {
           {
             description: 'Id of an existing user.',
             examples: [],
-            id: 'fe171ec8cfd0b',
+            id: 'http_path_param-http_path-service_abc-/users/{}-userId',
             name: 'userId',
             required: true,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: '13ad531bed72e',
+                id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-',
               },
             },
             style: 'simple',
@@ -200,13 +200,13 @@ export default {
         query: [
           {
             examples: [],
-            id: 'efe9534d001fc',
+            id: 'http_query-http_operation-service_abc-get-/users/{}-summaryOnly',
             name: 'summaryOnly',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'boolean',
               'x-stoplight': {
-                id: 'aca62504578bd',
+                id: 'schema-http_query-http_operation-service_abc-get-/users/{}-summaryOnly-',
               },
             },
             style: 'form',
@@ -220,7 +220,7 @@ export default {
             {
               encodings: [],
               examples: [],
-              id: 'fce50f391bf57',
+              id: 'http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/json',
               mediaType: 'application/json',
               schema: {
                 $ref: '#/components/schemas/0',
@@ -229,20 +229,20 @@ export default {
             {
               encodings: [],
               examples: [],
-              id: '48eeb3ee2a049',
+              id: 'http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/xml',
               mediaType: 'application/xml',
               schema: {
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 type: 'string',
                 'x-stoplight': {
-                  id: '069dfbb6c6315',
+                  id: 'schema-http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/xml-',
                 },
               },
             },
           ],
           description: 'User Found',
           headers: [],
-          id: 'f387e16c7d39d',
+          id: 'http_response-http_operation-service_abc-get-/users/{}-200',
         },
         {
           code: '404',
@@ -252,7 +252,7 @@ export default {
       security: [],
       servers: [
         {
-          id: '98ddf8a4b5bdc',
+          id: 'http_server-service_abc-http://localhost:3000',
           name: 'Users API',
           url: 'http://localhost:3000',
         },
@@ -260,14 +260,14 @@ export default {
       summary: 'Get User Info by User ID',
       tags: [
         {
-          id: '1e29148da7966',
+          id: 'tag-tag-without-root-def',
           name: 'tag-without-root-def',
         },
       ],
     },
     {
       extensions: {},
-      id: 'b16a96d287951',
+      id: 'http_operation-service_abc-post-/users/{}',
       iid: 'post-users-userId',
       method: 'post',
       path: '/users/{userId}',
@@ -282,26 +282,26 @@ export default {
                   $ref: '#/components/examples/0',
                 },
               ],
-              id: '00db77c676e1a',
+              id: 'http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json',
               mediaType: 'application/json',
               schema: {
                 $ref: '#/components/schemas/0',
               },
             },
           ],
-          id: '07267ec331fc9',
+          id: 'http_request_body-http_operation-service_abc-post-/users/{}',
         },
         cookie: [],
         headers: [
           {
             examples: [],
-            id: '1ead595922478',
+            id: 'http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header',
             name: 'Post-Specific-Header',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: 'de5897f178a5d',
+                id: 'schema-http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header-',
               },
             },
             style: 'simple',
@@ -314,14 +314,14 @@ export default {
           {
             description: 'Id of an existing user.',
             examples: [],
-            id: 'fe171ec8cfd0b',
+            id: 'http_path_param-http_path-service_abc-/users/{}-userId',
             name: 'userId',
             required: true,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: '13ad531bed72e',
+                id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-',
               },
             },
             style: 'simple',
@@ -336,7 +336,7 @@ export default {
             {
               encodings: [],
               examples: [],
-              id: '88460a8f1a612',
+              id: 'http_media-http_response-http_operation-service_abc-post-/users/{}-201-application/json',
               mediaType: 'application/json',
               schema: {
                 $ref: '#/components/schemas/0',
@@ -345,7 +345,7 @@ export default {
           ],
           description: 'User Created',
           headers: [],
-          id: 'd8ca38606ee5d',
+          id: 'http_response-http_operation-service_abc-post-/users/{}-201',
         },
         {
           code: '400',
@@ -355,7 +355,7 @@ export default {
       security: [
         [
           {
-            id: '202a905f9dff6',
+            id: 'http_security-service_abc-api-key',
             in: 'query',
             key: 'api-key',
             name: 'API Key',
@@ -365,7 +365,7 @@ export default {
       ],
       servers: [
         {
-          id: '98ddf8a4b5bdc',
+          id: 'http_server-service_abc-http://localhost:3000',
           name: 'Users API',
           url: 'http://localhost:3000',
         },
@@ -374,7 +374,7 @@ export default {
       tags: [
         {
           // hash('tag-mutates')
-          id: '3d179d2f9363d',
+          id: 'tag-mutates',
           name: 'mutates',
         },
       ],

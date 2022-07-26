@@ -1,9 +1,154 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { setSkipHashing } from '../../hash';
 import { bundleOas3Service } from '../service';
 
+setSkipHashing(true);
+
 describe('bundleOas3Service', () => {
+  it('should handle $ref parameter followed by parameter that has same name as shared component', () => {
+    const res = bundleOas3Service({
+      document: {
+        'x-stoplight': {
+          id: 'service_id',
+        },
+        paths: {
+          '/repos': {
+            get: {
+              parameters: [
+                // This is the key bit - a $ref'd param before the inline sort param below
+                {
+                  $ref: '#/components/parameters/org',
+                },
+                {
+                  name: 'sort',
+                  in: 'query',
+                  description: 'The sort parameter defined directly in the list repos operation.',
+                  required: false,
+                  schema: {
+                    type: 'string',
+                  },
+                },
+              ],
+            },
+          },
+        },
+        components: {
+          parameters: {
+            org: {
+              name: 'org',
+              in: 'header',
+              required: true,
+              schema: {
+                type: 'string',
+              },
+            },
+            sort: {
+              // A shared query param with the same name as the inline one defined in the operation
+              // The resulting bundled http service should treat these as two separate query params (one inline, one shared), each with their own unique ids
+              name: 'sort',
+              description: 'The sort parameter from shared components.',
+              in: 'query',
+              required: false,
+              schema: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(res).toStrictEqual({
+      id: 'service_id',
+      version: '',
+      name: 'no-title',
+      operations: [
+        {
+          id: 'http_operation-service_id-get-/repos',
+          method: 'get',
+          path: '/repos',
+          tags: [],
+          extensions: {},
+          responses: [],
+          request: {
+            headers: [
+              {
+                $ref: '#/components/header/0',
+              },
+            ],
+            query: [
+              {
+                id: 'http_query-service_id-sort',
+                name: 'sort',
+                style: 'form',
+                examples: [],
+                description: 'The sort parameter defined directly in the list repos operation.',
+                required: false,
+                schema: {
+                  type: 'string',
+                  $schema: 'http://json-schema.org/draft-07/schema#',
+                  'x-stoplight': {
+                    id: 'schema-http_query-service_id-sort-',
+                  },
+                },
+              },
+            ],
+            cookie: [],
+            path: [],
+          },
+          security: [],
+          servers: [],
+        },
+      ],
+      components: {
+        responses: [],
+        schemas: [],
+        requestBodies: [],
+        examples: [],
+        securitySchemes: [],
+        header: [
+          {
+            id: 'http_header-service_id-org',
+            name: 'org',
+            style: 'simple',
+            examples: [],
+            required: true,
+            schema: {
+              type: 'string',
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-http_header-service_id-org-',
+              },
+            },
+            key: 'org',
+          },
+        ],
+        query: [
+          {
+            id: 'http_query-service_id-sort',
+            name: 'sort',
+            style: 'form',
+            examples: [],
+            description: 'The sort parameter from shared components.',
+            required: false,
+            schema: {
+              type: 'string',
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-http_query-service_id-sort-',
+              },
+            },
+            key: 'sort',
+          },
+        ],
+        cookie: [],
+        path: [],
+      },
+    });
+  });
+
   it('should rewrite $refs in shared components', () => {
     expect(
       bundleOas3Service({
@@ -103,7 +248,7 @@ describe('bundleOas3Service', () => {
         header: [
           {
             examples: [],
-            id: '8bb895b336918',
+            id: 'http_header-undefined-Some-Header',
             key: 'Some-Header',
             name: 'A-Shared-Header',
             required: false,
@@ -111,7 +256,7 @@ describe('bundleOas3Service', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               'x-stoplight': {
-                id: '0f99c3bfafaac',
+                id: 'schema-http_header-undefined-Some-Header-',
               },
             },
             style: 'simple',
@@ -141,7 +286,7 @@ describe('bundleOas3Service', () => {
             code: 'Error',
             contents: [
               {
-                id: '9b52b936650e1',
+                id: 'http_media-http_response-undefined-Error-application/json',
                 mediaType: 'application/json',
                 encodings: [],
                 examples: [],
@@ -154,14 +299,14 @@ describe('bundleOas3Service', () => {
                   },
                   type: 'object',
                   'x-stoplight': {
-                    id: '42ac2d350285a',
+                    id: 'schema-http_media-http_response-undefined-Error-application/json-',
                   },
                 },
               },
             ],
             description: 'A generic error response.',
             headers: [],
-            id: 'cb9db02eed34a',
+            id: 'http_response-undefined-Error',
             key: 'Error',
           },
           {
@@ -191,7 +336,7 @@ describe('bundleOas3Service', () => {
             title: 'User',
             type: 'object',
             'x-stoplight': {
-              id: '64592aa729862',
+              id: 'schema-undefined-User',
             },
           },
           {
@@ -205,7 +350,7 @@ describe('bundleOas3Service', () => {
             title: 'Address',
             type: 'object',
             'x-stoplight': {
-              id: '4e6bf245b910e',
+              id: 'schema-undefined-Address',
             },
           },
           {
@@ -223,7 +368,7 @@ describe('bundleOas3Service', () => {
             title: 'Error',
             type: 'object',
             'x-stoplight': {
-              id: 'cf45f959c561b',
+              id: 'schema-undefined-Error',
             },
           },
         ],
@@ -308,13 +453,13 @@ describe('bundleOas3Service', () => {
             code: 'Error',
             contents: [
               {
-                id: '9b52b936650e1',
+                id: 'http_media-http_response-undefined-Error-application/json',
                 mediaType: 'application/json',
                 encodings: [],
                 examples: [],
                 schema: {
                   'x-stoplight': {
-                    id: '42ac2d350285a',
+                    id: 'schema-http_media-http_response-undefined-Error-application/json-',
                   },
                   $schema: 'http://json-schema.org/draft-07/schema#',
                   properties: {
@@ -328,7 +473,7 @@ describe('bundleOas3Service', () => {
             ],
             description: 'A generic error response.',
             headers: [],
-            id: 'cb9db02eed34a',
+            id: 'http_response-undefined-Error',
             key: 'Error',
           },
           {
@@ -345,7 +490,7 @@ describe('bundleOas3Service', () => {
           },
           {
             'x-stoplight': {
-              id: '64592aa729862',
+              id: 'schema-undefined-User',
             },
             $schema: 'http://json-schema.org/draft-07/schema#',
             key: 'User',
@@ -452,16 +597,16 @@ describe('bundleOas3Service', () => {
       },
       operations: [
         {
-          id: '76b4ee6eadc90',
+          id: 'http_operation-undefined-post-/todo',
           method: 'post',
           path: '/todo',
           extensions: {},
           request: {
             body: {
-              id: '9c150f23174d8',
+              id: 'http_request_body-http_operation-undefined-post-/todo',
               contents: [
                 {
-                  id: 'a7f2c8456c37f',
+                  id: 'http_media-http_request_body-http_operation-undefined-post-/todo-application/json',
                   encodings: [],
                   examples: [],
                   mediaType: 'application/json',
@@ -469,7 +614,7 @@ describe('bundleOas3Service', () => {
                     $schema: 'http://json-schema.org/draft-07/schema#',
                     $ref: '#/components/schemas/2',
                     'x-stoplight': {
-                      id: 'c25f41d54d86a',
+                      id: 'schema-http_operation-undefined-post-/todo-',
                     },
                   },
                 },
@@ -482,11 +627,11 @@ describe('bundleOas3Service', () => {
           },
           responses: [
             {
-              id: '6a74b99c6956b',
+              id: 'http_response-http_operation-undefined-post-/todo-200',
               code: '200',
               contents: [
                 {
-                  id: 'a84c6be0c4ac3',
+                  id: 'http_media-http_response-http_operation-undefined-post-/todo-200-application/json',
                   encodings: [],
                   examples: [],
                   mediaType: 'application/json',
@@ -494,7 +639,7 @@ describe('bundleOas3Service', () => {
                     $schema: 'http://json-schema.org/draft-07/schema#',
                     $ref: '#/components/schemas/0',
                     'x-stoplight': {
-                      id: 'c25f41d54d86a',
+                      id: 'schema-http_operation-undefined-post-/todo-',
                     },
                   },
                 },
@@ -502,11 +647,11 @@ describe('bundleOas3Service', () => {
               headers: [],
             },
             {
-              id: '6a84b99c69b38',
+              id: 'http_response-http_operation-undefined-post-/todo-201',
               code: '201',
               contents: [
                 {
-                  id: '01161cd990e25',
+                  id: 'http_media-http_response-http_operation-undefined-post-/todo-201-application/json',
                   encodings: [],
                   examples: [],
                   mediaType: 'application/json',
@@ -514,7 +659,7 @@ describe('bundleOas3Service', () => {
                     $schema: 'http://json-schema.org/draft-07/schema#',
                     $ref: '#/components/schemas/1',
                     'x-stoplight': {
-                      id: 'c25f41d54d86a',
+                      id: 'schema-http_operation-undefined-post-/todo-',
                     },
                   },
                 },
@@ -564,7 +709,7 @@ describe('bundleOas3Service', () => {
       },
       operations: [
         {
-          id: 'a26b653a5e5ba',
+          id: 'http_operation-undefined-get-/todos/{}',
           method: 'get',
           path: '/todos/{todoId}',
           extensions: {},

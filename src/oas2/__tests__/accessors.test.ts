@@ -1,7 +1,10 @@
 import { Dictionary } from '@stoplight/types';
 import { Security } from 'swagger-schema-official';
 
+import { setSkipHashing } from '../../hash';
 import { getConsumes, getExamplesFromSchema, getProduces, getSecurities } from '../accessors';
+
+setSkipHashing(true);
 
 const securityDefinitionsFixture: Dictionary<Security> = {
   api_key: {
