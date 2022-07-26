@@ -1,8 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { setSkipHashing } from '../../hash';
 import { transformOas3Operations } from '../operation';
 import { transformOas3Service } from '../service';
+
+setSkipHashing(true);
 
 describe('transformOas3Service', () => {
   it.each(fs.readdirSync(path.join(__dirname, './__fixtures__')))(

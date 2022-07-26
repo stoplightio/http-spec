@@ -1,7 +1,10 @@
+import { setSkipHashing } from '../../hash';
 import { transformOas2Service } from '../../oas2/service';
 import { transformOas3Service } from '../../oas3/service';
 import * as oas2KitchenSinkJson from './fixtures/oas2-kitchen-sink.json';
 import * as oas3KitchenSinkJson from './fixtures/oas3-kitchen-sink.json';
+
+setSkipHashing(true);
 
 describe('oas service', () => {
   it('openapi v2', () => {

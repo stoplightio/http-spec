@@ -1,7 +1,10 @@
+import { setSkipHashing } from '../../hash';
 import { Fragment } from '../../types';
 import { createOasParamsIterator } from '../accessors';
 import { createContext } from '../context';
 import { OasVersion } from '../types';
+
+setSkipHashing(true);
 
 const getValidOasParameters = (document: { paths: { '/': { get: Fragment } } }, spec: OasVersion) =>
   Array.from(

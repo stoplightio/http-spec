@@ -1,7 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { setSkipHashing } from '../../hash';
 import { bundleOas2Service } from '../service';
+
+setSkipHashing(true);
 
 describe('bundleOas2Service', () => {
   it('should not bundle shared requestBodies', () => {
@@ -70,22 +73,22 @@ describe('bundleOas2Service', () => {
       version: '',
       operations: [
         {
-          id: 'c911d0f53d100',
+          id: 'http_operation-abc-patch-/users/{}',
           method: 'patch',
           path: '/users/{userId}',
           extensions: {},
           request: {
             body: {
-              id: '5331ff8ad9369',
+              id: 'http_request_body-abc-application/json',
               contents: [
                 {
-                  id: 'cf10c8e681da1',
+                  id: 'http_media-http_request_body-abc-application/json-application/json',
                   examples: [],
                   mediaType: 'application/json',
                   schema: {
                     $schema: 'http://json-schema.org/draft-07/schema#',
                     'x-stoplight': {
-                      id: 'dbc0f9871a94e',
+                      id: 'schema-http_media-http_request_body-abc-application/json-application/json-',
                     },
                     format: 'e-mail',
                   },
@@ -104,13 +107,13 @@ describe('bundleOas2Service', () => {
           tags: [],
         },
         {
-          id: '551bee27265ba',
+          id: 'http_operation-abc-put-/users/{}',
           method: 'put',
           path: '/users/{userId}',
           extensions: {},
           request: {
             body: {
-              id: 'a9a74db98e417',
+              id: 'http_request_body-http_operation-abc-put-/users/{}',
               contents: [],
             },
             cookie: [],
@@ -124,13 +127,13 @@ describe('bundleOas2Service', () => {
           tags: [],
         },
         {
-          id: '71b60791196bf',
+          id: 'http_operation-abc-post-/users/{}',
           method: 'post',
           path: '/users/{userId}',
           extensions: {},
           request: {
             body: {
-              id: '9b5d65cfbc4fd',
+              id: 'http_request_body-abc',
               contents: [],
               required: true,
             },

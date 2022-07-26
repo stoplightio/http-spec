@@ -1,8 +1,11 @@
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
+import { setSkipHashing } from '../../hash';
 import { transformOas2Operations } from '../../oas2/operation';
 import { transformOas3Operations } from '../../oas3/operation';
+
+setSkipHashing(true);
 
 const oas2KitchenSinkJson: Spec = require('./fixtures/oas2-kitchen-sink.json');
 const oas3KitchenSinkJson: OpenAPIObject = require('./fixtures/oas3-kitchen-sink.json');

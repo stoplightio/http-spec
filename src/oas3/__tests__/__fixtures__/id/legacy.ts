@@ -20,7 +20,7 @@ export default [
         // hash(`http_server-${parentId}-${server.url}`)
         // closest parent with an id is the service, so ends up being...
         // hash('http_server-service_abc-http://localhost:3000')
-        id: '98ddf8a4b5bdc',
+        id: 'http_server-service_abc-http://localhost:3000',
         name: 'Users API',
         url: 'http://localhost:3000',
       },
@@ -30,7 +30,7 @@ export default [
         // hash(`http_security-${parentId}-${security.key || security.name}`)
         // closest parent with an id is the service, so ends up being...
         // hash('http_security-service_abc-api-key')
-        id: '202a905f9dff6',
+        id: 'http_security-service_abc-api-key',
         key: 'api-key',
         type: 'apiKey',
         name: 'API Key',
@@ -41,7 +41,7 @@ export default [
       {
         // hash(`tag-${tag.name}`)
         // hash('tag-mutates')
-        id: '3d179d2f9363d',
+        id: 'tag-mutates',
         name: 'mutates',
       },
     ],
@@ -55,7 +55,7 @@ export default [
     // for pathWithParamNamesEmpty, remove all characters between {} segments
     // closest parent with an id is the service, so ends up being...
     // hash('http_operation-service_abc-get-/users/{}')
-    id: '96043a63b6901',
+    id: 'http_operation-service_abc-get-/users/{}',
     iid: 'get-user',
     description: 'Retrieve the information of the user with the matching user ID.',
     method: 'get',
@@ -65,8 +65,8 @@ export default [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_response-96043a63b6901-200')
-        id: 'f387e16c7d39d',
+        // hash('http_response-http_operation-service_abc-get-/users/{}-200')
+        id: 'http_response-http_operation-service_abc-get-/users/{}-200',
         code: '200',
         description: 'User Found',
         headers: [],
@@ -74,12 +74,12 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-f387e16c7d39d-application/json')
-            id: 'fce50f391bf57',
+            // hash('http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/json')
+            id: 'http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight': { id: 'de4f083463b7c' },
+              'x-stoplight': { id: 'schema-service_abc-User' },
               title: 'User',
               type: 'object',
               properties: {
@@ -101,12 +101,14 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-f387e16c7d39d-application/xml')
-            id: '48eeb3ee2a049',
+            // hash('http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/xml')
+            id: 'http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/xml',
             mediaType: 'application/xml',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight': { id: '069dfbb6c6315' },
+              'x-stoplight': {
+                id: 'schema-http_media-http_response-http_operation-service_abc-get-/users/{}-200-application/xml-',
+              },
               type: 'string',
             },
             examples: [],
@@ -119,7 +121,7 @@ export default [
         // This response was defined in shared components originally.. the closest parent with an
         // id is the service, and the key was ErrorResponse so ends up being...
         // hash('http_response-service_abc-ErrorResponse')
-        id: '437771f63f179',
+        id: 'http_response-service_abc-ErrorResponse',
         code: '404',
         description: 'A generic error response.',
         headers: [],
@@ -127,14 +129,14 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-437771f63f179-application/json')
-            id: '4d98be34f341a',
+            // hash('http_media-http_response-service_abc-ErrorResponse-application/json')
+            id: 'http_media-http_response-service_abc-ErrorResponse-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                // hash('schema-4d98be34f341a-')
-                id: '89c00c1a4aeb9',
+                // hash('schema-http_media-http_response-service_abc-ErrorResponse-application/json-')
+                id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/json-',
               },
               type: 'object',
               properties: {
@@ -154,8 +156,8 @@ export default [
       {
         // hash(`http_server-${parentId}-${server.url}`)
         // this is coming from the service defined servers (rather than being defined specifically for this one operation)
-        // so the ID ends up being the same as the service defined one... look in file for "98ddf8a4b5bdc" to find the other def above
-        id: '98ddf8a4b5bdc',
+        // so the ID ends up being the same as the service defined one... look in file for "http_server-service_abc-http://localhost:3000" to find the other def above
+        id: 'http_server-service_abc-http://localhost:3000',
         name: 'Users API',
         url: 'http://localhost:3000',
       },
@@ -168,15 +170,14 @@ export default [
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
           // hash('http_header-service_abc-Some-Header')
-          id: 'd0b1db7d34de6',
+          id: 'http_header-service_abc-Some-Header',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              // hash('schema-d0b1db7d34de6-')
-              id: '854607270d287',
+              id: 'schema-http_header-service_abc-Some-Header-',
             },
             type: 'string',
           },
@@ -188,14 +189,14 @@ export default [
           // hash(`http_query-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_query-96043a63b6901-summaryOnly')
-          id: 'efe9534d001fc',
+          // hash('http_query-http_operation-service_abc-get-/users/{}-summaryOnly')
+          id: 'http_query-http_operation-service_abc-get-/users/{}-summaryOnly',
           name: 'summaryOnly',
           style: 'form',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'boolean',
-            'x-stoplight': { id: 'aca62504578bd' },
+            'x-stoplight': { id: 'schema-http_query-http_operation-service_abc-get-/users/{}-summaryOnly-' },
           },
           examples: [],
         },
@@ -209,14 +210,14 @@ export default [
           // The closest parent id to a path, is the service, so this equals... (remember that path segments have characters removed, since they are basically meaningless)
           // hash('http_path-service_abc-/users/{}') = '05574f79'
           // and then the final path param id...
-          // hash('http_path_param-05574f79-userId') = 'fe171ec8cfd0b'
-          id: 'fe171ec8cfd0b',
+          // hash('http_path_param-05574f79-userId') = 'http_path_param-http_path-service_abc-/users/{}-userId'
+          id: 'http_path_param-http_path-service_abc-/users/{}-userId',
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
           style: 'simple',
           schema: {
-            'x-stoplight': { id: '13ad531bed72e' },
+            'x-stoplight': { id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-' },
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'integer',
           },
@@ -228,7 +229,7 @@ export default [
       {
         // hash(`tag-${tag.name}`)
         // hash('tag-tag-without-root-def')
-        id: '1e29148da7966',
+        id: 'tag-tag-without-root-def',
         name: 'tag-without-root-def',
       },
     ],
@@ -241,7 +242,7 @@ export default [
    */
   {
     // Same process as first time... and yes, I know "POST" doesn't make sense on this path lol
-    id: 'b16a96d287951',
+    id: 'http_operation-service_abc-post-/users/{}',
     iid: 'post-users-userId',
     method: 'post',
     path: '/users/{userId}',
@@ -250,8 +251,8 @@ export default [
       {
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_response-b16a96d287951-201')
-        id: 'd8ca38606ee5d',
+        // hash('http_response-http_operation-service_abc-post-/users/{}-201')
+        id: 'http_response-http_operation-service_abc-post-/users/{}-201',
         code: '201',
         description: 'User Created',
         headers: [],
@@ -259,12 +260,12 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-d8ca38606ee5d-application/json')
-            id: '88460a8f1a612',
+            // hash('http_media-http_response-http_operation-service_abc-post-/users/{}-201-application/json')
+            id: 'http_media-http_response-http_operation-service_abc-post-/users/{}-201-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight': { id: 'de4f083463b7c' },
+              'x-stoplight': { id: 'schema-service_abc-User' },
               title: 'User',
               type: 'object',
               properties: {
@@ -291,7 +292,7 @@ export default [
         // id is the service, and the key was ErrorResponse so ends up being...
         // hash('http_response-service_abc-ErrorResponse')
         // NOTE how this ID is the same as the 404 response from the get user operation...
-        id: '437771f63f179',
+        id: 'http_response-service_abc-ErrorResponse',
         code: '400',
         description: 'A generic error response.',
         headers: [],
@@ -299,15 +300,15 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-437771f63f179-application/json')
+            // hash('http_media-http_response-service_abc-ErrorResponse-application/json')
             // NOTE how this ID is the same as the 404 response json media type from the get user operation...
-            id: '4d98be34f341a',
+            id: 'http_media-http_response-service_abc-ErrorResponse-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                // hash('schema-4d98be34f341a-')
-                id: '89c00c1a4aeb9',
+                // hash('schema-http_media-http_response-service_abc-ErrorResponse-application/json-')
+                id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/json-',
               },
               type: 'object',
               properties: {
@@ -328,8 +329,8 @@ export default [
         // hash(`http_server-${parentId}-${server.url}`)
         // this is coming from the service defined servers (rather than being defined specifically for this one operation)
         // so the ID ends up being the same as the service defined one (and also present in the get user op)...
-        // look in file for "98ddf8a4b5bdc" to find the other defs above
-        id: '98ddf8a4b5bdc',
+        // look in file for "http_server-service_abc-http://localhost:3000" to find the other defs above
+        id: 'http_server-service_abc-http://localhost:3000',
         name: 'Users API',
         url: 'http://localhost:3000',
       },
@@ -338,18 +339,18 @@ export default [
       body: {
         // hash(`http_request_body-${parentId}`)
         // closest parent with an id is the operation, so ends up being...
-        // hash('http_request_body-b16a96d287951')
-        id: '07267ec331fc9',
+        // hash('http_request_body-http_operation-service_abc-post-/users/{}')
+        id: 'http_request_body-http_operation-service_abc-post-/users/{}',
         contents: [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the request body, so ends up being...
-            // hash('http_media-07267ec331fc9-application/json')
-            id: '00db77c676e1a',
+            // hash('http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json')
+            id: 'http_media-http_request_body-http_operation-service_abc-post-/users/{}-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
-              'x-stoplight': { id: 'de4f083463b7c' },
+              'x-stoplight': { id: 'schema-service_abc-User' },
               title: 'User',
               type: 'object',
               properties: {
@@ -371,7 +372,7 @@ export default [
                 // This example was defined in shared components originally.. the closest parent with an
                 // id is the service, and the key was "A-Shared-Example" so ends up being...
                 // hash('example-service_abc-A-Shared-Example')
-                id: '5a69041e065b0',
+                id: 'example-service_abc-A-Shared-Example',
                 key: 'basic-example',
                 value: {
                   id: 0,
@@ -390,13 +391,15 @@ export default [
           // hash(`http_header-${parentId}-${param.name}`)
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
-          // hash('http_header-b16a96d287951-Post-Specific-Header')
-          id: '1ead595922478',
+          // hash('http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header')
+          id: 'http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header',
           name: 'Post-Specific-Header',
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
-            'x-stoplight': { id: 'de5897f178a5d' },
+            'x-stoplight': {
+              id: 'schema-http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header-',
+            },
             type: 'integer',
           },
           examples: [],
@@ -406,15 +409,15 @@ export default [
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
           // hash('http_header-service_abc-Some-Header')
-          id: 'd0b1db7d34de6',
+          id: 'http_header-service_abc-Some-Header',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              // hash('schema-d0b1db7d34de6-')
-              id: '854607270d287',
+              // hash('schema-http_header-service_abc-Some-Header-')
+              id: 'schema-http_header-service_abc-Some-Header-',
             },
             type: 'string',
           },
@@ -427,7 +430,7 @@ export default [
         {
           // Same process as other path param, resulting in the same
           // ID (so this path param node will end up as single instance in the graph, with an edge from each operation pointing at it)
-          id: 'fe171ec8cfd0b',
+          id: 'http_path_param-http_path-service_abc-/users/{}-userId',
           name: 'userId',
           required: true,
           description: 'Id of an existing user.',
@@ -436,8 +439,8 @@ export default [
             $schema: 'http://json-schema.org/draft-07/schema#',
             // hash(`http_media-${parentId}-${key}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-437771f63f179-application/json')
-            'x-stoplight': { id: '13ad531bed72e' },
+            // hash('http_media-http_response-service_abc-ErrorResponse-application/json')
+            'x-stoplight': { id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-' },
             type: 'integer',
           },
           examples: [],
@@ -448,7 +451,7 @@ export default [
       {
         // hash(`tag-${tag.name}`)
         // hash('tag-mutates')
-        id: '3d179d2f9363d',
+        id: 'tag-mutates',
         name: 'mutates',
       },
     ],
@@ -458,7 +461,7 @@ export default [
           // This is effectively a silly "fake" ref that openapi pulls... so
           // we can effectively just re-use the same ID for the relevant securityScheme
           // from the root.. note the ID is the same as the root securityScheme id
-          id: '202a905f9dff6',
+          id: 'http_security-service_abc-api-key',
           key: 'api-key',
           type: 'apiKey',
           name: 'API Key',

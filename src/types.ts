@@ -4,7 +4,7 @@ import type { idGenerators } from './generators';
 
 export type Fragment = Record<string, unknown>;
 
-export type IdGenerator = (value: string) => string;
+export type IdGenerator = (value: string, skipHashing?: boolean) => string;
 
 export type RefResolver<T extends Fragment = Fragment> = (
   this: TransformerContext<T>,
