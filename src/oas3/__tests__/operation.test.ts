@@ -1,9 +1,12 @@
 import { OpenAPIObject } from 'openapi3-ts';
 
+import { setSkipHashing } from '../../hash';
 import {
   transformOas3Operation as _transformOas3Operation,
   transformOas3Operations as _transformOas3Operations,
 } from '../operation';
+
+setSkipHashing(true);
 
 const transformOas3Operation: typeof _transformOas3Operation = opts => _transformOas3Operation(opts);
 
@@ -1244,24 +1247,24 @@ describe('transformOas3Operation', () => {
     };
 
     expect(transformOas3Operation({ document, path: '/hello/test', method: 'get' })).toStrictEqual({
-      id: '87ba69c1b59cb',
+      id: 'http_operation-undefined-get-/hello/test',
       iid: 'get-test',
       method: 'get',
       path: '/hello/test',
       responses: [
         {
-          id: '727c28d8a760f',
+          id: 'http_response-http_operation-undefined-get-/hello/test-200',
           code: '200',
           headers: [],
           contents: [
             {
-              id: 'dbb4352dafa27',
+              id: 'http_media-http_response-http_operation-undefined-get-/hello/test-200-application/json',
               mediaType: 'application/json',
               schema: {
                 $ref: '#/broken/ref',
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 'x-stoplight': {
-                  id: 'e073d9f2029c1',
+                  id: 'schema-http_operation-undefined-get-/hello/test-',
                 },
               },
               examples: [],

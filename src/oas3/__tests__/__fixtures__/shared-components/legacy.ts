@@ -23,7 +23,7 @@ export default [
     // for pathWithParamNamesEmpty, remove all characters between {} segments
     // closest parent with an id is the service, so ends up being...
     // hash('http_operation-service_abc-get-/orgs/{}/repos')
-    id: '376a534068842',
+    id: 'http_operation-service_abc-get-/orgs/{}/repos',
     method: 'get',
     path: '/orgs/{org}/repos',
     summary: 'Get a organization repository',
@@ -32,7 +32,7 @@ export default [
         // hash(`http_response-${parentId}-${response.code || response key (for shared response)}`)
         // closest parent with an id is the operation, so ends up being...
         // hash('http_response-service_abc-forbidden')
-        id: 'c73bfcb376d49',
+        id: 'http_response-service_abc-forbidden',
         code: '403',
         description: 'Forbidden',
         headers: [
@@ -40,7 +40,7 @@ export default [
             // hash(`http_header-${parentId}-${header key}`)
             // it's a shared header, so the closest parent is the service.
             // hash('http_header-service_abc-X-Rate-Limit')
-            id: '96620a275464f',
+            id: 'http_header-service_abc-X-Rate-Limit',
             name: 'X-Rate-Limit',
             style: 'simple',
             encodings: [],
@@ -51,7 +51,7 @@ export default [
               // it's a shared header, so the closest parent is the service.
               // hash('schema-service_abc-rate-limit')
               'x-stoplight': {
-                id: '72da152ada960',
+                id: 'schema-service_abc-rate-limit',
               },
               type: 'integer',
               description: 'The number of allowed requests in the current period',
@@ -63,14 +63,14 @@ export default [
           {
             // hash(`http_media-${parentId}-${mediaType}`)
             // closest parent with an id is the response, so ends up being...
-            // hash('http_media-c73bfcb376d49-application/json')
-            id: '4143bd61bfef9',
+            // hash('http_media-http_response-service_abc-forbidden-application/json')
+            id: 'http_media-http_response-service_abc-forbidden-application/json',
             mediaType: 'application/json',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
                 // hash('schema-service_abc-basic-error')
-                id: '5cbb77597a983',
+                id: 'schema-service_abc-basic-error',
               },
               title: 'Basic Error',
               description: 'Basic Error',
@@ -84,7 +84,7 @@ export default [
             examples: [
               {
                 // fast1a52hex('example-service_abc-A-Shared-Example')
-                id: '5a69041e065b0',
+                id: 'example-service_abc-A-Shared-Example',
                 key: 'error',
                 value: {
                   address: {
@@ -104,15 +104,15 @@ export default [
       headers: [
         {
           // hash('http_header-service_abc-Some-Header')
-          id: 'd0b1db7d34de6',
+          id: 'http_header-service_abc-Some-Header',
           name: 'A-Shared-Header',
           required: false,
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             type: 'string',
             'x-stoplight': {
-              // hash('schema-d0b1db7d34de6-')
-              id: '854607270d287',
+              // hash('schema-http_header-service_abc-Some-Header-')
+              id: 'schema-http_header-service_abc-Some-Header-',
             },
           },
           examples: [],

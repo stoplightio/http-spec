@@ -1,8 +1,11 @@
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
+import { setSkipHashing } from '../../hash';
 import { Fragment } from '../../types';
 import { transformOas2Service } from '../service';
+
+setSkipHashing(true);
 
 describe('oas2 service', () => {
   it('should handle non array schemes', () => {

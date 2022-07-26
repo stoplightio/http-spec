@@ -1,5 +1,8 @@
+import { setSkipHashing } from '../../hash';
 import { createContext } from '../context';
 import { translateToTags as _translateToTags } from '../tags';
+
+setSkipHashing(true);
 
 const translateToTags = (tags: unknown) => _translateToTags.call(createContext({}), tags);
 

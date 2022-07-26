@@ -2,7 +2,10 @@ import { DeepPartial } from '@stoplight/types';
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
+import { setSkipHashing } from '../../hash';
 import { transformOas2Operation, transformOas2Operations } from '../operation';
+
+setSkipHashing(true);
 
 describe('transformOas2Operation', () => {
   it('should translate operation', () => {
