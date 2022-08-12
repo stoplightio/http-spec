@@ -72,5 +72,8 @@ export function syncReferenceObject<K extends Reference>(target: K, references: 
     get() {
       return getResolved(references, $ref);
     },
+    set(value) {
+      references[$ref] = { value, resolved: true };
+    },
   });
 }
