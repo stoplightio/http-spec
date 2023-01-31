@@ -32,6 +32,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -87,6 +93,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -337,6 +349,10 @@ Array [
               "minimum": -9223372036854776000,
               "type": "number",
               "x-stoplight": Object {
+                "explicitProperties": Array [
+                  "type",
+                  "format",
+                ],
                 "id": "schema-http_header-http_response-http_operation-abc-options-/pets-200-X-Rate-Limit-",
               },
             },
@@ -431,6 +447,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -486,6 +508,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -710,6 +738,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -766,6 +800,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -983,6 +1023,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
@@ -1039,6 +1085,12 @@ Array [
                   "maximum": 9223372036854776000,
                   "minimum": -9223372036854776000,
                   "type": "integer",
+                  "x-stoplight": Object {
+                    "explicitProperties": Array [
+                      "type",
+                      "format",
+                    ],
+                  },
                 },
                 "name": Object {
                   "examples": Array [
