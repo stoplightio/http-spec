@@ -101,6 +101,9 @@ describe('translateSchemaObject', () => {
             type: 'integer',
             format: 'int64',
             maximum: 2 ** 40,
+            'x-stoplight': {
+              explicitProperties: ['type', 'format', 'maximum'],
+            },
           },
           {
             type: 'integer',
@@ -128,23 +131,35 @@ describe('translateSchemaObject', () => {
           format: 'int64',
           minimum: 0 - 2 ** 63,
           maximum: 2 ** 40,
+          'x-stoplight': {
+            explicitProperties: ['type', 'format', 'maximum'],
+          },
         },
         {
           type: 'integer',
           format: 'int32',
           minimum: 0,
           maximum: 2 ** 31 - 1,
+          'x-stoplight': {
+            explicitProperties: ['type', 'format', 'minimum'],
+          },
         },
         {
           type: 'number',
           format: 'float',
           minimum: 0 - 2 ** 128,
           maximum: 2 ** 128 - 1,
+          'x-stoplight': {
+            explicitProperties: ['type', 'format'],
+          },
         },
         {
           type: 'string',
           format: 'byte',
           pattern: '^[\\w\\d+\\/=]*$',
+          'x-stoplight': {
+            explicitProperties: ['type', 'format'],
+          },
         },
       ],
     });

@@ -63,6 +63,10 @@ Object {
         "minimum": -2147483648,
         "type": "integer",
         "x-stoplight": Object {
+          "explicitProperties": Array [
+            "type",
+            "format",
+          ],
           "id": Any<String>,
         },
       },
@@ -88,6 +92,10 @@ Object {
         "minimum": -2147483648,
         "type": "integer",
         "x-stoplight": Object {
+          "explicitProperties": Array [
+            "type",
+            "format",
+          ],
           "id": Any<String>,
         },
       },

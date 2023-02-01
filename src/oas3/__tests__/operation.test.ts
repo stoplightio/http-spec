@@ -712,6 +712,7 @@ describe('transformOas3Operation', () => {
             schema: {
               'x-stoplight': {
                 id: expect.any(String),
+                explicitProperties: expect.any(Array),
               },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
@@ -792,6 +793,7 @@ describe('transformOas3Operation', () => {
             schema: {
               'x-stoplight': {
                 id: expect.any(String),
+                explicitProperties: expect.any(Array),
               },
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
