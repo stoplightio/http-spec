@@ -97,7 +97,7 @@ describe('translateToCallbacks', () => {
       {
         callbackName: 'newPetWebhook',
         extensions: {},
-        id: expect.any(String),
+        id: '4e4ca2f611499',
         method: 'post',
         path: '{$request.body#/newPetAvailableUrl}',
         request: {
@@ -148,7 +148,7 @@ describe('translateToCallbacks', () => {
       {
         callbackName: 'newPetWebhook',
         extensions: {},
-        id: expect.any(String),
+        id: 'bf6c40c6bfae2',
         method: 'post',
         path: '{$request.body#/returnedPetAvailableUrl}',
         request: {
@@ -199,7 +199,7 @@ describe('translateToCallbacks', () => {
       {
         callbackName: 'petAdopted',
         extensions: {},
-        id: expect.any(String),
+        id: '2199f838ca54c',
         method: 'post',
         path: '{$request.body#/adoptedUrl}',
         request: {

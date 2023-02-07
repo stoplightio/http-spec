@@ -31,7 +31,7 @@ export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;
 
 export type ArrayCallbackParameters<T> = [T, number, T[]];
 
-export type AvailableContext = 'service' | 'path' | 'operation';
+export type AvailableContext = 'service' | 'path' | 'operation' | 'callback';
 
 export type References = Record<string, { resolved: boolean; value: string }>;
 

@@ -57,7 +57,16 @@ export const transformOasOperation: TranslateFunction<
 
   const serviceId = (this.ids.service = String(this.document['x-stoplight']?.id));
   this.ids.path = this.generateId.httpPath({ parentId: serviceId, path });
-  const operationId = (this.ids.operation = this.generateId.httpOperation({ parentId: serviceId, method, path }));
+  let operationId: string;
+  if (this.context === 'callback') {
+    operationId = this.ids.operation = this.generateId.httpCallbackOperation({
+      parentId: serviceId,
+      method,
+      path,
+    });
+  } else {
+    operationId = this.ids.operation = this.generateId.httpOperation({ parentId: serviceId, method, path });
+  }
 
   this.context = 'operation';
 

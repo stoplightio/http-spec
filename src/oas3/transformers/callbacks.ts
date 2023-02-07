@@ -1,6 +1,7 @@
 import type { IHttpCallbackOperation } from '@stoplight/types';
 import type { OpenAPIObject } from 'openapi3-ts';
 
+import { createContext } from '../../oas/context';
 import { entries } from '../../utils';
 import { transformOas3Operation } from '../operation';
 import type { Oas3TranslateFunction } from '../types';
@@ -19,11 +20,14 @@ export const translateToCallbacks: Oas3TranslateFunction<[callbacks: unknown], I
             paths: { [path]: { [method]: op } },
           };
 
+          const ctx = createContext(document);
+          ctx.context = 'callback';
           results.push({
             ...transformOas3Operation({
               document,
               method,
               path,
+              ctx,
             }),
             callbackName,
           });
