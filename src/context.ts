@@ -66,7 +66,6 @@ export function createContext<T extends Record<string, unknown>>(
       service: '',
       path: '',
       operation: '',
-      callback: '',
     },
     references: {},
     parentId: '',

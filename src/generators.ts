@@ -38,7 +38,7 @@ export const idGenerators = {
   },
 
   httpCallbackOperation: (props: Context & { method: string; path: string }) => {
-    return join(['http_operation', props.parentId, props.method, props.path]);
+    return join(['http_callback', props.parentId, props.method, props.path]);
   },
 
   httpPathParam: (props: Context & { keyOrName: string }) => {

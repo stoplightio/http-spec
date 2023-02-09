@@ -39,7 +39,7 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   document: T;
   context: AvailableContext;
   parentId: string;
-  readonly ids: Record<AvailableContext, string>;
+  readonly ids: Omit<Record<AvailableContext, string>, 'callback'>;
   readonly references: References;
   generateId: ((template: string) => string) & {
     [key in keyof typeof idGenerators]: (

@@ -24,8 +24,8 @@ describe('idGenerators', () => {
     const operation2 = { parentId: '12345', method: 'post', path: '{$request.body#/newPetAvailableUrl}' };
     const id1 = idGenerators.httpCallbackOperation(operation1);
     const id2 = idGenerators.httpCallbackOperation(operation2);
-    expect(id1).toEqual('http_operation-12345-post-{$request.body#/returnedPetAdoptedUrl}');
-    expect(id2).toEqual('http_operation-12345-post-{$request.body#/newPetAvailableUrl}');
+    expect(id1).toEqual('http_callback-12345-post-{$request.body#/returnedPetAdoptedUrl}');
+    expect(id2).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}');
     expect(id1).not.toEqual(id2);
   });
 });

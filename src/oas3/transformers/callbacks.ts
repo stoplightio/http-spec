@@ -22,6 +22,8 @@ export const translateToCallbacks: Oas3TranslateFunction<[callbacks: unknown], I
 
           const ctx = createContext(document);
           ctx.context = 'callback';
+          Object.assign(ctx.ids, this.ids);
+          ctx.ids.operation = this.generateId.httpCallbackOperation({ parentId: this.ids.service, method, path });
           results.push({
             ...transformOas3Operation({
               document,
