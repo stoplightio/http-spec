@@ -31,7 +31,7 @@ export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;
 
 export type ArrayCallbackParameters<T> = [T, number, T[]];
 
-export type AvailableContext = 'service' | 'path' | 'operation';
+export type AvailableContext = 'service' | 'path' | 'operation' | 'callback';
 
 export type References = Record<string, { resolved: boolean; value: string }>;
 
@@ -39,7 +39,7 @@ export type TransformerContext<T extends Fragment = Fragment> = {
   document: T;
   context: AvailableContext;
   parentId: string;
-  readonly ids: Record<AvailableContext, string>;
+  readonly ids: Omit<Record<AvailableContext, string>, 'callback'>;
   readonly references: References;
   generateId: ((template: string) => string) & {
     [key in keyof typeof idGenerators]: (
