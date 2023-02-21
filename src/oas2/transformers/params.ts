@@ -9,7 +9,7 @@ import {
   IHttpPathParam,
   IHttpQueryParam,
   Optional,
-  Reference,
+  Reference
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
 import type {
@@ -18,7 +18,7 @@ import type {
   Header,
   HeaderParameter,
   PathParameter,
-  QueryParameter,
+  QueryParameter
 } from 'swagger-schema-official';
 import pickBy = require('lodash.pickby');
 import pick = require('lodash.pick');
@@ -156,6 +156,13 @@ export const translateToBodyParameter = withContext<
       },
       isString,
     ),
+
+    ...pickBy(
+      {
+        name: body.name,
+      },
+      isString,
+    )
   };
 });
 
