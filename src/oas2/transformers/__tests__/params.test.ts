@@ -8,7 +8,7 @@ import {
   translateToHeaderParam as _translateToHeaderParam,
   translateToHeaderParams as _translateToHeaderParams,
   translateToPathParameter as _translateToPathParameter,
-  translateToQueryParameter as _translateToQueryParameter,
+  translateToQueryParameter as _translateToQueryParameter
 } from '../params';
 
 const translateFromFormDataParameters = (
@@ -142,10 +142,10 @@ describe('params.translator', () => {
         ),
       ).toMatchSnapshot({
         id: expect.any(String),
+        name: 'name',
         contents: [
           {
             id: expect.any(String),
-            name: 'name',
             schema: {
               'x-stoplight': {
                 id: expect.any(String),
@@ -173,9 +173,9 @@ describe('params.translator', () => {
         ),
       ).toEqual(
         expect.objectContaining({
+          name: 'name',
           contents: expect.arrayContaining([
             expect.objectContaining({
-              name: 'name',
               schema: {
                 'x-stoplight': {
                   id: expect.any(String),
