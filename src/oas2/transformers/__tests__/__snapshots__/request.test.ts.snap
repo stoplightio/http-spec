@@ -11,6 +11,7 @@ Object {
       },
     ],
     "id": Any<String>,
+    "name": "param",
   },
   "cookie": Array [],
   "headers": Array [],
@@ -152,6 +153,7 @@ Object {
       },
     ],
     "id": Any<String>,
+    "name": "param",
   },
   "cookie": Array [],
   "headers": Array [

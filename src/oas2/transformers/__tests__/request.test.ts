@@ -31,6 +31,7 @@ describe('request', () => {
             id: expect.any(String),
           },
         ],
+        name: 'param',
       },
     });
   });
@@ -130,6 +131,7 @@ describe('request', () => {
             id: expect.any(String),
           },
         ],
+        name: 'param',
       },
       headers: [
         {

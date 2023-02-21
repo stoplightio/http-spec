@@ -55,6 +55,7 @@ Object {
   ],
   "description": "descr",
   "id": Any<String>,
+  "name": "name",
   "required": true,
 }
 `;

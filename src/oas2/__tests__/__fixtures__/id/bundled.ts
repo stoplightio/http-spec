@@ -248,6 +248,7 @@ export default {
           // hash('http_request_body-{parentId}-{consumes.join('-')}')
           id: 'http_request_body-http_operation-service_abc-post-/users/{}',
           required: true,
+          name: 'user',
           contents: [
             {
               // hash('http_media-{parentId}-{mediaType}')

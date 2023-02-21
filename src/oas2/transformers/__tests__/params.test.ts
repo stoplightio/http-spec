@@ -142,6 +142,7 @@ describe('params.translator', () => {
         ),
       ).toMatchSnapshot({
         id: expect.any(String),
+        name: 'name',
         contents: [
           {
             id: expect.any(String),
@@ -172,6 +173,7 @@ describe('params.translator', () => {
         ),
       ).toEqual(
         expect.objectContaining({
+          name: 'name',
           contents: expect.arrayContaining([
             expect.objectContaining({
               schema: {
@@ -193,7 +195,6 @@ describe('params.translator', () => {
           {},
           {
             in: 'body',
-            name: 'name',
             required: true,
             description: 'descr',
             schema: {

@@ -156,6 +156,13 @@ export const translateToBodyParameter = withContext<
       },
       isString,
     ),
+
+    ...pickBy(
+      {
+        name: body.name,
+      },
+      isString,
+    ),
   };
 });
 

@@ -80,6 +80,7 @@ describe('bundleOas2Service', () => {
           request: {
             body: {
               id: 'http_request_body-abc',
+              name: 'email',
               contents: [
                 {
                   id: 'http_media-http_request_body-abc-application/json',
@@ -134,6 +135,7 @@ describe('bundleOas2Service', () => {
           request: {
             body: {
               id: 'http_request_body-abc',
+              name: 'email',
               contents: [],
               required: true,
             },
