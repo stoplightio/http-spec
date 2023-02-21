@@ -3,7 +3,7 @@ import {
   FormDataParameter,
   HeaderParameter,
   PathParameter,
-  QueryParameter
+  QueryParameter,
 } from 'swagger-schema-official';
 
 import { createContext } from '../../../oas/context';
@@ -131,7 +131,7 @@ describe('request', () => {
             id: expect.any(String),
           },
         ],
-        name: 'param'
+        name: 'param',
       },
       headers: [
         {
