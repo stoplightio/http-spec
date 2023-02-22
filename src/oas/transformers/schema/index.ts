@@ -31,7 +31,7 @@ export const translateSchemaObject = withContext<
 >(function (schema) {
   const maybeSchemaObject = this.maybeResolveLocalRef(schema);
   if (isReferenceObject(maybeSchemaObject)) return maybeSchemaObject;
-  const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject)) : '';
+  const actualKey = this.context === 'service' ? getSharedKey(Object(maybeSchemaObject), '') : '';
   return translateSchemaObjectFromPair.call(this, [actualKey, schema]);
 });
 
