@@ -752,4 +752,88 @@ describe('bundleOas3Service', () => {
       expect(bundleOas3Service({ document })).toEqual(output);
     },
   );
+
+  it('handle requestBody components', () => { 
+    const result = bundleOas3Service({document: {
+      openapi: "3.0.0",
+      info: {
+        version: "1",
+        title: "Swagger Petstore",
+      },
+      paths: {
+        "/pets": {
+          post: {
+            summary: "Add a new pet to the store",
+            description: "",
+            operationId: "addPet",
+            responses: {
+              "405": {
+                description: "Invalid input",
+              },
+            },
+            requestBody: {
+              $ref: "#/components/requestBodies/Pet",
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Pet: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "integer",
+                      format: "int64",
+                    },
+                    name: {
+                      type: "string",
+                    },
+                  },
+                },
+              },
+              "application/xml": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    id: {
+                      type: "integer",
+                      format: "int64",
+                    },
+                    name: {
+                      type: "string",
+                    },
+                  },
+                },
+              },
+            },
+            description: "Pet object that needs to be added to the store",
+            required: true,
+          },
+        },
+        // schemas: {
+        //   Pet: {
+        //     type: "object",
+        //     properties: {
+        //       id: {
+        //         type: "integer",
+        //         format: "int64",
+        //       },
+        //       name: {
+        //         type: "string",
+        //       },
+        //     },
+        //   },
+        // },
+      },
+    }});
+
+    console.log(JSON.stringify(result, null, 2));
+    expect(
+      result.components.requestBodies
+    ).toHaveLength(1);
+  });
 });

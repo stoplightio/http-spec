@@ -5,7 +5,7 @@ import type {
   IHttpOperationRequestBody,
   IHttpParam,
   Optional,
-  Reference,
+  Reference
 } from '@stoplight/types';
 import { HttpParamStyles } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
@@ -56,6 +56,20 @@ export const translateRequestBody = withContext<
       isString,
     ),
   };
+});
+
+export const translateRequestBodyComponents = withContext<
+  Oas3TranslateFunction<[requestBodyComponentsObject: unknown], Optional<IHttpOperationRequestBody<true> | Reference>[]>
+>(function (requestBodyObject) {
+  if(!isPlainObject(requestBodyObject)) return [];
+  const requestBodies = [];
+  for(const key of Object.keys(requestBodyObject)){
+    const translatedRequestBody = translateRequestBody.call(this, requestBodyObject[key]);
+    if(translatedRequestBody){
+      requestBodies.push(translatedRequestBody);
+    }
+  }
+  return requestBodies;
 });
 
 const translateParameterObjectSchema = withContext<

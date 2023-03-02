@@ -37,6 +37,7 @@ export const bundleOas3Service: Oas3HttpServiceBundle = ({ document: _document }
       securitySchemes: translateSecurityScheme,
     }),
     ...translateToSharedParameters.call(ctx, document.components),
+    // requestBodies: translateRequestBodyComponents.call(ctx, document.components?.requestBodies ?? [])
   };
 
   const operations = transformOas3Operations(document, ctx) as unknown as IHttpOperation<true>[];
