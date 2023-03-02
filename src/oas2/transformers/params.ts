@@ -74,7 +74,7 @@ export const translateToHeaderParam = withContext<
   >
 >(function (param) {
   const name = param.name;
-  const keyOrName = getSharedKey(param) ?? name;
+  const keyOrName = getSharedKey(param, name);
 
   return {
     id: this.generateId.httpHeader({ keyOrName }),
@@ -252,7 +252,7 @@ export const translateToQueryParameter = withContext<
   Oas2TranslateFunction<[query: DeepPartial<QueryParameter> & Oas2ParamBase], IHttpQueryParam<true>>
 >(function (param) {
   const name = param.name;
-  const keyOrName = getSharedKey(param) ?? name;
+  const keyOrName = getSharedKey(param, name);
 
   return {
     id: this.generateId.httpQuery({ keyOrName }),
@@ -275,7 +275,7 @@ export const translateToPathParameter = withContext<
   Oas2TranslateFunction<[param: DeepPartial<PathParameter> & Oas2ParamBase], IHttpPathParam<true>>
 >(function (param) {
   const name = param.name;
-  const keyOrName = getSharedKey(param) ?? name;
+  const keyOrName = getSharedKey(param, name);
 
   return {
     id: this.generateId.httpPathParam({ keyOrName }),

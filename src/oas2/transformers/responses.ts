@@ -30,7 +30,7 @@ export const translateToResponse = withContext<
 
   if (!isResponseObject(maybeResponseObject)) return;
 
-  const codeOrKey = this.context === 'service' ? getSharedKey(maybeResponseObject) : statusCode;
+  const codeOrKey = this.context === 'service' ? getSharedKey(maybeResponseObject, statusCode) : statusCode;
   const id = this.generateId.httpResponse({ codeOrKey, produces });
 
   const headers = translateToHeaderParams.call(this, maybeResponseObject.headers);

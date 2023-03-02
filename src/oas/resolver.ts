@@ -11,8 +11,8 @@ export function inferContext(path: JsonPath): AvailableContext {
 
 const SHARED_COMPONENTS_KEYS = new WeakMap();
 
-export function getSharedKey(value: object) {
-  return SHARED_COMPONENTS_KEYS.get(value);
+export function getSharedKey(value: object, currentKey: string) {
+  return SHARED_COMPONENTS_KEYS.get(value) ?? currentKey;
 }
 
 export function setSharedKey(value: unknown, key: string) {

@@ -1,0 +1,88 @@
+{
+  "openapi": "3.1.0",
+  "x-stoplight": {
+    "id": "service_abc"
+  },
+  "info": {
+    "title": "Users API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "foo": {
+                  "summary": "A foo example",
+                  "value": {
+                    "foo": "bar"
+                  }
+                },
+                "bar": {
+                  "summary": "A bar example",
+                  "value": {
+                    "bar": "baz"
+                  }
+                },
+                "baz": {
+                  "$ref": "#/components/examples/baz"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "application/json": {
+              "examples": {
+                "cat": {
+                  "summary": "An example of a cat",
+                  "value": {
+                    "name": "Fluffy",
+                    "petType": "Cat",
+                    "color": "White",
+                    "gender": "male",
+                    "breed": "Persian"
+                  }
+                },
+                "dog": {
+                  "summary": "An example of a dog with a cat's name",
+                  "value": {
+                    "name": "Puma",
+                    "petType": "Dog",
+                    "color": "Black",
+                    "gender": "Female",
+                    "breed": "Mixed"
+                  }
+                },
+                "frog": {
+                  "$ref": "#/components/examples/frog-example"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "examples": {
+      "baz": {
+        "summary": "A baz example",
+        "value": {
+          "baz": "qux"
+        }
+      },
+      "frog-example": {
+        "externalValue": "http://foo.bar/examples/frog-example.json"
+      }
+    }
+  }
+}
