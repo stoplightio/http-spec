@@ -1,5 +1,5 @@
 import { resolveInlineRefWithLocation } from '@stoplight/json';
-import type { JsonPath, Reference } from '@stoplight/types';
+import type { JsonPath, Optional, Reference } from '@stoplight/types';
 
 import type { AvailableContext, References, RefResolver } from '../types';
 
@@ -11,7 +11,7 @@ export function inferContext(path: JsonPath): AvailableContext {
 
 const SHARED_COMPONENTS_KEYS = new WeakMap();
 
-export function getSharedKey(value: object, currentKey: string) {
+export function getSharedKey(value: object, currentKey: Optional<string>) {
   return SHARED_COMPONENTS_KEYS.get(value) ?? currentKey;
 }
 

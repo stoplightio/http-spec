@@ -19,6 +19,7 @@ import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
 import { getComponentName, getSharedKey, syncReferenceObject } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
+import { ArrayCallbackParameters } from '../../types';
 import { entries } from '../../utils';
 import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
@@ -26,9 +27,27 @@ import { translateMediaTypeObject } from './content';
 import { translateToExample } from './examples';
 import pickBy = require('lodash.pickby');
 
+export const translateToSharedRequestBody = withContext<
+  Oas3TranslateFunction<
+    ArrayCallbackParameters<[key: string, requestBodyObject: unknown]>,
+    Optional<IHttpOperationRequestBody<true> | Reference>
+  >
+>(function ([key, requestBodyObject]) {
+  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  if (isReferenceObject(maybeRequestBodyObject)) {
+    (maybeRequestBodyObject as { key: string } & Reference).key = key;
+    return maybeRequestBodyObject as { key: string } & Reference;
+  }
+
+  return translateRequestBody.call(this, key, maybeRequestBodyObject);
+});
+
 export const translateRequestBody = withContext<
-  Oas3TranslateFunction<[requestBodyObject: unknown], Optional<IHttpOperationRequestBody<true> | Reference>>
->(function (requestBodyObject) {
+  Oas3TranslateFunction<
+    [key: Optional<string>, requestBodyObject: unknown],
+    Optional<IHttpOperationRequestBody<true> | Reference>
+  >
+>(function (key, requestBodyObject) {
   const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
   if (isReferenceObject(maybeRequestBodyObject)) {
     return maybeRequestBodyObject;
@@ -36,7 +55,9 @@ export const translateRequestBody = withContext<
 
   if (!isRequestBodyObject(maybeRequestBodyObject)) return;
 
-  const id = this.generateId.httpRequestBody({});
+  const id = this.generateId.httpRequestBody({
+    key: this.context === 'service' ? getSharedKey(maybeRequestBodyObject, key) : key,
+  });
 
   return {
     id,
@@ -160,7 +181,7 @@ export const translateToRequest = withContext<
   const res = {
     ...pickBy(
       {
-        body: translateRequestBody.call(this, operation?.requestBody),
+        body: translateRequestBody.call(this, void 0, operation?.requestBody),
       },
       isNonNullable,
     ),

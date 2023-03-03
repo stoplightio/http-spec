@@ -17,7 +17,7 @@ import { isSecurityScheme } from './guards';
 import { transformOas3Operations } from './operation';
 import { translateToExample } from './transformers/examples';
 import { translateToSharedParameters } from './transformers/parameters';
-import { translateRequestBody } from './transformers/request';
+import { translateToSharedRequestBody } from './transformers/request';
 import { translateToResponse } from './transformers/responses';
 import { translateToSingleSecurity } from './transformers/securities';
 import { translateToServer } from './transformers/servers';
@@ -31,7 +31,7 @@ export const bundleOas3Service: Oas3HttpServiceBundle = ({ document: _document }
   const components = {
     ...translateToComponents.call(ctx, OasVersion.OAS3, {
       responses: translateToResponse,
-      requestBodies: translateRequestBody,
+      requestBodies: translateToSharedRequestBody,
       examples: translateToExample,
       schemas: translateSchemaObjectFromPair,
       securitySchemes: translateSecurityScheme,
