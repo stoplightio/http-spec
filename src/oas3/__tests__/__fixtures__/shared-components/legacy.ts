@@ -16,7 +16,7 @@ export default [
   },
 
   /**
-   * http_operation 1 of 1 (the GET operation)
+   * http_operation 1 of 2 (the GET operation)
    */
   {
     // hash(`http_operation-${parentId}-${method}-${pathWithParamNamesEmpty}`)
@@ -122,6 +122,152 @@ export default [
       query: [],
       cookie: [],
       path: [],
+    },
+    tags: [],
+    security: [],
+    extensions: {},
+  },
+  /**
+   * http_operation 2 of 2 (the POST operation)
+   */
+  {
+    id: 'http_operation-service_abc-post-/orgs/{}/repos',
+    method: 'post',
+    path: '/orgs/{org}/repos',
+    summary: 'Create a organization repository',
+    responses: [
+      {
+        id: 'http_response-service_abc-forbidden',
+        code: '403',
+        contents: [
+          {
+            id: 'http_media-http_response-service_abc-forbidden-application/json',
+            encodings: [],
+            examples: [
+              {
+                id: 'example-service_abc-A-Shared-Example',
+                key: 'error',
+                value: {
+                  address: {
+                    street: 'string',
+                  },
+                  id: 0,
+                },
+              },
+            ],
+            mediaType: 'application/json',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-service_abc-basic-error',
+              },
+              title: 'Basic Error',
+              description: 'Basic Error',
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        ],
+        description: 'Forbidden',
+        headers: [
+          {
+            id: 'http_header-service_abc-X-Rate-Limit',
+            encodings: [],
+            examples: [],
+            name: 'X-Rate-Limit',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-service_abc-rate-limit',
+              },
+              title: 'Rate Limit',
+              description: 'The number of allowed requests in the current period',
+              type: 'integer',
+            },
+            style: 'simple',
+          },
+        ],
+      },
+    ],
+    servers: [],
+    request: {
+      body: {
+        id: 'http_request_body-service_abc-Organization',
+        description: 'Organization to be added',
+        contents: [
+          {
+            id: 'http_media-http_request_body-service_abc-Organization-application/json',
+            mediaType: 'application/json',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-service_abc-Organization',
+              },
+              title: 'Organization',
+              description: 'Organization',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+              required: ['id', 'name'],
+            },
+            encodings: [],
+            examples: [],
+          },
+          {
+            id: 'http_media-http_request_body-service_abc-Organization-application/xml',
+            mediaType: 'application/xml',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              'x-stoplight': {
+                id: 'schema-service_abc-Organization',
+              },
+              title: 'Organization',
+              description: 'Organization',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+              required: ['id', 'name'],
+            },
+            encodings: [],
+            examples: [],
+          },
+        ],
+      },
+      cookie: [],
+      headers: [
+        {
+          id: 'http_header-service_abc-Some-Header',
+          name: 'A-Shared-Header',
+          style: 'simple',
+          required: false,
+          examples: [],
+          schema: {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            'x-stoplight': {
+              id: 'schema-http_header-service_abc-Some-Header-',
+            },
+            type: 'string',
+          },
+        },
+      ],
+      path: [],
+      query: [],
     },
     tags: [],
     security: [],

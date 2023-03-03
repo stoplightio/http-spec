@@ -1,3 +1,5 @@
+import { isNonNullable } from './guards';
+
 type Context = { parentId: string };
 
 function join(dependencies: (string | undefined)[]) {
@@ -57,12 +59,20 @@ export const idGenerators = {
     return join(['http_header', props.parentId, props.keyOrName]);
   },
 
-  httpRequestBody: (props: { parentId: string; consumes?: string[] }) => {
-    return join([
+  httpRequestBody: (props: Context & { key?: string; consumes?: string[] }) => {
+    const deps = [
       'http_request_body',
       props.parentId,
       ...(Array.isArray(props.consumes) ? sortAlphabetically(props.consumes) : []),
-    ]);
+    ];
+
+    // this is for backwards compatibility
+    // we don't want an empty key to be added as we do for schemas because that would invalidate older ids
+    if (isNonNullable(props.key)) {
+      deps.push(props.key);
+    }
+
+    return join(deps);
   },
 
   httpMedia: (props: { parentId: string; mediaType?: string }) => {

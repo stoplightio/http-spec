@@ -712,7 +712,7 @@ Array [
             "encodings": Array [],
             "examples": Array [
               Object {
-                "id": "example-http_media-http_request_body-abc-application/json-Dog",
+                "id": "example-http_media-http_request_body-abc-Pet-application/json-Dog",
                 "key": "Dog",
                 "summary": "A dog example",
                 "value": Object {
@@ -722,12 +722,12 @@ Array [
               },
               Object {
                 "externalValue": "https://stoplight.io/pets/cat",
-                "id": "example-http_media-http_request_body-abc-application/json-Cat",
+                "id": "example-http_media-http_request_body-abc-Pet-application/json-Cat",
                 "key": "Cat",
                 "summary": "A cat example",
               },
             ],
-            "id": "http_media-http_request_body-abc-application/json",
+            "id": "http_media-http_request_body-abc-Pet-application/json",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -789,7 +789,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
-            "id": "http_media-http_request_body-abc-application/xml",
+            "id": "http_media-http_request_body-abc-Pet-application/xml",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -850,7 +850,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "http_request_body-abc",
+        "id": "http_request_body-abc-Pet",
         "required": true,
       },
       "cookie": Array [],
@@ -997,7 +997,7 @@ Array [
             "encodings": Array [],
             "examples": Array [
               Object {
-                "id": "example-http_media-http_request_body-abc-application/json-Dog",
+                "id": "example-http_media-http_request_body-abc-Pet-application/json-Dog",
                 "key": "Dog",
                 "summary": "A dog example",
                 "value": Object {
@@ -1007,12 +1007,12 @@ Array [
               },
               Object {
                 "externalValue": "https://stoplight.io/pets/cat",
-                "id": "example-http_media-http_request_body-abc-application/json-Cat",
+                "id": "example-http_media-http_request_body-abc-Pet-application/json-Cat",
                 "key": "Cat",
                 "summary": "A cat example",
               },
             ],
-            "id": "http_media-http_request_body-abc-application/json",
+            "id": "http_media-http_request_body-abc-Pet-application/json",
             "mediaType": "application/json",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1074,7 +1074,7 @@ Array [
           Object {
             "encodings": Array [],
             "examples": Array [],
-            "id": "http_media-http_request_body-abc-application/xml",
+            "id": "http_media-http_request_body-abc-Pet-application/xml",
             "mediaType": "application/xml",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -1135,7 +1135,7 @@ Array [
           },
         ],
         "description": "Pet object that needs to be added to the store",
-        "id": "http_request_body-abc",
+        "id": "http_request_body-abc-Pet",
         "required": true,
       },
       "cookie": Array [],

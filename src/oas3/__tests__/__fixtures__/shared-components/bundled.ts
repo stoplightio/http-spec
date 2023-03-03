@@ -6,7 +6,6 @@ export default {
   operations: [
     {
       extensions: {},
-      // hash('http_operation-service_abc-get-/orgs/{}/repos')
       id: 'http_operation-service_abc-get-/orgs/{}/repos',
       method: 'get',
       path: '/orgs/{org}/repos',
@@ -31,12 +30,40 @@ export default {
       summary: 'Get a organization repository',
       tags: [],
     },
+    {
+      extensions: {},
+      id: 'http_operation-service_abc-post-/orgs/{}/repos',
+      method: 'post',
+      path: '/orgs/{org}/repos',
+      request: {
+        cookie: [],
+        headers: [
+          {
+            $ref: '#/components/header/1',
+          },
+        ],
+        path: [],
+        query: [],
+        body: {
+          $ref: '#/components/requestBodies/0',
+        },
+      },
+      responses: [
+        {
+          code: '403',
+          $ref: '#/components/responses/0',
+        },
+      ],
+      security: [],
+      servers: [],
+      summary: 'Create a organization repository',
+      tags: [],
+    },
   ],
   components: {
     cookie: [],
     examples: [
       {
-        // fast1a52hex('example-service_abc-A-Shared-Example')
         id: 'example-service_abc-A-Shared-Example',
         key: 'A-Shared-Example',
         value: {
@@ -49,7 +76,6 @@ export default {
     ],
     header: [
       {
-        // hash('http_header-service_abc-X-Rate-Limit')
         id: 'http_header-service_abc-X-Rate-Limit',
         key: 'X-Rate-Limit',
         name: 'X-Rate-Limit',
@@ -61,7 +87,6 @@ export default {
         },
       },
       {
-        // hash('http_header-service_abc-Some-Header')
         id: 'http_header-service_abc-Some-Header',
         key: 'Some-Header',
         name: 'A-Shared-Header',
@@ -72,7 +97,6 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            // hash('schema-http_header-service_abc-Some-Header')
             id: 'schema-http_header-service_abc-Some-Header-',
           },
         },
@@ -80,17 +104,40 @@ export default {
     ],
     path: [],
     query: [],
-    requestBodies: [],
+    requestBodies: [
+      {
+        id: 'http_request_body-service_abc-Organization',
+        key: 'Organization',
+        description: 'Organization to be added',
+        contents: [
+          {
+            id: 'http_media-http_request_body-service_abc-Organization-application/json',
+            encodings: [],
+            examples: [],
+            mediaType: 'application/json',
+            schema: {
+              $ref: '#/components/schemas/2',
+            },
+          },
+          {
+            id: 'http_media-http_request_body-service_abc-Organization-application/xml',
+            encodings: [],
+            examples: [],
+            mediaType: 'application/xml',
+            schema: {
+              $ref: '#/components/schemas/2',
+            },
+          },
+        ],
+      },
+    ],
     responses: [
       {
-        // hash('http_response-service_abc-forbidden')
         id: 'http_response-service_abc-forbidden',
         key: 'forbidden',
         code: 'forbidden',
         contents: [
           {
-            // hash('http_media-{parentId}-application/json')
-            // hash('http_media-http_response-service_abc-forbidden-application/json')
             id: 'http_media-http_response-service_abc-forbidden-application/json',
             mediaType: 'application/json',
             encodings: [],
@@ -118,7 +165,6 @@ export default {
       {
         $schema: 'http://json-schema.org/draft-07/schema#',
         'x-stoplight': {
-          // hash('schema-service_abc-basic-error')
           id: 'schema-service_abc-basic-error',
         },
         type: 'object',
@@ -134,13 +180,31 @@ export default {
       {
         $schema: 'http://json-schema.org/draft-07/schema#',
         'x-stoplight': {
-          // hash('schema-service_abc-rate-limit')
           id: 'schema-service_abc-rate-limit',
         },
         description: 'The number of allowed requests in the current period',
         key: 'rate-limit',
         type: 'integer',
         title: 'Rate Limit',
+      },
+      {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        'x-stoplight': {
+          id: 'schema-service_abc-Organization',
+        },
+        key: 'Organization',
+        type: 'object',
+        title: 'Organization',
+        description: 'Organization',
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          name: {
+            type: 'string',
+          },
+        },
+        required: ['id', 'name'],
       },
     ],
     securitySchemes: [],
