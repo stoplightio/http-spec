@@ -1,4 +1,7 @@
+import { IHttpOperationRequest } from '@stoplight/types';
+
 import { createContext } from '../../../oas/context';
+import { bundleOas3Service } from '../../service';
 import { translateToRequest as _translateToRequest } from '../request';
 
 const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) =>
@@ -99,5 +102,50 @@ describe('translateOas3ToRequest', () => {
         ],
       },
     });
+  });
+
+  it('given path-defined parameters should create unique parameters', () => {
+    const getOperation = {
+      parameters: [],
+    };
+    const postOperation = {
+      parameters: [],
+    };
+
+    const path = {
+      parameters: [
+        {
+          name: 'param-name-1',
+          in: 'query',
+          description: 'descr',
+          deprecated: true,
+          content: {
+            'content-a': {
+              schema: {},
+            },
+          },
+        },
+      ],
+      get: getOperation,
+      post: postOperation,
+    };
+
+    const service = {
+      paths: {
+        '/': path,
+      },
+    };
+
+    const bundledService = bundleOas3Service({
+      document: service,
+    });
+
+    const getRequest = bundledService.operations[0].request as IHttpOperationRequest<true>;
+    const postRequest = bundledService.operations[1].request as IHttpOperationRequest<true>;
+
+    const getQueryParam = getRequest.query?.[0];
+    const postQueryParam = postRequest.query?.[0];
+
+    expect(getQueryParam).not.toEqual(postQueryParam);
   });
 });
