@@ -202,7 +202,7 @@ export default [
           // hash(`http_path_param-${parentId}-${param.name}`)
           // This was defined on the path, so we use the *operation* to generate the id (thus if another operation on this path was in this doc, it would have path param with a different id)
           // path's id = hash(`http_path-${parentId}-${path}`)
-          // The closest parent id to a path, is the service, so this equals... (remember that path segments have characters removed, since they are basically meaningless)
+          // The closest parent id to a operation, is the service, so this equals... (remember that path segments have characters removed, since they are basically meaningless)
           // hash('http_path-service_abc-/users/{}') = '05574f79'
           // and then the final path param id...
           // hash('http_path_param-05574f79-userId') = 'http_path_param-http_operation-service_abc-get-/users/{}-userId'
