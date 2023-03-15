@@ -34,7 +34,7 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({
     ...httpOperation,
 
     responses: translateToResponses.call(ctx, operation.responses),
-    request: translateToRequest.call(ctx, pathObj, operation),
+    request: translateToRequest.call(ctx, pathObj, operation, httpOperation),
     security: translateToSecurities.call(ctx, operation.security),
     servers: translateToServers.call(ctx, pathObj, operation),
 

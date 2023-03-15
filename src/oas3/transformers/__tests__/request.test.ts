@@ -1,8 +1,10 @@
+import { IHttpQueryParam } from '@stoplight/types';
+
 import { createContext } from '../../../oas/context';
 import { translateToRequest as _translateToRequest } from '../request';
 
-const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>) =>
-  _translateToRequest.call(createContext({}), path, operation);
+const translateToRequest = (path: Record<string, unknown>, operation: Record<string, unknown>, operationId: string) =>
+  _translateToRequest.call(createContext({}), path, operation, { id: operationId });
 
 describe('translateOas3ToRequest', () => {
   it('given no request body should translate parameters', () => {
@@ -48,7 +50,7 @@ describe('translateOas3ToRequest', () => {
       get: operation,
     };
 
-    expect(translateToRequest(path, operation)).toMatchSnapshot({
+    expect(translateToRequest(path, operation, 'get')).toMatchSnapshot({
       headers: [
         {
           id: expect.any(String),
@@ -84,7 +86,7 @@ describe('translateOas3ToRequest', () => {
       post: operation,
     };
 
-    expect(translateToRequest(path, operation)).toMatchSnapshot({
+    expect(translateToRequest(path, operation, 'post')).toMatchSnapshot({
       body: {
         id: expect.any(String),
         contents: [
@@ -99,5 +101,39 @@ describe('translateOas3ToRequest', () => {
         ],
       },
     });
+  });
+
+  it('given path-defined parameters should create unique ids', () => {
+    const getOperation = {
+      parameters: [],
+    };
+    const postOperation = {
+      parameters: [],
+    };
+
+    const path = {
+      parameters: [
+        {
+          name: 'param-name-1',
+          in: 'query',
+          description: 'descr',
+          deprecated: true,
+          content: {
+            'content-a': {
+              schema: {},
+            },
+          },
+        },
+      ],
+      get: getOperation,
+      post: postOperation,
+    };
+
+    const getRequest = translateToRequest(path, getOperation, 'get');
+    const postRequest = translateToRequest(path, postOperation, 'post');
+    const getQueryId = (getRequest.query?.[0] as IHttpQueryParam<true>).id;
+    const postQueryId = (postRequest.query?.[0] as IHttpQueryParam<true>).id;
+
+    expect(getQueryId).not.toEqual(postQueryId);
   });
 });

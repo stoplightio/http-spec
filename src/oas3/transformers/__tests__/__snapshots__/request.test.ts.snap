@@ -76,3 +76,49 @@ Object {
   ],
 }
 `;
+
+exports[`translateOas3ToRequest given path-defined parameters should create unique ids 1`] = `
+Object {
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [
+    Object {
+      "content": Object {
+        "content-a": Object {
+          "schema": Object {},
+        },
+      },
+      "deprecated": true,
+      "description": "descr",
+      "examples": Array [],
+      "id": Any<String>,
+      "name": "param-name-1",
+      "style": "form",
+    },
+  ],
+}
+`;
+
+exports[`translateOas3ToRequest given path-defined parameters should create unique ids 2`] = `
+Object {
+  "cookie": Array [],
+  "headers": Array [],
+  "path": Array [],
+  "query": Array [
+    Object {
+      "content": Object {
+        "content-a": Object {
+          "schema": Object {},
+        },
+      },
+      "deprecated": true,
+      "description": "descr",
+      "examples": Array [],
+      "id": Any<String>,
+      "name": "param-name-1",
+      "style": "form",
+    },
+  ],
+}
+`;

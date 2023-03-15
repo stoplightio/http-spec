@@ -4,6 +4,7 @@ import type {
   IHttpOperationRequest,
   IHttpOperationRequestBody,
   IHttpParam,
+  IShareableNode,
   Optional,
   Reference,
 } from '@stoplight/types';
@@ -91,12 +92,12 @@ const translateParameterObjectSchema = withContext<
 });
 
 export const translateParameterObject = withContext<
-  Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
->(function (parameterObject) {
+  Oas3TranslateFunction<[parameterObject: ParameterObject, parent?: IShareableNode], IHttpParam<true>>
+>(function (parameterObject, parent) {
   const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
   const keyOrName = getSharedKey(parameterObject, name);
-  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ keyOrName });
+  const id = this.generateId[`http${kind[0].toUpperCase()}${kind.slice(1)}`]({ keyOrName, parentId: parent?.id });
   const schema = translateParameterObjectSchema.call(this, parameterObject);
 
   const examples = entries(parameterObject.examples).map(translateToExample, this).filter(isNonNullable);
@@ -148,10 +149,10 @@ const iterateOasParams = createOasParamsIterator(OasVersion.OAS3);
 
 export const translateToRequest = withContext<
   Oas3TranslateFunction<
-    [path: Record<string, unknown>, operation: Record<string, unknown>],
+    [path: Record<string, unknown>, operation: Record<string, unknown>, parent: IShareableNode],
     IHttpOperationRequest<true>
   >
->(function (path, operation) {
+>(function (path, operation, parent) {
   const params: Omit<IHttpOperationRequest<true>, 'header'> & { header: (IHttpHeaderParam<true> | Reference)[] } = {
     header: [],
     query: [],
@@ -174,7 +175,7 @@ export const translateToRequest = withContext<
     if (isReferenceObject(param)) {
       target.push(syncReferenceObject(param, this.references));
     } else {
-      target.push(translateParameterObject.call(this, param) as any);
+      target.push(translateParameterObject.call(this, param, parent) as any);
     }
   }
 
