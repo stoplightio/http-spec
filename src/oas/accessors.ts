@@ -21,9 +21,13 @@ export function createOasParamsIterator(
     const seenParams = new Set();
     const { parentId, context } = this;
     const opParams = Array.isArray(operation.parameters) ? operation.parameters : [];
-    const params = [...opParams, ...(Array.isArray(path.parameters) ? path.parameters : [])];
+    const pathParams = Array.isArray(path.parameters) ? path.parameters : [];
+    const params = [...opParams, ...pathParams];
 
     for (let i = 0; i < params.length; i++) {
+      this.context = i < opParams.length ? 'operation' : 'path';
+      this.parentId = this.ids[this.context];
+
       const maybeParameterObject = this.maybeResolveLocalRef(params[i]);
       if (isReferenceObject(maybeParameterObject)) {
         yield params[i];
@@ -46,10 +50,6 @@ export function createOasParamsIterator(
         continue;
       }
       seenParams.add(key);
-
-      if (this.context !== 'service') {
-        this.context = i < opParams.length ? 'operation' : 'path';
-      }
 
       yield maybeParameterObject;
     }
