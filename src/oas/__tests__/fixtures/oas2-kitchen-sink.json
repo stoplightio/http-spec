@@ -330,5 +330,8 @@
         "$ref": "#/definitions/Error"
       }
     }
+  },
+  "x-service-level-extension": {
+    "hello": "world"
   }
 }

@@ -6,6 +6,14 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
+  "extensions": Object {
+    "x-service-level-extension": Object {
+      "hello": "world",
+    },
+    "x-stoplight": Object {
+      "id": "abc",
+    },
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
@@ -75,6 +83,14 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
+  "extensions": Object {
+    "x-service-level-extension": Object {
+      "hello": "world",
+    },
+    "x-stoplight": Object {
+      "id": "abc",
+    },
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",

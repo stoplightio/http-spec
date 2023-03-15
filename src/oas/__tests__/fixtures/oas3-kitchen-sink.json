@@ -292,5 +292,8 @@
         "title": "Category"
       }
     }
+  },
+  "x-service-level-extension": {
+    "hello": "world"
   }
 }
