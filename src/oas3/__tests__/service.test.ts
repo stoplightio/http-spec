@@ -38,6 +38,7 @@ describe('oas3 service', () => {
           type: 'apiKey',
           in: undefined,
           name: undefined,
+          extensions: {},
         },
       ],
       extensions: {
@@ -95,6 +96,7 @@ describe('oas3 service', () => {
           flows: {},
           key: 't1',
           type: 'oauth2',
+          extensions: {},
         },
       ],
       extensions: {

@@ -199,6 +199,7 @@ describe('bundleOas2Service', () => {
                 'x-operation-extension': {
                   hello: 'world',
                 },
+                security: [{ 'api-key': [] }],
               },
             },
           },
@@ -210,6 +211,17 @@ describe('bundleOas2Service', () => {
               },
             },
           ],
+          securityDefinitions: {
+            'api-key': {
+              name: 'API Key',
+              type: 'apiKey',
+              in: 'query',
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+          security: [{ 'api-key': [] }],
         },
       }),
     ).toStrictEqual({
@@ -241,7 +253,22 @@ describe('bundleOas2Service', () => {
             query: [],
           },
           responses: [],
-          security: [],
+          security: [
+            [
+              {
+                extensions: {
+                  'x-security-extension': {
+                    hello: 'world',
+                  },
+                },
+                id: 'http_security-abc-api-key',
+                in: 'query',
+                key: 'api-key',
+                name: 'API Key',
+                type: 'apiKey',
+              },
+            ],
+          ],
           servers: [],
           tags: [],
         },
@@ -255,7 +282,20 @@ describe('bundleOas2Service', () => {
         responses: [],
         requestBodies: [],
         schemas: [],
-        securitySchemes: [],
+        securitySchemes: [
+          {
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+            id: 'http_security-abc-api-key',
+            in: 'query',
+            key: 'api-key',
+            name: 'API Key',
+            type: 'apiKey',
+          },
+        ],
       },
       tags: [
         {
@@ -264,6 +304,20 @@ describe('bundleOas2Service', () => {
           'x-service-tag-extension': {
             hello: 'world',
           },
+        },
+      ],
+      security: [
+        {
+          extensions: {
+            'x-security-extension': {
+              hello: 'world',
+            },
+          },
+          id: 'http_security-abc-api-key',
+          in: 'query',
+          key: 'api-key',
+          name: 'API Key',
+          type: 'apiKey',
         },
       ],
     });

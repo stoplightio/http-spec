@@ -8,7 +8,6 @@ import type {
   IOauthFlowObjects,
   Optional,
 } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
 import type {
   ApiKeySecurity,
   BasicAuthenticationSecurity,
@@ -17,9 +16,11 @@ import type {
   OAuth2ImplicitSecurity,
   OAuth2PasswordSecurity,
 } from 'swagger-schema-official';
+import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';
+import { getExtensions } from '../../oas/accessors';
 import { getSecurities } from '../accessors';
 import { isSecurityScheme } from '../guards';
 import type { Oas2TranslateFunction } from '../types';
@@ -76,6 +77,8 @@ export const translateToBasicSecurityScheme = withContext<
       },
       isString,
     ),
+
+    extensions: getExtensions(security),
   };
 });
 
@@ -100,6 +103,7 @@ export const translateToApiKeySecurityScheme = withContext<
         },
         isString,
       ),
+      extensions: getExtensions(security),
     };
   }
 
@@ -133,6 +137,7 @@ export const translateToOauth2SecurityScheme = withContext<
       },
       isString,
     ),
+    extensions: getExtensions(security),
   };
 });
 

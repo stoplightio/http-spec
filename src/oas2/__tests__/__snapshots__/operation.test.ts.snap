@@ -53,6 +53,7 @@ Object {
   "security": Array [
     Array [
       Object {
+        "extensions": Object {},
         "flows": Object {
           "implicit": Object {
             "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -68,6 +69,7 @@ Object {
     ],
     Array [
       Object {
+        "extensions": Object {},
         "id": Any<String>,
         "in": "header",
         "key": "api_key",

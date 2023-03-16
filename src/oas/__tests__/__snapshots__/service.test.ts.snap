@@ -22,6 +22,7 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
+      "extensions": Object {},
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -36,6 +37,11 @@ Object {
       "type": "oauth2",
     },
     Object {
+      "extensions": Object {
+        "x-security-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "http_security-abc-api_key",
       "in": "header",
       "key": "api_key",
@@ -106,6 +112,7 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
+      "extensions": Object {},
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -120,6 +127,11 @@ Object {
       "type": "oauth2",
     },
     Object {
+      "extensions": Object {
+        "x-security-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "http_security-abc-api_key",
       "in": "header",
       "key": "api_key",

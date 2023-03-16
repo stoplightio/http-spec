@@ -33,6 +33,7 @@ export default [
         type: 'apiKey',
         name: 'API Key',
         in: 'query',
+        extensions: {},
       },
     ],
     tags: [
@@ -465,6 +466,7 @@ export default [
           type: 'apiKey',
           name: 'API Key',
           in: 'query',
+          extensions: {},
         },
       ],
     ],

@@ -236,7 +236,10 @@
       "api_key": {
         "type": "apiKey",
         "name": "api_key",
-        "in": "header"
+        "in": "header",
+        "x-security-extension": {
+          "hello": "world"
+        }
       }
     },
     "schemas": {
