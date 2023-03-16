@@ -185,14 +185,14 @@ export default {
           {
             description: 'Id of an existing user.',
             examples: [],
-            id: 'http_path_param-http_path-service_abc-/users/{}-userId',
+            id: 'http_path_param-http_operation-service_abc-get-/users/{}-userId',
             name: 'userId',
             required: true,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-',
+                id: 'schema-http_path_param-http_operation-service_abc-get-/users/{}-userId-',
               },
             },
             style: 'simple',
@@ -315,14 +315,14 @@ export default {
           {
             description: 'Id of an existing user.',
             examples: [],
-            id: 'http_path_param-http_path-service_abc-/users/{}-userId',
+            id: 'http_path_param-http_operation-service_abc-post-/users/{}-userId',
             name: 'userId',
             required: true,
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: 'schema-http_path_param-http_path-service_abc-/users/{}-userId-',
+                id: 'schema-http_path_param-http_operation-service_abc-post-/users/{}-userId-',
               },
             },
             style: 'simple',

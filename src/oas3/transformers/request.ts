@@ -93,6 +93,12 @@ const translateParameterObjectSchema = withContext<
 export const translateParameterObject = withContext<
   Oas3TranslateFunction<[parameterObject: ParameterObject], IHttpParam<true>>
 >(function (parameterObject) {
+  if (this.context === 'path') {
+    // we do not have a path representation to hang this path-defined parameter on, so this becomes a new operation-defined parameter
+    this.context = 'operation';
+    this.parentId = this.ids['operation'];
+  }
+
   const kind = parameterObject.in === 'path' ? 'pathParam' : parameterObject.in;
   const name = parameterObject.name;
   const keyOrName = getSharedKey(parameterObject, name);
@@ -174,7 +180,7 @@ export const translateToRequest = withContext<
     if (isReferenceObject(param)) {
       target.push(syncReferenceObject(param, this.references));
     } else {
-      target.push(translateParameterObject.call(this, param) as any);
+      target.push(translateParameterObject.call(this, param));
     }
   }
 
