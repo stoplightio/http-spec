@@ -71,6 +71,13 @@ Object {
       "id": "tag-user",
       "name": "user",
     },
+    Object {
+      "id": "tag-x-extension-in-tag",
+      "name": "x-extension-in-tag",
+      "x-service-tag-extension": Object {
+        "hello": "world",
+      },
+    },
   ],
   "termsOfService": "http://swagger.io/terms/",
   "version": "1.0.0",
@@ -147,6 +154,13 @@ Object {
       "description": "Operations about user",
       "id": "tag-user",
       "name": "user",
+    },
+    Object {
+      "id": "tag-x-extension-in-tag",
+      "name": "x-extension-in-tag",
+      "x-service-tag-extension": Object {
+        "hello": "world",
+      },
     },
   ],
   "termsOfService": "http://swagger.io/terms/",

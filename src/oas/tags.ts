@@ -5,6 +5,7 @@ import pickBy = require('lodash.pickby');
 import { withContext } from '../context';
 import { isNonNullable, isSerializablePrimitive, isString } from '../guards';
 import type { ArrayCallbackParameters, Fragment, TranslateFunction } from '../types';
+import { getExtensions } from './accessors';
 
 const translateTag = withContext<TranslateFunction<Fragment, ArrayCallbackParameters<unknown>, Optional<INodeTag>>>(
   function (tag) {
@@ -30,6 +31,8 @@ export const translateTagDefinition: TranslateFunction<
 
   if (!translatedTag) return;
 
+  const extensions = getExtensions(tag);
+
   return {
     ...translatedTag,
 
@@ -39,6 +42,8 @@ export const translateTagDefinition: TranslateFunction<
       },
       isString,
     ),
+
+    ...extensions,
   };
 };
 
