@@ -154,6 +154,11 @@ describe('bundleOas3Service', () => {
         cookie: [],
         path: [],
       },
+      extensions: {
+        'x-stoplight': {
+          id: 'service_id',
+        },
+      },
     });
   });
 
@@ -386,6 +391,7 @@ describe('bundleOas3Service', () => {
       name: 'no-title',
       operations: [],
       version: '',
+      extensions: {},
     });
   });
 
@@ -445,6 +451,7 @@ describe('bundleOas3Service', () => {
       name: 'no-title',
       operations: [],
       version: '',
+      extensions: {},
       components: {
         cookie: [],
         examples: [],
@@ -579,6 +586,7 @@ describe('bundleOas3Service', () => {
       id: 'undefined',
       name: 'no-title',
       version: '',
+      extensions: {},
       components: {
         cookie: [],
         examples: [],
@@ -704,6 +712,7 @@ describe('bundleOas3Service', () => {
       id: 'undefined',
       name: 'no-title',
       version: '',
+      extensions: {},
       components: {
         cookie: [],
         examples: [],
@@ -752,4 +761,91 @@ describe('bundleOas3Service', () => {
       expect(bundleOas3Service({ document })).toEqual(output);
     },
   );
+
+  it('should maintain x-extensions', () => {
+    expect(
+      bundleOas3Service({
+        document: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+          'x-service-extension': {
+            hello: 'world',
+          },
+          openapi: '3.0',
+          paths: {
+            '/users/{userId}': {
+              patch: {
+                'x-operation-extension': {
+                  hello: 'world',
+                },
+              },
+            },
+          },
+          tags: [
+            {
+              name: 'service-tag-extension',
+              'x-service-tag-extension': {
+                hello: 'world',
+              },
+            },
+          ],
+        },
+      }),
+    ).toStrictEqual({
+      id: 'abc',
+      name: 'no-title',
+      version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+        'x-service-extension': {
+          hello: 'world',
+        },
+      },
+      operations: [
+        {
+          id: 'http_operation-abc-patch-/users/{}',
+          method: 'patch',
+          path: '/users/{userId}',
+          extensions: {
+            'x-operation-extension': {
+              hello: 'world',
+            },
+          },
+          request: {
+            cookie: [],
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: [],
+          tags: [],
+        },
+      ],
+      components: {
+        cookie: [],
+        examples: [],
+        header: [],
+        path: [],
+        query: [],
+        responses: [],
+        requestBodies: [],
+        schemas: [],
+        securitySchemes: [],
+      },
+      tags: [
+        {
+          id: 'tag-service-tag-extension',
+          name: 'service-tag-extension',
+          'x-service-tag-extension': {
+            hello: 'world',
+          },
+        },
+      ],
+    });
+  });
 });

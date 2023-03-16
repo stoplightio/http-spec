@@ -10,6 +10,11 @@ export default [
       },
     ],
     version: '1.0',
+    extensions: {
+      'x-stoplight': {
+        id: 'service_abc',
+      },
+    },
   },
   {
     id: 'http_operation-service_abc-post-/users/{}',

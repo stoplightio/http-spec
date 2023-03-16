@@ -42,6 +42,11 @@ export default [
         name: 'mutates',
       },
     ],
+    extensions: {
+      'x-stoplight': {
+        id: 'service_abc',
+      },
+    },
   },
 
   /**

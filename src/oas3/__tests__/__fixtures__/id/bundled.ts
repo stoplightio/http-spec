@@ -380,4 +380,9 @@ export default {
       ],
     },
   ],
+  extensions: {
+    'x-stoplight': {
+      id: 'service_abc',
+    },
+  },
 };

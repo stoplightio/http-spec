@@ -90,4 +90,9 @@ export default {
     schemas: [],
     securitySchemes: [],
   },
+  extensions: {
+    'x-stoplight': {
+      id: 'service_abc',
+    },
+  },
 };

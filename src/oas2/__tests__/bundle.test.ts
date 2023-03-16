@@ -71,6 +71,11 @@ describe('bundleOas2Service', () => {
       id: 'abc',
       name: 'no-title',
       version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
       operations: [
         {
           id: 'http_operation-abc-patch-/users/{}',
@@ -175,4 +180,92 @@ describe('bundleOas2Service', () => {
       expect(bundleOas2Service({ document })).toEqual(output);
     },
   );
+
+  it('should maintain x-extensions', () => {
+    expect(
+      bundleOas2Service({
+        document: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+          'x-service-extension': {
+            hello: 'world',
+          },
+          swagger: '2.0',
+          paths: {
+            '/users/{userId}': {
+              patch: {
+                consumes: ['application/json'],
+                'x-operation-extension': {
+                  hello: 'world',
+                },
+              },
+            },
+          },
+          tags: [
+            {
+              name: 'service-tag-extension',
+              'x-service-tag-extension': {
+                hello: 'world',
+              },
+            },
+          ],
+        },
+      }),
+    ).toStrictEqual({
+      id: 'abc',
+      name: 'no-title',
+      version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+        'x-service-extension': {
+          hello: 'world',
+        },
+      },
+      operations: [
+        {
+          id: 'http_operation-abc-patch-/users/{}',
+          method: 'patch',
+          path: '/users/{userId}',
+          extensions: {
+            'x-operation-extension': {
+              hello: 'world',
+            },
+          },
+          request: {
+            cookie: [],
+            headers: [],
+            path: [],
+            query: [],
+          },
+          responses: [],
+          security: [],
+          servers: [],
+          tags: [],
+        },
+      ],
+      components: {
+        cookie: [],
+        examples: [],
+        header: [],
+        path: [],
+        query: [],
+        responses: [],
+        requestBodies: [],
+        schemas: [],
+        securitySchemes: [],
+      },
+      tags: [
+        {
+          id: 'tag-service-tag-extension',
+          name: 'service-tag-extension',
+          'x-service-tag-extension': {
+            hello: 'world',
+          },
+        },
+      ],
+    });
+  });
 });

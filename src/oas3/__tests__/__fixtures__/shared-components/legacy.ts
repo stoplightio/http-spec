@@ -13,6 +13,11 @@ export default [
     version: '0.0.3',
     name: 'GitHub v3 REST API',
     description: "GitHub's v3 REST API.",
+    extensions: {
+      'x-stoplight': {
+        id: 'service_abc',
+      },
+    },
   },
 
   /**
