@@ -6,6 +6,7 @@ import { Spec } from 'swagger-schema-official';
 
 import { isBoolean, isNonNullable, isString } from '../guards';
 import { TranslateFunction } from '../types';
+import { getExtensions } from './accessors';
 import { hasXLogo } from './guards';
 import { translateTagDefinition } from './tags';
 import { translateLogo } from './transformers/translateLogo';
@@ -44,6 +45,8 @@ export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> |
         },
         isBoolean,
       ),
+
+      extensions: getExtensions(document),
     };
 
     if (isPlainObject(document.info) && hasXLogo(document.info)) {

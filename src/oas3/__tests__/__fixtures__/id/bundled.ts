@@ -162,6 +162,7 @@ export default {
         key: 'api-key',
         name: 'API Key',
         type: 'apiKey',
+        extensions: {},
       },
     ],
   },
@@ -360,6 +361,7 @@ export default {
             key: 'api-key',
             name: 'API Key',
             type: 'apiKey',
+            extensions: {},
           },
         ],
       ],
@@ -380,4 +382,9 @@ export default {
       ],
     },
   ],
+  extensions: {
+    'x-stoplight': {
+      id: 'service_abc',
+    },
+  },
 };

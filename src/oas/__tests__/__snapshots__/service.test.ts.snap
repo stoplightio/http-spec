@@ -6,6 +6,14 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
+  "extensions": Object {
+    "x-service-level-extension": Object {
+      "hello": "world",
+    },
+    "x-stoplight": Object {
+      "id": "abc",
+    },
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
@@ -14,6 +22,7 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
+      "extensions": Object {},
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -28,6 +37,11 @@ Object {
       "type": "oauth2",
     },
     Object {
+      "extensions": Object {
+        "x-security-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "http_security-abc-api_key",
       "in": "header",
       "key": "api_key",
@@ -62,6 +76,13 @@ Object {
       "description": "Operations about user",
       "id": "tag-user",
       "name": "user",
+    },
+    Object {
+      "id": "tag-x-extension-in-tag",
+      "name": "x-extension-in-tag",
+      "x-service-tag-extension": Object {
+        "hello": "world",
+      },
     },
   ],
   "termsOfService": "http://swagger.io/terms/",
@@ -75,6 +96,14 @@ Object {
     "email": "apiteam@swagger.io",
   },
   "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key \`special-key\` to test the authorization filters.",
+  "extensions": Object {
+    "x-service-level-extension": Object {
+      "hello": "world",
+    },
+    "x-stoplight": Object {
+      "id": "abc",
+    },
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
@@ -83,6 +112,7 @@ Object {
   "name": "Swagger Petstore",
   "securitySchemes": Array [
     Object {
+      "extensions": Object {},
       "flows": Object {
         "implicit": Object {
           "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -97,6 +127,11 @@ Object {
       "type": "oauth2",
     },
     Object {
+      "extensions": Object {
+        "x-security-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "http_security-abc-api_key",
       "in": "header",
       "key": "api_key",
@@ -131,6 +166,13 @@ Object {
       "description": "Operations about user",
       "id": "tag-user",
       "name": "user",
+    },
+    Object {
+      "id": "tag-x-extension-in-tag",
+      "name": "x-extension-in-tag",
+      "x-service-tag-extension": Object {
+        "hello": "world",
+      },
     },
   ],
   "termsOfService": "http://swagger.io/terms/",

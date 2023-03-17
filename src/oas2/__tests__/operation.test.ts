@@ -102,11 +102,13 @@ describe('transformOas2Operation', () => {
         [
           {
             id: expect.any(String),
+            extensions: {},
           },
         ],
         [
           {
             id: expect.any(String),
+            extensions: {},
           },
         ],
       ],

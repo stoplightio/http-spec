@@ -162,6 +162,7 @@ Array [
     "security": Array [
       Array [
         Object {
+          "extensions": Object {},
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -653,6 +654,7 @@ Array [
     "security": Array [
       Array [
         Object {
+          "extensions": Object {},
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -870,6 +872,7 @@ Array [
     "security": Array [
       Array [
         Object {
+          "extensions": Object {},
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
@@ -1209,6 +1212,7 @@ Array [
     "security": Array [
       Array [
         Object {
+          "extensions": Object {},
           "flows": Object {
             "implicit": Object {
               "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",

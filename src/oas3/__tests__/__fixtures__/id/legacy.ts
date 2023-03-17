@@ -33,6 +33,7 @@ export default [
         type: 'apiKey',
         name: 'API Key',
         in: 'query',
+        extensions: {},
       },
     ],
     tags: [
@@ -42,6 +43,11 @@ export default [
         name: 'mutates',
       },
     ],
+    extensions: {
+      'x-stoplight': {
+        id: 'service_abc',
+      },
+    },
   },
 
   /**
@@ -460,6 +466,7 @@ export default [
           type: 'apiKey',
           name: 'API Key',
           in: 'query',
+          extensions: {},
         },
       ],
     ],

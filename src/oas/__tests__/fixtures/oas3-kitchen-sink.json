@@ -36,6 +36,12 @@
         "description": "Find out more about our store",
         "url": "http://swagger.io"
       }
+    },
+    {
+      "name": "x-extension-in-tag",
+      "x-service-tag-extension": {
+        "hello": "world"
+      }
     }
   ],
   "paths": {
@@ -230,7 +236,10 @@
       "api_key": {
         "type": "apiKey",
         "name": "api_key",
-        "in": "header"
+        "in": "header",
+        "x-security-extension": {
+          "hello": "world"
+        }
       }
     },
     "schemas": {
@@ -292,5 +301,8 @@
         "title": "Category"
       }
     }
+  },
+  "x-service-level-extension": {
+    "hello": "world"
   }
 }

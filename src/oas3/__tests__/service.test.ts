@@ -38,8 +38,14 @@ describe('oas3 service', () => {
           type: 'apiKey',
           in: undefined,
           name: undefined,
+          extensions: {},
         },
       ],
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -90,8 +96,14 @@ describe('oas3 service', () => {
           flows: {},
           key: 't1',
           type: 'oauth2',
+          extensions: {},
         },
       ],
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -104,6 +116,11 @@ describe('oas3 service', () => {
       id: 'abc',
       name: 'no-title',
       version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -139,6 +156,11 @@ describe('oas3 service', () => {
           url: 'http://petstore.swagger.io/v2',
         },
       ],
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -154,6 +176,11 @@ describe('oas3 service', () => {
       id: 'abc',
       name: 'no-title',
       version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -191,6 +218,11 @@ describe('oas3 service', () => {
       id: 'abc',
       name: 'no-title',
       version: '',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
       servers: [
         {
           id: expect.any(String),
@@ -233,6 +265,11 @@ describe('oas3 service', () => {
       internal: true,
       name: '',
       version: '1.0',
+      extensions: {
+        'x-stoplight': {
+          id: 'abc',
+        },
+      },
     });
   });
 
@@ -279,6 +316,11 @@ describe('oas3 service', () => {
         name: '',
         version: '1.0',
         summary: 'Very cool API',
+        extensions: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+        },
       });
     });
 
@@ -298,6 +340,11 @@ describe('oas3 service', () => {
         id: 'abc',
         name: '',
         version: '1.0',
+        extensions: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+        },
         license: {
           name: 'MIT License',
           identifier: 'MIT',
@@ -324,6 +371,11 @@ describe('oas3 service', () => {
         id: 'abc',
         name: 'no-title',
         version: '1.0.0',
+        extensions: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+        },
         logo: {
           altText: 'altText',
           href: 'https://stoplight.io',
@@ -351,6 +403,11 @@ describe('oas3 service', () => {
           url: 'https://stoplight.io',
         },
         version: '1.0.0',
+        extensions: {
+          'x-stoplight': {
+            id: 'abc',
+          },
+        },
         logo: {
           altText: 'logo',
           href: 'https://stoplight.io',

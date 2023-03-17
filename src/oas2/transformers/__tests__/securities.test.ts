@@ -45,6 +45,7 @@ describe('securities', () => {
             type: 'http',
             description: 'a description',
             key: 'basic-security',
+            extensions: {},
           },
         ],
       ]);
@@ -74,6 +75,7 @@ describe('securities', () => {
             in: 'header',
             key: 'apiKey-security',
             description: 'a description',
+            extensions: {},
           },
         ],
       ]);
@@ -102,6 +104,7 @@ describe('securities', () => {
             in: 'header',
             key: 'apiKey-security',
             description: 'a description',
+            extensions: {},
           },
         ],
       ]);
@@ -121,6 +124,90 @@ describe('securities', () => {
           [{ 'apiKey-security': [] }],
         ),
       ).toEqual([[]]);
+    });
+
+    it('should maintain x-extensions', () => {
+      const document: any = {
+        securityDefinitions: {
+          'basic-security': {
+            type: 'basic',
+            description: 'a description',
+            'x-security-extension': {
+              hello: 'world',
+            },
+          },
+          'implicit-security': {
+            type: 'oauth2',
+            description: 'a description',
+            authorizationUrl: 'a url',
+            flow: 'implicit',
+            scopes: { scope: 'value' },
+            'x-security-extension': {
+              hello: 'world',
+            },
+          },
+          'api-security': {
+            type: 'apiKey',
+            description: 'a description',
+            in: 'query',
+            name: 'a name',
+            'x-security-extension': {
+              hello: 'world',
+            },
+          },
+        },
+      };
+      expect(
+        translateToSecurities(document, [
+          { 'basic-security': [] },
+          { 'implicit-security': [] },
+          { 'api-security': [] },
+        ]),
+      ).toEqual([
+        [
+          {
+            id: expect.any(String),
+            scheme: 'basic',
+            type: 'http',
+            description: 'a description',
+            key: 'basic-security',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        ],
+        [
+          {
+            id: expect.any(String),
+            description: 'a description',
+            flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
+            key: 'implicit-security',
+            type: 'oauth2',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        ],
+        [
+          {
+            id: expect.any(String),
+            name: 'a name',
+            type: 'apiKey',
+            in: 'query',
+            key: 'api-security',
+            description: 'a description',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        ],
+      ]);
     });
 
     describe('single oauth2 security', () => {
@@ -148,6 +235,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -176,6 +264,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: {} } },
               key: 'implicit-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -205,6 +294,7 @@ describe('securities', () => {
               flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'password-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -234,6 +324,7 @@ describe('securities', () => {
               flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'application-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -270,6 +361,7 @@ describe('securities', () => {
               },
               key: 'accessCode-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -330,6 +422,7 @@ describe('securities', () => {
               type: 'http',
               description: 'a description',
               key: 'basic-security',
+              extensions: {},
             },
           ],
           [
@@ -339,6 +432,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
           [
@@ -349,6 +443,7 @@ describe('securities', () => {
               in: 'query',
               key: 'api-security',
               description: 'a description',
+              extensions: {},
             },
           ],
         ]);
@@ -365,6 +460,7 @@ describe('securities', () => {
               type: 'http',
               description: 'a description',
               key: 'basic-security',
+              extensions: {},
             },
             {
               id: expect.any(String),
@@ -372,6 +468,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
+              extensions: {},
             },
             {
               id: expect.any(String),
@@ -380,6 +477,7 @@ describe('securities', () => {
               in: 'query',
               key: 'api-security',
               description: 'a description',
+              extensions: {},
             },
           ],
         ]);

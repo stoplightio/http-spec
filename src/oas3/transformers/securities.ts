@@ -1,10 +1,11 @@
 import { isPlainObject } from '@stoplight/json';
-import type { IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
+import type { Extensions, IApiKeySecurityScheme, IOauthFlowObjects, Optional } from '@stoplight/types';
 import { HttpSecurityScheme } from '@stoplight/types';
 import type { SecuritySchemeObject } from 'openapi3-ts';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
+import { getExtensions } from '../../oas/accessors';
 import { ArrayCallbackParameters } from '../../types';
 import { getSecurities } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
@@ -28,7 +29,7 @@ export const translateToSingleSecurity = withContext<
     Optional<HttpSecurityScheme>
   >
 >(function ([key, securityScheme]) {
-  const baseObject: { id: string; key: string; description?: string } = {
+  const baseObject: { id: string; key: string; description?: string; extensions?: Extensions } = {
     id: this.generateId.httpSecurity({ keyOrName: key }),
     key,
   };
@@ -36,6 +37,8 @@ export const translateToSingleSecurity = withContext<
   if (securityScheme.description) {
     baseObject.description = securityScheme.description;
   }
+
+  baseObject.extensions = getExtensions(securityScheme);
 
   if (securityScheme.type === 'apiKey') {
     return {

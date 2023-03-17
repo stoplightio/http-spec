@@ -209,4 +209,9 @@ export default {
     ],
     securitySchemes: [],
   },
+  extensions: {
+    'x-stoplight': {
+      id: 'service_abc',
+    },
+  },
 };

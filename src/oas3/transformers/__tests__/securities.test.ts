@@ -34,6 +34,7 @@ describe('securities', () => {
             type: 'http',
             description: 'a description',
             scheme: 'basic',
+            extensions: {},
           },
         ],
       ]);
@@ -63,6 +64,7 @@ describe('securities', () => {
             type: 'http',
             description: 'a description',
             scheme: 'digest',
+            extensions: {},
           },
         ],
       ]);
@@ -94,6 +96,7 @@ describe('securities', () => {
             description: 'a description',
             scheme: 'bearer',
             bearerFormat: 'authorization',
+            extensions: {},
           },
         ],
       ]);
@@ -123,6 +126,7 @@ describe('securities', () => {
             type: 'openIdConnect',
             description: 'a description',
             openIdConnectUrl: 'openIdConnectUrl',
+            extensions: {},
           },
         ],
       ]);
@@ -154,6 +158,7 @@ describe('securities', () => {
             in: 'header',
             key: 'apiKey-security',
             description: 'a description',
+            extensions: {},
           },
         ],
       ]);
@@ -183,6 +188,106 @@ describe('securities', () => {
             type: 'http',
             description: 'a description',
             scheme: 'basic',
+            extensions: {},
+          },
+        ],
+      ]);
+    });
+
+    it('should maintain x extensions', () => {
+      const document: OpenAPIObject = {
+        openapi: '3.0.0',
+        info: {
+          title: 'OAS3',
+          version: '1.0',
+        },
+        paths: {
+          '/path': {
+            $ref: '../test-api/openapi.yaml#/paths/~1path',
+          },
+        },
+        components: {
+          securitySchemes: {
+            'http-security': {
+              type: 'http',
+              description: 'a description',
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+            'implicit-security': {
+              type: 'oauth2',
+              description: 'a description',
+              flows: {
+                implicit: {
+                  authorizationUrl: 'a url',
+                  scopes: { scope: 'value' },
+                },
+              },
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+            'api-security': {
+              type: 'apiKey',
+              name: 'a name',
+              in: 'query',
+              description: 'a description',
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        },
+      };
+
+      expect(
+        translateToSecurities(document, [
+          { 'http-security': [] },
+          { 'implicit-security': ['scope'] },
+          { 'api-security': [] },
+        ]),
+      ).toEqual([
+        [
+          {
+            id: expect.any(String),
+            type: 'http',
+            description: 'a description',
+            key: 'http-security',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        ],
+        [
+          {
+            id: expect.any(String),
+            description: 'a description',
+            flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
+            key: 'implicit-security',
+            type: 'oauth2',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
+          },
+        ],
+        [
+          {
+            id: expect.any(String),
+            name: 'a name',
+            type: 'apiKey',
+            in: 'query',
+            key: 'api-security',
+            description: 'a description',
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
+            },
           },
         ],
       ]);
@@ -218,6 +323,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -252,6 +358,7 @@ describe('securities', () => {
               flows: { password: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'password-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -286,6 +393,7 @@ describe('securities', () => {
               flows: { clientCredentials: { tokenUrl: 'a token url', scopes: { scope: 'value' } } },
               key: 'clientCredentials-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -327,6 +435,7 @@ describe('securities', () => {
               },
               key: 'authorizationCode-flow-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
         ]);
@@ -385,6 +494,7 @@ describe('securities', () => {
               type: 'http',
               description: 'a description',
               key: 'http-security',
+              extensions: {},
             },
           ],
           [
@@ -394,6 +504,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
+              extensions: {},
             },
           ],
           [
@@ -404,6 +515,7 @@ describe('securities', () => {
               in: 'query',
               key: 'api-security',
               description: 'a description',
+              extensions: {},
             },
           ],
         ]);
@@ -421,6 +533,7 @@ describe('securities', () => {
               type: 'http',
               description: 'a description',
               key: 'http-security',
+              extensions: {},
             },
             {
               id: expect.any(String),
@@ -428,6 +541,7 @@ describe('securities', () => {
               flows: { implicit: { authorizationUrl: 'a url', scopes: { scope: 'value' } } },
               key: 'implicit-security',
               type: 'oauth2',
+              extensions: {},
             },
             {
               id: expect.any(String),
@@ -436,6 +550,7 @@ describe('securities', () => {
               in: 'query',
               key: 'api-security',
               description: 'a description',
+              extensions: {},
             },
           ],
         ]);
