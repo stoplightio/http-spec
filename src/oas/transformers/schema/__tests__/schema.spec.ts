@@ -61,6 +61,11 @@ describe('translateSchemaObject', () => {
             exclusiveMinimum: false,
             exclusiveMaximum: false,
           },
+          {
+            type: 'integer',
+            exclusiveMinimum: 2,
+            exclusiveMaximum: 10,
+          },
         ],
       }),
     ).toStrictEqual({
@@ -88,6 +93,11 @@ describe('translateSchemaObject', () => {
           type: 'integer',
           minimum: 2,
           maximum: 10,
+        },
+        {
+          type: 'integer',
+          exclusiveMinimum: 2,
+          exclusiveMaximum: 10,
         },
       ],
     });
