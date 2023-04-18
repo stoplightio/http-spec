@@ -131,6 +131,7 @@ export function transformSecurityScheme(
             type: 'http',
             scheme: 'bearer',
             description: 'OAuth2 Access Token',
+            extensions: {},
           },
         };
       }
@@ -144,6 +145,7 @@ export function transformSecurityScheme(
           type: 'apiKey',
           name: parameters.get('key'),
           in: parameters.get('in') || 'header',
+          extensions: {},
         },
       };
 
@@ -157,6 +159,7 @@ export function transformSecurityScheme(
           key: nextKey('http'),
           type: 'http',
           scheme: auth.type,
+          extensions: {},
         },
       };
 

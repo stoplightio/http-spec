@@ -4,6 +4,7 @@ import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';
+import { getExtensions } from '../oas/accessors';
 import { entries } from '../utils';
 import { isSecurityScheme } from './guards';
 
@@ -39,11 +40,18 @@ export function getSecurities(
                   },
                 ]),
               ),
+              extensions: getExtensions(definition),
             },
           ];
         }
 
-        return [opScheme, definition];
+        return [
+          opScheme,
+          {
+            ...definition,
+            extensions: getExtensions(definition),
+          },
+        ];
       })
       .filter(isNonNullable);
   });

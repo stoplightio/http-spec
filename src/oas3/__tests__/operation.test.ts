@@ -728,6 +728,7 @@ describe('transformOas3Operation', () => {
       },
       responses: [],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [],
       tags: [],
       extensions: {},
@@ -809,6 +810,7 @@ describe('transformOas3Operation', () => {
       },
       responses: [],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [],
       tags: [],
       extensions: {},
@@ -1055,6 +1057,7 @@ describe('transformOas3Operation', () => {
         },
       ],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [],
       tags: [],
       extensions: {},
@@ -1284,6 +1287,7 @@ describe('transformOas3Operation', () => {
       },
       tags: [],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       extensions: {},
     });
   });

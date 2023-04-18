@@ -29,16 +29,15 @@ export const translateToSingleSecurity = withContext<
     Optional<HttpSecurityScheme>
   >
 >(function ([key, securityScheme]) {
-  const baseObject: { id: string; key: string; description?: string; extensions?: Extensions } = {
+  const baseObject: { id: string; key: string; description?: string; extensions: Extensions } = {
     id: this.generateId.httpSecurity({ keyOrName: key }),
     key,
+    extensions: getExtensions(securityScheme),
   };
 
   if (securityScheme.description) {
     baseObject.description = securityScheme.description;
   }
-
-  baseObject.extensions = getExtensions(securityScheme);
 
   if (securityScheme.type === 'apiKey') {
     return {

@@ -95,7 +95,15 @@ describe('transformPostmanCollectionOperation()', () => {
           ).toEqual(
             expect.objectContaining({
               security: [
-                [{ id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/), key: 'http-0', scheme: 'basic', type: 'http' }],
+                [
+                  {
+                    id: expect.stringMatching(/^_gen_[0-9a-f]{6}$/),
+                    key: 'http-0',
+                    scheme: 'basic',
+                    type: 'http',
+                    extensions: {},
+                  },
+                ],
               ],
             }),
           );

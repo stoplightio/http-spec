@@ -9,6 +9,7 @@ import type { Fragment, HttpOperationTransformer } from '../types';
 import { TransformerContext, TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
 import { translateToTags } from './tags';
+import { translateToSecurityDeclarationType } from './transformers';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -95,5 +96,7 @@ export const transformOasOperation: TranslateFunction<
       },
       isString,
     ),
+
+    securityDeclarationType: translateToSecurityDeclarationType(operation),
   };
 };

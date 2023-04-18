@@ -1,4 +1,4 @@
-import type { DeepPartial, IHttpOperation } from '@stoplight/types';
+import { DeepPartial, IHttpOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 

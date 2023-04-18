@@ -55,6 +55,7 @@ export default {
       },
       responses: [],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [
         {
           id: 'http_server-service_abc-http://localhost:3000',

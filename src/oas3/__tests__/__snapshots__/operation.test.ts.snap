@@ -18,6 +18,7 @@ Object {
       },
       "responses": Array [],
       "security": Array [],
+      "securityDeclarationType": "inheritedFromService",
       "servers": Array [],
       "tags": Array [],
     },
@@ -58,6 +59,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [],
   "tags": Array [],
 }
@@ -80,6 +82,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [],
   "summary": "summary",
   "tags": Array [],
@@ -103,6 +106,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [
     Object {
       "id": Any<String>,
@@ -132,6 +136,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [
     Object {
       "id": Any<String>,
@@ -161,6 +166,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [],
   "summary": "summary",
   "tags": Array [
@@ -189,6 +195,7 @@ Object {
   },
   "responses": Array [],
   "security": Array [],
+  "securityDeclarationType": "inheritedFromService",
   "servers": Array [
     Object {
       "id": Any<String>,

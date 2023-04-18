@@ -78,6 +78,7 @@ Object {
       },
     ],
   ],
+  "securityDeclarationType": "declared",
   "servers": Array [],
   "summary": "osum",
   "tags": Array [],

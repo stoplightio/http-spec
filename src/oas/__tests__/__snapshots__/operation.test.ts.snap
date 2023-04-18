@@ -178,6 +178,7 @@ Array [
         },
       ],
     ],
+    "securityDeclarationType": "declared",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -257,6 +258,7 @@ Array [
       },
     ],
     "security": Array [],
+    "securityDeclarationType": "inheritedFromService",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -365,6 +367,7 @@ Array [
       },
     ],
     "security": Array [],
+    "securityDeclarationType": "inheritedFromService",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -409,6 +412,7 @@ Array [
       },
     ],
     "security": Array [],
+    "securityDeclarationType": "inheritedFromService",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -670,6 +674,7 @@ Array [
         },
       ],
     ],
+    "securityDeclarationType": "declared",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -888,6 +893,7 @@ Array [
         },
       ],
     ],
+    "securityDeclarationType": "declared",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -971,6 +977,7 @@ Array [
       },
     ],
     "security": Array [],
+    "securityDeclarationType": "inheritedFromService",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
@@ -1228,6 +1235,7 @@ Array [
         },
       ],
     ],
+    "securityDeclarationType": "declared",
     "servers": Array [
       Object {
         "id": "http_server-abc-https://petstore.swagger.io/v2",
