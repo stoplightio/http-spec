@@ -34,6 +34,7 @@ describe('transformPostmanCollectionService()', () => {
               key: 'http-0',
               scheme: 'basic',
               type: 'http',
+              extensions: {},
             },
           ],
         },

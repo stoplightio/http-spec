@@ -37,6 +37,7 @@ describe('transformSecurityScheme()', () => {
           key: 'auth-http',
           type: 'http',
           scheme: 'basic',
+          extensions: {},
         },
       });
     });
@@ -75,6 +76,7 @@ describe('transformSecurityScheme()', () => {
           key: 'auth-http',
           type: 'http',
           scheme: 'digest',
+          extensions: {},
         },
       });
     });
@@ -103,6 +105,7 @@ describe('transformSecurityScheme()', () => {
           key: 'auth-http',
           type: 'http',
           scheme: 'bearer',
+          extensions: {},
         },
       });
     });
@@ -143,6 +146,7 @@ describe('transformSecurityScheme()', () => {
             type: 'apiKey',
             name: 'TestApiKey',
             in: 'query',
+            extensions: {},
           },
         });
       });
@@ -177,6 +181,7 @@ describe('transformSecurityScheme()', () => {
             type: 'apiKey',
             name: 'TestApiKey',
             in: 'header',
+            extensions: {},
           },
         });
       });
@@ -437,6 +442,7 @@ describe('transformSecurityScheme()', () => {
             description: 'OAuth2 Access Token',
             scheme: 'bearer',
             type: 'http',
+            extensions: {},
           },
         });
       });
@@ -677,6 +683,7 @@ describe('transformPostmanSecuritySchemes()', () => {
             key: 'http-0',
             scheme: 'basic',
             type: 'http',
+            extensions: {},
           },
           type: 'securityScheme',
         },
@@ -686,6 +693,7 @@ describe('transformPostmanSecuritySchemes()', () => {
             key: 'http-1',
             scheme: 'digest',
             type: 'http',
+            extensions: {},
           },
           type: 'securityScheme',
         },
@@ -785,6 +793,7 @@ describe('transformPostmanSecuritySchemes()', () => {
             key: 'http-0',
             scheme: 'basic',
             type: 'http',
+            extensions: {},
           },
           type: 'securityScheme',
         },
@@ -796,20 +805,26 @@ describe('transformPostmanSecuritySchemes()', () => {
 describe.each<[string, PostmanSecurityScheme, PostmanSecurityScheme, boolean]>([
   [
     'two equal security schemes',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
-    { type: 'securityScheme', securityScheme: { id: '', key: '2', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic', extensions: {} } },
+    { type: 'securityScheme', securityScheme: { id: '', key: '2', type: 'http', scheme: 'basic', extensions: {} } },
     true,
   ],
   [
     'different types',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
+    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic', extensions: {} } },
     { type: 'headerParams', headerParams: [] },
     false,
   ],
   [
     'two different',
-    { type: 'securityScheme', securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic' } },
-    { type: 'securityScheme', securityScheme: { id: '', key: '2', type: 'http', scheme: 'digest' } },
+    {
+      type: 'securityScheme',
+      securityScheme: { id: '', key: '1', type: 'http', scheme: 'basic', extensions: {} },
+    },
+    {
+      type: 'securityScheme',
+      securityScheme: { id: '', key: '2', type: 'http', scheme: 'digest', extensions: {} },
+    },
     false,
   ],
   [

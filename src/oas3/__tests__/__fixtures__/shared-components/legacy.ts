@@ -130,6 +130,7 @@ export default [
     },
     tags: [],
     security: [],
+    securityDeclarationType: 'inheritedFromService',
     extensions: {},
   },
   /**
@@ -276,6 +277,7 @@ export default [
     },
     tags: [],
     security: [],
+    securityDeclarationType: 'inheritedFromService',
     extensions: {},
   },
 ];

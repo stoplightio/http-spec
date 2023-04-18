@@ -141,6 +141,7 @@ describe('oas operation', () => {
       extensions: {},
       responses: [],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [],
       summary: '/Update',
       tags: [],

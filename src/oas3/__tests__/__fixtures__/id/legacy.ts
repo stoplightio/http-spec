@@ -235,6 +235,7 @@ export default [
       },
     ],
     security: [],
+    securityDeclarationType: 'inheritedFromService',
     extensions: {},
   },
 
@@ -470,6 +471,7 @@ export default [
         },
       ],
     ],
+    securityDeclarationType: 'declared',
     extensions: {},
   },
 ];

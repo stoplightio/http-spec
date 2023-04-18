@@ -227,6 +227,7 @@ export default {
         },
       ],
       security: [],
+      securityDeclarationType: 'inheritedFromService',
       servers: [
         {
           id: 'http_server-service_abc-http://localhost:3000',
@@ -369,6 +370,7 @@ export default {
           },
         ],
       ],
+      securityDeclarationType: 'declared',
       servers: [
         {
           id: 'http_server-service_abc-http://localhost:3000',
