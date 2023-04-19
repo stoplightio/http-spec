@@ -124,4 +124,32 @@ describe('translateToServers', () => {
       },
     ]);
   });
+
+  it.each([
+    ['http', 80],
+    ['ws', 80],
+    ['https', 443],
+    ['wss', 443],
+  ])('should handle default %s port %s', (scheme, port) => {
+    expect(translateToServers({ host: `stoplight.io:${port}` }, { schemes: [scheme] })).toEqual([
+      {
+        id: expect.any(String),
+        url: `${scheme}://stoplight.io`,
+      },
+    ]);
+  });
+
+  it.each([
+    ['http', 443],
+    ['ws', 443],
+    ['https', 80],
+    ['wss', 80],
+  ])('should handle flip-flopped %s on port %s', (scheme, port) => {
+    expect(translateToServers({ host: `stoplight.io:${port}` }, { schemes: [scheme] })).toEqual([
+      {
+        id: expect.any(String),
+        url: `${scheme}://stoplight.io:${port}`,
+      },
+    ]);
+  });
 });

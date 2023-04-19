@@ -39,8 +39,8 @@ export const translateToServer = withContext<
     typeof this.document.basePath === 'string' && this.document.basePath.length > 0 ? this.document.basePath : null;
 
   const uri = new URL('https://localhost');
-  uri.host = host;
   uri.protocol = `${scheme}:`;
+  uri.host = host;
 
   if (basePath !== null) {
     uri.pathname = basePath;
