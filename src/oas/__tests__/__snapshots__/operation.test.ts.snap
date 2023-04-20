@@ -208,13 +208,13 @@ Array [
       "cookie": Array [],
       "headers": Array [
         Object {
-          "id": "http_header-abc-rate-limit",
+          "id": "http_header-abc-parameter-rate-limit",
           "name": "Rate-Limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "schema-http_header-abc-rate-limit-",
+              "id": "schema-http_header-abc-parameter-rate-limit-",
             },
           },
           "style": "simple",
@@ -283,13 +283,13 @@ Array [
       "cookie": Array [],
       "headers": Array [
         Object {
-          "id": "http_header-abc-rate-limit",
+          "id": "http_header-abc-parameter-rate-limit",
           "name": "Rate-Limit",
           "schema": Object {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "string",
             "x-stoplight": Object {
-              "id": "schema-http_header-abc-rate-limit-",
+              "id": "schema-http_header-abc-parameter-rate-limit-",
             },
           },
           "style": "simple",
@@ -331,20 +331,20 @@ Array [
         "headers": Array [
           Object {
             "description": "Allowed clients",
-            "id": "http_header-http_response-http_operation-abc-options-/pets-200-Allow",
+            "id": "http_header-http_response-http_operation-abc-options-/pets-200-parameter-Allow",
             "name": "Allow",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "type": "string",
               "x-stoplight": Object {
-                "id": "schema-http_header-http_response-http_operation-abc-options-/pets-200-Allow-",
+                "id": "schema-http_header-http_response-http_operation-abc-options-/pets-200-parameter-Allow-",
               },
             },
             "style": "simple",
           },
           Object {
             "description": "Remaining requests",
-            "id": "http_header-http_response-http_operation-abc-options-/pets-200-X-Rate-Limit",
+            "id": "http_header-http_response-http_operation-abc-options-/pets-200-parameter-X-Rate-Limit",
             "name": "X-Rate-Limit",
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
@@ -357,7 +357,7 @@ Array [
                   "type",
                   "format",
                 ],
-                "id": "schema-http_header-http_response-http_operation-abc-options-/pets-200-X-Rate-Limit-",
+                "id": "schema-http_header-http_response-http_operation-abc-options-/pets-200-parameter-X-Rate-Limit-",
               },
             },
             "style": "simple",

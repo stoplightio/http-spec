@@ -83,7 +83,7 @@ exports[`params.translator translateToHeaderParams should translate empty dictio
 exports[`params.translator translateToHeaderParams should translate to multiple header params 1`] = `
 Object {
   "description": "a description",
-  "id": "117996bbb6f45",
+  "id": "4a76be1a8b54a",
   "name": "header-name",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -99,7 +99,7 @@ Object {
 exports[`params.translator translateToHeaderParams should translate to multiple header params 2`] = `
 Object {
   "description": "another description",
-  "id": "dce8b374eb7d6",
+  "id": "d047efbd7d6b5",
   "name": "plain-tex",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -115,7 +115,7 @@ Object {
 exports[`params.translator translateToHeaderParams should translate to simple header param 1`] = `
 Object {
   "description": "a description",
-  "id": "117996bbb6f45",
+  "id": "4a76be1a8b54a",
   "name": "header-name",
   "schema": Object {
     "$schema": "http://json-schema.org/draft-07/schema#",
