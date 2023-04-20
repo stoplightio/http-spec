@@ -77,7 +77,7 @@ export const translateToHeaderParam = withContext<
   const keyOrName = getSharedKey(param, name);
 
   return {
-    id: this.generateId.httpHeader({ keyOrName }),
+    id: this.generateId.httpHeader({ keyOrName, componentType: 'parameter' }),
     name,
     style: HttpParamStyles.Simple,
     ...buildSchemaForParameter.call(this, param),

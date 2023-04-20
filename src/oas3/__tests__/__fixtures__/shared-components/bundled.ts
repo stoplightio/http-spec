@@ -78,7 +78,7 @@ export default {
     ],
     header: [
       {
-        id: 'http_header-service_abc-X-Rate-Limit',
+        id: 'http_header-service_abc-header-X-Rate-Limit',
         key: 'X-Rate-Limit',
         name: 'X-Rate-Limit',
         style: 'simple',
@@ -89,7 +89,7 @@ export default {
         },
       },
       {
-        id: 'http_header-service_abc-Some-Header',
+        id: 'http_header-service_abc-parameter-Some-Header',
         key: 'Some-Header',
         name: 'A-Shared-Header',
         style: 'simple',
@@ -99,7 +99,7 @@ export default {
           $schema: 'http://json-schema.org/draft-07/schema#',
           type: 'string',
           'x-stoplight': {
-            id: 'schema-http_header-service_abc-Some-Header-',
+            id: 'schema-http_header-service_abc-parameter-Some-Header-',
           },
         },
       },

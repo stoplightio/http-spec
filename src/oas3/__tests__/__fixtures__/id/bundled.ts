@@ -34,7 +34,7 @@ export default {
     header: [
       {
         // hash('http_header-service_abc-Some-Header')
-        id: 'http_header-service_abc-Some-Header',
+        id: 'http_header-service_abc-parameter-Some-Header',
         key: 'Some-Header',
         name: 'A-Shared-Header',
         style: 'simple',
@@ -45,7 +45,7 @@ export default {
           type: 'string',
           'x-stoplight': {
             // hash('schema-http_header-service_abc-Some-Header')
-            id: 'schema-http_header-service_abc-Some-Header-',
+            id: 'schema-http_header-service_abc-parameter-Some-Header-',
           },
         },
       },
@@ -297,13 +297,13 @@ export default {
         headers: [
           {
             examples: [],
-            id: 'http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header',
+            id: 'http_header-http_operation-service_abc-post-/users/{}-parameter-Post-Specific-Header',
             name: 'Post-Specific-Header',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'integer',
               'x-stoplight': {
-                id: 'schema-http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header-',
+                id: 'schema-http_header-http_operation-service_abc-post-/users/{}-parameter-Post-Specific-Header-',
               },
             },
             style: 'simple',

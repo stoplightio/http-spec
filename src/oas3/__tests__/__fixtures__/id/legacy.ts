@@ -172,14 +172,14 @@ export default [
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
           // hash('http_header-service_abc-Some-Header')
-          id: 'http_header-service_abc-Some-Header',
+          id: 'http_header-service_abc-parameter-Some-Header',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              id: 'schema-http_header-service_abc-Some-Header-',
+              id: 'schema-http_header-service_abc-parameter-Some-Header-',
             },
             type: 'string',
           },
@@ -393,13 +393,13 @@ export default [
           // This was defined directly on the operation (not a shared component), so the closest
           // parent with an id is the operation, so ends up being...
           // hash('http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header')
-          id: 'http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header',
+          id: 'http_header-http_operation-service_abc-post-/users/{}-parameter-Post-Specific-Header',
           name: 'Post-Specific-Header',
           style: 'simple',
           schema: {
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
-              id: 'schema-http_header-http_operation-service_abc-post-/users/{}-Post-Specific-Header-',
+              id: 'schema-http_header-http_operation-service_abc-post-/users/{}-parameter-Post-Specific-Header-',
             },
             type: 'integer',
           },
@@ -410,7 +410,7 @@ export default [
           // This header was defined in shared components originally, note how this ends up appearing several times in this doc.
           // The closest parent with an id is the service, so ends up being...
           // hash('http_header-service_abc-Some-Header')
-          id: 'http_header-service_abc-Some-Header',
+          id: 'http_header-service_abc-parameter-Some-Header',
           name: 'A-Shared-Header',
           required: false,
           style: 'simple',
@@ -418,7 +418,7 @@ export default [
             $schema: 'http://json-schema.org/draft-07/schema#',
             'x-stoplight': {
               // hash('schema-http_header-service_abc-Some-Header-')
-              id: 'schema-http_header-service_abc-Some-Header-',
+              id: 'schema-http_header-service_abc-parameter-Some-Header-',
             },
             type: 'string',
           },

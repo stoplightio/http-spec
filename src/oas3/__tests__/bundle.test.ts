@@ -119,7 +119,7 @@ describe('bundleOas3Service', () => {
         securitySchemes: [],
         header: [
           {
-            id: 'http_header-service_id-org',
+            id: 'http_header-service_id-parameter-org',
             name: 'org',
             style: 'simple',
             examples: [],
@@ -128,7 +128,7 @@ describe('bundleOas3Service', () => {
               type: 'string',
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
-                id: 'schema-http_header-service_id-org-',
+                id: 'schema-http_header-service_id-parameter-org-',
               },
             },
             key: 'org',
@@ -262,7 +262,7 @@ describe('bundleOas3Service', () => {
         header: [
           {
             examples: [],
-            id: 'http_header-undefined-Some-Header',
+            id: 'http_header-undefined-parameter-Some-Header',
             key: 'Some-Header',
             name: 'A-Shared-Header',
             required: false,
@@ -270,7 +270,7 @@ describe('bundleOas3Service', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               type: 'string',
               'x-stoplight': {
-                id: 'schema-http_header-undefined-Some-Header-',
+                id: 'schema-http_header-undefined-parameter-Some-Header-',
               },
             },
             style: 'simple',
@@ -905,5 +905,95 @@ describe('bundleOas3Service', () => {
         },
       ],
     });
+  });
+
+  it('should handle parameter and header components with same key', () => {
+    const res = bundleOas3Service({
+      document: {
+        openapi: '3.1.0',
+        servers: [
+          {
+            url: 'https://server.url',
+          },
+        ],
+        info: {
+          license: {
+            name: 'Info license name',
+            url: 'https://lisence.com',
+          },
+          contact: {
+            email: 'info@contact.email',
+            name: 'Info contact name',
+            url: 'https://info.contact/url',
+          },
+          description: 'Info description',
+          title: 'Info title',
+          version: '0.0.1',
+        },
+        tags: [
+          {
+            name: 'tag1',
+            description: 'tag1 description',
+          },
+        ],
+        paths: {
+          '/path1': {
+            get: {
+              operationId: 'getPath1',
+              description: 'getPath1 description',
+              tags: ['tag1'],
+              parameters: [
+                {
+                  $ref: '#/components/parameters/duplicateNamedComponent',
+                },
+              ],
+              responses: {
+                '200': {
+                  description: 'getPath1 200 response description',
+                  headers: {
+                    path1ResponseHeader: {
+                      $ref: '#/components/headers/duplicateNamedComponent',
+                    },
+                  },
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        components: {
+          parameters: {
+            duplicateNamedComponent: {
+              name: 'duplicateNamedComponentParameter',
+              description: 'parameter description',
+              style: 'simple',
+              in: 'header',
+              schema: {
+                type: 'string',
+              },
+            },
+          },
+          headers: {
+            duplicateNamedComponent: {
+              schema: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(res.components.header).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: 'http_header-undefined-header-duplicateNamedComponent' }),
+        expect.objectContaining({ id: 'http_header-undefined-parameter-duplicateNamedComponent' }),
+      ]),
+    );
   });
 });
