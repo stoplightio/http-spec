@@ -55,7 +55,7 @@ export const idGenerators = {
     return join(['http_cookie', props.parentId, props.keyOrName]);
   },
 
-  httpHeader: (props: Context & { keyOrName: string; componentType: 'parameter' | 'header' }) => {
+  httpHeader: (props: Context & { keyOrName: string; componentType: 'parameter' | 'header' | 'unknown' }) => {
     return join(['http_header', props.parentId, props.componentType, props.keyOrName]);
   },
 
