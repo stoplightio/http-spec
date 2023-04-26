@@ -36,34 +36,30 @@ import { getExamplesFromSchema } from '../accessors';
 import { isHeaderParam, isPathParam, isQueryParam } from '../guards';
 import { Oas2TranslateFunction } from '../types';
 
-function chooseQueryParameterStyle(
-  parameter: DeepPartial<QueryParameter>,
-):
-  | HttpParamStyles.PipeDelimited
-  | HttpParamStyles.SpaceDelimited
-  | HttpParamStyles.Form
-  | HttpParamStyles.CommaDelimited {
-  /** Must cast to 'any' because this field is missing from the types but it's defined in the spec
-   * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject
-   */
+type QueryParameterStyle = {
+  style:
+    | HttpParamStyles.Form
+    | HttpParamStyles.CommaDelimited
+    | HttpParamStyles.SpaceDelimited
+    | HttpParamStyles.PipeDelimited
+    | HttpParamStyles.TabDelimited;
+  explode?: boolean;
+};
+
+function chooseQueryParameterStyle(parameter: DeepPartial<QueryParameter>): QueryParameterStyle {
   switch (parameter.collectionFormat) {
-    case 'pipes':
-      return HttpParamStyles.PipeDelimited;
-    case 'ssv':
-      return HttpParamStyles.SpaceDelimited;
     case 'csv':
-      return HttpParamStyles.CommaDelimited;
+      return { style: HttpParamStyles.CommaDelimited };
+    case 'ssv':
+      return { style: HttpParamStyles.SpaceDelimited };
+    case 'tsv':
+      return { style: HttpParamStyles.TabDelimited };
+    case 'pipes':
+      return { style: HttpParamStyles.PipeDelimited };
     case 'multi':
+      return { style: HttpParamStyles.Form, explode: true };
     default:
-      /**
-       * This implementation is, in fact, not fully compliant with oas3.
-       * As per oas3 spec: "Form style parameters defined by RFC6570.
-       *                    This option replaces collectionFormat with a csv
-       *                    (when explode is false) or multi (when explode is true)
-       *                    value from OpenAPI 2.0."
-       * But since there is no such property like 'explode' in oas2 we are defaulting to 'form'.
-       */
-      return HttpParamStyles.Form;
+      return { style: HttpParamStyles.CommaDelimited };
   }
 }
 
@@ -257,7 +253,7 @@ export const translateToQueryParameter = withContext<
   return {
     id: this.generateId.httpQuery({ keyOrName }),
     name,
-    style: chooseQueryParameterStyle(param),
+    ...chooseQueryParameterStyle(param),
 
     ...buildSchemaForParameter.call(this, param),
 

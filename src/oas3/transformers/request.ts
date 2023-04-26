@@ -15,7 +15,7 @@ import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';
 import { OasVersion } from '../../oas';
 import { createOasParamsIterator } from '../../oas/accessors';
-import { isReferenceObject, isValidParamStyle } from '../../oas/guards';
+import { isReferenceObject, isValidOas3ParamStyle } from '../../oas/guards';
 import { getComponentName, getSharedKey, syncReferenceObject } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
@@ -111,7 +111,7 @@ export const translateParameterObject = withContext<
   return {
     id,
     name,
-    style: isValidParamStyle(parameterObject.style)
+    style: isValidOas3ParamStyle(parameterObject.style)
       ? parameterObject.style
       : // https://spec.openapis.org/oas/v3.0.3#parameterStyle, https://spec.openapis.org/oas/v3.1.0#parameterStyle
       parameterObject.in === 'query' || parameterObject.in === 'cookie'

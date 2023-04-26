@@ -11,10 +11,12 @@ export function hasXLogo(
   return isPlainObject(info['x-logo']);
 }
 
-const VALID_OAS3_PARAM_LOCATION: OAS3.ParameterLocation[] = ['query', 'header', 'path', 'cookie'];
-const VALID_OAS2_PARAM_LOCATION: OAS2.BaseParameter['in'][] = ['query', 'header', 'path', 'body', 'formData'];
+const VALID_OAS3_PARAM_LOCATION: readonly OAS3.ParameterLocation[] = ['query', 'header', 'path', 'cookie'];
+const VALID_OAS2_PARAM_LOCATION: readonly OAS2.BaseParameter['in'][] = ['query', 'header', 'path', 'body', 'formData'];
 
-const VALID_PARAM_STYLES: HttpParamStyles[] = Object.values(HttpParamStyles);
+const VALID_OAS3_PARAM_STYLES: readonly HttpParamStyles[] = Object.values(HttpParamStyles).filter(
+  s => ![HttpParamStyles.CommaDelimited, HttpParamStyles.TabDelimited].includes(s),
+);
 
 export const isValidParameterObject = (param: unknown): param is ParamBase =>
   isPlainObject(param) && typeof param.name === 'string' && typeof param.in === 'string';
@@ -25,8 +27,8 @@ export const isValidOas2ParameterObject = (param: unknown): param is Oas2ParamBa
 export const isValidOas3ParameterObject = (param: unknown): param is Oas3ParamBase =>
   isValidParameterObject(param) && VALID_OAS3_PARAM_LOCATION.includes(param.in as OAS3.ParameterLocation);
 
-export const isValidParamStyle = (style: unknown): style is HttpParamStyles =>
-  VALID_PARAM_STYLES.includes(style as HttpParamStyles);
+export const isValidOas3ParamStyle = (style: unknown): style is HttpParamStyles =>
+  VALID_OAS3_PARAM_STYLES.includes(style as HttpParamStyles);
 
 export function isReferenceObject(maybeReferenceObject: unknown): maybeReferenceObject is Reference {
   return hasRef(maybeReferenceObject);

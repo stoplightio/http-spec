@@ -423,15 +423,17 @@ describe('params.translator', () => {
     };
 
     it.each([
-      { oasStyle: 'pipes', expectedStyle: HttpParamStyles.PipeDelimited },
-      { oasStyle: 'ssv', expectedStyle: HttpParamStyles.SpaceDelimited },
-      { oasStyle: 'csv', expectedStyle: HttpParamStyles.CommaDelimited },
-      { oasStyle: 'multi', expectedStyle: HttpParamStyles.Form },
-      { oasStyle: 'nasino', expectedStyle: HttpParamStyles.Form },
-    ])('translate style: %s', ({ oasStyle, expectedStyle }) => {
+      { oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
+      { oasStyle: 'ssv', expected: { style: HttpParamStyles.SpaceDelimited } },
+      { oasStyle: 'csv', expected: { style: HttpParamStyles.CommaDelimited } },
+      { oasStyle: 'tsv', expected: { style: HttpParamStyles.TabDelimited } },
+      { oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
+      { oasStyle: 'multi', expected: { style: HttpParamStyles.Form, explode: true } },
+      { oasStyle: 'invalidStyleValue', expected: { style: HttpParamStyles.CommaDelimited } },
+    ])('translate style: %o', ({ oasStyle, expected }) => {
       expect(
         translateToQueryParameter({}, { ...parameter, collectionFormat: oasStyle } as QueryParameter),
-      ).toHaveProperty('style', expectedStyle);
+      ).toMatchObject(expected);
     });
 
     it('translate x-deprecated', () => {
