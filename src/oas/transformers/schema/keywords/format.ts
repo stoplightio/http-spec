@@ -15,7 +15,9 @@ const ranges = {
 
 const createNumberFormatter = (min: number, max: number): Converter => {
   return schema => {
-    (schema['x-stoplight'] ??= {}).explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
+    const explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
+    schema['x-stoplight'] = { ...schema['x-stoplight'] };
+    schema['x-stoplight'].explicitProperties = explicitProperties;
     schema.minimum = Math.max(asActualNumber(schema.minimum, min), min);
     schema.maximum = Math.min(asActualNumber(schema.maximum, max), max);
   };
@@ -27,7 +29,9 @@ const convertFormatFloat = createNumberFormatter(ranges.MIN_FLOAT, ranges.MAX_FL
 const convertFormatDouble = createNumberFormatter(ranges.MIN_DOUBLE, ranges.MAX_DOUBLE);
 
 const convertFormatByte: Converter = schema => {
-  (schema['x-stoplight'] ??= {}).explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
+  const explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
+  schema['x-stoplight'] = { ...schema['x-stoplight'] };
+  schema['x-stoplight'].explicitProperties = explicitProperties;
   schema.pattern = '^[\\w\\d+\\/=]*$';
 };
 
