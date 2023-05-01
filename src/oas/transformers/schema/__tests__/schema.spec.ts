@@ -353,4 +353,27 @@ describe('convertSchema', () => {
       $schema: 'http://json-schema.org/draft-07/schema#',
     });
   });
+
+  it('should not mutate schema', () => {
+    const schema = Object.freeze({
+      title: 'test',
+      'x-stoplight': Object.freeze({
+        id: 'mmpytm7zd1pok',
+      }),
+      type: 'object',
+      properties: Object.freeze({
+        id: Object.freeze({
+          type: 'integer',
+          'x-stoplight': Object.freeze({
+            id: '5blfk3t7lozhy',
+            explicitProperties: Object.freeze(['type', 'format', 'readOnly']),
+          }),
+          format: 'int32',
+          readOnly: true,
+        }),
+      }),
+    });
+
+    expect(() => convertSchema({}, schema)).not.toThrowError(/Cannot assign to read only property/);
+  });
 });
