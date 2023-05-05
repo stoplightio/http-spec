@@ -936,6 +936,13 @@ Array [
             },
           },
           "style": "form",
+          "x-stoplight": Object {
+            "explicitProperties": Array [
+              "in",
+              "name",
+              "schema",
+            ],
+          },
         },
         Object {
           "examples": Array [],
@@ -949,6 +956,13 @@ Array [
             },
           },
           "style": "form",
+          "x-stoplight": Object {
+            "explicitProperties": Array [
+              "name",
+              "in",
+              "schema",
+            ],
+          },
         },
       ],
     },
@@ -1164,6 +1178,14 @@ Array [
             },
           },
           "style": "simple",
+          "x-stoplight": Object {
+            "explicitProperties": Array [
+              "name",
+              "in",
+              "required",
+              "schema",
+            ],
+          },
         },
       ],
       "query": Array [],

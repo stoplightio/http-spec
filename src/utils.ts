@@ -13,3 +13,7 @@ export function isEqual(left: unknown, right: unknown) {
     return;
   });
 }
+
+export function collectExplicitProperties(o: unknown) {
+  return isPlainObject(o) ? Object.keys(o).filter(word => word !== 'x-stoplight') : [];
+}
