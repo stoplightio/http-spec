@@ -122,6 +122,9 @@ export default [
           },
           examples: [],
           style: 'simple',
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
+          },
         },
       ],
       query: [],
@@ -269,6 +272,9 @@ export default [
               id: 'schema-http_header-service_abc-parameter-Some-Header-',
             },
             type: 'string',
+          },
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
           },
         },
       ],

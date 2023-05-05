@@ -709,6 +709,9 @@ describe('transformOas3Operation', () => {
             ],
             name: 'name',
             style: 'simple',
+            'x-stoplight': {
+              explicitProperties: expect.any(Array),
+            },
             schema: {
               'x-stoplight': {
                 id: expect.any(String),
@@ -802,6 +805,9 @@ describe('transformOas3Operation', () => {
               maximum: 2147483647,
               minimum: -2147483648,
               examples: ['test'],
+            },
+            'x-stoplight': {
+              explicitProperties: expect.any(Array),
             },
           },
         ],

@@ -102,6 +102,9 @@ export default {
             id: 'schema-http_header-service_abc-parameter-Some-Header-',
           },
         },
+        'x-stoplight': {
+          explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
+        },
       },
     ],
     path: [],

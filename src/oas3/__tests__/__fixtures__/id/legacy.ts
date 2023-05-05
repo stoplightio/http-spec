@@ -184,6 +184,9 @@ export default [
             type: 'string',
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
+          },
         },
       ],
       query: [
@@ -200,6 +203,9 @@ export default [
             'x-stoplight': { id: 'schema-http_query-http_operation-service_abc-get-/users/{}-summaryOnly-' },
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
+          },
         },
       ],
       cookie: [],
@@ -223,6 +229,9 @@ export default [
             type: 'integer',
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
+          },
         },
       ],
     },
@@ -404,6 +413,9 @@ export default [
             type: 'integer',
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
+          },
         },
         {
           // hash(`http_header-${parentId}-${key ?? param.name}`)
@@ -423,6 +435,9 @@ export default [
             type: 'string',
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
+          },
         },
       ],
       query: [],
@@ -445,6 +460,9 @@ export default [
             type: 'integer',
           },
           examples: [],
+          'x-stoplight': {
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
+          },
         },
       ],
     },

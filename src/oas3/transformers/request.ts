@@ -20,7 +20,7 @@ import { getComponentName, getSharedKey, syncReferenceObject } from '../../oas/r
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
 import { ArrayCallbackParameters } from '../../types';
-import { entries } from '../../utils';
+import { collectExplicitProperties, entries } from '../../utils';
 import { isRequestBodyObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 import { translateMediaTypeObject } from './content';
@@ -136,6 +136,8 @@ export const translateParameterObject = withContext<
         deprecated: parameterObject.deprecated,
         required: parameterObject.required,
         explode: parameterObject.explode,
+        allowEmptyValue: parameterObject.allowEmptyValue,
+        allowReserved: parameterObject.allowReserved,
       },
       isBoolean,
     ),
@@ -147,6 +149,10 @@ export const translateParameterObject = withContext<
       },
       isPlainObject,
     ),
+
+    'x-stoplight': {
+      explicitProperties: collectExplicitProperties(parameterObject),
+    },
   };
 });
 

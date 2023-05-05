@@ -1,5 +1,6 @@
 import type { JSONSchema7 } from 'json-schema';
 
+import { collectExplicitProperties } from '../../../../utils';
 import type { Converter } from '../types';
 
 const ranges = {
@@ -15,9 +16,8 @@ const ranges = {
 
 const createNumberFormatter = (min: number, max: number): Converter => {
   return schema => {
-    const explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
-    schema['x-stoplight'] = { ...schema['x-stoplight'] };
-    schema['x-stoplight'].explicitProperties = explicitProperties;
+    const explicitProperties = collectExplicitProperties(schema);
+    schema['x-stoplight'] = { ...schema['x-stoplight'], explicitProperties };
     schema.minimum = Math.max(asActualNumber(schema.minimum, min), min);
     schema.maximum = Math.min(asActualNumber(schema.maximum, max), max);
   };
@@ -29,9 +29,8 @@ const convertFormatFloat = createNumberFormatter(ranges.MIN_FLOAT, ranges.MAX_FL
 const convertFormatDouble = createNumberFormatter(ranges.MIN_DOUBLE, ranges.MAX_DOUBLE);
 
 const convertFormatByte: Converter = schema => {
-  const explicitProperties = Object.keys(schema).filter(word => word !== 'x-stoplight');
-  schema['x-stoplight'] = { ...schema['x-stoplight'] };
-  schema['x-stoplight'].explicitProperties = explicitProperties;
+  const explicitProperties = collectExplicitProperties(schema);
+  schema['x-stoplight'] = { ...schema['x-stoplight'], explicitProperties };
   schema.pattern = '^[\\w\\d+\\/=]*$';
 };
 
