@@ -48,9 +48,7 @@ export default {
             id: 'schema-http_header-service_abc-parameter-Some-Header-',
           },
         },
-        'x-stoplight': {
-          explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-        },
+        explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
       },
     ],
     path: [],
@@ -199,9 +197,7 @@ export default {
               },
             },
             style: 'simple',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
           },
         ],
         query: [
@@ -217,9 +213,7 @@ export default {
               },
             },
             style: 'form',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
           },
         ],
       },
@@ -316,9 +310,7 @@ export default {
               },
             },
             style: 'simple',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'schema']),
           },
           {
             $ref: '#/components/header/0',
@@ -339,9 +331,7 @@ export default {
               },
             },
             style: 'simple',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema', 'description']),
           },
         ],
         query: [],

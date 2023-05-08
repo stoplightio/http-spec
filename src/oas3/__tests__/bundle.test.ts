@@ -96,9 +96,7 @@ describe('bundleOas3Service', () => {
                     id: 'schema-http_query-http_operation-service_id-get-/repos-sort-',
                   },
                 },
-                'x-stoplight': {
-                  explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-                },
+                explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
               },
             ],
             cookie: [],
@@ -135,9 +133,7 @@ describe('bundleOas3Service', () => {
               },
             },
             key: 'org',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
           },
         ],
         query: [
@@ -156,9 +152,7 @@ describe('bundleOas3Service', () => {
               },
             },
             key: 'sort',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'description', 'in', 'required', 'schema']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'description', 'in', 'required', 'schema']),
           },
         ],
         cookie: [],
@@ -283,9 +277,7 @@ describe('bundleOas3Service', () => {
               },
             },
             style: 'simple',
-            'x-stoplight': {
-              explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-            },
+            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
           },
           {
             $ref: '#/components/header/0',

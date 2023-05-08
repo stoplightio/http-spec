@@ -122,9 +122,7 @@ export default [
           },
           examples: [],
           style: 'simple',
-          'x-stoplight': {
-            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-          },
+          explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
         },
       ],
       query: [],
@@ -273,9 +271,7 @@ export default [
             },
             type: 'string',
           },
-          'x-stoplight': {
-            explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
-          },
+          explicitProperties: expect.arrayContaining(['name', 'in', 'required', 'schema']),
         },
       ],
       path: [],
