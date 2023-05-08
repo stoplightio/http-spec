@@ -926,6 +926,11 @@ Array [
       "query": Array [
         Object {
           "examples": Array [],
+          "explicitProperties": Array [
+            "in",
+            "name",
+            "schema",
+          ],
           "id": "http_query-abc-skip",
           "name": "skip",
           "schema": Object {
@@ -936,16 +941,14 @@ Array [
             },
           },
           "style": "form",
-          "x-stoplight": Object {
-            "explicitProperties": Array [
-              "in",
-              "name",
-              "schema",
-            ],
-          },
         },
         Object {
           "examples": Array [],
+          "explicitProperties": Array [
+            "name",
+            "in",
+            "schema",
+          ],
           "id": "http_query-abc-limit",
           "name": "limit",
           "schema": Object {
@@ -956,13 +959,6 @@ Array [
             },
           },
           "style": "form",
-          "x-stoplight": Object {
-            "explicitProperties": Array [
-              "name",
-              "in",
-              "schema",
-            ],
-          },
         },
       ],
     },
@@ -1167,6 +1163,12 @@ Array [
       "path": Array [
         Object {
           "examples": Array [],
+          "explicitProperties": Array [
+            "name",
+            "in",
+            "required",
+            "schema",
+          ],
           "id": "http_path_param-abc-pet-id",
           "name": "petId",
           "required": true,
@@ -1178,14 +1180,6 @@ Array [
             },
           },
           "style": "simple",
-          "x-stoplight": Object {
-            "explicitProperties": Array [
-              "name",
-              "in",
-              "required",
-              "schema",
-            ],
-          },
         },
       ],
       "query": Array [],

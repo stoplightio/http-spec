@@ -41,17 +41,15 @@ Object {
       },
       "description": "descr",
       "examples": Array [],
+      "explicitProperties": Array [
+        "name",
+        "in",
+        "description",
+        "content",
+      ],
       "id": Any<String>,
       "name": "param-name-3",
       "style": "simple",
-      "x-stoplight": Object {
-        "explicitProperties": Array [
-          "name",
-          "in",
-          "description",
-          "content",
-        ],
-      },
     },
   ],
   "path": Array [],
@@ -64,17 +62,15 @@ Object {
       },
       "description": "descr",
       "examples": Array [],
+      "explicitProperties": Array [
+        "name",
+        "in",
+        "description",
+        "content",
+      ],
       "id": Any<String>,
       "name": "param-name-2",
       "style": "form",
-      "x-stoplight": Object {
-        "explicitProperties": Array [
-          "name",
-          "in",
-          "description",
-          "content",
-        ],
-      },
     },
     Object {
       "content": Object {
@@ -85,18 +81,16 @@ Object {
       "deprecated": true,
       "description": "descr",
       "examples": Array [],
+      "explicitProperties": Array [
+        "name",
+        "in",
+        "description",
+        "deprecated",
+        "content",
+      ],
       "id": Any<String>,
       "name": "param-name-1",
       "style": "form",
-      "x-stoplight": Object {
-        "explicitProperties": Array [
-          "name",
-          "in",
-          "description",
-          "deprecated",
-          "content",
-        ],
-      },
     },
   ],
 }

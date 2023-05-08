@@ -150,9 +150,7 @@ export const translateParameterObject = withContext<
       isPlainObject,
     ),
 
-    'x-stoplight': {
-      explicitProperties: collectExplicitProperties(parameterObject),
-    },
+    explicitProperties: collectExplicitProperties(parameterObject),
   };
 });
 
