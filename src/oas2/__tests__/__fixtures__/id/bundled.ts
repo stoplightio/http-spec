@@ -164,7 +164,7 @@ export default {
             // hash('http_query-http_operation-service_abc-get-/users/{}-summaryOnly')
             id: 'http_query-http_operation-service_abc-get-/users/{}-summaryOnly',
             name: 'summaryOnly',
-            style: 'commaDelimited',
+            style: 'unspecified',
             schema: {
               $schema: 'http://json-schema.org/draft-07/schema#',
               'x-stoplight': {
