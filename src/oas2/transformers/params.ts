@@ -38,6 +38,7 @@ import { Oas2TranslateFunction } from '../types';
 
 type QueryParameterStyle = {
   style:
+    | HttpParamStyles.Unspecified
     | HttpParamStyles.Form
     | HttpParamStyles.CommaDelimited
     | HttpParamStyles.SpaceDelimited
@@ -47,6 +48,10 @@ type QueryParameterStyle = {
 };
 
 function chooseQueryParameterStyle(parameter: DeepPartial<QueryParameter>): QueryParameterStyle {
+  if (parameter.type !== 'array') {
+    return { style: HttpParamStyles.Unspecified };
+  }
+
   switch (parameter.collectionFormat) {
     case 'csv':
       return { style: HttpParamStyles.CommaDelimited };

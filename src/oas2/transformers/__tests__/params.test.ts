@@ -423,16 +423,23 @@ describe('params.translator', () => {
     };
 
     it.each([
-      { oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
-      { oasStyle: 'ssv', expected: { style: HttpParamStyles.SpaceDelimited } },
-      { oasStyle: 'csv', expected: { style: HttpParamStyles.CommaDelimited } },
-      { oasStyle: 'tsv', expected: { style: HttpParamStyles.TabDelimited } },
-      { oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
-      { oasStyle: 'multi', expected: { style: HttpParamStyles.Form, explode: true } },
-      { oasStyle: 'invalidStyleValue', expected: { style: HttpParamStyles.CommaDelimited } },
-    ])('translate style: %o', ({ oasStyle, expected }) => {
+      { type: 'string', oasStyle: 'pipes', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'ssv', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'csv', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'tsv', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'pipes', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'multi', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'string', oasStyle: 'invalidStyleValue', expected: { style: HttpParamStyles.Unspecified } },
+      { type: 'array', oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
+      { type: 'array', oasStyle: 'ssv', expected: { style: HttpParamStyles.SpaceDelimited } },
+      { type: 'array', oasStyle: 'csv', expected: { style: HttpParamStyles.CommaDelimited } },
+      { type: 'array', oasStyle: 'tsv', expected: { style: HttpParamStyles.TabDelimited } },
+      { type: 'array', oasStyle: 'pipes', expected: { style: HttpParamStyles.PipeDelimited } },
+      { type: 'array', oasStyle: 'multi', expected: { style: HttpParamStyles.Form, explode: true } },
+      { type: 'array', oasStyle: 'invalidStyleValue', expected: { style: HttpParamStyles.CommaDelimited } },
+    ])('translate style: %o', ({ type, oasStyle, expected }) => {
       expect(
-        translateToQueryParameter({}, { ...parameter, collectionFormat: oasStyle } as QueryParameter),
+        translateToQueryParameter({}, { ...parameter, type, collectionFormat: oasStyle } as QueryParameter),
       ).toMatchObject(expected);
     });
 
