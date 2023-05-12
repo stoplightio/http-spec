@@ -235,6 +235,26 @@ describe('params.translator', () => {
       });
     });
 
+    it('should not map a body param to form data consumes', () => {
+      consumes = ['*', 'application/x-www-form-urlencoded', 'multipart/form-data'];
+
+      const results = translateToBodyParameter(
+        {},
+        {
+          in: 'body',
+          name: 'name',
+          required: true,
+          description: 'descr',
+          schema: {
+            format: 'e-mail',
+          },
+        },
+        consumes,
+      );
+      expect(results.contents?.length).toEqual(1);
+      expect(results.contents![0].mediaType).toEqual('*');
+    });
+
     describe('schema examples', () => {
       describe('given response with schema with x-examples', () => {
         it('should translate to body parameter with examples', () => {
@@ -408,6 +428,20 @@ describe('params.translator', () => {
           Object.assign({}, expectedContent, { mediaType: 'multipart/form-data' }),
         ],
       });
+    });
+
+    it('should not map a form data param to non-form data consumes', () => {
+      consumes = ['application/x-www-form-urlencoded', 'multipart/form-data', '*'];
+
+      const results = translateFromFormDataParameters(
+        {},
+        [formDataParameterString, formDataParameterArray, formDataParameterInteger],
+        consumes,
+      );
+
+      expect(results.contents?.length).toEqual(2);
+      expect(results.contents![0].mediaType).toEqual('application/x-www-form-urlencoded');
+      expect(results.contents![1].mediaType).toEqual('multipart/form-data');
     });
   });
 
