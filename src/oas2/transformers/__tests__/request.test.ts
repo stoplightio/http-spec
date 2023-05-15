@@ -9,8 +9,8 @@ import {
 import { createContext } from '../../../oas/context';
 import { translateToRequest as _translateToRequest } from '../request';
 
-const translateToRequest = (parameters: any[]) => {
-  const document = { consumes: ['*'], paths: { '/api': { get: { parameters } } } };
+const translateToRequest = (parameters: any[], consumes?: string[]) => {
+  const document = { consumes: consumes ?? ['*'], paths: { '/api': { get: { parameters } } } };
   const ctx = createContext(document);
   return _translateToRequest.call(ctx, document.paths['/api'], document.paths['/api'].get);
 };
@@ -37,7 +37,7 @@ describe('request', () => {
   });
 
   it('given single form param should translate to request with form', () => {
-    expect(translateToRequest([fakeFormParameter])).toMatchSnapshot({
+    expect(translateToRequest([fakeFormParameter], ['multipart/form-data'])).toMatchSnapshot({
       body: {
         id: expect.any(String),
         contents: [

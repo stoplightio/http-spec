@@ -47,6 +47,8 @@ type QueryParameterStyle = {
   explode?: boolean;
 };
 
+const FORM_DATA_CONSUMES = ['application/x-www-form-urlencoded', 'multipart/form-data'];
+
 function chooseQueryParameterStyle(parameter: DeepPartial<QueryParameter>): QueryParameterStyle {
   if (parameter.type !== 'array') {
     return { style: HttpParamStyles.Unspecified };
@@ -123,10 +125,12 @@ export const translateToBodyParameter = withContext<
     translateToDefaultExample.call(this, key, value),
   );
 
+  const nonFormDataConsumes = consumes.filter(c => !FORM_DATA_CONSUMES.includes(c));
+
   return {
     id,
 
-    contents: consumes.map(
+    contents: nonFormDataConsumes.map(
       withContext(mediaType => {
         return {
           id: this.generateId.httpMedia({ mediaType }),
@@ -173,10 +177,11 @@ export const translateFromFormDataParameters = withContext<
     IHttpOperationRequestBody
   >
 >(function (parameters, consumes) {
+  const formDataConsumes = consumes.filter(c => FORM_DATA_CONSUMES.includes(c));
   const finalBody: Omit<IHttpOperationRequestBody, 'contents'> & Required<Pick<IHttpOperationRequestBody, 'contents'>> =
     {
-      id: this.generateId.httpRequestBody({ consumes }),
-      contents: consumes.map(
+      id: this.generateId.httpRequestBody({ consumes: formDataConsumes }),
+      contents: formDataConsumes.map(
         withContext(mediaType => ({
           id: this.generateId.httpMedia({ mediaType }),
           mediaType,
