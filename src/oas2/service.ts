@@ -11,6 +11,7 @@ import { transformOasService } from '../oas/service';
 import { translateToComponents } from '../oas/transformers/components';
 import { translateSchemaObjectFromPair } from '../oas/transformers/schema';
 import { Oas2HttpServiceBundle, Oas2HttpServiceTransformer, OasVersion } from '../oas/types';
+import { translateToResponse } from '../oas3/transformers/responses';
 import { ArrayCallbackParameters, RefResolver } from '../types';
 import { entries } from '../utils';
 import { transformOas2Operations } from './operation';
@@ -41,6 +42,7 @@ export const bundleOas2Service: Oas2HttpServiceBundle = ({ document: _document }
     ...translateToComponents.call(ctx, OasVersion.OAS2, {
       definitions: translateSchemaObjectFromPair,
       securityDefinitions: translateSecurityScheme,
+      responses: translateToResponse,
     }),
     ...translateToSharedParameters.call(ctx, document),
   };

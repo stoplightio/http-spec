@@ -45,7 +45,16 @@ export default {
     path: [],
     query: [],
     requestBodies: [],
-    responses: [],
+    responses: [
+      {
+        id: 'http_response-service_abc-ErrorResponse',
+        key: 'ErrorResponse',
+        code: 'ErrorResponse',
+        contents: [],
+        description: 'A generic error response.',
+        headers: [],
+      },
+    ],
     schemas: [
       {
         $schema: 'http://json-schema.org/draft-07/schema#',
