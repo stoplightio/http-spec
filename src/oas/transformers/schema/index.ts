@@ -20,6 +20,18 @@ type InternalOptions = {
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
 
+function extractId(schema: unknown): string | undefined {
+  if (
+    isPlainObject(schema) &&
+    isPlainObject(schema['x-stoplight']) &&
+    typeof schema['x-stoplight']['id'] === 'string'
+  ) {
+    return schema['x-stoplight']['id'];
+  }
+
+  return;
+}
+
 // Convert from OpenAPI 2.0, OpenAPI 3.0 `SchemaObject` or JSON Schema Draft4/6 to JSON Schema Draft 7
 // This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.
 export const translateSchemaObject = withContext<
@@ -48,8 +60,10 @@ export const translateSchemaObjectFromPair = withContext<
     if (!isReferenceObject(schema)) return {};
 
     const converted = convertSchema(this.document, schema, this.references);
+    const id = extractId(converted) ?? this.generateId.schema({ key: key ?? '' });
     converted['x-stoplight'] = {
-      id: this.generateId.schema({ key: key ?? '' }),
+      ...(isPlainObject(converted['x-stoplight']) && converted['x-stoplight']),
+      id,
     };
     return converted;
   }
@@ -61,9 +75,8 @@ export const translateSchemaObjectFromPair = withContext<
     return cached;
   }
 
-  const id = this.generateId.schema({ key: key ?? '' });
-
   cached = convertSchema(this.document, maybeSchemaObject, this.references);
+  const id = extractId(cached) ?? this.generateId.schema({ key: key ?? '' });
   cached['x-stoplight'] = {
     ...(isPlainObject(cached['x-stoplight']) && cached['x-stoplight']),
     id,

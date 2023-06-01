@@ -209,6 +209,14 @@ export default {
         },
         required: ['id', 'name'],
       },
+      {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        'x-stoplight': {
+          id: 'icwajdhukp1rr',
+        },
+        key: 'Entity',
+        title: 'Entity',
+      },
     ],
     securitySchemes: [],
   },

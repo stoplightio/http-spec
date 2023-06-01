@@ -71,6 +71,12 @@
           }
         },
         "required": ["id", "name"]
+      },
+      "Entity": {
+        "x-stoplight": {
+          "id": "icwajdhukp1rr"
+        },
+        "title": "Entity"
       }
     },
     "headers": {

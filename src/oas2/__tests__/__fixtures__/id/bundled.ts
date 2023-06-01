@@ -118,6 +118,14 @@ export default {
           id: 'schema-service_abc-Error',
         },
       },
+      {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        'x-stoplight': {
+          id: 'icwajdhukp1rr',
+        },
+        key: 'Entity',
+        title: 'Entity',
+      },
     ],
     securitySchemes: [
       {
