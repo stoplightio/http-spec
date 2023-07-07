@@ -7,6 +7,7 @@ import type { Spec } from 'swagger-schema-official';
 import { isBoolean, isString } from '../guards';
 import type { Fragment, HttpOperationTransformer } from '../types';
 import { TransformerContext, TranslateFunction } from '../types';
+import { extractId } from '../utils';
 import { getExtensions } from './accessors';
 import { translateToTags } from './tags';
 import { translateToSecurityDeclarationType } from './transformers';
@@ -60,15 +61,19 @@ export const transformOasOperation: TranslateFunction<
   this.ids.path = this.generateId.httpPath({ parentId: serviceId, path });
   let operationId: string;
   if (this.context === 'callback') {
-    operationId = this.ids.operation = this.generateId.httpCallbackOperation({
-      parentId: serviceId,
-      method,
-      path,
-    });
+    operationId = this.ids.operation =
+      extractId(operation) ??
+      this.generateId.httpCallbackOperation({
+        parentId: serviceId,
+        method,
+        path,
+      });
   } else {
-    operationId = this.ids.operation = this.generateId.httpOperation({ parentId: serviceId, method, path });
+    operationId = this.ids.operation =
+      extractId(operation) ?? this.generateId.httpOperation({ parentId: serviceId, method, path });
   }
 
+  this.parentId = operationId;
   this.context = 'operation';
 
   return {
