@@ -6,6 +6,7 @@ import type { Spec } from 'swagger-schema-official';
 
 import { withContext } from '../../../context';
 import type { Fragment, TranslateFunction } from '../../../types';
+import { extractId } from '../../../utils';
 import { isReferenceObject } from '../../guards';
 import { getSharedKey, syncReferenceObject } from '../../resolver';
 import keywords from './keywords';
@@ -19,18 +20,6 @@ type InternalOptions = {
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
-
-function extractId(schema: unknown): string | undefined {
-  if (
-    isPlainObject(schema) &&
-    isPlainObject(schema['x-stoplight']) &&
-    typeof schema['x-stoplight']['id'] === 'string'
-  ) {
-    return schema['x-stoplight']['id'];
-  }
-
-  return;
-}
 
 // Convert from OpenAPI 2.0, OpenAPI 3.0 `SchemaObject` or JSON Schema Draft4/6 to JSON Schema Draft 7
 // This converter shouldn't make any differences to Schema objects defined in OpenAPI 3.1, excepts when jsonSchemaDialect is provided.

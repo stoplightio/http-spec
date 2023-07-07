@@ -17,3 +17,15 @@ export function isEqual(left: unknown, right: unknown) {
 export function collectExplicitProperties(o: unknown) {
   return isPlainObject(o) ? Object.keys(o).filter(word => word !== 'x-stoplight') : [];
 }
+
+export function extractId(schema: unknown): string | undefined {
+  if (
+    isPlainObject(schema) &&
+    isPlainObject(schema['x-stoplight']) &&
+    typeof schema['x-stoplight']['id'] === 'string'
+  ) {
+    return schema['x-stoplight']['id'];
+  }
+
+  return;
+}
