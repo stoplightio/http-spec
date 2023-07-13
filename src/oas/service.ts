@@ -1,12 +1,13 @@
 import { isPlainObject } from '@stoplight/json';
 import { DeepPartial, IHttpService } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
 import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
+import pickBy = require('lodash.pickby');
 
 import { isBoolean, isNonNullable, isString } from '../guards';
 import { TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
+import { toExternalDocs } from './externalDocs';
 import { hasXLogo } from './guards';
 import { translateTagDefinition } from './tags';
 import { translateLogo } from './transformers/translateLogo';
@@ -46,6 +47,7 @@ export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> |
         isBoolean,
       ),
 
+      ...toExternalDocs(document.externalDocs),
       extensions: getExtensions(document),
     };
 
