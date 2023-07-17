@@ -162,4 +162,85 @@ describe('oas operation', () => {
       },
     });
   });
+  it('uses existing stableId', () => {
+    const document = {
+      openapi: '3.1.0',
+      'x-stoplight': {
+        id: 'tohfdtsy98xjv',
+      },
+      info: {
+        title: '1st',
+        version: '1.0',
+      },
+      paths: {
+        '/test': {
+          get: {
+            summary: 'Your GET endpoint',
+            tags: [],
+            responses: {},
+            operationId: 'get-test',
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {},
+                  },
+                },
+              },
+            },
+            'x-stoplight': {
+              id: 't44kj45klj46v',
+            },
+          },
+        },
+      },
+    };
+    const result = transformOas3Operations(document);
+
+    expect(result).toStrictEqual([
+      {
+        id: 't44kj45klj46v',
+        iid: 'get-test',
+        method: 'get',
+        path: '/test',
+        request: {
+          body: {
+            id: 'http_request_body-t44kj45klj46v',
+            contents: [
+              {
+                id: 'http_media-http_request_body-t44kj45klj46v-application/json',
+                mediaType: 'application/json',
+                encodings: [],
+                examples: [],
+                schema: {
+                  $schema: 'http://json-schema.org/draft-07/schema#',
+                  type: 'object',
+                  properties: {},
+                  'x-stoplight': {
+                    id: 'schema-http_media-http_request_body-t44kj45klj46v-application/json-',
+                  },
+                },
+              },
+            ],
+          },
+          cookie: [],
+          headers: [],
+          path: [],
+          query: [],
+        },
+        extensions: {
+          'x-stoplight': {
+            id: 't44kj45klj46v',
+          },
+        },
+        responses: [],
+        security: [],
+        securityDeclarationType: 'inheritedFromService',
+        servers: [],
+        summary: 'Your GET endpoint',
+        tags: [],
+      },
+    ]);
+  });
 });
