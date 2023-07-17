@@ -14,7 +14,7 @@ Stoplight needs a way to interact with these documents in a standardized way, an
 
 This repository contains *exclusively* converters functions that take OpenAPI v2, OpenAPI v3.x, or Postman Collection documents and transforms them into the [http-spec interface](https://github.com/stoplightio/types/blob/master/src/http-spec.ts).
 
-You can explore the whole structure by looking at the [IHttpService](https://github.com/stoplightio/types/blob/master/src/http-spec.ts#L10) definition and checking out its descendands. You'll probably notice that it resembles a lot the current OpenAPI 3.x specification, and that's on purpose. OpenAPI 3.0 has first support and we gracefully upgrade/downgrade the other specification formats to it.
+You can explore the whole structure by looking at the [IHttpService](https://github.com/stoplightio/types/blob/master/src/http-spec.ts#L10) definition and checking out its descendants. You'll probably notice that it resembles a lot the current OpenAPI 3.x specification, and that's on purpose. OpenAPI 3.0 has first support and we gracefully upgrade/downgrade the other specification formats to it.
 
 ## How do I write a converter?
 
@@ -25,6 +25,63 @@ If you would like to add support for another API description format, like RAML, 
 3. Let the TypeScript errors guide you while filling out the missing fields (such as Security Schemes, Servers)
 4. Create a function that's able to return an array of `IHttpOperation` from your own input
 5. Profit
+
+## When should I use `withContext`?
+
+If a given fragment of a document needs to be represented as a standalone node, and as such an id is needed, you should wrap a converter with `withContext`.
+`withContext` ensures `parentId` will be set properly to all descendant converters - it's important to call `this.generateId` first, though.
+
+Example:
+
+```ts
+import { isPlainObject } from '@stoplight/json';
+import type { Optional } from '@stoplight/types';
+
+import { withContext } from './context';
+import { isNonNullable } from './guards';
+import type { ArrayCallbackParameters, TranslateFunction } from './types';
+
+type Item = {
+  id: string;
+  value: number;
+};
+
+type Object = {
+  id: string;
+  name: string;
+  items: Item[];
+};
+
+export const translateItem = withContext<
+  TranslateFunction<
+    // Oas2TranslateFunction & Oas3TranslateFunction are available too
+    Record<string, unknown>, // type of the entire doc, should be skipped whe Oas{2,3} TranslateFunction is used
+    ArrayCallbackParameters<[object: unknown]>, // fn parameters, ArrayCallbackParameters is a shorthand
+    Optional<Item> // fn return type
+  >
+>(function (object, index) {
+  if (!isPlainObject(object)) return;
+
+  const id = this.generateId(`my-item-${index}`); // can also be any of src/generators.ts like this.generateId.httpQuery({ keyOrName: 'whatever' })
+  return {
+    id,
+    value: index,
+  };
+});
+
+export const translateObject = withContext<
+  TranslateFunction<Record<string, unknown>, [object: unknown], Optional<Object>>
+>(function (object) {
+  if (!isPlainObject(object)) return;
+
+  const id = this.generateId('my_id'); // can also be any of src/generators.ts like this.generateId.httpQuery({ keyOrName: 'whatever' })
+  return {
+    id,
+    name: 'some-name',
+    items: Array.isArray(object.items) ? object.items.map(translateItem, this).filter(isNonNullable) : [],
+  };
+});
+```
 
 ## IHttpOperation merger
 
