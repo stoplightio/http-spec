@@ -1,14 +1,15 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, IHttpOperation } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
 import type { OpenAPIObject, OperationObject, PathsObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
+import pickBy = require('lodash.pickby');
 
 import { isBoolean, isString } from '../guards';
 import type { Fragment, HttpOperationTransformer } from '../types';
 import { TransformerContext, TranslateFunction } from '../types';
 import { extractId } from '../utils';
 import { getExtensions } from './accessors';
+import { toExternalDocs } from './externalDocs';
 import { translateToTags } from './tags';
 import { translateToSecurityDeclarationType } from './transformers';
 
@@ -103,5 +104,6 @@ export const transformOasOperation: TranslateFunction<
     ),
 
     securityDeclarationType: translateToSecurityDeclarationType(operation),
+    ...toExternalDocs(operation.externalDocs),
   };
 };

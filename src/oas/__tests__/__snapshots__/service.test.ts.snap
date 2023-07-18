@@ -14,6 +14,10 @@ Object {
       "id": "abc",
     },
   },
+  "externalDocs": Object {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io",
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
@@ -64,6 +68,10 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "externalDocs": Object {
+        "description": "Find out more",
+        "url": "http://swagger.io",
+      },
       "id": "tag-pet",
       "name": "pet",
     },
@@ -74,6 +82,10 @@ Object {
     },
     Object {
       "description": "Operations about user",
+      "externalDocs": Object {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io",
+      },
       "id": "tag-user",
       "name": "user",
     },
@@ -104,6 +116,10 @@ Object {
       "id": "abc",
     },
   },
+  "externalDocs": Object {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io",
+  },
   "id": "abc",
   "license": Object {
     "name": "Apache 2.0",
@@ -154,6 +170,10 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "externalDocs": Object {
+        "description": "Find out more",
+        "url": "http://swagger.io",
+      },
       "id": "tag-pet",
       "name": "pet",
     },
@@ -164,6 +184,10 @@ Object {
     },
     Object {
       "description": "Operations about user",
+      "externalDocs": Object {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io",
+      },
       "id": "tag-user",
       "name": "user",
     },
