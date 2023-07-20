@@ -45,6 +45,7 @@ export const bundleOas2Service: Oas2HttpServiceBundle = ({ document: _document }
       responses: translateToResponse,
     }),
     ...translateToSharedParameters.call(ctx, document),
+    callbacks: [],
   };
 
   const operations = transformOas2Operations(document, ctx) as unknown as IHttpOperation<true>[];

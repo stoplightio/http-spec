@@ -92,6 +92,9 @@ describe('translateToCallbacks', () => {
           },
         },
       },
+      petReturned: {
+        $ref: 'target.yaml#/components/callbacks/SharedCallback1',
+      },
     };
     expect(translateToCallbacks({}, callbackEntries)).toStrictEqual([
       {
@@ -249,6 +252,10 @@ describe('translateToCallbacks', () => {
         securityDeclarationType: 'inheritedFromService',
         servers: [],
         tags: [],
+      },
+      {
+        callbackName: 'petReturned',
+        $ref: 'target.yaml#/components/callbacks/SharedCallback1',
       },
     ]);
   });

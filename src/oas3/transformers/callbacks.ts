@@ -1,17 +1,24 @@
-import type { IHttpCallbackOperation } from '@stoplight/types';
+import type { IHttpCallbackOperation, IHttpKeyedReference } from '@stoplight/types';
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { createContext } from '../../oas/context';
+import { isReferenceObject } from '../../oas/guards';
 import { entries } from '../../utils';
 import { transformOas3Operation } from '../operation';
 import type { Oas3TranslateFunction } from '../types';
 
-export const translateToCallbacks: Oas3TranslateFunction<[callbacks: unknown], IHttpCallbackOperation[] | undefined> =
-  function (callbacks) {
-    const callbackEntries = entries(callbacks);
-    if (!callbackEntries.length) return;
+export const translateToCallbacks: Oas3TranslateFunction<
+  [callbacks: unknown],
+  (IHttpCallbackOperation | IHttpKeyedReference)[] | undefined
+> = function (callbacks) {
+  const callbackEntries = entries(callbacks);
+  if (!callbackEntries.length) return;
 
-    return callbackEntries.reduce((results: IHttpCallbackOperation[], [callbackName, path2Methods]) => {
+  return callbackEntries.reduce(
+    (results: (IHttpCallbackOperation | IHttpKeyedReference)[], [callbackName, path2Methods]) => {
+      if (isReferenceObject(path2Methods)) {
+        results.push({ key: callbackName, ...path2Methods });
+      }
       for (const [path, method2Op] of entries(path2Methods)) {
         for (const [method, op] of entries(method2Op as { [key: string]: {} })) {
           const document: Partial<OpenAPIObject> = {
@@ -31,11 +38,13 @@ export const translateToCallbacks: Oas3TranslateFunction<[callbacks: unknown], I
               path,
               ctx,
             }),
-            callbackName,
+            key: callbackName,
           });
         }
       }
 
       return results;
-    }, []);
-  };
+    },
+    [],
+  );
+};
