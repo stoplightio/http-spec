@@ -6,6 +6,7 @@ import { withContext } from '../context';
 import { isNonNullable, isSerializablePrimitive, isString } from '../guards';
 import type { ArrayCallbackParameters, Fragment, TranslateFunction } from '../types';
 import { getExtensions } from './accessors';
+import { toExternalDocs } from './externalDocs';
 
 const translateTag = withContext<TranslateFunction<Fragment, ArrayCallbackParameters<unknown>, Optional<INodeTag>>>(
   function (tag) {
@@ -20,6 +21,10 @@ const translateTag = withContext<TranslateFunction<Fragment, ArrayCallbackParame
   },
 );
 
+/**
+ * translate a tag _definition_ to http-spec (e.g., at the top level of an
+ * OpenAPI document)
+ */
 export const translateTagDefinition: TranslateFunction<
   Fragment,
   ArrayCallbackParameters<unknown>,
@@ -43,10 +48,15 @@ export const translateTagDefinition: TranslateFunction<
       isString,
     ),
 
+    ...toExternalDocs(tag.externalDocs),
     ...extensions,
   };
 };
 
+/**
+ * translate a _reference_ to a tag to http-spec (e.g., at the operation level
+ * of an OpenAPI document)
+ */
 export const translateToTags: TranslateFunction<Fragment, [tags: unknown], INodeTag[]> = function (tags) {
   return Array.isArray(tags) ? tags.map(translateTag, this).filter(isNonNullable) : [];
 };
