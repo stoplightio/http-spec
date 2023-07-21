@@ -67,6 +67,7 @@ export default {
     },
   ],
   components: {
+    callbacks: [],
     cookie: [],
     examples: [
       {

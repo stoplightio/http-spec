@@ -98,7 +98,7 @@ describe('translateToCallbacks', () => {
     };
     expect(translateToCallbacks({}, callbackEntries)).toStrictEqual([
       {
-        callbackName: 'newPetWebhook',
+        key: 'newPetWebhook',
         extensions: {},
         id: '3245690b6a7fc',
         method: 'post',
@@ -150,7 +150,7 @@ describe('translateToCallbacks', () => {
         tags: [],
       },
       {
-        callbackName: 'newPetWebhook',
+        key: 'newPetWebhook',
         extensions: {},
         id: '07041d5723f4a',
         method: 'post',
@@ -202,7 +202,7 @@ describe('translateToCallbacks', () => {
         tags: [],
       },
       {
-        callbackName: 'petAdopted',
+        key: 'petAdopted',
         extensions: {},
         id: '2333951a518f9',
         method: 'post',
@@ -254,7 +254,7 @@ describe('translateToCallbacks', () => {
         tags: [],
       },
       {
-        callbackName: 'petReturned',
+        key: 'petReturned',
         $ref: 'target.yaml#/components/callbacks/SharedCallback1',
       },
     ]);

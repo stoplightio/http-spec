@@ -4,10 +4,10 @@ exports[`transformOas3Operation callback 1`] = `
 Object {
   "callbacks": Array [
     Object {
-      "callbackName": "myCallback",
       "extensions": Object {},
       "id": Any<String>,
       "iid": "cbId",
+      "key": "myCallback",
       "method": "post",
       "path": "http://example.com?transactionId={$request.body#/id}",
       "request": Object {
