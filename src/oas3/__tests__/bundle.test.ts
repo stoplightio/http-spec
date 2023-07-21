@@ -113,6 +113,7 @@ describe('bundleOas3Service', () => {
         },
       ],
       components: {
+        callbacks: [],
         responses: [],
         schemas: [],
         requestBodies: [],
@@ -260,6 +261,7 @@ describe('bundleOas3Service', () => {
       }),
     ).toStrictEqual({
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [
@@ -458,6 +460,7 @@ describe('bundleOas3Service', () => {
       version: '',
       extensions: {},
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],
@@ -593,6 +596,7 @@ describe('bundleOas3Service', () => {
       version: '',
       extensions: {},
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],
@@ -720,6 +724,7 @@ describe('bundleOas3Service', () => {
       version: '',
       extensions: {},
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],
@@ -862,6 +867,7 @@ describe('bundleOas3Service', () => {
         },
       ],
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],

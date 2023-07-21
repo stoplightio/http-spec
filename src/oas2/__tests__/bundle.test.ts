@@ -159,6 +159,7 @@ describe('bundleOas2Service', () => {
         },
       ],
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],
@@ -278,6 +279,7 @@ describe('bundleOas2Service', () => {
         },
       ],
       components: {
+        callbacks: [],
         cookie: [],
         examples: [],
         header: [],
