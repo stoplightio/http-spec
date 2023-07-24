@@ -174,7 +174,7 @@ describe('bundleOas2Service', () => {
   });
 
   it.each(fs.readdirSync(path.join(__dirname, './__fixtures__')))(
-    'given %s, should generate valid output',
+    'given blah, should generate valid output',
     async name => {
       const document = JSON.parse(
         await fs.promises.readFile(path.join(__dirname, './__fixtures__', name, 'input.json'), 'utf8'),

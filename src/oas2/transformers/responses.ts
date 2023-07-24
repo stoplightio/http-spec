@@ -1,14 +1,21 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, IHttpOperationResponse, IMediaTypeContent, Optional } from '@stoplight/types';
+import type {
+  DeepPartial,
+  IBundledHttpService,
+  IHttpOperationResponse,
+  IMediaTypeContent,
+  Optional,
+} from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { Operation, Reference } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
 import { isReferenceObject } from '../../oas/guards';
-import { getSharedKey } from '../../oas/resolver';
+import { getSharedKey, setSharedKey } from '../../oas/resolver';
 import { translateToDefaultExample } from '../../oas/transformers/examples';
 import { translateSchemaObject } from '../../oas/transformers/schema';
+import { Fragment } from '../../types';
 import { entries } from '../../utils';
 import { getExamplesFromSchema, getProduces } from '../accessors';
 import { isResponseObject } from '../guards';
@@ -91,4 +98,21 @@ export const translateToResponses: Oas2TranslateFunction<
   return entries(operation.responses)
     .map(([statusCode, response]) => translateToResponse.call(this, produces, statusCode, response))
     .filter(isNonNullable);
+};
+
+type ResponsesComponents = Pick<IBundledHttpService['components'], 'responses'>;
+export const translateToSharedResponses: Oas2TranslateFunction<[root: Fragment], ResponsesComponents> = function (
+  root,
+) {
+  const sharedResponses: ResponsesComponents = {
+    responses: [],
+  };
+  for (const [key, value] of entries(root.responses)) {
+    setSharedKey(value, key);
+    sharedResponses.responses.push({
+      key,
+      ...(translateToResponse.call(this, ['application/x-stoplight-placeholder'], key, value) as any),
+    });
+  }
+  return sharedResponses;
 };

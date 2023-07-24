@@ -48,10 +48,28 @@ export default {
     requestBodies: [],
     responses: [
       {
-        id: 'http_response-service_abc-ErrorResponse',
+        id: 'http_response-service_abc-ErrorResponse-application/x-stoplight-placeholder',
         key: 'ErrorResponse',
         code: 'ErrorResponse',
-        contents: [],
+        contents: [
+          {
+            examples: [],
+            id: 'http_media-http_response-service_abc-ErrorResponse-application/x-stoplight-placeholder-application/x-stoplight-placeholder',
+            mediaType: 'application/x-stoplight-placeholder',
+            schema: {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                error: {
+                  $ref: '#/components/schemas/3',
+                },
+              },
+              type: 'object',
+              'x-stoplight': {
+                id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/x-stoplight-placeholder-application/x-stoplight-placeholder-',
+              },
+            },
+          },
+        ],
         description: 'A generic error response.',
         headers: [],
       },
@@ -230,7 +248,7 @@ export default {
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 // hash('schema-http_media-http_response-service_abc-ErrorResponse-application/json-application/json-')
                 'x-stoplight': {
-                  id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/json-application/json-',
+                  id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/x-stoplight-placeholder-application/x-stoplight-placeholder-',
                 },
                 type: 'object',
                 properties: {
@@ -362,7 +380,7 @@ export default {
                 $schema: 'http://json-schema.org/draft-07/schema#',
                 // hash('schema-http_media-http_response-service_abc-ErrorResponse-application/json-application/json-')
                 'x-stoplight': {
-                  id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/json-application/json-',
+                  id: 'schema-http_media-http_response-service_abc-ErrorResponse-application/x-stoplight-placeholder-application/x-stoplight-placeholder-',
                 },
                 type: 'object',
                 properties: {
