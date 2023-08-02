@@ -15,10 +15,13 @@ export function toExternalDocs(externalDocs: any): { externalDocs?: IExternalDoc
     return {};
   }
 
+  const description = getDescription(externalDocs);
+  const descriptionProp = description ? { description } : {};
+
   return {
     externalDocs: {
       url,
-      description: getDescription(externalDocs),
+      ...descriptionProp,
     },
   };
 }
