@@ -18,7 +18,7 @@ export const translateToResponse = withContext<
     Optional<IHttpOperationResponse<true> | (Pick<IHttpOperationResponse, 'code'> & Reference)>
   >
 >(function ([statusCode, response]) {
-  const maybeResponseObject = this.maybeResolveLocalRef(response);
+  const maybeResponseObject = this.maybeResolveLocalRef(response) ?? response;
 
   if (isReferenceObject(maybeResponseObject)) {
     (maybeResponseObject as Pick<IHttpOperationResponse, 'code'> & Reference).code = statusCode;
