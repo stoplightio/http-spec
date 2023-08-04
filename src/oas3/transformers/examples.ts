@@ -15,7 +15,7 @@ export const translateToExample = withContext<
     Optional<INodeExample | INodeExternalExample | ({ key: string } & Reference)>
   >
 >(function ([key, example]) {
-  const maybeExample = this.maybeResolveLocalRef(example);
+  const maybeExample = this.maybeResolveLocalRef(example) ?? example;
 
   if (!isPlainObject(maybeExample)) return;
   if (isReferenceObject(maybeExample)) {

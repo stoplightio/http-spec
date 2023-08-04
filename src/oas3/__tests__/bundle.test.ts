@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { isReferenceObject } from 'openapi3-ts';
 import * as path from 'path';
 
 import { setSkipHashing } from '../../hash';
@@ -1046,5 +1047,53 @@ describe('bundleOas3Service', () => {
         },
       ]),
     );
+  });
+
+  it('should not drop example if it has an external reference', () => {
+    const res = bundleOas3Service({
+      document: {
+        openapi: '3.0.0',
+        info: {
+          version: '0.0.1',
+          title: 'ref source spec',
+        },
+        paths: {
+          '/path_refToComponents': {
+            post: {
+              operationId: 'create_path_refToComponents',
+              responses: {
+                '200': {
+                  content: {
+                    'application/json': {
+                      type: 'object',
+                      examples: {
+                        firstExample: { $ref: '#/components/examples/SharedExample1' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        components: {
+          examples: {
+            SharedExample1: {
+              $ref: 'target.yaml#/components/examples/SharedExample1',
+            },
+          },
+        },
+      },
+    });
+
+    const response = res.operations[0].responses[0];
+    if (isReferenceObject(response)) fail('should be a response');
+
+    expect(response.contents?.[0].examples).toStrictEqual([
+      {
+        key: 'firstExample',
+        $ref: '#/components/examples/SharedExample1',
+      },
+    ]);
   });
 });
