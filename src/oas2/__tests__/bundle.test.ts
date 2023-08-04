@@ -328,4 +328,49 @@ describe('bundleOas2Service', () => {
       ],
     });
   });
+
+  it('should not drop operation response if it has an external reference', () => {
+    const res = bundleOas2Service({
+      document: {
+        swagger: '2.0',
+        info: {
+          title: 'info title',
+          description: 'info description',
+        },
+        host: 'host.com',
+        basePath: '/',
+        schemes: ['http'],
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        paths: {
+          '/path_refToComponents': {
+            post: {
+              operationId: 'path_refToComponents',
+              responses: {
+                '200': {
+                  $ref: '#/responses/SharedResponse1',
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          SharedResponse1: {
+            $ref: 'target.yaml#/responses/SharedResponse1',
+            code: 'SharedResponse1',
+          },
+        },
+      },
+    });
+
+    expect(res.operations[0].responses).toHaveLength(1);
+    expect(res.operations[0].responses).toEqual(
+      expect.arrayContaining([
+        {
+          $ref: '#/responses/SharedResponse1',
+          code: '200',
+        },
+      ]),
+    );
+  });
 });
