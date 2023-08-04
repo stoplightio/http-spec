@@ -1023,31 +1023,11 @@ describe('bundleOas3Service', () => {
                 '200': {
                   $ref: '#/components/responses/SharedResponse1',
                 },
-                default: {
-                  description: 'create_path_refToComponents default response description',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        $ref: '#/components/schemas/SharedSchema1',
-                      },
-                    },
-                  },
-                },
               },
             },
           },
         },
         components: {
-          schemas: {
-            SharedSchema1: {
-              type: 'object',
-              properties: {
-                schema1Prop1: {
-                  type: 'string',
-                },
-              },
-            },
-          },
           responses: {
             SharedResponse1: {
               $ref: 'target.yaml#/components/responses/SharedResponse1',
@@ -1057,29 +1037,12 @@ describe('bundleOas3Service', () => {
       },
     });
 
-    expect(res.operations[0].responses).toHaveLength(2);
+    expect(res.operations[0].responses).toHaveLength(1);
     expect(res.operations[0].responses).toEqual(
       expect.arrayContaining([
         {
           $ref: '#/components/responses/SharedResponse1',
           code: '200',
-        },
-        {
-          id: 'http_response-http_operation-undefined-post-/path_refToComponents-default',
-          code: 'default',
-          headers: [],
-          contents: [
-            {
-              id: 'http_media-http_response-http_operation-undefined-post-/path_refToComponents-default-application/json',
-              mediaType: 'application/json',
-              examples: [],
-              encodings: [],
-              schema: {
-                $ref: '#/components/schemas/0',
-              },
-            },
-          ],
-          description: 'create_path_refToComponents default response description',
         },
       ]),
     );

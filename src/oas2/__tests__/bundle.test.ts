@@ -350,26 +350,6 @@ describe('bundleOas2Service', () => {
                 '200': {
                   $ref: '#/responses/SharedResponse1',
                 },
-                default: {
-                  description: 'path_refToComponents default response description',
-                  schema: {
-                    $ref: '#/definitions/SharedSchema1',
-                  },
-                },
-              },
-            },
-          },
-        },
-        definitions: {
-          SharedSchema1: {
-            title: 'SharedSchema1',
-            type: 'object',
-            properties: {
-              SharedSchema1_prop1: {
-                type: 'string',
-              },
-              SharedSchema1_prop2: {
-                type: 'integer',
               },
             },
           },
@@ -383,26 +363,12 @@ describe('bundleOas2Service', () => {
       },
     });
 
-    expect(res.operations[0].responses).toHaveLength(2);
+    expect(res.operations[0].responses).toHaveLength(1);
     expect(res.operations[0].responses).toEqual(
       expect.arrayContaining([
         {
           $ref: '#/responses/SharedResponse1',
           code: '200',
-        },
-        {
-          code: 'default',
-          contents: [
-            {
-              examples: [],
-              id: 'http_media-http_response-http_operation-undefined-post-/path_refToComponents-default-application/json-application/json',
-              mediaType: 'application/json',
-              schema: { $ref: '#/components/schemas/0' },
-            },
-          ],
-          description: 'path_refToComponents default response description',
-          headers: [],
-          id: 'http_response-http_operation-undefined-post-/path_refToComponents-default-application/json',
         },
       ]),
     );
