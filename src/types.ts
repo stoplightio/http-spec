@@ -29,6 +29,8 @@ export interface ITransformOperationOpts<T extends Fragment> {
 
 export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;
 
+export type HttpSecurityKind = 'requirement' | 'scheme';
+
 export type ArrayCallbackParameters<T> = [T, number, T[]];
 
 export type AvailableContext = 'service' | 'path' | 'operation' | 'callback';
