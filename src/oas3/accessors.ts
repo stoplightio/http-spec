@@ -1,7 +1,7 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, Dictionary, HttpSecurityScheme, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
-import type { OpenAPIObject } from 'openapi3-ts';
+import type { OAuthFlowObject, OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';
 import { getExtensions } from '../oas/accessors';
@@ -55,4 +55,26 @@ export function getSecurities(
       })
       .filter(isNonNullable);
   });
+}
+
+/** Collects scopes for each flow in a way that can be used to uniquely identify a security requirement. */
+export function getScopeKeys(scheme: Omit<SecuritySchemeObject, 'type'>): string[] | undefined {
+  if (!scheme.flows) {
+    return undefined;
+  }
+
+  const scopes: string[] = [];
+
+  function collectScopes(flowType: string, flow?: OAuthFlowObject) {
+    for (const scope of Object.keys(flow?.scopes ?? {})) {
+      scopes.push(`${flowType}::${scope}`);
+    }
+  }
+
+  collectScopes('implicit', scheme.flows.implicit);
+  collectScopes('password', scheme.flows.password);
+  collectScopes('clientCredentials', scheme.flows.clientCredentials);
+  collectScopes('authorizationCode', scheme.flows.authorizationCode);
+
+  return scopes;
 }

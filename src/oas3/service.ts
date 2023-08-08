@@ -126,8 +126,8 @@ export const transformOas3Service: Oas3HttpServiceTransformer = ({
 
 const translateSecurityScheme = withContext<
   Oas3TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<HttpSecurityScheme>>
->(function ([key, definition]) {
+>(function ([key, definition], index) {
   if (!isSecurityScheme(definition)) return;
 
-  return translateToSingleSecurity.call(this, [key, definition]);
+  return translateToSingleSecurity.call(this, 'scheme', [key, definition], index, []);
 });

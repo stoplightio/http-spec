@@ -6,31 +6,43 @@ import type { SecuritySchemeObject } from 'openapi3-ts';
 import { withContext } from '../../context';
 import { isNonNullable } from '../../guards';
 import { getExtensions } from '../../oas/accessors';
-import { ArrayCallbackParameters } from '../../types';
-import { getSecurities } from '../accessors';
+import { ArrayCallbackParameters, HttpSecurityKind } from '../../types';
+import { getScopeKeys, getSecurities } from '../accessors';
 import { isOAuthFlowObject } from '../guards';
 import { Oas3TranslateFunction } from '../types';
 
-export const translateToSecurities: Oas3TranslateFunction<[operationSecurities: unknown], HttpSecurityScheme[][]> =
-  function (operationSecurities) {
-    this.context = 'service';
-    const securities = getSecurities(this.document, operationSecurities);
+export const translateToSecurities: Oas3TranslateFunction<
+  [operationSecurities: unknown, kind: HttpSecurityKind],
+  HttpSecurityScheme[][]
+> = function (operationSecurities, kind) {
+  this.context = 'service';
+  const securities = getSecurities(this.document, operationSecurities);
 
-    return securities.map(security => security.map(translateToSingleSecurity, this).filter(isNonNullable));
-  };
+  return securities.map(security => security.map(translateToSingleSecurity.bind(this, kind)).filter(isNonNullable));
+};
 
 export const translateToSingleSecurity = withContext<
   Oas3TranslateFunction<
     [
-      ArrayCallbackParameters<
+      HttpSecurityKind,
+      ...ArrayCallbackParameters<
         [key: string, security: SecuritySchemeObject | (Omit<SecuritySchemeObject, 'type'> & { type: 'mutualTLS' })]
-      >[0],
+      >,
     ],
     Optional<HttpSecurityScheme>
   >
->(function ([key, securityScheme]) {
+>(function (kind, [key, securityScheme], index) {
   const baseObject: { id: string; key: string; description?: string; extensions: Extensions } = {
-    id: this.generateId.httpSecurity({ keyOrName: key }),
+    id: this.generateId.httpSecurity({
+      keyOrName: key,
+      kind,
+      ...(kind === 'requirement'
+        ? {
+            index,
+            scopeKeys: getScopeKeys(securityScheme),
+          }
+        : {}),
+    }),
     key,
     extensions: getExtensions(securityScheme),
   };

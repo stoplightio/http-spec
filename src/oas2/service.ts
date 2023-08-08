@@ -123,8 +123,8 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document, ctx
 
 const translateSecurityScheme = withContext<
   Oas2TranslateFunction<ArrayCallbackParameters<[name: string, scheme: unknown]>, Optional<HttpSecurityScheme>>
->(function ([key, definition]) {
+>(function ([key, definition], index) {
   if (!isPlainObject(definition)) return;
 
-  return translateToSingleSecurity.call(this, { ...definition, key });
+  return translateToSingleSecurity.call(this, 'scheme', { ...definition, key }, index, []);
 });

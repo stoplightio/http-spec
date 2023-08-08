@@ -20,6 +20,7 @@ describe('securities', () => {
             },
           },
           [{ 'invalid-security': [] }],
+          'requirement',
         ),
       ).toEqual([[]]);
     });
@@ -36,6 +37,7 @@ describe('securities', () => {
             },
           },
           [{ 'basic-security': [] }],
+          'requirement',
         ),
       ).toEqual([
         [
@@ -65,6 +67,7 @@ describe('securities', () => {
             },
           },
           [{ 'apiKey-security': [] }],
+          'requirement',
         ),
       ).toEqual([
         [
@@ -94,6 +97,7 @@ describe('securities', () => {
             },
           },
           [{ 'apiKey-security': [] }],
+          'requirement',
         ),
       ).toEqual([
         [
@@ -122,6 +126,7 @@ describe('securities', () => {
             },
           },
           [{ 'apiKey-security': [] }],
+          'requirement',
         ),
       ).toEqual([[]]);
     });
@@ -158,11 +163,11 @@ describe('securities', () => {
         },
       };
       expect(
-        translateToSecurities(document, [
-          { 'basic-security': [] },
-          { 'implicit-security': [] },
-          { 'api-security': [] },
-        ]),
+        translateToSecurities(
+          document,
+          [{ 'basic-security': [] }, { 'implicit-security': [] }, { 'api-security': [] }],
+          'requirement',
+        ),
       ).toEqual([
         [
           {
@@ -226,6 +231,7 @@ describe('securities', () => {
               },
             },
             [{ 'implicit-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([
           [
@@ -255,6 +261,7 @@ describe('securities', () => {
               },
             },
             [{ 'implicit-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([
           [
@@ -285,6 +292,7 @@ describe('securities', () => {
               },
             },
             [{ 'password-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([
           [
@@ -315,6 +323,7 @@ describe('securities', () => {
               },
             },
             [{ 'application-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([
           [
@@ -346,6 +355,7 @@ describe('securities', () => {
               },
             },
             [{ 'accessCode-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([
           [
@@ -379,6 +389,7 @@ describe('securities', () => {
               },
             },
             [{ 'accessCode-flow-security': [] }],
+            'requirement',
           ),
         ).toEqual([[]]);
       });
@@ -409,11 +420,11 @@ describe('securities', () => {
 
       it('OR relation between security schemes', () => {
         expect(
-          translateToSecurities(document, [
-            { 'basic-security': [] },
-            { 'implicit-security': [] },
-            { 'api-security': [] },
-          ]),
+          translateToSecurities(
+            document,
+            [{ 'basic-security': [] }, { 'implicit-security': [] }, { 'api-security': [] }],
+            'requirement',
+          ),
         ).toEqual([
           [
             {
@@ -451,7 +462,11 @@ describe('securities', () => {
 
       it('AND relation between security schemes', () => {
         expect(
-          translateToSecurities(document, [{ 'basic-security': [], 'implicit-security': [], 'api-security': [] }]),
+          translateToSecurities(
+            document,
+            [{ 'basic-security': [], 'implicit-security': [], 'api-security': [] }],
+            'requirement',
+          ),
         ).toEqual([
           [
             {

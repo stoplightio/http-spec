@@ -26,9 +26,9 @@ export default [
     ],
     securitySchemes: [
       {
-        // hash(`http_security-${parentId}-${security.key || security.name}`)
+        // hash(`http_security-${parentId}-scheme-${security.key || security.name}`)
         // closest parent with an id is the service, so ends up being...
-        id: 'http_security-service_abc-api-key',
+        id: 'http_security-service_abc-scheme-api-key',
         key: 'api-key',
         type: 'apiKey',
         name: 'API Key',
@@ -465,10 +465,7 @@ export default [
     security: [
       [
         {
-          // This is effectively a silly "fake" ref that openapi pulls... so
-          // we can effectively just re-use the same ID for the relevant securityScheme
-          // from the root.. note the ID is the same as the root securityScheme id
-          id: 'http_security-service_abc-api-key',
+          id: 'http_security-service_abc-requirement-api-key-0-',
           key: 'api-key',
           type: 'apiKey',
           name: 'API Key',

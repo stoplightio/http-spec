@@ -6,7 +6,7 @@ import { OperationSecurities } from '../../accessors';
 import { translateToSecurities as _translateToSecurities } from '../securities';
 
 const translateToSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) =>
-  _translateToSecurities.call(createContext(document), operationSecurities);
+  _translateToSecurities.call(createContext(document), operationSecurities, 'requirement');
 
 describe('securities', () => {
   describe('translateToSecurities', () => {
