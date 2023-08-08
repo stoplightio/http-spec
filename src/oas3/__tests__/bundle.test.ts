@@ -1008,66 +1008,68 @@ describe('bundleOas3Service', () => {
     );
   });
 
-  it('should not drop operation response if it has an external reference', () => {
-    const res = bundleOas3Service({
-      document: {
-        openapi: '3.0.0',
-        info: {
-          version: '0.0.1',
-          title: 'ref source spec',
-        },
-        paths: {
-          '/path_refToComponents': {
-            post: {
-              operationId: 'create_path_refToComponents',
-              responses: {
-                '200': {
-                  $ref: '#/components/responses/SharedResponse1',
+  describe('should retain external references to', () => {
+    it('response', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          info: {
+            version: '0.0.1',
+            title: 'ref source spec',
+          },
+          paths: {
+            '/path_refToComponents': {
+              post: {
+                operationId: 'create_path_refToComponents',
+                responses: {
+                  '200': {
+                    $ref: '#/components/responses/SharedResponse1',
+                  },
                 },
               },
             },
           },
-        },
-        components: {
-          responses: {
-            SharedResponse1: {
-              $ref: 'target.yaml#/components/responses/SharedResponse1',
+          components: {
+            responses: {
+              SharedResponse1: {
+                $ref: 'target.yaml#/components/responses/SharedResponse1',
+              },
             },
           },
         },
-      },
+      });
+
+      expect(res.operations[0].responses).toHaveLength(1);
+      expect(res.operations[0].responses).toEqual(
+        expect.arrayContaining([
+          {
+            $ref: '#/components/responses/SharedResponse1',
+            code: '200',
+          },
+        ]),
+      );
     });
 
-    expect(res.operations[0].responses).toHaveLength(1);
-    expect(res.operations[0].responses).toEqual(
-      expect.arrayContaining([
-        {
-          $ref: '#/components/responses/SharedResponse1',
-          code: '200',
-        },
-      ]),
-    );
-  });
-
-  it('should not drop example if it has an external reference', () => {
-    const res = bundleOas3Service({
-      document: {
-        openapi: '3.0.0',
-        info: {
-          version: '0.0.1',
-          title: 'ref source spec',
-        },
-        paths: {
-          '/path_refToComponents': {
-            post: {
-              operationId: 'create_path_refToComponents',
-              responses: {
-                '200': {
-                  content: {
-                    'application/json': {
-                      type: 'object',
-                      examples: {
-                        firstExample: { $ref: '#/components/examples/SharedExample1' },
+    it('example', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          info: {
+            version: '0.0.1',
+            title: 'ref source spec',
+          },
+          paths: {
+            '/path_refToComponents': {
+              post: {
+                operationId: 'create_path_refToComponents',
+                responses: {
+                  '200': {
+                    content: {
+                      'application/json': {
+                        type: 'object',
+                        examples: {
+                          firstExample: { $ref: '#/components/examples/SharedExample1' },
+                        },
                       },
                     },
                   },
@@ -1075,25 +1077,60 @@ describe('bundleOas3Service', () => {
               },
             },
           },
-        },
-        components: {
-          examples: {
-            SharedExample1: {
-              $ref: 'target.yaml#/components/examples/SharedExample1',
+          components: {
+            examples: {
+              SharedExample1: {
+                $ref: 'target.yaml#/components/examples/SharedExample1',
+              },
             },
           },
         },
-      },
+      });
+
+      const response = res.operations[0].responses[0];
+      if (isReferenceObject(response)) fail('should be a response');
+
+      expect(response.contents?.[0].examples).toStrictEqual([
+        {
+          key: 'firstExample',
+          $ref: '#/components/examples/SharedExample1',
+        },
+      ]);
     });
 
-    const response = res.operations[0].responses[0];
-    if (isReferenceObject(response)) fail('should be a response');
+    it('request body', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          info: {
+            version: '0.0.1',
+            title: 'ref source spec',
+          },
+          paths: {
+            '/': {
+              post: {
+                id: 'the-operation',
+                requestBody: {
+                  $ref: '#/components/requestBodies/SharedRequestBodies1',
+                },
+              },
+            },
+          },
+          components: {
+            requestBodies: {
+              SharedRequestBodies1: {
+                $ref: 'target.yaml#/components/requestBodies/SharedRequestBody1',
+              },
+            },
+          },
+        },
+      });
 
-    expect(response.contents?.[0].examples).toStrictEqual([
-      {
-        key: 'firstExample',
-        $ref: '#/components/examples/SharedExample1',
-      },
-    ]);
+      const request = res.operations[0].request;
+      if (isReferenceObject(request) || !request) fail('should be a request');
+      expect(request?.body).toEqual({
+        $ref: '#/components/requestBodies/SharedRequestBodies1',
+      });
+    });
   });
 });

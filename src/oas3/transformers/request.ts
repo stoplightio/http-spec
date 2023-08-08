@@ -48,7 +48,7 @@ export const translateRequestBody = withContext<
     Optional<IHttpOperationRequestBody<true> | Reference>
   >
 >(function (key, requestBodyObject) {
-  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
+  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject) ?? requestBodyObject;
   if (isReferenceObject(maybeRequestBodyObject)) {
     return maybeRequestBodyObject;
   }
