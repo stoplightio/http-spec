@@ -1,4 +1,5 @@
 import { isNonNullable } from './guards';
+import { HttpSecurityKind } from './types';
 
 type Context = { parentId: string };
 
@@ -79,8 +80,20 @@ export const idGenerators = {
     return join(['http_media', props.parentId, props.mediaType]);
   },
 
-  httpSecurity: (props: { parentId: string; keyOrName?: string }) => {
-    return join(['http_security', props.parentId, props.keyOrName]);
+  httpSecurity: (props: {
+    parentId: string;
+    keyOrName?: string;
+    kind: HttpSecurityKind;
+    index?: number;
+    scopeKeys?: string[];
+  }) => {
+    return join([
+      'http_security',
+      props.parentId,
+      props.kind,
+      props.keyOrName,
+      ...(props.kind === 'requirement' ? [String(props.index ?? ''), props.scopeKeys?.join('|') ?? ''] : []),
+    ]);
   },
 
   httpServer: (props: { parentId: string; url: string }) => {

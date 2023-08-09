@@ -159,7 +159,7 @@ export default {
     ],
     securitySchemes: [
       {
-        id: 'http_security-service_abc-api-key',
+        id: 'http_security-service_abc-scheme-api-key',
         in: 'query',
         key: 'api-key',
         name: 'API Key',
@@ -363,7 +363,7 @@ export default {
       security: [
         [
           {
-            id: 'http_security-service_abc-api-key',
+            id: 'http_security-service_abc-requirement-api-key-0-',
             in: 'query',
             key: 'api-key',
             name: 'API Key',
