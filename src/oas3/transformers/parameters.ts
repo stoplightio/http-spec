@@ -10,7 +10,10 @@ import { Oas3TranslateFunction } from '../types';
 import { translateHeaderObject } from './headers';
 import { translateParameterObject } from './request';
 
-type ParameterComponents = Pick<IBundledHttpService['components'], 'query' | 'header' | 'path' | 'cookie'>;
+type ParameterComponents = Pick<
+  IBundledHttpService['components'],
+  'query' | 'header' | 'path' | 'cookie' | 'unknownParameters'
+>;
 
 export const translateToSharedParameters = withContext<
   Oas3TranslateFunction<[components: unknown], ParameterComponents>
@@ -20,6 +23,7 @@ export const translateToSharedParameters = withContext<
     query: [],
     cookie: [],
     path: [],
+    unknownParameters: [],
   };
 
   if (!isPlainObject(components)) return sharedParameters;
@@ -82,9 +86,14 @@ export const translateToSharedParameters = withContext<
 
   for (const resolvable of resolvables) {
     const kind = getComponentName(this.references, resolvable.$ref);
-    if (kind === void 0 || !(kind in sharedParameters)) continue;
 
-    sharedParameters[kind].push(resolvable);
+    if (kind === undefined) {
+      continue; // skip it
+    } else if (kind === 'parameters') {
+      sharedParameters['unknownParameters'].push(resolvable);
+    } else if (kind in sharedParameters) {
+      sharedParameters[kind].push(resolvable);
+    }
   }
 
   return sharedParameters;

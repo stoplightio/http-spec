@@ -48,7 +48,7 @@ export const translateRequestBody = withContext<
     Optional<IHttpOperationRequestBody<true> | Reference>
   >
 >(function (key, requestBodyObject) {
-  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject) ?? requestBodyObject;
+  const maybeRequestBodyObject = this.maybeResolveLocalRef(requestBodyObject);
   if (isReferenceObject(maybeRequestBodyObject)) {
     return maybeRequestBodyObject;
   }
@@ -178,10 +178,15 @@ export const translateToRequest = withContext<
       kind = param.in;
     }
 
+    // TODO: Test with both path-level and op-level parameters!
+    if (kind === 'parameters') kind = 'unknown';
+
     const target = params[kind || 'unknown'];
     if (!Array.isArray(target)) continue;
 
     if (isReferenceObject(param)) {
+      // TODO: Under what circumstances should we NOT replace the local
+      // (fragment only) URI with a file/network URI?
       target.push(syncReferenceObject(param, this.references));
     } else {
       target.push(translateParameterObject.call(this, param));

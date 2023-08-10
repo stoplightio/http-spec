@@ -1082,6 +1082,7 @@ describe('bundleOas3Service', () => {
       const response = res.operations[0].responses[0];
       if (isReferenceObject(response)) fail('should be a response');
 
+      console.log(JSON.stringify(res, null, 4));
       expect(response.contents?.[0].examples).toStrictEqual([
         {
           key: 'firstExample',
@@ -1196,6 +1197,38 @@ describe('bundleOas3Service', () => {
         name: 'RefToComponentHeader',
         $ref: '#/components/headers/SharedHeader1',
       });
+    });
+
+    it('parameter', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              get: {
+                operationId: 'the_op_id',
+                parameters: [
+                  {
+                    $ref: '#/components/parameters/Shared1',
+                  },
+                ],
+                responses: { '200': {} },
+              },
+            },
+          },
+          components: {
+            parameters: {
+              Shared1: {
+                $ref: 'target.yaml#/components/parameters/Shared1',
+              },
+            },
+          },
+        },
+      });
+
+      const request = res.operations[0].request;
+      if (!request || isReferenceObject(request)) fail('should be a response');
+      expect(request.query).toStrictEqual(false);
     });
   });
 });
