@@ -1013,10 +1013,6 @@ describe('bundleOas3Service', () => {
       const res = bundleOas3Service({
         document: {
           openapi: '3.0.0',
-          info: {
-            version: '0.0.1',
-            title: 'ref source spec',
-          },
           paths: {
             '/path_refToComponents': {
               post: {
@@ -1054,10 +1050,6 @@ describe('bundleOas3Service', () => {
       const res = bundleOas3Service({
         document: {
           openapi: '3.0.0',
-          info: {
-            version: '0.0.1',
-            title: 'ref source spec',
-          },
           paths: {
             '/path_refToComponents': {
               post: {
@@ -1102,10 +1094,6 @@ describe('bundleOas3Service', () => {
       const res = bundleOas3Service({
         document: {
           openapi: '3.0.0',
-          info: {
-            version: '0.0.1',
-            title: 'ref source spec',
-          },
           paths: {
             '/': {
               post: {
@@ -1130,6 +1118,83 @@ describe('bundleOas3Service', () => {
       if (isReferenceObject(request) || !request) fail('should be a request');
       expect(request?.body).toEqual({
         $ref: '#/components/requestBodies/SharedRequestBodies1',
+      });
+    });
+
+    it('request header', () => {
+      // Arrange and Act
+      const actual = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              parameters: [{ $ref: '#/components/headers/SharedHeader1' }],
+              post: {
+                operationId: 'create_path_refToComponents',
+                responses: {
+                  '200': {},
+                },
+              },
+            },
+          },
+          components: {
+            headers: {
+              SharedHeader1: {
+                description: 'an integer-valued request header',
+                schema: {
+                  type: 'integer',
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Assert
+      const request = actual.operations[0]?.request;
+      if (isReferenceObject(request) || !request) fail('should be a header');
+      expect(request.headers?.[0]).toEqual({
+        $ref: '#/components/header/0',
+      });
+    });
+
+    it('response header', () => {
+      // Arrange and Act
+      const actual = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              post: {
+                operationId: 'the_operation_id',
+                responses: {
+                  '200': {
+                    headers: {
+                      RefToComponentHeader: {
+                        $ref: '#/components/headers/SharedHeader1',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          components: {
+            headers: {
+              SharedHeader1: {
+                $ref: 'target.yaml#/components/headers/SharedHeader2',
+              },
+            },
+          },
+        },
+      });
+
+      // Assert
+      const response = actual.operations[0]?.responses[0];
+      if (!response || isReferenceObject(response)) fail('should be a header');
+      expect(response.headers?.[0]).toEqual({
+        name: 'RefToComponentHeader',
+        $ref: '#/components/headers/SharedHeader1',
       });
     });
   });
