@@ -18,7 +18,7 @@ export const translateHeaderObject = withContext<
     Optional<IHttpHeaderParam<true> | (Pick<IHttpHeaderParam<true>, 'name'> & Reference)>
   >
 >(function ([name, unresolvedHeaderObject]) {
-  const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject);
+  const maybeHeaderObject = this.maybeResolveLocalRef(unresolvedHeaderObject) ?? unresolvedHeaderObject;
 
   if (isReferenceObject(maybeHeaderObject)) {
     (maybeHeaderObject as Pick<IHttpHeaderParam<true>, 'name'> & Reference).name = name;
