@@ -179,14 +179,12 @@ export const translateToRequest = withContext<
     }
 
     // TODO: Test with both path-level and op-level parameters!
-    if (kind === 'parameters') kind = 'unknown';
+    if (kind === 'unknownParameters') kind = 'unknown';
 
     const target = params[kind || 'unknown'];
     if (!Array.isArray(target)) continue;
 
     if (isReferenceObject(param)) {
-      // TODO: Under what circumstances should we NOT replace the local
-      // (fragment only) URI with a file/network URI?
       target.push(syncReferenceObject(param, this.references));
     } else {
       target.push(translateParameterObject.call(this, param));

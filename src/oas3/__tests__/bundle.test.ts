@@ -1082,7 +1082,6 @@ describe('bundleOas3Service', () => {
       const response = res.operations[0].responses[0];
       if (isReferenceObject(response)) fail('should be a response');
 
-      console.log(JSON.stringify(res, null, 4));
       expect(response.contents?.[0].examples).toStrictEqual([
         {
           key: 'firstExample',
@@ -1219,7 +1218,7 @@ describe('bundleOas3Service', () => {
           components: {
             parameters: {
               Shared1: {
-                $ref: 'target.yaml#/components/parameters/Shared1',
+                $ref: 'target.yaml#/components/parameters/Shared2',
               },
             },
           },
@@ -1228,7 +1227,18 @@ describe('bundleOas3Service', () => {
 
       const request = res.operations[0].request;
       if (!request || isReferenceObject(request)) fail('should be a response');
-      expect(request.query).toStrictEqual(false);
+      expect(request.unknown).toStrictEqual([
+        {
+          $ref: '#/components/unknownParameters/0',
+        },
+      ]);
+
+      expect(res.components.unknownParameters).toStrictEqual([
+        {
+          $ref: 'target.yaml#/components/parameters/Shared2',
+          key: 'Shared1',
+        },
+      ]);
     });
   });
 });

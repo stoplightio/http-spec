@@ -78,7 +78,7 @@ function getResolved(references: References, startingRefUri: string): string {
 
     // follow the reference one step
     const referenced = references[refUri];
-    ({ value: refUri } = referenced);
+    refUri = referenced.value;
 
     // return the first resolved reference we encounter
     if (referenced.resolved) {

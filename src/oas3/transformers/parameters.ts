@@ -53,10 +53,24 @@ export const translateToSharedParameters = withContext<
     if (isReferenceObject(value)) {
       // note that unlike schemas, we don't handle proxy $refs here
       // we need resolved content to be able to determine the kind of parameter to push it to the correct array
-      this.references[`#/components/parameters/${key}`] = {
-        resolved: false,
-        value: value.$ref,
-      };
+      if (value.$ref.startsWith('#')) {
+        // a reference WITHIN this http-spec document
+        this.references[`#/components/parameters/${key}`] = {
+          resolved: false,
+          value: value.$ref,
+        };
+      } else {
+        // a reference to OUTSIDE this http-spec document
+        this.references[`#/components/parameters/${key}`] = {
+          resolved: true,
+          value: `#/components/unknownParameters/${sharedParameters.unknownParameters.length}`,
+        };
+        // We have to add this to shared parameters here, rather than
+        sharedParameters.unknownParameters.push({
+          ...value,
+          key,
+        });
+      }
 
       resolvables.push(
         syncReferenceObject(
@@ -87,10 +101,8 @@ export const translateToSharedParameters = withContext<
   for (const resolvable of resolvables) {
     const kind = getComponentName(this.references, resolvable.$ref);
 
-    if (kind === undefined) {
+    if (kind === undefined || kind === 'unknownParameters') {
       continue; // skip it
-    } else if (kind === 'parameters') {
-      sharedParameters['unknownParameters'].push(resolvable);
     } else if (kind in sharedParameters) {
       sharedParameters[kind].push(resolvable);
     }
