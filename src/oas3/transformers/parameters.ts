@@ -101,9 +101,7 @@ export const translateToSharedParameters = withContext<
   for (const resolvable of resolvables) {
     const kind = getComponentName(this.references, resolvable.$ref);
 
-    if (kind === undefined || kind === 'unknownParameters') {
-      continue; // skip it
-    } else if (kind in sharedParameters) {
+    if (kind && kind !== 'unknownParameters' && kind in sharedParameters) {
       sharedParameters[kind].push(resolvable);
     }
   }
