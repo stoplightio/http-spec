@@ -351,7 +351,10 @@ const buildSchemaForParameter: Oas2TranslateFunction<
   };
 };
 
-type ParameterComponents = Pick<IBundledHttpService['components'], 'query' | 'header' | 'path' | 'cookie'>;
+type ParameterComponents = Pick<
+  IBundledHttpService['components'],
+  'query' | 'header' | 'path' | 'cookie' | 'unknownParameters'
+>;
 
 export const translateToSharedParameters = withContext<Oas2TranslateFunction<[root: Fragment], ParameterComponents>>(
   function (root) {
@@ -360,6 +363,7 @@ export const translateToSharedParameters = withContext<Oas2TranslateFunction<[ro
       query: [],
       cookie: [],
       path: [],
+      unknownParameters: [],
     };
 
     for (const [key, value] of entries(root.parameters)) {

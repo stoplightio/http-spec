@@ -293,6 +293,7 @@ describe('bundleOas3Service', () => {
         ],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [
           {
@@ -467,6 +468,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [
           {
@@ -603,6 +605,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [],
         schemas: [
@@ -731,6 +734,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         responses: [],
         schemas: [],
         securitySchemes: [],
@@ -874,6 +878,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         responses: [],
         requestBodies: [],
         schemas: [],
