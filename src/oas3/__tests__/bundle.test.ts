@@ -120,6 +120,7 @@ describe('bundleOas3Service', () => {
         requestBodies: [],
         examples: [],
         securitySchemes: [],
+        unknownParameters: [],
         header: [
           {
             id: 'http_header-service_id-parameter-org',
@@ -1288,5 +1289,36 @@ describe('bundleOas3Service', () => {
         },
       ]);
     });
+  });
+
+  it('when an operation-level param ref points outside the http-spec document', () => {
+    const res = bundleOas3Service({
+      document: {
+        openapi: '3.0.0',
+        paths: {
+          '/': {
+            get: {
+              operationId: 'the_op_id',
+              responses: { '200': {} },
+              parameters: [
+                {
+                  // BUG: This parameter is missing from the http-spec document
+                  $ref: 'otherFile.yaml#/components/parameters/Shared1',
+                },
+              ],
+            },
+          },
+        },
+      },
+    });
+
+    console.log(JSON.stringify(res, null, 4));
+    const request = res.operations[0].request;
+    if (!request || isReferenceObject(request)) fail('should be a response');
+    expect(request.unknown).toStrictEqual([
+      {
+        $ref: 'otherFile.yaml#/components/parameters/Shared1',
+      },
+    ]);
   });
 });
