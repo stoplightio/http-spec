@@ -1203,7 +1203,7 @@ describe('bundleOas3Service', () => {
       });
     });
 
-    it('parameter', () => {
+    it('operation-level parameter', () => {
       const res = bundleOas3Service({
         document: {
           openapi: '3.0.0',
@@ -1216,6 +1216,49 @@ describe('bundleOas3Service', () => {
                     $ref: '#/components/parameters/Shared1',
                   },
                 ],
+                responses: { '200': {} },
+              },
+            },
+          },
+          components: {
+            parameters: {
+              Shared1: {
+                $ref: 'target.yaml#/components/parameters/Shared2',
+              },
+            },
+          },
+        },
+      });
+
+      const request = res.operations[0].request;
+      if (!request || isReferenceObject(request)) fail('should be a response');
+      expect(request.unknown).toStrictEqual([
+        {
+          $ref: '#/components/unknownParameters/0',
+        },
+      ]);
+
+      expect(res.components.unknownParameters).toStrictEqual([
+        {
+          $ref: 'target.yaml#/components/parameters/Shared2',
+          key: 'Shared1',
+        },
+      ]);
+    });
+
+    it('path-level parameter', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              parameters: [
+                {
+                  $ref: '#/components/parameters/Shared1',
+                },
+              ],
+              get: {
+                operationId: 'the_op_id',
                 responses: { '200': {} },
               },
             },
