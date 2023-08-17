@@ -1312,7 +1312,6 @@ describe('bundleOas3Service', () => {
       },
     });
 
-    console.log(JSON.stringify(res, null, 4));
     const request = res.operations[0].request;
     if (!request || isReferenceObject(request)) fail('should be a response');
     expect(request.unknown).toStrictEqual([

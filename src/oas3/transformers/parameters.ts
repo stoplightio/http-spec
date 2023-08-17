@@ -1,4 +1,4 @@
-import { isPlainObject } from '@stoplight/json';
+import { isLocalRef, isPlainObject } from '@stoplight/json';
 import type { IBundledHttpService, IComponentNode, Reference } from '@stoplight/types';
 
 import { withContext } from '../../context';
@@ -53,7 +53,7 @@ export const translateToSharedParameters = withContext<
     if (isReferenceObject(value)) {
       // note that unlike schemas, we don't handle proxy $refs here
       // we need resolved content to be able to determine the kind of parameter to push it to the correct array
-      if (value.$ref.startsWith('#')) {
+      if (isLocalRef(value.$ref)) {
         // a reference WITHIN this http-spec document
         this.references[`#/components/parameters/${key}`] = {
           resolved: false,
@@ -65,7 +65,7 @@ export const translateToSharedParameters = withContext<
           resolved: true,
           value: `#/components/unknownParameters/${sharedParameters.unknownParameters.length}`,
         };
-        // We have to add this to shared parameters here, rather than
+        // We have to add this to shared parameters here, rather than in the typed parameters below.
         sharedParameters.unknownParameters.push({
           ...value,
           key,
