@@ -120,6 +120,7 @@ describe('bundleOas3Service', () => {
         requestBodies: [],
         examples: [],
         securitySchemes: [],
+        unknownParameters: [],
         header: [
           {
             id: 'http_header-service_id-parameter-org',
@@ -293,6 +294,7 @@ describe('bundleOas3Service', () => {
         ],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [
           {
@@ -467,6 +469,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [
           {
@@ -603,6 +606,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         requestBodies: [],
         responses: [],
         schemas: [
@@ -702,7 +706,7 @@ describe('bundleOas3Service', () => {
     });
   });
 
-  it('should put $ref params that cannot be resolved into unknown bucket', () => {
+  it('should put ref params that cannot be resolved into unknown bucket', () => {
     expect(
       bundleOas3Service({
         document: {
@@ -731,6 +735,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         responses: [],
         schemas: [],
         securitySchemes: [],
@@ -874,6 +879,7 @@ describe('bundleOas3Service', () => {
         header: [],
         path: [],
         query: [],
+        unknownParameters: [],
         responses: [],
         requestBodies: [],
         schemas: [],
@@ -1197,5 +1203,121 @@ describe('bundleOas3Service', () => {
         $ref: '#/components/headers/SharedHeader1',
       });
     });
+
+    it('operation-level parameter', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              get: {
+                operationId: 'the_op_id',
+                parameters: [
+                  {
+                    $ref: '#/components/parameters/Shared1',
+                  },
+                ],
+                responses: { '200': {} },
+              },
+            },
+          },
+          components: {
+            parameters: {
+              Shared1: {
+                $ref: 'target.yaml#/components/parameters/Shared2',
+              },
+            },
+          },
+        },
+      });
+
+      const request = res.operations[0].request;
+      if (!request || isReferenceObject(request)) fail('should be a response');
+      expect(request.unknown).toStrictEqual([
+        {
+          $ref: '#/components/unknownParameters/0',
+        },
+      ]);
+
+      expect(res.components.unknownParameters).toStrictEqual([
+        {
+          $ref: 'target.yaml#/components/parameters/Shared2',
+          key: 'Shared1',
+        },
+      ]);
+    });
+
+    it('path-level parameter', () => {
+      const res = bundleOas3Service({
+        document: {
+          openapi: '3.0.0',
+          paths: {
+            '/': {
+              parameters: [
+                {
+                  $ref: '#/components/parameters/Shared1',
+                },
+              ],
+              get: {
+                operationId: 'the_op_id',
+                responses: { '200': {} },
+              },
+            },
+          },
+          components: {
+            parameters: {
+              Shared1: {
+                $ref: 'target.yaml#/components/parameters/Shared2',
+              },
+            },
+          },
+        },
+      });
+
+      const request = res.operations[0].request;
+      if (!request || isReferenceObject(request)) fail('should be a response');
+      expect(request.unknown).toStrictEqual([
+        {
+          $ref: '#/components/unknownParameters/0',
+        },
+      ]);
+
+      expect(res.components.unknownParameters).toStrictEqual([
+        {
+          $ref: 'target.yaml#/components/parameters/Shared2',
+          key: 'Shared1',
+        },
+      ]);
+    });
+  });
+
+  it('when an operation-level param ref points outside the http-spec document', () => {
+    const res = bundleOas3Service({
+      document: {
+        openapi: '3.0.0',
+        paths: {
+          '/': {
+            get: {
+              operationId: 'the_op_id',
+              responses: { '200': {} },
+              parameters: [
+                {
+                  // BUG: This parameter is missing from the http-spec document
+                  $ref: 'otherFile.yaml#/components/parameters/Shared1',
+                },
+              ],
+            },
+          },
+        },
+      },
+    });
+
+    const request = res.operations[0].request;
+    if (!request || isReferenceObject(request)) fail('should be a response');
+    expect(request.unknown).toStrictEqual([
+      {
+        $ref: 'otherFile.yaml#/components/parameters/Shared1',
+      },
+    ]);
   });
 });

@@ -28,7 +28,7 @@ export function createOasParamsIterator(
       this.context = i < opParams.length ? 'operation' : 'path';
       this.parentId = this.ids[this.context];
 
-      const maybeParameterObject = this.maybeResolveLocalRef(params[i]);
+      const maybeParameterObject = this.maybeResolveLocalRef(params[i]) ?? params[i];
       if (isReferenceObject(maybeParameterObject)) {
         yield params[i];
         this.context = context;

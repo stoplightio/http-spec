@@ -108,6 +108,7 @@ export default {
     ],
     path: [],
     query: [],
+    unknownParameters: [],
     requestBodies: [
       {
         id: 'http_request_body-service_abc-Organization',

@@ -1,4 +1,4 @@
-import { isPlainObject } from '@stoplight/json';
+import { isLocalRef, isPlainObject } from '@stoplight/json';
 import type { IBundledHttpService, IComponentNode, Reference } from '@stoplight/types';
 
 import { withContext } from '../../context';
@@ -10,7 +10,10 @@ import { Oas3TranslateFunction } from '../types';
 import { translateHeaderObject } from './headers';
 import { translateParameterObject } from './request';
 
-type ParameterComponents = Pick<IBundledHttpService['components'], 'query' | 'header' | 'path' | 'cookie'>;
+type ParameterComponents = Pick<
+  IBundledHttpService['components'],
+  'query' | 'header' | 'path' | 'cookie' | 'unknownParameters'
+>;
 
 export const translateToSharedParameters = withContext<
   Oas3TranslateFunction<[components: unknown], ParameterComponents>
@@ -20,6 +23,7 @@ export const translateToSharedParameters = withContext<
     query: [],
     cookie: [],
     path: [],
+    unknownParameters: [],
   };
 
   if (!isPlainObject(components)) return sharedParameters;
@@ -49,10 +53,24 @@ export const translateToSharedParameters = withContext<
     if (isReferenceObject(value)) {
       // note that unlike schemas, we don't handle proxy $refs here
       // we need resolved content to be able to determine the kind of parameter to push it to the correct array
-      this.references[`#/components/parameters/${key}`] = {
-        resolved: false,
-        value: value.$ref,
-      };
+      if (isLocalRef(value.$ref)) {
+        // a reference WITHIN this http-spec document
+        this.references[`#/components/parameters/${key}`] = {
+          resolved: false,
+          value: value.$ref,
+        };
+      } else {
+        // a reference to OUTSIDE this http-spec document
+        this.references[`#/components/parameters/${key}`] = {
+          resolved: true,
+          value: `#/components/unknownParameters/${sharedParameters.unknownParameters.length}`,
+        };
+        // We have to add this to shared parameters here, rather than in the typed parameters below.
+        sharedParameters.unknownParameters.push({
+          ...value,
+          key,
+        });
+      }
 
       resolvables.push(
         syncReferenceObject(
@@ -82,9 +100,10 @@ export const translateToSharedParameters = withContext<
 
   for (const resolvable of resolvables) {
     const kind = getComponentName(this.references, resolvable.$ref);
-    if (kind === void 0 || !(kind in sharedParameters)) continue;
 
-    sharedParameters[kind].push(resolvable);
+    if (kind && kind !== 'unknownParameters' && kind in sharedParameters) {
+      sharedParameters[kind].push(resolvable);
+    }
   }
 
   return sharedParameters;

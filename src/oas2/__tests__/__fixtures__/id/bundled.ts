@@ -45,6 +45,7 @@ export default {
     ],
     path: [],
     query: [],
+    unknownParameters: [],
     requestBodies: [],
     responses: [
       {

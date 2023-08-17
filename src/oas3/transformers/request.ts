@@ -178,6 +178,8 @@ export const translateToRequest = withContext<
       kind = param.in;
     }
 
+    if (['parameters', 'unknownParameters'].includes(kind)) kind = 'unknown';
+
     const target = params[kind || 'unknown'];
     if (!Array.isArray(target)) continue;
 

@@ -87,6 +87,7 @@ export default {
     header: [],
     path: [],
     query: [],
+    unknownParameters: [],
     requestBodies: [],
     responses: [],
     schemas: [],

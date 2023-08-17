@@ -23,8 +23,18 @@ export function setSharedKey(value: unknown, key: string) {
   return false;
 }
 
-export function getComponentName(references: References, $ref: string) {
-  return getResolved(references, $ref).match(/^#\/components\/([A-Za-z]+)\//)?.[1];
+const COMPONENTS_FRAGMENT_PATTERN = /#\/components\/(?<section>[A-Za-z0-9_-]+)\//;
+
+/**
+ * Given a URI, return the name of the components sub-section indicated.  For
+ * example, given `#/components/securitySchemes` returns "securitySchemes".
+ * @returns the name of the components sub-section, or undefined if none is
+ * present
+ */
+export function getComponentName(references: References, $ref: string): string | undefined {
+  const uri = getResolved(references, $ref);
+  const match = uri.match(COMPONENTS_FRAGMENT_PATTERN);
+  return match?.groups?.['section'];
 }
 
 export const resolveRef: RefResolver = function (target) {
@@ -47,27 +57,46 @@ export const bundleResolveRef: RefResolver = function (target) {
   return syncReferenceObject(target, this.references);
 };
 
-function getResolved(references: References, $ref: string) {
-  const seen = new Set();
-  let value = $ref;
+/**
+ * Find the nearest resolved reference URI, starting with `$ref` and stepping
+ * through all known references.
+ * @param references all known references
+ * @param startingRefUri the starting reference URI
+ * @returns the first resolved reference URI, or unknown reference URI
+ */
+function getResolved(references: References, startingRefUri: string): string {
+  const seen = new Set(); // for cycle detection
 
-  while (value in references) {
-    if (seen.has(value)) return value;
-    seen.add(value);
+  let refUri: string = startingRefUri;
+  while (refUri in references) {
+    // don't follow cycles; bail out immediately
+    if (seen.has(refUri)) {
+      return refUri;
+    }
 
-    const referenced = references[value];
-    ({ value } = referenced);
+    seen.add(refUri);
+
+    // follow the reference one step
+    const referenced = references[refUri];
+    refUri = referenced.value;
+
+    // return the first resolved reference we encounter
     if (referenced.resolved) {
-      break;
+      return refUri;
     }
   }
 
-  return value;
+  // we've reached a completely unresolved *and* unknown reference URI
+  return refUri;
 }
 
-export function syncReferenceObject<K extends Reference>(target: K, references: References): K {
-  const { $ref } = target;
-  return Object.defineProperty({ ...target }, '$ref', {
+/**
+ * Replace the $ref property of `reference` with a proxy to one of the known
+ * references in `references`, preserving any other properties of `reference`.
+ */
+export function syncReferenceObject<K extends Reference>(reference: K, references: References): K {
+  const { $ref } = reference;
+  return Object.defineProperty({ ...reference }, '$ref', {
     enumerable: true,
     get() {
       return getResolved(references, $ref);
