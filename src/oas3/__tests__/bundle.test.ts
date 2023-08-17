@@ -706,7 +706,7 @@ describe('bundleOas3Service', () => {
     });
   });
 
-  it('should put $ref params that cannot be resolved into unknown bucket', () => {
+  it('should put ref params that cannot be resolved into unknown bucket', () => {
     expect(
       bundleOas3Service({
         document: {
