@@ -15,6 +15,7 @@ export default [
         id: 'service_abc',
       },
     },
+    infoExtensions: {},
   },
   {
     id: 'http_operation-service_abc-post-/users/{}',

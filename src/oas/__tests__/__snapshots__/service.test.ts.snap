@@ -19,6 +19,9 @@ Object {
     "url": "http://swagger.io",
   },
   "id": "abc",
+  "infoExtensions": Object {
+    "x-special-info": 27,
+  },
   "license": Object {
     "name": "Apache 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",
@@ -121,6 +124,9 @@ Object {
     "url": "http://swagger.io",
   },
   "id": "abc",
+  "infoExtensions": Object {
+    "x-special-info": 27,
+  },
   "license": Object {
     "name": "Apache 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html",

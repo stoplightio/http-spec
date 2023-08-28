@@ -48,6 +48,7 @@ export default [
         id: 'service_abc',
       },
     },
+    infoExtensions: {},
   },
 
   /**

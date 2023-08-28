@@ -49,6 +49,7 @@ export const transformOasService: TranslateFunction<DeepPartial<OpenAPIObject> |
 
       ...toExternalDocs(document.externalDocs),
       extensions: getExtensions(document),
+      infoExtensions: getExtensions(document.info),
     };
 
     if (isPlainObject(document.info) && hasXLogo(document.info)) {

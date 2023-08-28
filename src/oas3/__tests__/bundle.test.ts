@@ -166,6 +166,7 @@ describe('bundleOas3Service', () => {
           id: 'service_id',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -402,6 +403,7 @@ describe('bundleOas3Service', () => {
       operations: [],
       version: '',
       extensions: {},
+      infoExtensions: {},
     });
   });
 
@@ -462,6 +464,7 @@ describe('bundleOas3Service', () => {
       operations: [],
       version: '',
       extensions: {},
+      infoExtensions: {},
       components: {
         callbacks: [],
         cookie: [],
@@ -599,6 +602,7 @@ describe('bundleOas3Service', () => {
       name: 'no-title',
       version: '',
       extensions: {},
+      infoExtensions: {},
       components: {
         callbacks: [],
         cookie: [],
@@ -728,6 +732,7 @@ describe('bundleOas3Service', () => {
       name: 'no-title',
       version: '',
       extensions: {},
+      infoExtensions: {},
       components: {
         callbacks: [],
         cookie: [],
@@ -834,6 +839,7 @@ describe('bundleOas3Service', () => {
           hello: 'world',
         },
       },
+      infoExtensions: {},
       operations: [
         {
           id: 'http_operation-abc-patch-/users/{}',

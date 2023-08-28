@@ -27,6 +27,7 @@ describe('oas2 service', () => {
           id: 'def',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -55,6 +56,7 @@ describe('oas2 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
       servers: [
         {
           id: expect.any(String),
@@ -86,6 +88,7 @@ describe('oas2 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -135,6 +138,7 @@ describe('oas2 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
   describe('x-logo support', () => {
@@ -168,6 +172,14 @@ describe('oas2 service', () => {
             id: 'abc',
           },
         },
+        infoExtensions: {
+          'x-logo': {
+            altText: 'altText',
+            href: 'https://stoplight.io',
+            url: 'http://petstore.swagger.io/v2',
+            backgroundColor: '#FFF000',
+          },
+        },
       });
     });
     it('should provide default values for href and altText', () => {
@@ -198,6 +210,9 @@ describe('oas2 service', () => {
           'x-stoplight': {
             id: 'abc',
           },
+        },
+        infoExtensions: {
+          'x-logo': {},
         },
       });
     });
