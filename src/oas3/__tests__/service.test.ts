@@ -46,6 +46,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -104,6 +105,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -121,6 +123,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -161,6 +164,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -181,6 +185,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -223,6 +228,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
       servers: [
         {
           id: expect.any(String),
@@ -270,6 +276,7 @@ describe('oas3 service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
     });
   });
 
@@ -321,6 +328,7 @@ describe('oas3 service', () => {
             id: 'abc',
           },
         },
+        infoExtensions: {},
       });
     });
 
@@ -345,6 +353,7 @@ describe('oas3 service', () => {
             id: 'abc',
           },
         },
+        infoExtensions: {},
         license: {
           name: 'MIT License',
           identifier: 'MIT',
@@ -382,6 +391,14 @@ describe('oas3 service', () => {
           url: 'http://petstore.swagger.io/v2',
           backgroundColor: '#FFF000',
         },
+        infoExtensions: {
+          'x-logo': {
+            altText: 'altText',
+            href: 'https://stoplight.io',
+            url: 'http://petstore.swagger.io/v2',
+            backgroundColor: '#FFF000',
+          },
+        },
       });
     });
     it('should provide default values for href and altText', () => {
@@ -412,6 +429,7 @@ describe('oas3 service', () => {
           altText: 'logo',
           href: 'https://stoplight.io',
         },
+        infoExtensions: { 'x-logo': {} },
       });
     });
   });

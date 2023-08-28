@@ -21,6 +21,7 @@ export default {
       id: 'service_abc',
     },
   },
+  infoExtensions: {},
   components: {
     callbacks: [],
     cookie: [],

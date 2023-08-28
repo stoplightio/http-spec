@@ -76,6 +76,7 @@ describe('bundleOas2Service', () => {
           id: 'abc',
         },
       },
+      infoExtensions: {},
       operations: [
         {
           id: 'http_operation-abc-patch-/users/{}',
@@ -241,6 +242,7 @@ describe('bundleOas2Service', () => {
           hello: 'world',
         },
       },
+      infoExtensions: {},
       operations: [
         {
           id: 'http_operation-abc-patch-/users/{}',
