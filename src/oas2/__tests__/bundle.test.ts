@@ -317,18 +317,20 @@ describe('bundleOas2Service', () => {
         },
       ],
       security: [
-        {
-          extensions: {
-            'x-security-extension': {
-              hello: 'world',
+        [
+          {
+            extensions: {
+              'x-security-extension': {
+                hello: 'world',
+              },
             },
+            id: 'http_security-abc-scheme-api-key',
+            in: 'query',
+            key: 'api-key',
+            name: 'API Key',
+            type: 'apiKey',
           },
-          id: 'http_security-abc-scheme-api-key',
-          in: 'query',
-          key: 'api-key',
-          name: 'API Key',
-          type: 'apiKey',
-        },
+        ],
       ],
     });
   });

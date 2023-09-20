@@ -1483,18 +1483,18 @@
   resolved "https://registry.yarnpkg.com/@stoplight/test-utils/-/test-utils-0.0.1.tgz#b0d38c8a0abebda2dacbc2aa6a4f9bec44878e7b"
   integrity sha512-Cj3waLFR9bYLG8yvgkjXMxOfiVdewRyrKdH5RQpttVNfKj5UF+mElofPcHn/UfiOuxK3t5rbsdMfS26LK5tdQg==
 
-"@stoplight/types@^13.0.0":
-  version "13.3.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.3.0.tgz#17ba488e7e65d8d5b98d86df9564a2a24ef84652"
-  integrity sha512-1DuqsnlKXF6Cf4PAJyJKMSt73Y+54AR+x+mt1Z3XxfHaSl/m2z7dHhLqLlTRHNqB3GOOoLgYzfuzEwHuYKIXRw==
+"@stoplight/types@14.0.0-beta.1":
+  version "14.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-14.0.0-beta.1.tgz#9eee1811a03749d9b63a9f003897c6ee5005698c"
+  integrity sha512-TypAJM0SLIc42uMgKRAipecind5vjEYVRL7iCrLMCdgpliLWXwsaEKYgNTtGS7NeQ6159arvi5cNVnEQu2460w==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
 
-"@stoplight/types@^13.19.0":
-  version "13.20.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.20.0.tgz#d42682f1e3a14a3c60bdf0df08bff4023518763d"
-  integrity sha512-2FNTv05If7ib79VPDA/r9eUet76jewXFH2y2K5vuge6SXbRHtWBhcaRmu+6QpF4/WRNoJj5XYRSwLGXDxysBGA==
+"@stoplight/types@^13.0.0":
+  version "13.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-13.3.0.tgz#17ba488e7e65d8d5b98d86df9564a2a24ef84652"
+  integrity sha512-1DuqsnlKXF6Cf4PAJyJKMSt73Y+54AR+x+mt1Z3XxfHaSl/m2z7dHhLqLlTRHNqB3GOOoLgYzfuzEwHuYKIXRw==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
