@@ -305,7 +305,7 @@ describe('oas3 service', () => {
     };
 
     const transformed = transformOas3Service({ document });
-    expect(transformed).toHaveProperty(['security', 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
+    expect(transformed).toHaveProperty(['security', 0, 0, 'flows', 'implicit', 'scopes'], { scope_1: '' });
   });
 
   describe('OAS 3.1 support', () => {
