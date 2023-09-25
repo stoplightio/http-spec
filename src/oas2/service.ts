@@ -83,33 +83,35 @@ export const transformOas2Service: Oas2HttpServiceTransformer = ({ document, ctx
 
   const security = Array.isArray(document.security)
     ? document.security
-        .flatMap(sec => {
+        .map(sec => {
           if (!isPlainObject(sec)) return null;
 
-          return Object.keys(sec).map(key => {
-            const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
-            if (ss && ss.type === 'oauth2') {
-              const flows = {};
-              for (const flowKey in ss.flows) {
-                const flow = ss.flows[flowKey];
-                flows[flowKey] = {
-                  ...flow,
-                  scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
-                    const secKey = sec[key];
-                    if (secKey) return secKey.includes(scopeKey);
-                    return undefined;
-                  }),
+          return Object.keys(sec)
+            .map(key => {
+              const ss = securitySchemes.find(securityScheme => securityScheme.key === key);
+              if (ss?.type === 'oauth2') {
+                const flows = {};
+                for (const flowKey in ss.flows) {
+                  const flow = ss.flows[flowKey];
+                  flows[flowKey] = {
+                    ...flow,
+                    scopes: pickBy(flow.scopes, (_val: string, scopeKey: string) => {
+                      const secKey = sec[key];
+                      if (secKey) return secKey.includes(scopeKey);
+                      return undefined;
+                    }),
+                  };
+                }
+
+                return {
+                  ...ss,
+                  flows,
                 };
               }
 
-              return {
-                ...ss,
-                flows,
-              };
-            }
-
-            return ss;
-          });
+              return ss;
+            })
+            .filter(isNonNullable);
         })
         .filter(isNonNullable)
     : [];
