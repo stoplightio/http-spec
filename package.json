@@ -85,7 +85,7 @@
     "lodash.pickby": "^4.6.0",
     "openapi3-ts": "^2.0.2",
     "postman-collection": "^4.1.2",
-    "tslib": "^2.3.1",
+    "tslib": "^2.6.2",
     "type-is": "^1.6.18"
   },
   "devDependencies": {
