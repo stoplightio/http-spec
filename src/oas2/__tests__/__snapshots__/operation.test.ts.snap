@@ -66,6 +66,14 @@ Object {
         "key": "petstore_auth",
         "type": "oauth2",
       },
+      Object {
+        "extensions": Object {},
+        "id": Any<String>,
+        "in": "header",
+        "key": "api_key",
+        "name": "api_key_name",
+        "type": "apiKey",
+      },
     ],
     Array [
       Object {
@@ -77,6 +85,7 @@ Object {
         "type": "apiKey",
       },
     ],
+    Array [],
   ],
   "securityDeclarationType": "declared",
   "servers": Array [],
