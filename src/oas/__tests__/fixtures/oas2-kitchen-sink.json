@@ -186,8 +186,13 @@
         },
         "security": [
           {
-            "petstore_auth": ["write:pets", "read:pets"]
-          }
+            "petstore_auth": ["write:pets", "read:pets"],
+            "api_key": []
+          },
+          {
+            "api_key": []
+          },
+          {}
         ]
       }
     }

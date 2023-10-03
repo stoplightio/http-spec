@@ -39,10 +39,12 @@ describe('transformOas2Operation', () => {
             security: [
               {
                 petstore_auth: ['write:pets'],
+                api_key: [],
               },
               {
                 api_key: [],
               },
+              {},
             ],
           },
         },
@@ -104,6 +106,10 @@ describe('transformOas2Operation', () => {
             id: expect.any(String),
             extensions: {},
           },
+          {
+            id: expect.any(String),
+            extensions: {},
+          },
         ],
         [
           {
@@ -111,6 +117,7 @@ describe('transformOas2Operation', () => {
             extensions: {},
           },
         ],
+        [],
       ],
     });
   });
