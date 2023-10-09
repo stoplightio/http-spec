@@ -6,8 +6,8 @@ import type { Converter } from '../types';
 const ranges = {
   MIN_INT_32: 0 - 2 ** 31,
   MAX_INT_32: 2 ** 31 - 1,
-  MIN_INT_64: 0 - 2 ** 63,
-  MAX_INT_64: 2 ** 63 - 1,
+  MIN_INT_64: Number.MIN_SAFE_INTEGER,
+  MAX_INT_64: Number.MAX_SAFE_INTEGER,
   MIN_FLOAT: 0 - 2 ** 128,
   MAX_FLOAT: 2 ** 128 - 1,
   MIN_DOUBLE: 0 - Number.MAX_VALUE,

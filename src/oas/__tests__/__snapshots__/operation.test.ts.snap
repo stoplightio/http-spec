@@ -29,8 +29,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -90,8 +90,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -349,8 +349,8 @@ Array [
             "schema": Object {
               "$schema": "http://json-schema.org/draft-07/schema#",
               "format": "int64",
-              "maximum": 9223372036854776000,
-              "minimum": -9223372036854776000,
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991,
               "type": "number",
               "x-stoplight": Object {
                 "explicitProperties": Array [
@@ -450,8 +450,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -511,8 +511,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -771,8 +771,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -833,8 +833,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -1069,8 +1069,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [
@@ -1131,8 +1131,8 @@ Array [
                 },
                 "id": Object {
                   "format": "int64",
-                  "maximum": 9223372036854776000,
-                  "minimum": -9223372036854776000,
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
                   "type": "integer",
                   "x-stoplight": Object {
                     "explicitProperties": Array [

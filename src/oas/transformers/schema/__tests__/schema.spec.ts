@@ -110,7 +110,7 @@ describe('translateSchemaObject', () => {
           {
             type: 'integer',
             format: 'int64',
-            maximum: 2 ** 40,
+            maximum: Number.MAX_SAFE_INTEGER,
             'x-stoplight': {
               explicitProperties: ['type', 'format', 'maximum'],
             },
@@ -139,8 +139,8 @@ describe('translateSchemaObject', () => {
         {
           type: 'integer',
           format: 'int64',
-          minimum: 0 - 2 ** 63,
-          maximum: 2 ** 40,
+          minimum: Number.MIN_SAFE_INTEGER,
+          maximum: Number.MAX_SAFE_INTEGER,
           'x-stoplight': {
             explicitProperties: ['type', 'format', 'maximum'],
           },
