@@ -672,7 +672,34 @@ Array [
           "key": "petstore_auth",
           "type": "oauth2",
         },
+        Object {
+          "extensions": Object {
+            "x-security-extension": Object {
+              "hello": "world",
+            },
+          },
+          "id": "http_security-abc-requirement-api_key-1-",
+          "in": "header",
+          "key": "api_key",
+          "name": "api_key",
+          "type": "apiKey",
+        },
       ],
+      Array [
+        Object {
+          "extensions": Object {
+            "x-security-extension": Object {
+              "hello": "world",
+            },
+          },
+          "id": "http_security-abc-requirement-api_key-0-",
+          "in": "header",
+          "key": "api_key",
+          "name": "api_key",
+          "type": "apiKey",
+        },
+      ],
+      Array [],
     ],
     "securityDeclarationType": "declared",
     "servers": Array [
@@ -1249,7 +1276,34 @@ Array [
           "key": "petstore_auth",
           "type": "oauth2",
         },
+        Object {
+          "extensions": Object {
+            "x-security-extension": Object {
+              "hello": "world",
+            },
+          },
+          "id": "http_security-abc-requirement-api_key-1-",
+          "in": "header",
+          "key": "api_key",
+          "name": "api_key",
+          "type": "apiKey",
+        },
       ],
+      Array [
+        Object {
+          "extensions": Object {
+            "x-security-extension": Object {
+              "hello": "world",
+            },
+          },
+          "id": "http_security-abc-requirement-api_key-0-",
+          "in": "header",
+          "key": "api_key",
+          "name": "api_key",
+          "type": "apiKey",
+        },
+      ],
+      Array [],
     ],
     "securityDeclarationType": "declared",
     "servers": Array [

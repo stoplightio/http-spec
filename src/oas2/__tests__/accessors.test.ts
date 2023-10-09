@@ -29,6 +29,10 @@ describe('accessors', () => {
       api_key: [],
       petstore_auth: ['write:pets', 'read:pets'],
     },
+    {
+      api_key: [],
+    },
+    {},
   ];
 
   describe('relation between schemes', () => {
@@ -63,6 +67,15 @@ describe('accessors', () => {
               key: 'petstore_auth',
             },
           ],
+          [
+            {
+              key: 'api_key',
+              in: 'header',
+              name: 'api_key',
+              type: 'apiKey',
+            },
+          ],
+          [],
         ]);
       });
     });
@@ -224,6 +237,8 @@ describe('accessors', () => {
             key: 'petstore_auth',
           },
         ],
+        [{ in: 'header', name: 'api_key', type: 'apiKey', key: 'api_key' }],
+        [],
       ]);
     });
   });
