@@ -87,16 +87,20 @@ export function convertSchema(document: Fragment, schema: unknown, references: I
     };
   }
 
-  const clonedSchema = _convertSchema(actualSchema, {
-    structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
-    references,
-  });
+  const clonedSchema = _convertSchema(
+    actualSchema,
+    {
+      structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
+      references,
+    },
+    document,
+  );
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
   return clonedSchema as JSONSchema7;
 }
 
-function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
+function _convertSchema(schema: OASSchemaObject, options: InternalOptions, document: Fragment): JSONSchema7 {
   if (isReferenceObject(schema)) {
     return syncReferenceObject(schema, options.references);
   }
@@ -116,31 +120,37 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSON
 
       for (let i = 0; i < clonedSchema[struct].length; i++) {
         if (typeof clonedSchema[struct][i] === 'object' && clonedSchema[struct][i] !== null) {
-          clonedSchema[struct][i] = _convertSchema(clonedSchema[struct][i], options);
+          clonedSchema[struct][i] = _convertSchema(clonedSchema[struct][i], options, document);
         } else {
           clonedSchema[struct].splice(i, 1);
           i--;
         }
       }
     } else if (clonedSchema[struct] !== null && typeof clonedSchema[struct] === 'object') {
-      clonedSchema[struct] = _convertSchema(clonedSchema[struct], options);
+      clonedSchema[struct] = _convertSchema(clonedSchema[struct], options, document);
     }
   }
 
   if ('properties' in clonedSchema && isPlainObject(clonedSchema.properties)) {
-    convertProperties(clonedSchema, options);
+    convertProperties(clonedSchema, options, document);
   }
 
+  if (document.openapi === '3.0.0') {
+    convertTypes(clonedSchema);
+    convertOas3Nullable(clonedSchema);
+  }
   for (const keyword of keywordsKeys) {
     if (keyword in clonedSchema) {
-      keywords[keyword](clonedSchema);
+      if (keyword !== 'nullable' && document.openapi !== '3.0.0') {
+        keywords[keyword](clonedSchema);
+      }
     }
   }
 
   return clonedSchema as JSONSchema7;
 }
 
-function convertProperties(schema: OASSchemaObject, options: InternalOptions): void {
+function convertProperties(schema: OASSchemaObject, options: InternalOptions, document: Fragment): void {
   const props = { ...schema.properties };
   schema.properties = props;
 
@@ -148,7 +158,37 @@ function convertProperties(schema: OASSchemaObject, options: InternalOptions): v
     const property = props[key];
 
     if (isPlainObject(property)) {
-      props[key] = _convertSchema(property, options);
+      props[key] = _convertSchema(property, options, document);
     }
   }
 }
+
+function convertTypes(schema: OASSchemaObject) {
+  let inferredType: 'string' | 'number' | undefined;
+  if (Array.isArray(schema.enum) && !schema.type) {
+    for (const e in schema.enum) {
+      if (schema.enum[e] !== null) {
+        const number = Number(schema.enum[e]);
+        const enumType = Number.isNaN(number) ? 'string' : 'number';
+        if (!inferredType) {
+          inferredType = enumType;
+        } else if (inferredType !== enumType) {
+          return;
+        }
+      }
+    }
+    schema.type = inferredType;
+  }
+}
+
+export const convertOas3Nullable = (schema: OASSchemaObject) => {
+  if (schema['nullable'] === true) {
+    if (Array.isArray(schema.enum) && !schema.enum.includes(null)) {
+      schema.enum = [...schema.enum, null];
+    }
+  } else {
+    if (Array.isArray(schema.enum) && schema.enum.includes(null)) {
+      schema['nullable'] = true;
+    }
+  }
+};
