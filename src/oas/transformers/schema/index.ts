@@ -135,15 +135,9 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions, docum
     convertProperties(clonedSchema, options, document);
   }
 
-  if (document.openapi === '3.0.0') {
-    convertTypes(clonedSchema);
-    convertOas3Nullable(clonedSchema);
-  }
   for (const keyword of keywordsKeys) {
     if (keyword in clonedSchema) {
-      if (keyword !== 'nullable' && document.openapi !== '3.0.0') {
-        keywords[keyword](clonedSchema);
-      }
+      keywords[keyword](clonedSchema, document);
     }
   }
 
@@ -162,33 +156,3 @@ function convertProperties(schema: OASSchemaObject, options: InternalOptions, do
     }
   }
 }
-
-function convertTypes(schema: OASSchemaObject) {
-  let inferredType: 'string' | 'number' | undefined;
-  if (Array.isArray(schema.enum) && !schema.type) {
-    for (const e in schema.enum) {
-      if (schema.enum[e] !== null) {
-        const number = Number(schema.enum[e]);
-        const enumType = Number.isNaN(number) ? 'string' : 'number';
-        if (!inferredType) {
-          inferredType = enumType;
-        } else if (inferredType !== enumType) {
-          return;
-        }
-      }
-    }
-    schema.type = inferredType;
-  }
-}
-
-export const convertOas3Nullable = (schema: OASSchemaObject) => {
-  if (schema['nullable'] === true) {
-    if (Array.isArray(schema.enum) && !schema.enum.includes(null)) {
-      schema.enum = [...schema.enum, null];
-    }
-  } else {
-    if (Array.isArray(schema.enum) && schema.enum.includes(null)) {
-      schema['nullable'] = true;
-    }
-  }
-};
