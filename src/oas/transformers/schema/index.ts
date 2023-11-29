@@ -17,6 +17,7 @@ const keywordsKeys = Object.keys(keywords);
 type InternalOptions = {
   structs: string[];
   references: Record<string, { resolved: boolean; value: string }>;
+  isOas3_0: boolean;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -87,20 +88,25 @@ export function convertSchema(document: Fragment, schema: unknown, references: I
     };
   }
 
-  const clonedSchema = _convertSchema(
-    actualSchema,
-    {
-      structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
-      references,
-    },
-    document,
-  );
+  let isOas3_0 = false;
+
+  if ('openapi' in document) {
+    if (typeof document.openapi === 'string') {
+      isOas3_0 = document.openapi.startsWith('3.0');
+    }
+  }
+
+  const clonedSchema = _convertSchema(actualSchema, {
+    structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
+    references,
+    isOas3_0,
+  });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
   return clonedSchema as JSONSchema7;
 }
 
-function _convertSchema(schema: OASSchemaObject, options: InternalOptions, document: Fragment): JSONSchema7 {
+function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSONSchema7 {
   if (isReferenceObject(schema)) {
     return syncReferenceObject(schema, options.references);
   }
@@ -120,31 +126,31 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions, docum
 
       for (let i = 0; i < clonedSchema[struct].length; i++) {
         if (typeof clonedSchema[struct][i] === 'object' && clonedSchema[struct][i] !== null) {
-          clonedSchema[struct][i] = _convertSchema(clonedSchema[struct][i], options, document);
+          clonedSchema[struct][i] = _convertSchema(clonedSchema[struct][i], options);
         } else {
           clonedSchema[struct].splice(i, 1);
           i--;
         }
       }
     } else if (clonedSchema[struct] !== null && typeof clonedSchema[struct] === 'object') {
-      clonedSchema[struct] = _convertSchema(clonedSchema[struct], options, document);
+      clonedSchema[struct] = _convertSchema(clonedSchema[struct], options);
     }
   }
 
   if ('properties' in clonedSchema && isPlainObject(clonedSchema.properties)) {
-    convertProperties(clonedSchema, options, document);
+    convertProperties(clonedSchema, options);
   }
 
   for (const keyword of keywordsKeys) {
     if (keyword in clonedSchema) {
-      keywords[keyword](clonedSchema, document);
+      keywords[keyword](clonedSchema, options.isOas3_0);
     }
   }
 
   return clonedSchema as JSONSchema7;
 }
 
-function convertProperties(schema: OASSchemaObject, options: InternalOptions, document: Fragment): void {
+function convertProperties(schema: OASSchemaObject, options: InternalOptions): void {
   const props = { ...schema.properties };
   schema.properties = props;
 
@@ -152,7 +158,7 @@ function convertProperties(schema: OASSchemaObject, options: InternalOptions, do
     const property = props[key];
 
     if (isPlainObject(property)) {
-      props[key] = _convertSchema(property, options, document);
+      props[key] = _convertSchema(property, options);
     }
   }
 }

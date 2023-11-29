@@ -17,17 +17,9 @@ function isJsonSchema6TypeName(maybeJsonSchema7TypeName: string): maybeJsonSchem
 }
 
 const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter => {
-  return (schema, document) => {
+  return (schema, isOas3_0) => {
     if (typeof schema.type !== 'string' || !isJsonSchema6TypeName(schema.type) || !(keyword in schema)) {
       return;
-    }
-
-    let isOas3_0 = false;
-
-    if ('openapi' in document) {
-      if (typeof document.openapi === 'string') {
-        isOas3_0 = document.openapi.startsWith('3.0');
-      }
     }
 
     if (schema[keyword] === true) {
