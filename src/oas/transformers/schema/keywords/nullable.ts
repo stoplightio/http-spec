@@ -30,7 +30,7 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter 
       }
     }
 
-    if (!isOas3_0 && keyword === 'nullable') {
+    if (!isOas3_0 && keyword !== 'nullable') {
       delete schema[keyword];
     }
   };
