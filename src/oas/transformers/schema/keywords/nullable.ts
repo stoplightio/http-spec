@@ -1,5 +1,6 @@
 import type { JSONSchema7TypeName } from 'json-schema';
 
+import { collectExplicitProperties } from '../../../../utils';
 import { Converter } from '../types';
 
 const jsonSchema7TypeNames: ReadonlyArray<JSONSchema7TypeName> = [
@@ -27,6 +28,11 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter 
 
       if (Array.isArray(schema.enum)) {
         schema.enum = [...schema.enum, null];
+      }
+    } else {
+      if (keyword === 'nullable') {
+        const explicitProperties = collectExplicitProperties(schema);
+        schema['x-stoplight'] = { ...schema['x-stoplight'], explicitProperties };
       }
     }
 
