@@ -29,11 +29,11 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter 
       if (Array.isArray(schema.enum)) {
         schema.enum = [...schema.enum, null];
       }
-    }
-
-    if (keyword === 'nullable') {
-      const explicitProperties = collectExplicitProperties(schema);
-      schema['x-stoplight'] = { ...schema['x-stoplight'], explicitProperties };
+    } else {
+      if (keyword === 'nullable') {
+        const explicitProperties = collectExplicitProperties(schema);
+        schema['x-stoplight'] = { ...schema['x-stoplight'], explicitProperties };
+      }
     }
 
     delete schema[keyword];
