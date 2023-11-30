@@ -4,4 +4,4 @@ import type { Schema } from 'swagger-schema-official';
 
 export type OASSchemaObject = SchemaObject | Schema;
 
-export type Converter = (schema: OASSchemaObject | JSONSchema7, isOas3_0: boolean) => void;
+export type Converter = (schema: OASSchemaObject | JSONSchema7) => void;

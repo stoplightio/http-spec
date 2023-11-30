@@ -17,7 +17,6 @@ const keywordsKeys = Object.keys(keywords);
 type InternalOptions = {
   structs: string[];
   references: Record<string, { resolved: boolean; value: string }>;
-  isOas3_0: boolean;
 };
 
 const PROCESSED_SCHEMAS = new WeakMap<OASSchemaObject, JSONSchema7>();
@@ -88,18 +87,9 @@ export function convertSchema(document: Fragment, schema: unknown, references: I
     };
   }
 
-  let isOas3_0 = false;
-
-  if ('openapi' in document) {
-    if (typeof document.openapi === 'string') {
-      isOas3_0 = document.openapi.startsWith('3.0');
-    }
-  }
-
   const clonedSchema = _convertSchema(actualSchema, {
     structs: ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'additionalItems'],
     references,
-    isOas3_0,
   });
 
   clonedSchema.$schema = 'http://json-schema.org/draft-07/schema#';
@@ -143,7 +133,7 @@ function _convertSchema(schema: OASSchemaObject, options: InternalOptions): JSON
 
   for (const keyword of keywordsKeys) {
     if (keyword in clonedSchema) {
-      keywords[keyword](clonedSchema, options.isOas3_0);
+      keywords[keyword](clonedSchema);
     }
   }
 

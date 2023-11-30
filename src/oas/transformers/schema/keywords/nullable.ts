@@ -17,7 +17,7 @@ function isJsonSchema6TypeName(maybeJsonSchema7TypeName: string): maybeJsonSchem
 }
 
 const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter => {
-  return (schema, isOas3_0) => {
+  return schema => {
     if (typeof schema.type !== 'string' || !isJsonSchema6TypeName(schema.type) || !(keyword in schema)) {
       return;
     }
@@ -30,9 +30,7 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter 
       }
     }
 
-    if (!isOas3_0 && keyword !== 'nullable') {
-      delete schema[keyword];
-    }
+    delete schema[keyword];
   };
 };
 

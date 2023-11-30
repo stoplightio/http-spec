@@ -294,7 +294,6 @@ describe('translateSchemaObject', () => {
         },
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: ['string', 'null'],
-        nullable: true,
       });
     });
 
