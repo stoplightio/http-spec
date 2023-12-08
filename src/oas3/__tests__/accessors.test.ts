@@ -1,8 +1,8 @@
 import { DeepPartial } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
 
 import { setSkipHashing } from '../../hash';
 import { getSecurities as _getSecurities, OperationSecurities } from '../accessors';
+import { OpenAPIObject } from '../types';
 
 setSkipHashing(true);
 

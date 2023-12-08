@@ -391,6 +391,7 @@ export default {
       ],
     },
   ],
+  webhooks: [],
   extensions: {
     'x-stoplight': {
       id: 'service_abc',

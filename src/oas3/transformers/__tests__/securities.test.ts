@@ -1,8 +1,8 @@
 import { DeepPartial } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
 
 import { createContext } from '../../../oas/context';
 import { OperationSecurities } from '../../accessors';
+import { OpenAPIObject } from '../../types';
 import { translateToSecurities as _translateToSecurities } from '../securities';
 
 const translateToSecurities = (document: DeepPartial<OpenAPIObject>, operationSecurities: OperationSecurities) =>

@@ -46,6 +46,7 @@ export const bundleOas3Service: Oas3HttpServiceBundle = ({ document: _document }
   return {
     ...service,
     operations,
+    webhooks: [],
     components,
   };
 };

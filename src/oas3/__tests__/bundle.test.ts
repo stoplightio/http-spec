@@ -113,6 +113,7 @@ describe('bundleOas3Service', () => {
           servers: [],
         },
       ],
+      webhooks: [],
       components: {
         callbacks: [],
         responses: [],
@@ -401,6 +402,7 @@ describe('bundleOas3Service', () => {
       id: 'undefined',
       name: 'no-title',
       operations: [],
+      webhooks: [],
       version: '',
       extensions: {},
       infoExtensions: {},
@@ -462,6 +464,7 @@ describe('bundleOas3Service', () => {
       id: 'undefined',
       name: 'no-title',
       operations: [],
+      webhooks: [],
       version: '',
       extensions: {},
       infoExtensions: {},
@@ -707,6 +710,7 @@ describe('bundleOas3Service', () => {
           tags: [],
         },
       ],
+      webhooks: [],
     });
   });
 
@@ -770,6 +774,7 @@ describe('bundleOas3Service', () => {
           tags: [],
         },
       ],
+      webhooks: [],
     });
   });
 
@@ -878,6 +883,7 @@ describe('bundleOas3Service', () => {
           tags: [],
         },
       ],
+      webhooks: [],
       components: {
         callbacks: [],
         cookie: [],

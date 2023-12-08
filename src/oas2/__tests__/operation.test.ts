@@ -1,5 +1,4 @@
 import { DeepPartial } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
 import { setSkipHashing } from '../../hash';
@@ -226,7 +225,7 @@ describe('transformOas2Operation', () => {
   });
 
   it('given malformed parameters should translate operation with those parameters', () => {
-    const document: Partial<OpenAPIObject> = {
+    const document: Partial<DeepPartial<Spec>> = {
       swagger: '2.0',
       paths: {
         '/users/{userId}': {
@@ -236,7 +235,7 @@ describe('transformOas2Operation', () => {
                 in: 'header',
                 name: 'name',
               },
-              null,
+              null as any,
             ],
           },
         },

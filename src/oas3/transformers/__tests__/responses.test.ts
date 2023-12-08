@@ -1,7 +1,7 @@
 import type { DeepPartial } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
 
 import { createContext } from '../../../oas/context';
+import { OpenAPIObject } from '../../types';
 import { translateToResponses as _translateToResponses } from '../responses';
 
 const translateToResponses = (document: DeepPartial<OpenAPIObject>, responses: unknown) =>

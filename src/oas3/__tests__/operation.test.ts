@@ -1,10 +1,9 @@
-import { OpenAPIObject } from 'openapi3-ts';
-
 import { setSkipHashing } from '../../hash';
 import {
   transformOas3Operation as _transformOas3Operation,
   transformOas3Operations as _transformOas3Operations,
 } from '../operation';
+import { OpenAPIObject } from '../types';
 
 setSkipHashing(true);
 
