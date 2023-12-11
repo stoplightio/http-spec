@@ -1,11 +1,11 @@
 import { isPlainObject } from '@stoplight/json';
-import type { DeepPartial, IHttpOperation } from '@stoplight/types';
+import type { DeepPartial, IHttpEndpointOperation } from '@stoplight/types';
 import type { OpenAPIObject, OperationObject, PathsObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
 import pickBy = require('lodash.pickby');
 
 import { isBoolean, isString } from '../guards';
-import type { Fragment, HttpOperationTransformer } from '../types';
+import type { EndpointOperationConfig, Fragment, HttpEndpointOperationTransformer } from '../types';
 import { TransformerContext, TranslateFunction } from '../types';
 import { extractId } from '../utils';
 import { getExtensions } from './accessors';
@@ -15,16 +15,32 @@ import { translateToSecurityDeclarationType } from './transformers';
 
 const DEFAULT_METHODS = ['get', 'post', 'put', 'delete', 'options', 'head', 'patch', 'trace'];
 
-export function transformOasOperations<T extends Fragment & DeepPartial<Spec | OpenAPIObject>>(
-  document: T,
-  transformer: HttpOperationTransformer<any>,
-  methods: string[] | null = DEFAULT_METHODS,
-  ctx?: TransformerContext<T>,
-): IHttpOperation[] {
-  const paths = isPlainObject(document.paths) ? Object.keys(document.paths) : [];
+export const OPERATION_CONFIG: EndpointOperationConfig = {
+  type: 'operation',
+  documentProp: 'paths',
+  nameProp: 'path',
+};
 
-  return paths.flatMap(path => {
-    const value = document.paths![path];
+export const WEBHOOK_CONFIG: EndpointOperationConfig = {
+  type: 'webhook',
+  documentProp: 'webhooks',
+  nameProp: 'name',
+};
+
+export function transformOasEndpointOperations<
+  T extends Fragment & DeepPartial<Spec | OpenAPIObject>,
+  TEndpoint extends IHttpEndpointOperation,
+>(
+  document: T,
+  transformer: HttpEndpointOperationTransformer<any, TEndpoint>,
+  config: EndpointOperationConfig,
+  methods: string[] | null = DEFAULT_METHODS,
+
+  ctx?: TransformerContext<T>,
+): TEndpoint[] {
+  const entries = isPlainObject(document[config.documentProp]) ? Object.entries(document[config.documentProp]) : [];
+
+  return entries.flatMap(([name, value]) => {
     if (!isPlainObject(value)) return [];
 
     let operations = Object.keys(value);
@@ -35,75 +51,83 @@ export function transformOasOperations<T extends Fragment & DeepPartial<Spec | O
     return operations.map(method =>
       transformer({
         document,
-        path,
+        name,
         method,
+        config,
         ctx,
       }),
     );
   });
 }
 
-export const transformOasOperation: TranslateFunction<
+export const transformOasEndpointOperation: TranslateFunction<
   DeepPartial<OpenAPIObject> | DeepPartial<Spec>,
-  [path: string, method: string],
-  Omit<IHttpOperation, 'responses' | 'request' | 'servers' | 'security' | 'callbacks'>
-> = function (path: string, method: string) {
-  const pathObj = this.maybeResolveLocalRef(this.document?.paths?.[path]) as PathsObject;
+  [config: EndpointOperationConfig, name: string, method: string],
+  Omit<IHttpEndpointOperation, 'responses' | 'request' | 'servers' | 'security' | 'callbacks'>
+> = function ({ type, documentProp, nameProp }: EndpointOperationConfig, name: string, method: string) {
+  const pathObj = this.maybeResolveLocalRef(this.document?.[documentProp]?.[name]) as PathsObject;
   if (typeof pathObj !== 'object' || pathObj === null) {
-    throw new Error(`Could not find ${['paths', path].join('/')} in the provided spec.`);
+    throw new Error(`Could not find ${[documentProp, name].join('/')} in the provided spec.`);
   }
 
-  const operation = this.maybeResolveLocalRef(pathObj[method]) as OperationObject;
-  if (!operation) {
-    throw new Error(`Could not find ${['paths', path, method].join('/')} in the provided spec.`);
+  const obj = this.maybeResolveLocalRef(pathObj[method]) as OperationObject;
+  if (!obj) {
+    throw new Error(`Could not find ${[documentProp, name, method].join('/')} in the provided spec.`);
   }
 
   const serviceId = (this.ids.service = String(this.document['x-stoplight']?.id));
-  this.ids.path = this.generateId.httpPath({ parentId: serviceId, path });
-  let operationId: string;
+  if (type === 'operation') {
+    this.ids.path = this.generateId.httpPath({ parentId: serviceId, path: name });
+  } else {
+    this.ids.webhookName = this.generateId.httpWebhookName({ parentId: serviceId, name });
+  }
+  let id: string;
   if (this.context === 'callback') {
-    operationId = this.ids.operation =
-      extractId(operation) ??
+    id = this.ids.operation =
+      extractId(obj) ??
       this.generateId.httpCallbackOperation({
         parentId: serviceId,
         method,
-        path,
+        path: name,
       });
+  } else if (type === 'operation') {
+    id = this.ids.operation =
+      extractId(obj) ?? this.generateId.httpOperation({ parentId: serviceId, method, path: name });
   } else {
-    operationId = this.ids.operation =
-      extractId(operation) ?? this.generateId.httpOperation({ parentId: serviceId, method, path });
+    id = this.ids.webhook = extractId(obj) ?? this.generateId.httpWebhook({ parentId: serviceId, method, name });
   }
 
-  this.parentId = operationId;
-  this.context = 'operation';
+  this.parentId = id;
+
+  this.context = type;
 
   return {
-    id: operationId,
+    id,
 
     method,
-    path,
+    [nameProp]: name,
 
-    tags: translateToTags.call(this, operation.tags),
-    extensions: getExtensions(operation),
+    tags: translateToTags.call(this, obj.tags),
+    extensions: getExtensions(obj),
 
     ...pickBy(
       {
-        deprecated: operation.deprecated,
-        internal: operation['x-internal'],
+        deprecated: obj.deprecated,
+        internal: obj['x-internal'],
       },
       isBoolean,
     ),
 
     ...pickBy(
       {
-        iid: operation.operationId,
-        description: operation.description,
-        summary: operation.summary,
+        iid: obj.operationId,
+        description: obj.description,
+        summary: obj.summary,
       },
       isString,
     ),
 
-    securityDeclarationType: translateToSecurityDeclarationType(operation),
-    ...toExternalDocs(operation.externalDocs),
+    securityDeclarationType: translateToSecurityDeclarationType(obj),
+    ...toExternalDocs(obj.externalDocs),
   };
 };

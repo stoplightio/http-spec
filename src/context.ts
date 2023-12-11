@@ -66,6 +66,8 @@ export function createContext<T extends Record<string, unknown>>(
       service: '',
       path: '',
       operation: '',
+      webhookName: '',
+      webhook: '',
     },
     references: {},
     parentId: '',

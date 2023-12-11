@@ -2,7 +2,7 @@ import type { DeepPartial, IHttpOperation } from '@stoplight/types';
 import type { Spec } from 'swagger-schema-official';
 
 import { createContext } from '../oas/context';
-import { transformOasOperation, transformOasOperations } from '../oas/operation';
+import { OPERATION_CONFIG, transformOasEndpointOperation, transformOasEndpointOperations } from '../oas/operation';
 import { Oas2HttpOperationTransformer } from '../oas/types';
 import type { Fragment } from '../types';
 import { TransformerContext } from '../types';
@@ -15,25 +15,26 @@ export function transformOas2Operations<T extends DeepPartial<Spec> = DeepPartia
   document: T,
   ctx?: TransformerContext<T>,
 ): IHttpOperation[] {
-  return transformOasOperations(document, transformOas2Operation, void 0, ctx);
+  return transformOasEndpointOperations(document, transformOas2Operation, OPERATION_CONFIG, void 0, ctx);
 }
 
 export const transformOas2Operation: Oas2HttpOperationTransformer = ({
   document: _document,
-  path,
+  name,
   method,
+  config,
   ctx = createContext(_document),
 }) => {
-  const httpOperation = transformOasOperation.call(ctx, path, method);
-  const pathObj = ctx.maybeResolveLocalRef(ctx.document.paths![path]) as Fragment;
-  const operation = ctx.maybeResolveLocalRef(pathObj[method]) as Fragment;
+  const httpEndpointOperation = transformOasEndpointOperation.call(ctx, config, name, method);
+  const parentObj = ctx.maybeResolveLocalRef(ctx.document[config.documentProp]![name]) as Fragment;
+  const obj = ctx.maybeResolveLocalRef(parentObj[method]) as Fragment;
 
   return {
-    ...httpOperation,
+    ...httpEndpointOperation,
 
-    responses: translateToResponses.call(ctx, operation),
-    servers: translateToServers.call(ctx, operation),
-    request: translateToRequest.call(ctx, pathObj, operation),
-    security: translateToSecurities.call(ctx, operation.security, 'requirement'),
+    responses: translateToResponses.call(ctx, obj),
+    servers: translateToServers.call(ctx, obj),
+    request: translateToRequest.call(ctx, parentObj, obj),
+    security: translateToSecurities.call(ctx, obj.security, 'requirement'),
   } as any;
 };

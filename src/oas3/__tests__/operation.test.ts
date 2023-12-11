@@ -1,4 +1,5 @@
 import { setSkipHashing } from '../../hash';
+import { OPERATION_CONFIG } from '../../oas/operation';
 import {
   transformOas3Operation as _transformOas3Operation,
   transformOas3Operations as _transformOas3Operations,
@@ -31,8 +32,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('deprecated', true);
@@ -61,7 +63,8 @@ describe('transformOas3Operation', () => {
     };
 
     const result = transformOas3Operation({
-      path: '/users/{userId}',
+      name: '/users/{userId}',
+      config: OPERATION_CONFIG,
       method: 'delete',
       document,
     });
@@ -142,7 +145,8 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
+        config: OPERATION_CONFIG,
         method: 'get',
         document,
       }),
@@ -180,7 +184,8 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
+        config: OPERATION_CONFIG,
         method: 'get',
         document,
       }),
@@ -217,7 +222,8 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
+        config: OPERATION_CONFIG,
         method: 'get',
         document,
       }),
@@ -247,7 +253,8 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
+        config: OPERATION_CONFIG,
         method: 'get',
         document,
       }),
@@ -290,7 +297,8 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
+        config: OPERATION_CONFIG,
         method: 'get',
         document,
       }),
@@ -329,8 +337,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/users/{userId}',
+          name: '/users/{userId}',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toHaveProperty('servers', []);
@@ -360,8 +369,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('servers', [
@@ -396,8 +406,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toMatchSnapshot({
@@ -435,8 +446,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/users/{userId}',
+          name: '/users/{userId}',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toHaveProperty('servers', []);
@@ -466,8 +478,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('servers', [
@@ -502,8 +515,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toMatchSnapshot({
@@ -541,8 +555,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/users/{userId}',
+          name: '/users/{userId}',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toHaveProperty('servers', []);
@@ -572,8 +587,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('servers', [
@@ -628,8 +644,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/subscribe',
+        name: '/subscribe',
         method: 'post',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toMatchSnapshot({
@@ -686,8 +703,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toStrictEqual({
@@ -769,8 +787,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toStrictEqual({
@@ -857,7 +876,9 @@ describe('transformOas3Operation', () => {
       ],
     };
 
-    expect(transformOas3Operation({ document, path: '/pets', method: 'get' }).servers).toEqual([
+    expect(
+      transformOas3Operation({ document, name: '/pets', method: 'get', config: OPERATION_CONFIG }).servers,
+    ).toEqual([
       {
         id: expect.any(String),
         description: 'Sample Petstore Server Https',
@@ -959,8 +980,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/pet',
+        name: '/pet',
         method: 'get',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toStrictEqual({
@@ -1101,8 +1123,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/pets',
+        name: '/pets',
         method: 'post',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('request.body', {
@@ -1168,8 +1191,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation({
-        path: '/pets',
+        name: '/pets',
         method: 'post',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).toHaveProperty('request.body', {
@@ -1222,8 +1246,9 @@ describe('transformOas3Operation', () => {
 
     expect(
       transformOas3Operation.bind(null, {
-        path: '/pets',
+        name: '/pets',
         method: 'post',
+        config: OPERATION_CONFIG,
         document,
       }),
     ).not.toThrow();
@@ -1252,7 +1277,9 @@ describe('transformOas3Operation', () => {
       },
     };
 
-    expect(transformOas3Operation({ document, path: '/hello/test', method: 'get' })).toStrictEqual({
+    expect(
+      transformOas3Operation({ document, name: '/hello/test', method: 'get', config: OPERATION_CONFIG }),
+    ).toStrictEqual({
       id: 'http_operation-undefined-get-/hello/test',
       iid: 'get-test',
       method: 'get',
@@ -1364,8 +1391,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/users/{userId}',
+          name: '/users/{userId}',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toEqual(
@@ -1393,8 +1421,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/pet',
+          name: '/pet',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toEqual(
@@ -1484,8 +1513,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/users/{userId}',
+          name: '/users/{userId}',
           method: 'get',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toHaveProperty('responses', [
@@ -1528,8 +1558,9 @@ describe('transformOas3Operation', () => {
 
       expect(
         transformOas3Operation({
-          path: '/subscribe',
+          name: '/subscribe',
           method: 'connect',
+          config: OPERATION_CONFIG,
           document,
         }),
       ).toHaveProperty('request.body', {

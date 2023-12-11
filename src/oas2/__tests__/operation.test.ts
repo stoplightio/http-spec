@@ -2,6 +2,7 @@ import { DeepPartial } from '@stoplight/types';
 import { Spec } from 'swagger-schema-official';
 
 import { setSkipHashing } from '../../hash';
+import { OPERATION_CONFIG } from '../../oas/operation';
 import { transformOas2Operation, transformOas2Operations } from '../operation';
 
 setSkipHashing(true);
@@ -68,9 +69,10 @@ describe('transformOas2Operation', () => {
 
     expect(
       transformOas2Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
         document,
+        config: OPERATION_CONFIG,
       }),
     ).toMatchSnapshot({
       id: expect.any(String),
@@ -146,9 +148,10 @@ describe('transformOas2Operation', () => {
     };
 
     const result = transformOas2Operation({
-      path: '/users/{userId}',
+      name: '/users/{userId}',
       method: 'delete',
       document,
+      config: OPERATION_CONFIG,
     });
 
     expect(result.responses[0].contents).toHaveLength(0);
@@ -168,9 +171,10 @@ describe('transformOas2Operation', () => {
 
     expect(
       transformOas2Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
         document,
+        config: OPERATION_CONFIG,
       }),
     ).toHaveProperty('deprecated', true);
   });
@@ -244,9 +248,10 @@ describe('transformOas2Operation', () => {
 
     expect(
       transformOas2Operation({
-        path: '/users/{userId}',
+        name: '/users/{userId}',
         method: 'get',
         document,
+        config: OPERATION_CONFIG,
       }),
     ).toStrictEqual({
       id: expect.any(String),

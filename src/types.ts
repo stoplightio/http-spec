@@ -1,4 +1,4 @@
-import type { IBundledHttpService, IHttpOperation, IHttpService } from '@stoplight/types';
+import type { IBundledHttpService, IHttpEndpointOperation, IHttpService } from '@stoplight/types';
 
 import type { idGenerators } from './generators';
 
@@ -20,20 +20,33 @@ export type HttpServiceTransformer<T> = (opts: T) => IHttpService;
 
 export type HttpServiceBundle<T> = (opts: T) => IBundledHttpService;
 
-export interface ITransformOperationOpts<T extends Fragment> {
+export type EndpointOperationConfig =
+  | {
+      type: 'operation';
+      documentProp: 'paths';
+      nameProp: 'path';
+    }
+  | {
+      type: 'webhook';
+      documentProp: 'webhooks';
+      nameProp: 'name';
+    };
+
+export interface ITransformEndpointOperationOpts<T extends Fragment> {
   document: T;
-  path: string;
+  name: string;
   method: string;
+  config: EndpointOperationConfig;
   ctx?: TransformerContext<T>;
 }
 
-export type HttpOperationTransformer<T> = (opts: T) => IHttpOperation;
+export type HttpEndpointOperationTransformer<T, TEndpoint extends IHttpEndpointOperation> = (opts: T) => TEndpoint;
 
 export type HttpSecurityKind = 'requirement' | 'scheme';
 
 export type ArrayCallbackParameters<T> = [T, number, T[]];
 
-export type AvailableContext = 'service' | 'path' | 'operation' | 'callback';
+export type AvailableContext = 'service' | 'path' | 'operation' | 'callback' | 'webhook' | 'webhookName';
 
 export type References = Record<string, { resolved: boolean; value: string }>;
 
