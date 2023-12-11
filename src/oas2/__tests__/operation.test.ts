@@ -229,7 +229,7 @@ describe('transformOas2Operation', () => {
   });
 
   it('given malformed parameters should translate operation with those parameters', () => {
-    const document: Partial<DeepPartial<Spec>> = {
+    const document: DeepPartial<Spec> = {
       swagger: '2.0',
       paths: {
         '/users/{userId}': {
