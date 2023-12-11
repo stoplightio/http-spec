@@ -7,7 +7,7 @@ export type {
   Oas2HttpServiceTransformer,
   Oas2TransformOperationOpts,
   Oas2TransformServiceOpts,
-  Oas3HttpOperationTransformer,
+  Oas3HttpEndpointOperationTransformer,
   Oas3HttpServiceBundle,
   Oas3HttpServiceTransformer,
   Oas3TransformOperationOpts,

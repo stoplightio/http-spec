@@ -94,7 +94,8 @@ export const transformOasEndpointOperation: TranslateFunction<
     id = this.ids.operation =
       extractId(obj) ?? this.generateId.httpOperation({ parentId: serviceId, method, path: name });
   } else {
-    id = this.ids.webhook = extractId(obj) ?? this.generateId.httpWebhook({ parentId: serviceId, method, name });
+    id = this.ids.webhook =
+      extractId(obj) ?? this.generateId.httpWebhookOperation({ parentId: serviceId, method, name });
   }
 
   this.parentId = id;

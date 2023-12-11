@@ -118,6 +118,22 @@
       }
     }
   },
+  "webhooks": {
+    "git.push": {
+      "post": {
+        "operationId": "post-git.push",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "User": {

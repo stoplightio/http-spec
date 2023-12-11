@@ -1,11 +1,16 @@
-import { DeepPartial, IHttpOperation } from '@stoplight/types';
+import { DeepPartial, IHttpEndpointOperation, IHttpOperation, IHttpWebhookOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';
-import { OPERATION_CONFIG, transformOasEndpointOperation, transformOasEndpointOperations } from '../oas';
+import {
+  OPERATION_CONFIG,
+  transformOasEndpointOperation,
+  transformOasEndpointOperations,
+  WEBHOOK_CONFIG,
+} from '../oas';
 import { createContext } from '../oas/context';
-import type { Oas3HttpOperationTransformer } from '../oas/types';
+import type { Oas3HttpEndpointOperationTransformer } from '../oas/types';
 import { Fragment, TransformerContext } from '../types';
 import { translateToCallbacks } from './transformers/callbacks';
 import { translateToRequest } from './transformers/request';
@@ -17,10 +22,29 @@ export function transformOas3Operations<T extends Fragment = DeepPartial<OpenAPI
   document: T,
   ctx?: TransformerContext<T>,
 ): IHttpOperation[] {
-  return transformOasEndpointOperations(document, transformOas3Operation, OPERATION_CONFIG, void 0, ctx);
+  return transformOasEndpointOperations(
+    document,
+    transformOas3Operation,
+    OPERATION_CONFIG,
+    void 0,
+    ctx,
+  ) as unknown as IHttpOperation[];
 }
 
-export const transformOas3Operation: Oas3HttpOperationTransformer = ({
+export function transformOas3WebhookOperations<T extends Fragment = DeepPartial<OpenAPIObject>>(
+  document: T,
+  ctx?: TransformerContext<T>,
+): IHttpWebhookOperation[] {
+  return transformOasEndpointOperations(
+    document,
+    transformOas3Operation,
+    WEBHOOK_CONFIG,
+    void 0,
+    ctx,
+  ) as unknown as IHttpWebhookOperation[];
+}
+
+export const transformOas3Operation: Oas3HttpEndpointOperationTransformer = ({
   document: _document,
   name,
   method,
@@ -45,5 +69,5 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({
       },
       isNonNullable,
     ),
-  } as unknown as IHttpOperation;
+  } as unknown as IHttpEndpointOperation;
 };

@@ -1,4 +1,4 @@
-import { DeepPartial, IHttpOperation } from '@stoplight/types';
+import { DeepPartial, IHttpEndpointOperation, IHttpOperation } from '@stoplight/types';
 import type * as OAS3 from 'openapi3-ts';
 import type * as OAS2 from 'swagger-schema-official';
 
@@ -33,7 +33,8 @@ export type Oas3HttpServiceBundle = HttpServiceBundle<Oas3TransformServiceOpts>;
 export type Oas2TransformOperationOpts = ITransformEndpointOperationOpts<DeepPartial<OAS2.Spec>>;
 export type Oas3TransformOperationOpts = ITransformEndpointOperationOpts<DeepPartial<OAS3.OpenAPIObject>>;
 export type Oas2HttpOperationTransformer = HttpEndpointOperationTransformer<Oas2TransformOperationOpts, IHttpOperation>;
-export type Oas3HttpOperationTransformer = HttpEndpointOperationTransformer<Oas3TransformOperationOpts, IHttpOperation>;
+export type Oas3HttpEndpointOperationTransformer<T extends IHttpEndpointOperation = IHttpEndpointOperation> =
+  HttpEndpointOperationTransformer<Oas3TransformOperationOpts, T>;
 
 export type Oas3ParamBase = ParamBase & { in: OAS3.ParameterLocation };
 export type Oas2ParamBase = ParamBase & { in: OAS2.BaseParameter['in'] };

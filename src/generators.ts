@@ -44,8 +44,8 @@ export const idGenerators = {
     return join(['http_operation', props.parentId, props.method, sanitizePath(props.path)]);
   },
 
-  httpWebhook: (props: Context & { method: string; name: string }) => {
-    return join(['http_webhook', props.parentId, props.method, sanitizePath(props.name)]);
+  httpWebhookOperation: (props: Context & { method: string; name: string }) => {
+    return join(['http_webhook_operation', props.parentId, props.method, sanitizePath(props.name)]);
   },
 
   httpCallbackOperation: (props: Context & { method: string; path: string }) => {

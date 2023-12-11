@@ -41,7 +41,7 @@ export const translateToCallbacks: Oas3TranslateFunction<
               ctx,
             }),
             key: callbackName,
-          });
+          } as IHttpCallbackOperation);
         }
       }
 

@@ -391,7 +391,50 @@ export default {
       ],
     },
   ],
-  webhooks: [],
+  webhooks: [
+    {
+      extensions: {},
+      id: 'http_webhook_operation-service_abc-post-git.push',
+      iid: 'post-git.push',
+      method: 'post',
+      name: 'git.push',
+      request: {
+        body: {
+          contents: [
+            {
+              encodings: [],
+              examples: [],
+              id: 'http_media-http_request_body-http_webhook_operation-service_abc-post-git.push-application/json',
+              mediaType: 'application/json',
+              schema: {
+                $schema: 'http://json-schema.org/draft-07/schema#',
+                type: 'object',
+                'x-stoplight': {
+                  id: 'schema-http_media-http_request_body-http_webhook_operation-service_abc-post-git.push-application/json-',
+                },
+              },
+            },
+          ],
+          id: 'http_request_body-http_webhook_operation-service_abc-post-git.push',
+        },
+        cookie: [],
+        headers: [],
+        path: [],
+        query: [],
+      },
+      responses: [],
+      security: [],
+      securityDeclarationType: 'inheritedFromService',
+      servers: [
+        {
+          id: 'http_server-service_abc-http://localhost:3000',
+          name: 'Users API',
+          url: 'http://localhost:3000',
+        },
+      ],
+      tags: [],
+    },
+  ],
   extensions: {
     'x-stoplight': {
       id: 'service_abc',
