@@ -66,6 +66,7 @@ export default {
       tags: [],
     },
   ],
+  webhooks: [],
   components: {
     callbacks: [],
     cookie: [],

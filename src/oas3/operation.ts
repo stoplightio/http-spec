@@ -1,11 +1,16 @@
-import { DeepPartial, IHttpOperation } from '@stoplight/types';
+import { DeepPartial, IHttpEndpointOperation, IHttpOperation, IHttpWebhookOperation } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';
-import { transformOasOperation, transformOasOperations } from '../oas';
+import {
+  OPERATION_CONFIG,
+  transformOasEndpointOperation,
+  transformOasEndpointOperations,
+  WEBHOOK_CONFIG,
+} from '../oas';
 import { createContext } from '../oas/context';
-import type { Oas3HttpOperationTransformer } from '../oas/types';
+import type { Oas3HttpEndpointOperationTransformer } from '../oas/types';
 import { Fragment, TransformerContext } from '../types';
 import { translateToCallbacks } from './transformers/callbacks';
 import { translateToRequest } from './transformers/request';
@@ -17,26 +22,46 @@ export function transformOas3Operations<T extends Fragment = DeepPartial<OpenAPI
   document: T,
   ctx?: TransformerContext<T>,
 ): IHttpOperation[] {
-  return transformOasOperations(document, transformOas3Operation, void 0, ctx);
+  return transformOasEndpointOperations(
+    document,
+    transformOas3Operation,
+    OPERATION_CONFIG,
+    void 0,
+    ctx,
+  ) as unknown as IHttpOperation[];
 }
 
-export const transformOas3Operation: Oas3HttpOperationTransformer = ({
+export function transformOas3WebhookOperations<T extends Fragment = DeepPartial<OpenAPIObject>>(
+  document: T,
+  ctx?: TransformerContext<T>,
+): IHttpWebhookOperation[] {
+  return transformOasEndpointOperations(
+    document,
+    transformOas3Operation,
+    WEBHOOK_CONFIG,
+    void 0,
+    ctx,
+  ) as unknown as IHttpWebhookOperation[];
+}
+
+export const transformOas3Operation: Oas3HttpEndpointOperationTransformer = ({
   document: _document,
-  path,
+  name,
   method,
+  config,
   ctx = createContext(_document),
 }) => {
-  const httpOperation = transformOasOperation.call(ctx, path, method);
-  const pathObj = ctx.maybeResolveLocalRef(ctx.document.paths![path]) as Fragment;
-  const operation = ctx.maybeResolveLocalRef(pathObj[method]) as Fragment;
+  const httpOperation = transformOasEndpointOperation.call(ctx, config, name, method);
+  const parentObj = ctx.maybeResolveLocalRef(ctx.document[config.documentProp]![name]) as Fragment;
+  const operation = ctx.maybeResolveLocalRef(parentObj[method]) as Fragment;
 
   return {
     ...httpOperation,
 
     responses: translateToResponses.call(ctx, operation.responses),
-    request: translateToRequest.call(ctx, pathObj, operation),
+    request: translateToRequest.call(ctx, parentObj, operation),
     security: translateToSecurities.call(ctx, operation.security, 'requirement'),
-    servers: translateToServers.call(ctx, pathObj, operation),
+    servers: translateToServers.call(ctx, parentObj, operation),
 
     ...pickBy(
       {
@@ -44,5 +69,5 @@ export const transformOas3Operation: Oas3HttpOperationTransformer = ({
       },
       isNonNullable,
     ),
-  } as unknown as IHttpOperation;
+  } as unknown as IHttpEndpointOperation;
 };

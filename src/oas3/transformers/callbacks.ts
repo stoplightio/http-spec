@@ -3,6 +3,7 @@ import type { OpenAPIObject } from 'openapi3-ts';
 
 import { createContext } from '../../oas/context';
 import { isReferenceObject } from '../../oas/guards';
+import { OPERATION_CONFIG } from '../../oas/operation';
 import { entries } from '../../utils';
 import { transformOas3Operation } from '../operation';
 import type { Oas3TranslateFunction } from '../types';
@@ -35,11 +36,12 @@ export const translateToCallbacks: Oas3TranslateFunction<
             ...transformOas3Operation({
               document,
               method,
-              path,
+              name: path,
+              config: OPERATION_CONFIG,
               ctx,
             }),
             key: callbackName,
-          });
+          } as IHttpCallbackOperation);
         }
       }
 

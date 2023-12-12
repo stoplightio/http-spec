@@ -1,9 +1,13 @@
+import { IHttpOperation } from '@stoplight/types';
 import type { CollectionDefinition } from 'postman-collection';
 
-import type { HttpOperationTransformer } from '../types';
+import type { HttpEndpointOperationTransformer } from '../types';
 
-export type PostmanCollectionHttpOperationTransformer = HttpOperationTransformer<{
-  document: CollectionDefinition;
-  path: string;
-  method: string;
-}>;
+export type PostmanCollectionHttpOperationTransformer = HttpEndpointOperationTransformer<
+  {
+    document: CollectionDefinition;
+    path: string;
+    method: string;
+  },
+  IHttpOperation
+>;

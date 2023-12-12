@@ -1,10 +1,10 @@
 import { bundleTarget } from '@stoplight/json';
-import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
 
 import { setSkipHashing } from '../../hash';
 import { transformOas2Operations } from '../../oas2/operation';
 import { transformOas3Operations } from '../../oas3/operation';
+import { OpenAPIObject } from '../../oas3/types';
 
 setSkipHashing(true);
 

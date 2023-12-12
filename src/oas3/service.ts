@@ -1,5 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import type { HttpSecurityScheme, IHttpOperation, Optional } from '@stoplight/types';
+import type { HttpSecurityScheme, IHttpOperation, IHttpWebhookOperation, Optional } from '@stoplight/types';
 import pickBy = require('lodash.pickby');
 
 import { withContext } from '../context';
@@ -14,7 +14,7 @@ import { OasVersion } from '../oas/types';
 import type { ArrayCallbackParameters } from '../types';
 import { entries } from '../utils';
 import { isSecurityScheme } from './guards';
-import { transformOas3Operations } from './operation';
+import { transformOas3Operations, transformOas3WebhookOperations } from './operation';
 import { translateToCallbacks } from './transformers/callbacks';
 import { translateToExample } from './transformers/examples';
 import { translateToSharedParameters } from './transformers/parameters';
@@ -42,10 +42,12 @@ export const bundleOas3Service: Oas3HttpServiceBundle = ({ document: _document }
   };
 
   const operations = transformOas3Operations(document, ctx) as unknown as IHttpOperation<true>[];
+  const webhooks = transformOas3WebhookOperations(document, ctx) as unknown as IHttpWebhookOperation<true>[];
 
   return {
     ...service,
     operations,
+    webhooks,
     components,
   };
 };

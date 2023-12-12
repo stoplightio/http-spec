@@ -1,7 +1,8 @@
 import { isPlainObject } from '@stoplight/json';
 import { DeepPartial, IHttpService } from '@stoplight/types';
-import { OpenAPIObject } from 'openapi3-ts';
 import { Spec } from 'swagger-schema-official';
+
+import { OpenAPIObject } from '../oas3/types';
 import pickBy = require('lodash.pickby');
 
 import { isBoolean, isNonNullable, isString } from '../guards';
