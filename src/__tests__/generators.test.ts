@@ -41,9 +41,9 @@ describe('idGenerators', () => {
     const id1 = idGenerators.httpCallbackOperation(operation1);
     const id2 = idGenerators.httpCallbackOperation(operation2);
     const id3 = idGenerators.httpCallbackOperation(operation3);
-    expect(id1).toEqual('http_callback-12345-post-{$request.body#/returnedPetAdoptedUrl}-returnedPetAdopted');
-    expect(id2).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}-newPetAvailable');
-    expect(id3).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}-newPet');
+    expect(id1).toEqual('http_callback-12345-returnedPetAdopted-post-{$request.body#/returnedPetAdoptedUrl}');
+    expect(id2).toEqual('http_callback-12345-newPetAvailable-post-{$request.body#/newPetAvailableUrl}');
+    expect(id3).toEqual('http_callback-12345-newPet-post-{$request.body#/newPetAvailableUrl}');
     expect(id1).not.toEqual(id2);
     expect(id2).not.toEqual(id3);
   });

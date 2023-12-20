@@ -100,7 +100,7 @@ describe('translateToCallbacks', () => {
       {
         key: 'newPetWebhook',
         extensions: {},
-        id: '1e277a6571f2c',
+        id: '8598295bca7aa',
         method: 'post',
         path: '{$request.body#/newPetAvailableUrl}',
         request: {
@@ -152,7 +152,7 @@ describe('translateToCallbacks', () => {
       {
         key: 'newPetWebhook',
         extensions: {},
-        id: '3495b9c5e52ff',
+        id: '602f44a0af2a3',
         method: 'post',
         path: '{$request.body#/returnedPetAvailableUrl}',
         request: {
@@ -204,7 +204,7 @@ describe('translateToCallbacks', () => {
       {
         key: 'petAdopted',
         extensions: {},
-        id: '277b9b7c0fcbe',
+        id: '54f5719cae277',
         method: 'post',
         path: '{$request.body#/adoptedUrl}',
         request: {
