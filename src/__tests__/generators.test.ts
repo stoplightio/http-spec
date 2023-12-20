@@ -20,12 +20,31 @@ describe('idGenerators', () => {
     expect(id1).toEqual(id2);
   });
   it('httpCallbackOperation ids should be unique', () => {
-    const operation1 = { parentId: '12345', method: 'post', path: '{$request.body#/returnedPetAdoptedUrl}' };
-    const operation2 = { parentId: '12345', method: 'post', path: '{$request.body#/newPetAvailableUrl}' };
+    const operation1 = {
+      parentId: '12345',
+      method: 'post',
+      path: '{$request.body#/returnedPetAdoptedUrl}',
+      key: 'returnedPetAdopted',
+    };
+    const operation2 = {
+      parentId: '12345',
+      method: 'post',
+      path: '{$request.body#/newPetAvailableUrl}',
+      key: 'newPetAvailable',
+    };
+    const operation3 = {
+      parentId: '12345',
+      method: 'post',
+      path: '{$request.body#/newPetAvailableUrl}',
+      key: 'newPet',
+    };
     const id1 = idGenerators.httpCallbackOperation(operation1);
     const id2 = idGenerators.httpCallbackOperation(operation2);
-    expect(id1).toEqual('http_callback-12345-post-{$request.body#/returnedPetAdoptedUrl}');
-    expect(id2).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}');
+    const id3 = idGenerators.httpCallbackOperation(operation3);
+    expect(id1).toEqual('http_callback-12345-post-{$request.body#/returnedPetAdoptedUrl}-returnedPetAdopted');
+    expect(id2).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}-newPetAvailable');
+    expect(id3).toEqual('http_callback-12345-post-{$request.body#/newPetAvailableUrl}-newPet');
     expect(id1).not.toEqual(id2);
+    expect(id2).not.toEqual(id3);
   });
 });

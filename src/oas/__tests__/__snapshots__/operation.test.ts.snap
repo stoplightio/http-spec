@@ -1031,6 +1031,64 @@ Array [
     "tags": Array [],
   },
   Object {
+    "callbacks": Array [
+      Object {
+        "extensions": Object {},
+        "id": "http_callback-undefined-post-{$request.body#/callbackUrl}-MyEvent",
+        "key": "MyEvent",
+        "method": "post",
+        "path": "{$request.body#/callbackUrl}",
+        "request": Object {
+          "body": Object {
+            "contents": Array [
+              Object {
+                "encodings": Array [],
+                "examples": Array [],
+                "id": "http_media-http_request_body-http_callback-undefined-post-{$request.body#/callbackUrl}-MyEvent-application/json",
+                "mediaType": "application/json",
+                "schema": Object {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "properties": Object {
+                    "message": Object {
+                      "examples": Array [
+                        "Some event happened",
+                      ],
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                  ],
+                  "type": "object",
+                  "x-stoplight": Object {
+                    "id": "schema-http_media-http_request_body-http_callback-undefined-post-{$request.body#/callbackUrl}-MyEvent-application/json-",
+                  },
+                },
+              },
+            ],
+            "id": "http_request_body-http_callback-undefined-post-{$request.body#/callbackUrl}-MyEvent",
+            "required": true,
+          },
+          "cookie": Array [],
+          "headers": Array [],
+          "path": Array [],
+          "query": Array [],
+        },
+        "responses": Array [
+          Object {
+            "code": "200",
+            "contents": Array [],
+            "description": "Your server returns this code if it accepts the callback",
+            "headers": Array [],
+            "id": "http_response-http_callback-undefined-post-{$request.body#/callbackUrl}-MyEvent-200",
+          },
+        ],
+        "security": Array [],
+        "securityDeclarationType": "inheritedFromService",
+        "servers": Array [],
+        "tags": Array [],
+      },
+    ],
     "description": "",
     "extensions": Object {},
     "id": "http_operation-abc-put-/pet/{}",

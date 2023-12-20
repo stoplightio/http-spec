@@ -36,6 +36,7 @@ export interface ITransformEndpointOperationOpts<T extends Fragment> {
   document: T;
   name: string;
   method: string;
+  key?: string;
   config: EndpointOperationConfig;
   ctx?: TransformerContext<T>;
 }
