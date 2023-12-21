@@ -62,9 +62,9 @@ export function transformOasEndpointOperations<
 
 export const transformOasEndpointOperation: TranslateFunction<
   DeepPartial<OpenAPIObject> | DeepPartial<Spec>,
-  [config: EndpointOperationConfig, name: string, method: string],
+  [config: EndpointOperationConfig, name: string, method: string, key?: string],
   Omit<IHttpEndpointOperation, 'responses' | 'request' | 'servers' | 'security' | 'callbacks'>
-> = function ({ type, documentProp, nameProp }: EndpointOperationConfig, name: string, method: string) {
+> = function ({ type, documentProp, nameProp }: EndpointOperationConfig, name: string, method: string, key?: string) {
   const pathObj = this.maybeResolveLocalRef(this.document?.[documentProp]?.[name]) as PathsObject;
   if (typeof pathObj !== 'object' || pathObj === null) {
     throw new Error(`Could not find ${[documentProp, name].join('/')} in the provided spec.`);
@@ -89,6 +89,7 @@ export const transformOasEndpointOperation: TranslateFunction<
         parentId: serviceId,
         method,
         path: name,
+        key: key ?? '',
       });
   } else if (type === 'operation') {
     id = this.ids.operation =

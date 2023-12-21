@@ -49,9 +49,10 @@ export const transformOas3Operation: Oas3HttpEndpointOperationTransformer = ({
   name,
   method,
   config,
+  key,
   ctx = createContext(_document),
 }) => {
-  const httpOperation = transformOasEndpointOperation.call(ctx, config, name, method);
+  const httpOperation = transformOasEndpointOperation.call(ctx, config, name, method, key);
   const parentObj = ctx.maybeResolveLocalRef(ctx.document[config.documentProp]![name]) as Fragment;
   const operation = ctx.maybeResolveLocalRef(parentObj[method]) as Fragment;
 

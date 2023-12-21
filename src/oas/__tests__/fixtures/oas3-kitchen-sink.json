@@ -132,6 +132,38 @@
         ],
         "requestBody": {
           "$ref": "#/components/requestBodies/Pet"
+        },
+        "callbacks": {
+          "MyEvent": {
+            "{$request.body#/callbackUrl}": {
+              "post": {
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Some event happened"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Your server returns this code if it accepts the callback"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

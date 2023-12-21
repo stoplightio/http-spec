@@ -31,12 +31,18 @@ export const translateToCallbacks: Oas3TranslateFunction<
           const ctx = createContext(document);
           ctx.context = 'callback';
           Object.assign(ctx.ids, this.ids);
-          ctx.ids.operation = this.generateId.httpCallbackOperation({ parentId: this.ids.service, method, path });
+          ctx.ids.operation = this.generateId.httpCallbackOperation({
+            parentId: this.ids.service,
+            method,
+            path,
+            key: callbackName,
+          });
           results.push({
             ...transformOas3Operation({
               document,
               method,
               name: path,
+              key: callbackName,
               config: OPERATION_CONFIG,
               ctx,
             }),
