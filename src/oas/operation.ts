@@ -89,7 +89,7 @@ export const transformOasEndpointOperation: TranslateFunction<
         parentId: serviceId,
         method,
         path: name,
-        key: key ?? 'unknown',
+        key: key ?? '',
       });
   } else if (type === 'operation') {
     id = this.ids.operation =
