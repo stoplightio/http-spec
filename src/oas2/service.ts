@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import { HttpSecurityScheme, IHttpOperation, Optional } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import { pickBy } from 'lodash';
 
 import { withContext } from '../context';
 import { isNonNullable, isString } from '../guards';

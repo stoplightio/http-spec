@@ -1,8 +1,8 @@
 import { isPlainObject } from '@stoplight/json';
 import type { DeepPartial, IHttpEndpointOperation } from '@stoplight/types';
+import { pickBy } from 'lodash';
 import type { OpenAPIObject, OperationObject, PathsObject } from 'openapi3-ts';
 import type { Spec } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
 
 import { isBoolean, isString } from '../guards';
 import type { EndpointOperationConfig, Fragment, HttpEndpointOperationTransformer } from '../types';

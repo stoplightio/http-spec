@@ -12,6 +12,7 @@ import {
   Reference,
 } from '@stoplight/types';
 import type { JSONSchema7 } from 'json-schema';
+import { pick, pickBy } from 'lodash';
 import type {
   BodyParameter,
   FormDataParameter,
@@ -20,8 +21,6 @@ import type {
   PathParameter,
   QueryParameter,
 } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
-import pick = require('lodash.pick');
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';

@@ -1,4 +1,5 @@
 import type { IHttpOperationRequest } from '@stoplight/types';
+import { pickBy } from 'lodash';
 
 import { isNonNullable } from '../../guards';
 import { OasVersion } from '../../oas';
@@ -16,7 +17,6 @@ import {
   translateToPathParameter,
   translateToQueryParameter,
 } from './params';
-import pickBy = require('lodash.pickby');
 
 const iterateOasParams = createOasParamsIterator(OasVersion.OAS2);
 
