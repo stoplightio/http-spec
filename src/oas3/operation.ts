@@ -1,5 +1,5 @@
 import { DeepPartial, IHttpEndpointOperation, IHttpOperation, IHttpWebhookOperation } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import { pickBy } from 'lodash';
 import type { OpenAPIObject } from 'openapi3-ts';
 
 import { isNonNullable } from '../guards';

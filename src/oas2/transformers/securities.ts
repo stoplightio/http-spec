@@ -8,6 +8,7 @@ import type {
   IOauthFlowObjects,
   Optional,
 } from '@stoplight/types';
+import { pickBy } from 'lodash';
 import type {
   ApiKeySecurity,
   BasicAuthenticationSecurity,
@@ -16,7 +17,6 @@ import type {
   OAuth2ImplicitSecurity,
   OAuth2PasswordSecurity,
 } from 'swagger-schema-official';
-import pickBy = require('lodash.pickby');
 
 import { withContext } from '../../context';
 import { isNonNullable, isString } from '../../guards';

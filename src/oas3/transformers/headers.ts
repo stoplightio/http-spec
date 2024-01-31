@@ -1,6 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import { HttpParamStyles, IHttpEncoding, IHttpHeaderParam, Optional, Reference } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import { pickBy } from 'lodash';
 
 import { withContext } from '../../context';
 import { isBoolean, isNonNullable, isString } from '../../guards';

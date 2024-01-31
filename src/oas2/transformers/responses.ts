@@ -6,7 +6,7 @@ import type {
   IMediaTypeContent,
   Optional,
 } from '@stoplight/types';
-import pickBy = require('lodash.pickby');
+import { pickBy } from 'lodash';
 import type { Operation, Reference } from 'swagger-schema-official';
 
 import { withContext } from '../../context';
