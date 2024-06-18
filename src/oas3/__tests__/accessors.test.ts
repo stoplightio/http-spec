@@ -1,4 +1,5 @@
 import { DeepPartial } from '@stoplight/types';
+import { SecuritySchemeType } from 'openapi3-ts';
 
 import { setSkipHashing } from '../../hash';
 import { getSecurities as _getSecurities, OperationSecurities } from '../accessors';
@@ -110,6 +111,35 @@ describe('getOas3Securities', () => {
       ],
     ]);
   });
+
+  it.each<SecuritySchemeType>(['http', 'apiKey', 'openIdConnect'])(
+    'given global securities and matching operation scheme with scopes should return scopes as extensions for security scheme type: %s',
+    type => {
+      expect(
+        getSecurities({
+          security: [{ operationScheme: ['image:read'] }],
+          components: {
+            securitySchemes: {
+              operationScheme: {
+                type,
+              },
+            },
+          },
+        }),
+      ).toStrictEqual([
+        [
+          [
+            'operationScheme',
+            {
+              type,
+              ['x-scopes']: ['image:read'],
+              extensions: { ['x-scopes']: ['image:read'] },
+            },
+          ],
+        ],
+      ]);
+    },
+  );
 
   it('given global securities and matching spec and invalid operation scheme should return empty array', () => {
     expect(

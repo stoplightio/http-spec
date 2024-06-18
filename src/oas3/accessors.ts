@@ -45,11 +45,14 @@ export function getSecurities(
           ];
         }
 
+        const extensions = scopes?.length ? { ['x-scopes']: scopes } : {};
+
         return [
           opScheme,
           {
             ...definition,
-            extensions: getExtensions(definition),
+            ...extensions,
+            extensions: getExtensions({ ...definition, ...extensions }),
           },
         ];
       })
