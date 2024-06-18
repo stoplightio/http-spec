@@ -14,6 +14,7 @@ export default {
       // hash('tag-mutates')
       id: 'tag-mutates',
       name: 'mutates',
+      extensions: {},
     },
   ],
   extensions: {

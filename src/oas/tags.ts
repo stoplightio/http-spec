@@ -49,7 +49,7 @@ export const translateTagDefinition: TranslateFunction<
     ),
 
     ...toExternalDocs(tag.externalDocs),
-    ...extensions,
+    extensions,
   };
 };
 
