@@ -1,17 +1,20 @@
 {
-  "name": "@stoplight/http-spec",
+  "name": "@kong/stoplight-http-spec",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
   "sideEffects": false,
-  "homepage": "https://github.com/stoplightio/http-spec",
-  "bugs": "https://github.com/stoplightio/http-spec/issues",
+  "homepage": "https://github.com/Kong/http-spec",
+  "bugs": "https://github.com/Kong/http-spec/issues",
   "author": "Stoplight <support@stoplight.io>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stoplightio/http-spec"
+    "url": "https://github.com/Kong/http-spec"
   },
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "**/*"
   ],
@@ -132,5 +135,9 @@
   },
   "release": {
     "extends": "@stoplight/scripts/release"
+  },
+  "volta": {
+    "node": "18.19.1",
+    "yarn": "1.22.22"
   }
 }
