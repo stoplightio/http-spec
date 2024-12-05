@@ -787,6 +787,29 @@ Array [
                   ],
                   "type": "string",
                 },
+                "nullableEnumExplicit": Object {
+                  "enum": Array [
+                    null,
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
+                "nullableEnumImplicit": Object {
+                  "enum": Array [
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
                 "photoUrls": Object {
                   "items": Object {
                     "type": "string",
@@ -848,6 +871,29 @@ Array [
                     "doggie",
                   ],
                   "type": "string",
+                },
+                "nullableEnumExplicit": Object {
+                  "enum": Array [
+                    null,
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
+                "nullableEnumImplicit": Object {
+                  "enum": Array [
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
                 },
                 "photoUrls": Object {
                   "items": Object {
@@ -1143,6 +1189,29 @@ Array [
                   ],
                   "type": "string",
                 },
+                "nullableEnumExplicit": Object {
+                  "enum": Array [
+                    null,
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
+                "nullableEnumImplicit": Object {
+                  "enum": Array [
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
                 "photoUrls": Object {
                   "items": Object {
                     "type": "string",
@@ -1204,6 +1273,29 @@ Array [
                     "doggie",
                   ],
                   "type": "string",
+                },
+                "nullableEnumExplicit": Object {
+                  "enum": Array [
+                    null,
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
+                },
+                "nullableEnumImplicit": Object {
+                  "enum": Array [
+                    "foo",
+                    "bar",
+                    null,
+                  ],
+                  "type": Array [
+                    "string",
+                    "null",
+                  ],
                 },
                 "photoUrls": Object {
                   "items": Object {
