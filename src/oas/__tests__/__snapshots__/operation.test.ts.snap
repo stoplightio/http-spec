@@ -792,7 +792,6 @@ Array [
                     null,
                     "foo",
                     "bar",
-                    null,
                   ],
                   "type": Array [
                     "string",
@@ -877,7 +876,6 @@ Array [
                     null,
                     "foo",
                     "bar",
-                    null,
                   ],
                   "type": Array [
                     "string",
@@ -1194,7 +1192,6 @@ Array [
                     null,
                     "foo",
                     "bar",
-                    null,
                   ],
                   "type": Array [
                     "string",
@@ -1279,7 +1276,6 @@ Array [
                     null,
                     "foo",
                     "bar",
-                    null,
                   ],
                   "type": Array [
                     "string",
