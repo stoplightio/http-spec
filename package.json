@@ -132,5 +132,8 @@
   },
   "release": {
     "extends": "@stoplight/scripts/release"
+  },
+  "resolutions": {
+     "cross-spawn": "7.0.5"
   }
 }
