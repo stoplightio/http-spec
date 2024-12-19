@@ -313,8 +313,10 @@ describe('bundleOas2Service', () => {
         {
           id: 'tag-service-tag-extension',
           name: 'service-tag-extension',
-          'x-service-tag-extension': {
-            hello: 'world',
+          extensions: {
+            'x-service-tag-extension': {
+              hello: 'world',
+            },
           },
         },
       ],

@@ -71,6 +71,7 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "extensions": Object {},
       "externalDocs": Object {
         "description": "Find out more",
         "url": "http://swagger.io",
@@ -80,11 +81,13 @@ Object {
     },
     Object {
       "description": "Access to Petstore orders",
+      "extensions": Object {},
       "id": "tag-store",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
+      "extensions": Object {},
       "externalDocs": Object {
         "description": "Find out more about our store",
         "url": "http://swagger.io",
@@ -93,11 +96,13 @@ Object {
       "name": "user",
     },
     Object {
+      "extensions": Object {
+        "x-service-tag-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "tag-x-extension-in-tag",
       "name": "x-extension-in-tag",
-      "x-service-tag-extension": Object {
-        "hello": "world",
-      },
     },
   ],
   "termsOfService": "http://swagger.io/terms/",
@@ -176,6 +181,7 @@ Object {
   "tags": Array [
     Object {
       "description": "Everything about your Pets",
+      "extensions": Object {},
       "externalDocs": Object {
         "description": "Find out more",
         "url": "http://swagger.io",
@@ -185,11 +191,13 @@ Object {
     },
     Object {
       "description": "Access to Petstore orders",
+      "extensions": Object {},
       "id": "tag-store",
       "name": "store",
     },
     Object {
       "description": "Operations about user",
+      "extensions": Object {},
       "externalDocs": Object {
         "description": "Find out more about our store",
         "url": "http://swagger.io",
@@ -198,11 +206,13 @@ Object {
       "name": "user",
     },
     Object {
+      "extensions": Object {
+        "x-service-tag-extension": Object {
+          "hello": "world",
+        },
+      },
       "id": "tag-x-extension-in-tag",
       "name": "x-extension-in-tag",
-      "x-service-tag-extension": Object {
-        "hello": "world",
-      },
     },
   ],
   "termsOfService": "http://swagger.io/terms/",
