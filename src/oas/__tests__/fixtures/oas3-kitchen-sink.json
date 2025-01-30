@@ -312,6 +312,16 @@
             "type": "string",
             "description": "pet status in the store",
             "enum": ["available", "pending", "sold"]
+          },
+          "nullableEnumImplicit": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["foo", "bar"]
+          },
+          "nullableEnumExplicit": {
+            "type": "string",
+            "nullable": true,
+            "enum": [null, "foo", "bar"]
           }
         },
         "required": ["name", "photoUrls"]

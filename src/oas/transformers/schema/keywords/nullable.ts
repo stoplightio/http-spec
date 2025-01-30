@@ -26,7 +26,7 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable'): Converter 
     if (schema[keyword] === true) {
       schema.type = [schema.type, 'null'];
 
-      if (Array.isArray(schema.enum)) {
+      if (Array.isArray(schema.enum) && !schema.enum.includes(null)) {
         schema.enum = [...schema.enum, null];
       }
     } else {
