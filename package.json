@@ -70,7 +70,8 @@
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
     "release.dryRun": "sl-scripts release --dry-run --debug",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "node scripts/patch-postman-collection-faker.js"
   },
   "dependencies": {
     "@stoplight/json": "^3.18.1",
@@ -134,6 +135,7 @@
     "extends": "@stoplight/scripts/release"
   },
   "resolutions": {
-     "cross-spawn": "7.0.5"
+    "cross-spawn": "7.0.5",
+    "**/@faker-js/faker": "10.5.0"
   }
 }
