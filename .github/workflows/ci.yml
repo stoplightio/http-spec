@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test --maxWorkers=2
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+
+  release:
+    needs: [test, build]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/beta' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
